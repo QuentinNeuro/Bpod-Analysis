@@ -33,6 +33,7 @@ for i=1:size(GroupToPlot,1)
         MetaFilterGroup{j}=MetaFilter;
         [Analysis,thisFilter]=A_FilterMeta(Analysis,MetaFilter,Filters);
         Analysis=AP_DataSort(Analysis,MetaFilter,thisFilter);
+        if Analysis.Properties.Photometry
         if Analysis.Properties.PlotFiltersSingle && Analysis.(MetaFilter).nTrials>0
             for thisCh=1:length(Analysis.Properties.PhotoCh)
                 AP_PlotData_filter(Analysis,MetaFilter,thisCh);
@@ -41,6 +42,7 @@ for i=1:size(GroupToPlot,1)
                 saveas(gcf,[Analysis.Properties.DirFig Analysis.Properties.Name MetaFilter char(Analysis.Properties.PhotoChNames{thisCh})],'epsc');
                 end
             end
+        end
         end
         clear thisFilter
     end
@@ -65,6 +67,7 @@ for i=1:size(GroupToPlot,1)
         MetaFilterGroup{j}=MetaFilter;
         [Analysis,thisFilter]=A_FilterMeta(Analysis,MetaFilter,Filters);
         Analysis=AP_DataSort(Analysis,MetaFilter,thisFilter);
+        if Analysis.Properties.Photometry
         if Analysis.(MetaFilter).nTrials
             for thisCh=1:length(Analysis.Properties.PhotoCh)
                 AP_PlotData_Filter_corrDFF(Analysis,MetaFilter,thisCh);
@@ -74,14 +77,17 @@ for i=1:size(GroupToPlot,1)
                 end
             end
         end
+        end
         clear thisFilter
     end
+    if Analysis.Properties.Photometry
     for thisCh=1:length(Analysis.Properties.PhotoCh)
         AP_PlotSummary_Filter_corrDFF(Analysis,Title,MetaFilterGroup,thisCh);
         saveas(gcf,[Analysis.Properties.DirFig Analysis.Properties.Name Title char(Analysis.Properties.PhotoChNames{thisCh}) '.png']);
         if Analysis.Properties.Illustrator
         saveas(gcf,[Analysis.Properties.DirFig Analysis.Properties.Name Title char(Analysis.Properties.PhotoChNames{thisCh})],'epsc');
         end
+    end
     end
 end
 end

@@ -45,7 +45,6 @@ end
 Analysis=AP_TrialTypes_FiltersAndPlot(Analysis,DefaultParam);
 
 %% Behavior specific : Sort filtered trials and generates plots
-if Analysis.Properties.Photometry==1
 switch Analysis.Properties.Behavior
     case 'CuedOutcome'
 Analysis=AP_CuedOutcome_FiltersAndPlot(Analysis);
@@ -55,7 +54,6 @@ Analysis=AP_GoNogo_FiltersAndPlot(Analysis);
 AP_AuditoryTuning_FiltersAndPlot(Analysis);
     case 'Oddball'
 Analysis=AP_OddBall_FiltersAndPlot(Analysis);
-end
 end
 
 %% Save Analysis

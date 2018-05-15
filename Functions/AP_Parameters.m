@@ -44,7 +44,11 @@ if contains(Name,'CuedReward','IgnoreCase',true)
     handles.NidaqBaseline=[1 2];
 elseif contains(Name,'CuedOutcome','IgnoreCase',true)
     handles.Behavior='CuedOutcome';
-	handles.StateOfCue='CueDelivery';
+    if isfield(SessionData.RawEvents.Trial{1,1}.States,'SoundDelivery')
+        handles.StateOfCue='SoundDelivery';
+    elseif isfield(SessionData.RawEvents.Trial{1,1}.States,'CueDelivery')
+        handles.StateOfCue='CueDelivery';
+    end
     handles.StateOfOutcome='Outcome';
     handles.CueTimeReset=[0 1];
     handles.OutcomeTimeReset=[0 2];
