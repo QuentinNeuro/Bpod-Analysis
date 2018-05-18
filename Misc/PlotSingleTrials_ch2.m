@@ -11,11 +11,16 @@ steps=0:step:trialsnb*step-1;
 xstep=20;
 xsteps=0:xstep:trialsnb*xstep-1;
 
-time=Analysis.(thistype).(Feature1).Time(1,:);
+figure('Name','DA - Uncued Reward','numbertitle','off');
+subplot(2,4,1);
 
+
+
+time=Analysis.(thistype).(Feature1).Time(1,:);
+%% DFF1
 DFF1=Analysis.(thistype).(Feature1).Distance(1:trialsnb,:);
 steppedDFF1=DFF1+steps';
-% steppedDFF1AVG=Analysis.(thistype).(Feature1).DFFAVG+trialsnb*step;
+steppedDFF1AVG=Analysis.(thistype).(Feature1).DFFAVG+trialsnb*step;
 DFF2=Analysis.(thistype).(Feature2).DFF(1:trialsnb,:);
 steppedDFF2=DFF2+steps';
 steppedDFF2AVG=Analysis.(thistype).(Feature2).DFFAVG+trialsnb*step;
@@ -24,7 +29,7 @@ xDFF=DFF1.*DFF2;
 steppedxDFF=xDFF+xsteps';
 %% Figure
 figure('Name','DA - Uncued Reward','numbertitle','off');
-subplot(1,2,1);
+subplot(2,4,1);
 plot(time,steppedDFF1,'-k'); hold on
 plot([0 0],[-5 step*trialsnb],'-r');
 title('BLA')

@@ -16,11 +16,15 @@ end
 BaselineTime=Analysis.Properties.NidaqBaseline;
 BaselinePt=Analysis.Properties.NidaqBaselinePoints;
 
-%% Recompute Pupil Baseline according to the new Baseline
+%% Compute Pupil Baseline and DPP according to the Baseline timing
 if Analysis.Properties.Pupillometry
     Pup.PupilSmoothBaseline=mean(Pup.PupilSmooth(Pup.Time>BaselineTime(1) & Pup.Time<BaselineTime(2),:));
     Pup.PupilSmoothBaselineNorm=Pup.PupilSmoothBaseline/mean(Pup.PupilSmoothBaseline);
     Pup.PupilSmoothDPP=100*(Pup.PupilSmooth-Pup.PupilSmoothBaseline)./Pup.PupilSmoothBaseline;
+    nbOfFrames=Analysis.Properties.NidaqDuration*Pup.Parameters.frameRate;
+    if nbOfFrames>Pup.Parameters.nFrames
+        nbOfFrames=Pup.Parameters.nFrames;
+    end
 end
 
 %% Extract and organize data 
@@ -33,7 +37,8 @@ try
     Analysis.AllData.TrialNumbers(i)=i;
     Analysis.AllData.TrialTypes(i)=SessionData.TrialTypes(thisTrial);
 % Timimg
-    Analysis.AllData.States{i}          =SessionData.RawEvents.Trial{1,thisTrial}.States;
+    Analysis.AllData.TrialStartTS(i)    =SessionData.TrialStartTimestamp(thisTrial); 
+    Analysis.AllData.States{i}          =SessionData.RawEvents.Trial{1,thisTrial}.States;        
     Analysis.AllData.ZeroTime(i)        =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Properties.StateToZero)(1);
     Analysis.AllData.CueTime(i,:)       =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Properties.StateOfCue)...
                                             -Analysis.AllData.ZeroTime(i);
@@ -71,16 +76,17 @@ try
     end
 % Pupillometry
     if Analysis.Properties.Pupillometry
-        thisPupTime=Pup.Time(1:300)'-Analysis.AllData.ZeroTime(i);
-        thisPupilDPP=Pup.PupilSmoothDPP(1:300,thisTrial)';
+        thisPupTime=Pup.Time(1:nbOfFrames)'-Analysis.AllData.ZeroTime(i);
+        thisPup=Pup.Pupil(1:nbOfFrames,thisTrial)';
+        thisPupilDPP=Pup.PupilSmoothDPP(1:nbOfFrames,thisTrial)';
         if Analysis.Properties.ZeroAtZero
             thisPupilDPP=thisPupilDPP-mean(thisPupilDPP(thisPupTime>-0.01 & thisPupTime<0.01));
         end
         % Organize in the structure
         Analysis.AllData.Pupil.Time(i,:)            =thisPupTime;
-        Analysis.AllData.Pupil.Pupil(i,:)           =Pup.Pupil(1:300,thisTrial)';
+        Analysis.AllData.Pupil.Pupil(i,:)           =thisPup;
         Analysis.AllData.Pupil.PupilDPP(i,:)        =thisPupilDPP;
-        Analysis.AllData.Pupil.Blink(i,:)           =Pup.Blink(:,thisTrial)';
+        Analysis.AllData.Pupil.Blink(i,:)           =Pup.Blink(1:nbOfFrames,thisTrial)';
         Analysis.AllData.Pupil.Baseline(i)          =Pup.PupilSmoothBaseline(thisTrial);
         Analysis.AllData.Pupil.NormBaseline(i)      =Pup.PupilSmoothBaselineNorm(thisTrial);
         Analysis.AllData.Pupil.Cue(i)               =nanmean(thisPupilDPP(thisPupTime>CueTime(1) & thisPupTime<CueTime(2)));

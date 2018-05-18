@@ -8,6 +8,7 @@ handles.PlotFiltersSummary=DefaultParam.PlotFiltersSummary;
 handles.PlotFiltersBehavior=DefaultParam.PlotFiltersBehavior;
 handles.Illustrator=DefaultParam.Illustrator;
 handles.Transparency=DefaultParam.Transparency;
+handles.TE4CellBase=DefaultParam.TrialEvents4CellBase;
 
 handles.PlotEdges=DefaultParam.PlotX;
 handles.NidaqRange=DefaultParam.PlotYNidaq;

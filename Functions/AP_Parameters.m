@@ -33,6 +33,7 @@ handles.PlotFiltersSummary=DefaultParam.PlotFiltersSummary;
 handles.PlotFiltersBehavior=DefaultParam.PlotFiltersBehavior;
 handles.Illustrator=DefaultParam.Illustrator;
 handles.Transparency=DefaultParam.Transparency;
+handles.TE4CellBase=DefaultParam.TrialEvents4CellBase;
 
 %% Behavior specific : Plots, States and Timing
 if contains(Name,'CuedReward','IgnoreCase',true) 

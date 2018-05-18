@@ -1,16 +1,17 @@
 %% Bpod Photometry Launcher
 clear SessionData Analysis DefaultParam; close all;
 %% Analysis type Single/Group
-DefaultParam.Analysis_type='Group';
-DefaultParam.Save=0;
-DefaultParam.Load=1;
+DefaultParam.Analysis_type='Single';
+DefaultParam.Save=1;
+DefaultParam.Load=0;
+DefaultParam.TrialEvents4CellBase=1;
 % Figures
 DefaultParam.PhotoChNames={'470-BLA' 'none' '470-VS'};
-DefaultParam.PlotSummary1=0;
+DefaultParam.PlotSummary1=1;
 DefaultParam.PlotSummary2=0;
 DefaultParam.PlotFiltersSingle=0; %AP_Filter_GroupToPlot #1 Output
-DefaultParam.PlotFiltersSummary=0;
-DefaultParam.PlotFiltersBehavior=1; %AP_Filter_GroupToPlot #2 Ouput
+DefaultParam.PlotFiltersSummary=1;
+DefaultParam.PlotFiltersBehavior=0; %AP_Filter_GroupToPlot #2 Ouput
 DefaultParam.Illustrator=0;
 DefaultParam.Transparency=1;
 % Axis
@@ -20,9 +21,9 @@ DefaultParam.PlotX=[-4 4];
 DefaultParam.StateToZero='StateOfOutcome'; %'StateOfCue' 'StateOfOutcome'
 DefaultParam.ZeroAtZero=0;
 DefaultParam.WheelState='Outcome'; %'Baseline','Cue','Outcome'
-DefaultParam.PupilState='Cue';
+DefaultParam.PupilState='Outcome'; %'NormBaseline','Cue','Outcome'
 % Filters
-DefaultParam.PupilThreshold=2;
+DefaultParam.PupilThreshold=1;
 DefaultParam.WheelThreshold=2; %Speed cm/s
 DefaultParam.LicksCue=1;
 DefaultParam.LicksOutcome=2;
@@ -39,7 +40,7 @@ DefaultParam.StateOfCue='Cue';
 DefaultParam.StateOfOutcome='Outcome';
 DefaultParam.CueTimeReset=[];     % overwrite preloaded parameters
 DefaultParam.OutcomeTimeReset=[]; % overwrite preloaded parameters
-DefaultParam.NidaqBaseline=[2 3];    % overwrite preloaded parameters
+DefaultParam.NidaqBaseline=[];    % overwrite preloaded parameters
 % Photometry - being used if cannot find the parameters in the bpod file
 DefaultParam.SamplingRate=2000;  %(Hz)
 DefaultParam.NewSamplingRate=20; %(Hz)

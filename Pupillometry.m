@@ -28,13 +28,13 @@ if Batch==1
     for i=1:size(ListFolders,1)
         thisFolder=[FoldDir filesep ListFolders(i,:)];
         try
-        Pupillometry=Pupillometry_FIJI_Data_Reader(thisFolder);
+        Pupillometry_FIJI_Data_Reader(thisFolder);
         catch
         disp([ListFolders(i,:) ' NOT ANALYZED']);
         end
     end
 else
-    Pupillometry=Pupillometry_FIJI_Data_Reader(FoldDir);
+    Pupillometry_FIJI_Data_Reader(FoldDir);
 end  
 warning('on','all')
 
@@ -114,15 +114,15 @@ for thisTrial=1:nTrials
     end
 end
 % Normalize
-PupilBaseline=nanmean(Pupil(Baseline,:),1);
-PupilDPP=100*(Pupil-PupilBaseline)./PupilBaseline;
-PupilBaselineNorm=PupilBaseline/nanmean(PupilBaseline);
+% PupilBaseline=nanmean(Pupil(Baseline,:),1);
+% PupilDPP=100*(Pupil-PupilBaseline)./PupilBaseline;
+% PupilBaselineNorm=PupilBaseline/nanmean(PupilBaseline);
 % Smoothing
 PupilSmooth=fillmissing(Pupil,'nearest','EndValues','none');
 PupilSmooth=smoothdata(PupilSmooth,'gaussian',4);
-% Normalize
-PupilSmoothBaseline=nanmean(PupilSmooth(Baseline,:),1);
-PupilSmoothDPP=100*(PupilSmooth-PupilSmoothBaseline)./PupilSmoothBaseline;
+% % Normalize
+% PupilSmoothBaseline=nanmean(PupilSmooth(Baseline,:),1);
+% PupilSmoothDPP=100*(PupilSmooth-PupilSmoothBaseline)./PupilSmoothBaseline;
 
 
 %% Quality control Table
@@ -156,11 +156,11 @@ Pupillometry.Time=Time;
 Pupillometry.Blink=Blink;
 Pupillometry.Pupil=Pupil;
 Pupillometry.PupilSmooth=PupilSmooth;
-Pupillometry.PupilDPP=PupilDPP;
-Pupillometry.PupilBaseline=PupilBaseline;
-Pupillometry.PupilBaselineNorm=PupilBaselineNorm;
-Pupillometry.PupilSmoothDPP=PupilSmoothDPP;
-Pupillometry.PupilSmoothBaseline=PupilSmoothBaseline;
+% Pupillometry.PupilDPP=PupilDPP;
+% Pupillometry.PupilBaseline=PupilBaseline;
+% Pupillometry.PupilBaselineNorm=PupilBaselineNorm;
+% Pupillometry.PupilSmoothDPP=PupilSmoothDPP;
+% Pupillometry.PupilSmoothBaseline=PupilSmoothBaseline;
 
 %% Save
 switch testSave

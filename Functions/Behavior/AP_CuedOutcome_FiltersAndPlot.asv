@@ -98,9 +98,9 @@ if Analysis.Properties.TE4CellBase
     FileName=[Analysis.Properties.Name '_CuedEvents.mat'];
     DirEvents=[pwd filesep 'Events' filesep];
     if isdir(DirEvents)==0
-        mkdir(DirEvents);
+        mkdir(DirAnalysis);
     end
-    DirFile=[DirEvents FileName];
+    
+    DirFile=[pwd filesep FileName];
     save(DirFile,'CuedEvents');
-    clear CuedEvents
 end
