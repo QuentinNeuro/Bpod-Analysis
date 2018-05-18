@@ -35,7 +35,7 @@ handles.Illustrator=DefaultParam.Illustrator;
 handles.Transparency=DefaultParam.Transparency;
 
 %% Behavior specific : Plots, States and Timing
-if contains(Name,'CuedReward','IgnoreCase',true)
+if contains(Name,'CuedReward','IgnoreCase',true) 
     handles.Behavior='CuedOutcome';
 	handles.StateOfCue='SoundDelivery';
     handles.StateOfOutcome='Outcome';
