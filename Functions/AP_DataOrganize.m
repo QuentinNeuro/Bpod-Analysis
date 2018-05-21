@@ -44,8 +44,8 @@ try
                                                 -Analysis.AllData.Time.Zero(i);
     Analysis.AllData.Time.Outcome(i,:)   =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Parameters.StateOfOutcome)...
                                             -Analysis.AllData.Time.Zero(i);
-    CueTime     =Analysis.AllData.CueTime(i,:)+Analysis.Parameters.CueTimeReset;
-    OutcomeTime =Analysis.AllData.OutcomeTime(i,:)+Analysis.Parameters.OutcomeTimeReset;
+    CueTime     =Analysis.AllData.Time.Cue(i,:)+Analysis.Parameters.CueTimeReset;
+    OutcomeTime =Analysis.AllData.Time.Outcome(i,:)+Analysis.Parameters.OutcomeTimeReset;
 % Licks                                    
     Analysis.AllData.Licks.Events{i}                =thislick;
     Analysis.AllData.Licks.Trials{i}                =linspace(i,i,size(thislick,2));
@@ -76,7 +76,7 @@ try
     end
 % Pupillometry
     if Analysis.Parameters.Pupillometry
-        thisPupTime=Pup.Time(1:nbOfFrames)'-Analysis.AllData.ZeroTime(i);
+        thisPupTime=Pup.Time(1:nbOfFrames)'-Analysis.AllData.Time.Zero(i);
         thisPup=Pup.Pupil(1:nbOfFrames,thisTrial)';
         thisPupilDPP=Pup.PupilSmoothDPP(1:nbOfFrames,thisTrial)';
         if Analysis.Parameters.ZeroAtZero

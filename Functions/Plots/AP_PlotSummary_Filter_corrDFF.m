@@ -107,8 +107,8 @@ for i=1:4
     subplot(4,5,thisSubPlot); hold on;
 	ylabel(labelyA{i});
     plot([0 0],LimRanges{i},'-r');
-	plot(Analysis.AllData.CueTime(1,:)+Analysis.Parameters.CueTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
-	plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Parameters.OutcomeTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
+	plot(Analysis.(thistype).Time.Cue(1,:)+Analysis.Parameters.CueTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
+	plot(Analysis.(thistype).Time.Outcome(1,:)+Analysis.Parameters.OutcomeTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',LimRanges{i});
 end
 subplot(4,5,1); hold on;

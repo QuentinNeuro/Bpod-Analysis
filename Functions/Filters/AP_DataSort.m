@@ -34,7 +34,7 @@ end
     Analysis.(thistype).TrialNumbers                =Analysis.AllData.TrialNumbers(thisFilter);
 % Timing
     Analysis.(thistype).Time.Cue=Analysis.AllData.Time.Cue(thisFilter,:);
-    Analysis.(thistype).Time.Outcome=Analysis.AllData.TimeOutcome(thisFilter,:);
+    Analysis.(thistype).Time.Outcome=Analysis.AllData.Time.Outcome(thisFilter,:);
     
     CueTime=Analysis.(thistype).Time.Cue(1,:)+Analysis.Parameters.CueTimeReset;
     OutcomeTime=Analysis.(thistype).Time.Outcome(1,:)+Analysis.Parameters.OutcomeTimeReset;

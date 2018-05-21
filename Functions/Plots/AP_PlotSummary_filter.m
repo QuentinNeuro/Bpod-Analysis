@@ -54,6 +54,6 @@ end
     xlabel(labelx);
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',NidaqRange);
     plot([0 0],NidaqRange,'-r');
-	plot(Analysis.AllData.CueTime(1,:)+Analysis.Parameters.CueTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
-	plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Parameters.OutcomeTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
+	plot(Analysis.(thistype).Time.Cue(1,:)+Analysis.Parameters.CueTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
+	plot(Analysis.(thistype).Time.Outcome(1,:)+Analysis.Parameters.OutcomeTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
 end

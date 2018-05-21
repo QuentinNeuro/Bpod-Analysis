@@ -19,7 +19,7 @@ Logicals=false(Analysis.AllData.nTrials,1);
 
 %% Filter
 for i=1:Analysis.AllData.nTrials
-    if isnan(Analysis.AllData.States{1,i}.(State))==0
+    if isnan(Analysis.AllData.Time.States{1,i}.(State))==0
         Logicals(i)=true;
     end
 end

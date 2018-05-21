@@ -70,7 +70,7 @@ set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial+1],'YDir','reverse')
 plot(Analysis.(thistype).Licks.Events,Analysis.(thistype).Licks.Trials,'sk',...
     'MarkerSize',2,'MarkerFaceColor','k');
 plot([0 0],[0 maxtrial],'-r');
-plot(Analysis.(thistype).CueTime,[0 0],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
 % Lick AVG
 subplot(6,1,3); hold on;
 ylabel(labely2);
@@ -78,7 +78,7 @@ xlabel(labelx);
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxrate+1]);
 shadedErrorBar(Analysis.(thistype).Licks.Bin, Analysis.(thistype).Licks.AVG, Analysis.(thistype).Licks.SEM,'-k',transparency);
 plot([0 0],[0 maxrate+1],'-r');
-plot(Analysis.(thistype).CueTime,[maxrate maxrate],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Cue(1,:),[maxrate maxrate],'-b','LineWidth',2);
 
 if Analysis.Parameters.Photometry==1    
 % Nidaq Raster
@@ -88,7 +88,7 @@ set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
 yrasternidaq=1:Analysis.(thistype).nTrials;
 imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,NidaqRange);
 plot([0 0],[0 maxtrial],'-r');
-plot(Analysis.(thistype).CueTime,[0 0],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
 pos=get(gca,'pos');
 c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
 c.Label.String = labely4;
@@ -100,7 +100,7 @@ xlabel(labelx);
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',NidaqRange);
 shadedErrorBar(Analysis.(thistype).(thisChStruct).Time(1,:),Analysis.(thistype).(thisChStruct).DFFAVG,Analysis.(thistype).(thisChStruct).DFFSEM,'-k',transparency);
 plot([0 0],NidaqRange,'-r');
-plot(Analysis.(thistype).CueTime,[NidaqRange(2) NidaqRange(2)],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Cue(1,:),[NidaqRange(2) NidaqRange(2)],'-b','LineWidth',2);
 end    
 
 end

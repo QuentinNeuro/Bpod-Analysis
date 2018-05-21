@@ -34,7 +34,7 @@ set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
 imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yraster,Analysis.(thistype).(thisChStruct).DFF,LimRanges{6});
 xlabel(labelx);ylabel(labelyB{1});
 plot([0 0],[0 maxtrial],'-r');
-plot(Analysis.(thistype).CueTime,[0 0],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
 pos=get(gca,'pos');
 colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.005 pos(4)]);
 % Time
@@ -43,8 +43,8 @@ title(Title);
 shadedErrorBar(Analysis.(thistype).(thisChStruct).Time(1,:),Analysis.(thistype).(thisChStruct).DFFAVG,Analysis.(thistype).(thisChStruct).DFFSEM,['-' color4plot{k}],transparency);
 ylabel(labelyA{1}); xlabel(labelx);
 plot([0 0],LimRanges{6},'-r');
-plot(Analysis.AllData.CueTime(1,:)+Analysis.Parameters.CueTimeReset,[LimRanges{6}(2) LimRanges{6}(2)],'-b','LineWidth',2);
-plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Parameters.OutcomeTimeReset,[LimRanges{6}(2) LimRanges{6}(2)],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Cue(1,:)+Analysis.Parameters.CueTimeReset,[LimRanges{6}(2) LimRanges{6}(2)],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Outcome(1,:)+Analysis.Parameters.OutcomeTimeReset,[LimRanges{6}(2) LimRanges{6}(2)],'-b','LineWidth',2);
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',LimRanges{6});
 % Correlation
 subplot(4,5,3); hold on;
@@ -64,15 +64,15 @@ set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial+1],'YDir','reverse')
 plot(Analysis.(thistype).Licks.Events,Analysis.(thistype).Licks.Trials,'sk',...
     'MarkerSize',2,'MarkerFaceColor','k');
 plot([0 0],[0 maxtrial],'-r');
-plot(Analysis.(thistype).CueTime,[0 0],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
 xlabel(labelx);ylabel(labelyB{2});
 % Time
 subplot(4,5,7); hold on;
 shadedErrorBar(Analysis.(thistype).Licks.Bin, Analysis.(thistype).Licks.AVG, Analysis.(thistype).Licks.SEM,['-' color4plot{k}],transparency); 
 ylabel(labelyA{2}); xlabel(labelx);
 plot([0 0],LimRanges{2},'-r');
-plot(Analysis.AllData.CueTime(1,:)+Analysis.Parameters.CueTimeReset,[LimRanges{2}(2) LimRanges{2}(2)],'-b','LineWidth',2);
-plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Parameters.OutcomeTimeReset,[LimRanges{2}(2) LimRanges{2}(2)],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Cue(1,:)+Analysis.Parameters.CueTimeReset,[LimRanges{2}(2) LimRanges{2}(2)],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Outcome(1,:)+Analysis.Parameters.OutcomeTimeReset,[LimRanges{2}(2) LimRanges{2}(2)],'-b','LineWidth',2);
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',LimRanges{2});
 % Correlations
 subplot(4,5,8); hold on;
@@ -113,7 +113,7 @@ set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
 imagesc(Analysis.(thistype).Wheel.Time(1,:),yraster,Analysis.(thistype).Wheel.Distance,LimRanges{3});
 xlabel(labelx);ylabel(labelyB{3});
 plot([0 0],[0 maxtrial],'-r');
-plot(Analysis.(thistype).CueTime,[0 0],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
 pos=get(gca,'pos');
 colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.005 pos(4)]);
 % Time
@@ -121,8 +121,8 @@ subplot(4,5,12); hold on;
 shadedErrorBar(Analysis.(thistype).Wheel.Time(1,:),Analysis.(thistype).Wheel.DistanceAVG,Analysis.(thistype).Wheel.DistanceSEM,['-' color4plot{k}],transparency);
 ylabel(labelyA{3}); xlabel(labelx);
 plot([0 0],LimRanges{3},'-r');
-plot(Analysis.AllData.CueTime(1,:)+Analysis.Parameters.CueTimeReset,[LimRanges{3}(2) LimRanges{3}(2)],'-b','LineWidth',2);
-plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Parameters.OutcomeTimeReset,[LimRanges{3}(2) LimRanges{3}(2)],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Cue(1,:)+Analysis.Parameters.CueTimeReset,[LimRanges{3}(2) LimRanges{3}(2)],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Outcome(1,:)+Analysis.Parameters.OutcomeTimeReset,[LimRanges{3}(2) LimRanges{3}(2)],'-b','LineWidth',2);
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',LimRanges{3});
 % Correlation
 subplot(4,5,13); hold on;
@@ -160,7 +160,7 @@ set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
 imagesc(Analysis.(thistype).Pupil.Time(1,:),yraster,Analysis.(thistype).Pupil.PupilDPP,LimRanges{4});
 xlabel(labelx);ylabel(labelyB{4});
 plot([0 0],[0 maxtrial],'-r');
-plot(Analysis.(thistype).CueTime,[0 0],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
 pos=get(gca,'pos');
 colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.005 pos(4)]);
 % Time
@@ -168,8 +168,8 @@ subplot(4,5,17); hold on;
 shadedErrorBar(Analysis.(thistype).Pupil.Time(1,:),Analysis.(thistype).Pupil.PupilAVG,Analysis.(thistype).Pupil.PupilSEM,['-' color4plot{k}],transparency);
 ylabel(labelyA{4}); xlabel(labelx);
 plot([0 0],LimRanges{4},'-r');
-plot(Analysis.AllData.CueTime(1,:)+Analysis.Parameters.CueTimeReset,[LimRanges{4}(2) LimRanges{4}(2)],'-b','LineWidth',2);
-plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Parameters.OutcomeTimeReset,[LimRanges{4}(2) LimRanges{4}(2)],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Cue(1,:)+Analysis.Parameters.CueTimeReset,[LimRanges{4}(2) LimRanges{4}(2)],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Outcome(1,:)+Analysis.Parameters.OutcomeTimeReset,[LimRanges{4}(2) LimRanges{4}(2)],'-b','LineWidth',2);
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',LimRanges{4});
 % Correlations
 subplot(4,5,18); hold on;

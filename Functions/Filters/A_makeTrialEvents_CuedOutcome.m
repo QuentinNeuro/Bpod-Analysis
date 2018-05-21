@@ -4,14 +4,15 @@ function Events=A_makeTrialEvents_CuedOutcome(Analysis)
 %
 
 %% Trial Starting Time
-Events.TrialStartTimestamp=Analysis.AllData.TrialStartTS;
+Events.TrialStartTimestamp=Analysis.AllData.Time.TrialStartTS;
 
 %% States Time
 Cue=NaN(1,Analysis.AllData.nTrials);
 Outcome=NaN(1,Analysis.AllData.nTrials);
 for i=1:Analysis.AllData.nTrials
-    Cue(i)=Analysis.AllData.States{1,i}.SoundDelivery(1);
-    Outcome(i)=Analysis.AllData.States{1,i}.Outcome(1);
+    Cue(i)=Analysis.AllData.Time.States{1,i}.SoundDelivery(1);
+    Outcome(i)=Analysis.AllData.Time.States{1,i}.Outcome(1);
+    Events.Licks{i}=Analysis.AllData.Licks.Events{1,i}+Analysis.AllData.Time.Zero(i);
 end
 
 %% Behavior specific filters
