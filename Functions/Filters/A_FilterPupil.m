@@ -1,7 +1,7 @@
 function Analysis=A_FilterPupil(Analysis,FilterName,State,threshold)
 % Function to filter trials according to the running activity of the animal
 % Threshold and behavioral state can be specified in the
-% Analysis.Properties structure (see parameters part).
+% Analysis.Parameters structure (see parameters part).
 % Generates an additional inverted filter.
 %
 % Function designed by Quentin 2017 for Analysis_Photometry
@@ -10,11 +10,11 @@ function Analysis=A_FilterPupil(Analysis,FilterName,State,threshold)
 switch nargin
     case 1
         FilterName='Pupil';
-        State=Analysis.Properties.PupilState;
-        threshold=Analysis.Properties.PupilThreshold;
+        State=Analysis.Parameters.PupilState;
+        threshold=Analysis.Parameters.PupilThreshold;
     case 2
-        State=Analysis.Properties.PupilState;
-        threshold=Analysis.Properties.PupilThreshold;
+        State=Analysis.Parameters.PupilState;
+        threshold=Analysis.Parameters.PupilThreshold;
 end
 
 % Name
@@ -25,7 +25,7 @@ Analysis.Filters.Names{FilterNb+2}=[FilterName 'Inv'];
 Logicals=false(Analysis.AllData.nTrials,1);
 
 %% Filter
-if Analysis.Properties.Pupillometry==1
+if Analysis.Parameters.Pupillometry==1
     Logicals(Analysis.AllData.Pupil.(State)>threshold)=true;
     LogicalsInv=~Logicals;
 else

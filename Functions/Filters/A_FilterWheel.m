@@ -1,7 +1,7 @@
 function Analysis=A_FilterWheel(Analysis,FilterName,State,threshold)
 % Function to filter trials according to the running activity of the animal
 % Threshold and behavioral state can be specified in the
-% Analysis.Properties structure (see parameters part).
+% Analysis.Parameters structure (see parameters part).
 % Generates an additional inverted filter.
 %
 % Function designed by Quentin 2017 for Analysis_Photometry
@@ -10,11 +10,11 @@ function Analysis=A_FilterWheel(Analysis,FilterName,State,threshold)
 switch nargin
     case 1
         FilterName='Run';
-        State=Analysis.Properties.WheelState;
-        threshold=Analysis.Properties.WheelThreshold;
+        State=Analysis.Parameters.WheelState;
+        threshold=Analysis.Parameters.WheelThreshold;
     case 2
-        State=Analysis.Properties.WheelState;
-        threshold=Analysis.Properties.WheelThreshold;
+        State=Analysis.Parameters.WheelState;
+        threshold=Analysis.Parameters.WheelThreshold;
 end
 
 % Name
@@ -25,7 +25,7 @@ Analysis.Filters.Names{FilterNb+2}=[FilterName 'Inv'];
 Logicals=false(Analysis.AllData.nTrials,1);
 
 %% Filter
-if Analysis.Properties.Wheel==1
+if Analysis.Parameters.Wheel==1
     Logicals(Analysis.AllData.Wheel.(State)>threshold)=true;
     LogicalsInv=~Logicals;
 else

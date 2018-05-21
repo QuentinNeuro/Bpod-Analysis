@@ -69,7 +69,7 @@ end
 nTrials=size(ListOfPupil,1);
 framerate=20;
 maxTime=20;
-Baseline=2:4.5*framerate;
+% Baseline=2:4.5*framerate;
 filenames=cell(nTrials,1);
 % Blinking
 cd(BlinkDir)  

@@ -6,11 +6,11 @@ function [LickData, Photo, Wheel]=AP_DataExtract(SessionData,Analysis,thisTrial)
 %function designed by Quentin 2016 for Analysis_Photometry
 
 %% Timing parameters
-StateToZero=Analysis.Properties.StateToZero;
+StateToZero=Analysis.Parameters.StateToZero;
 TimeToZero=SessionData.RawEvents.Trial{1,thisTrial}.States.(StateToZero)(1);    
 
 %% Licks
-LickPort=Analysis.Properties.LickPort;
+LickPort=Analysis.Parameters.LickPort;
 try
     LickData=SessionData.RawEvents.Trial{1,thisTrial}.Events.(LickPort);
     LickData=LickData-TimeToZero;
@@ -19,13 +19,13 @@ catch
 end
 
 %% Nidaq
-if Analysis.Properties.Photometry==1
+if Analysis.Parameters.Photometry==1
 % Parameters  
-SampRate=Analysis.Properties.NidaqSamplingRate;
-SampRateSR=Analysis.Properties.NidaqDecimatedSR;
-DecimateFactor=Analysis.Properties.NidaqDecimateFactor;
-Baseline=Analysis.Properties.NidaqBaselinePoints;         %points with decimated SR
-Duration=Analysis.Properties.NidaqDuration;
+SampRate=Analysis.Parameters.NidaqSamplingRate;
+SampRateSR=Analysis.Parameters.NidaqDecimatedSR;
+DecimateFactor=Analysis.Parameters.NidaqDecimateFactor;
+Baseline=Analysis.Parameters.NidaqBaselinePoints;         %points with decimated SR
+Duration=Analysis.Parameters.NidaqDuration;
 
 % Expeced Data set
 ExpectedSize=Duration*SampRateSR;
@@ -33,19 +33,19 @@ Time=linspace(0,Duration,ExpectedSize);
 Time=Time-TimeToZero;
 
 % Data
-Photo=cell(length(Analysis.Properties.PhotoCh),1);
-for thisCh=1:length(Analysis.Properties.PhotoCh)
+Photo=cell(length(Analysis.Parameters.PhotoCh),1);
+for thisCh=1:length(Analysis.Parameters.PhotoCh)
     Data=NaN(ExpectedSize,1);
-    if Analysis.Properties.Modulation
-        thisNidaqField=char(Analysis.Properties.PhotoField{thisCh});
-        thisAmp=SessionData.TrialSettings(thisTrial).GUI.(char(Analysis.Properties.PhotoAmpField{thisCh}));
+    if Analysis.Parameters.Modulation
+        thisNidaqField=char(Analysis.Parameters.PhotoField{thisCh});
+        thisAmp=SessionData.TrialSettings(thisTrial).GUI.(char(Analysis.Parameters.PhotoAmpField{thisCh}));
         if thisAmp~=0
-        thisFreq=SessionData.TrialSettings(thisTrial).GUI.(char(Analysis.Properties.PhotoFreqField{thisCh}));
-        switch Analysis.Properties.recordedMod
+        thisFreq=SessionData.TrialSettings(thisTrial).GUI.(char(Analysis.Parameters.PhotoFreqField{thisCh}));
+        switch Analysis.Parameters.recordedMod
             case 0
                 thisModulation=AP_Modulation(Analysis,thisAmp,thisFreq);
             case 1
-                thisModulation=SessionData.(thisNidaqField){1,thisTrial}(:,Analysis.Properties.PhotoModulData(thisCh));
+                thisModulation=SessionData.(thisNidaqField){1,thisTrial}(:,Analysis.Parameters.PhotoModulData(thisCh));
         end
         thisData=AP_Demodulation(SessionData.(thisNidaqField){1,thisTrial}(:,1),thisModulation,SampRate,thisAmp,thisFreq,15);
         thisData=decimate(thisData,DecimateFactor);
@@ -63,7 +63,7 @@ for thisCh=1:length(Analysis.Properties.PhotoCh)
 % DFF and zero
     DFFBaseline=mean(Data(Baseline(1):Baseline(2)));
     DFF=(Data'-DFFBaseline)/DFFBaseline;
-    if Analysis.Properties.ZeroAtZero
+    if Analysis.Parameters.ZeroAtZero
         DFF=DFF-mean(DFF(Time>-0.01 & Time<0.01));
     end
     Photo{thisCh}(1,:)=Time;
@@ -75,12 +75,12 @@ end
 end
 
 %% Wheel
-if Analysis.Properties.Wheel==1
+if Analysis.Parameters.Wheel==1
 % Timimg parameters 
-    if Analysis.Properties.Photometry==0
-SampRateSR=Analysis.Properties.NidaqDecimatedSR;
-DecimateFactor=Analysis.Properties.NidaqDecimateFactor;
-Duration=Analysis.Properties.NidaqDuration;
+    if Analysis.Parameters.Photometry==0
+SampRateSR=Analysis.Parameters.NidaqDecimatedSR;
+DecimateFactor=Analysis.Parameters.NidaqDecimateFactor;
+Duration=Analysis.Parameters.NidaqDuration;
 ExpectedSize=Duration*SampRateSR;
 Time=linspace(0,Duration,ExpectedSize);
 Time=Time-TimeToZero;
@@ -92,12 +92,12 @@ DTpoints=SampRateSR*DTsec;
 DataWheel=NaN(ExpectedSize,1);
 % Data
 signedData = SessionData.NidaqWheelData{1,thisTrial};
-signedThreshold = 2^(Analysis.Properties.WheelCounterNbits-1);
-signedData(signedData > signedThreshold) = signedData(signedData > signedThreshold) - 2^Analysis.Properties.WheelCounterNbits;
-DataDeg  = signedData * 360/Analysis.Properties.WheelEncoderCPR;
+signedThreshold = 2^(Analysis.Parameters.WheelCounterNbits-1);
+signedData(signedData > signedThreshold) = signedData(signedData > signedThreshold) - 2^Analysis.Parameters.WheelCounterNbits;
+DataDeg  = signedData * 360/Analysis.Parameters.WheelEncoderCPR;
 DataDeg  = decimate(DataDeg,DecimateFactor);
 DataWheel(1:length(DataDeg))=DataDeg;
-DataWheelDistance=DataWheel.*(Analysis.Properties.WheelPolarity*Analysis.Properties.WheelDiameter*pi/360);
+DataWheelDistance=DataWheel.*(Analysis.Parameters.WheelPolarity*Analysis.Parameters.WheelDiameter*pi/360);
 
 Wheel(1,:)=Time;
 Wheel(2,:)=DataWheel;

@@ -2,12 +2,12 @@
 clear SessionData Analysis DefaultParam; close all;
 %% Analysis type Single/Group
 DefaultParam.Analysis_type='Single';
-DefaultParam.Save=1;
+DefaultParam.Save=0;
 DefaultParam.Load=0;
 DefaultParam.TrialEvents4CellBase=1;
 % Figures
 DefaultParam.PhotoChNames={'470-BLA' 'none' '470-VS'};
-DefaultParam.PlotSummary1=1;
+DefaultParam.PlotSummary1=0;
 DefaultParam.PlotSummary2=0;
 DefaultParam.PlotFiltersSingle=0; %AP_Filter_GroupToPlot #1 Output
 DefaultParam.PlotFiltersSummary=1;

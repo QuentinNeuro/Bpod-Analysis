@@ -33,13 +33,11 @@ end
     Analysis.(thistype).IgnoredTrials               =Analysis.AllData.nTrials-Analysis.(thistype).nTrials;
     Analysis.(thistype).TrialNumbers                =Analysis.AllData.TrialNumbers(thisFilter);
 % Timing
-    Analysis.(thistype).CueTime=Analysis.AllData.CueTime(thisFilter,:);
-    Analysis.(thistype).CueTime=Analysis.(thistype).CueTime(1,:);
-    Analysis.(thistype).OutcomeTime=Analysis.AllData.OutcomeTime(thisFilter,:);
-    Analysis.(thistype).OutcomeTime=Analysis.(thistype).OutcomeTime(1,:);
+    Analysis.(thistype).Time.Cue=Analysis.AllData.Time.Cue(thisFilter,:);
+    Analysis.(thistype).Time.Outcome=Analysis.AllData.TimeOutcome(thisFilter,:);
     
-    CueTime=Analysis.(thistype).CueTime+Analysis.Properties.CueTimeReset;
-    OutcomeTime=Analysis.(thistype).OutcomeTime+Analysis.Properties.OutcomeTimeReset;
+    CueTime=Analysis.(thistype).Time.Cue(1,:)+Analysis.Parameters.CueTimeReset;
+    OutcomeTime=Analysis.(thistype).Time.Outcome(1,:)+Analysis.Parameters.OutcomeTimeReset;
 % Licks    
     thisEvents                                      =Analysis.AllData.Licks.Events;
     thisEvents(thisFilter~=1) = '';
@@ -56,13 +54,13 @@ end
     % Average
     Analysis.(thistype).Licks.AVG                       =mean(Analysis.(thistype).Licks.Rate,1);
     Analysis.(thistype).Licks.SEM                       =std(Analysis.(thistype).Licks.Rate,0,1)/sqrt(Analysis.(thistype).nTrials);
-    Analysis.(thistype).Licks.Bin                       =Analysis.Properties.LickEdges(1)+Analysis.Properties.Bin:Analysis.Properties.Bin:Analysis.Properties.LickEdges(2);
+    Analysis.(thistype).Licks.Bin                       =Analysis.Parameters.LickEdges(1)+Analysis.Parameters.Bin:Analysis.Parameters.Bin:Analysis.Parameters.LickEdges(2);
     Analysis.(thistype).Licks.CueAVG                    =mean(Analysis.(thistype).Licks.Cue);
     Analysis.(thistype).Licks.OutcomeAVG                =mean(Analysis.(thistype).Licks.Outcome);
 % Photometry    
-    for thisCh=1:length(Analysis.Properties.PhotoCh)
-        thisChStruct=sprintf('Photo_%s',char(Analysis.Properties.PhotoCh{thisCh}));
-        Analysis.(thistype).(thisChStruct).Name         =Analysis.Properties.PhotoChNames{thisCh};
+    for thisCh=1:length(Analysis.Parameters.PhotoCh)
+        thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
+        Analysis.(thistype).(thisChStruct).Name         =Analysis.Parameters.PhotoChNames{thisCh};
         Analysis.(thistype).(thisChStruct).Time         =Analysis.AllData.(thisChStruct).Time(thisFilter,:);
         Analysis.(thistype).(thisChStruct).DFF          =Analysis.AllData.(thisChStruct).DFF(thisFilter,:);
         Analysis.(thistype).(thisChStruct).Cue          =Analysis.AllData.(thisChStruct).Cue(thisFilter);
@@ -81,7 +79,7 @@ end
         Analysis.(thistype).(thisChStruct).OutcomeMax   =max(Analysis.(thistype).(thisChStruct).DFFAVG(Analysis.(thistype).(thisChStruct).Time(1,:)>OutcomeTime(1) & Analysis.(thistype).(thisChStruct).Time(1,:)<OutcomeTime(2))); 
     end
 %% Wheel
-    if Analysis.Properties.Wheel==1
+    if Analysis.Parameters.Wheel==1
         Analysis.(thistype).Wheel.Time                  =Analysis.AllData.Wheel.Time(thisFilter,:);
         Analysis.(thistype).Wheel.Deg                   =Analysis.AllData.Wheel.Deg(thisFilter,:);
         Analysis.(thistype).Wheel.Distance              =Analysis.AllData.Wheel.Distance(thisFilter,:);
@@ -93,7 +91,7 @@ end
         Analysis.(thistype).Wheel.DistanceSEM            =nanstd(Analysis.(thistype).Wheel.Distance,0,1)/sqrt(Analysis.(thistype).nTrials);
     end
 %% Pupillometry
-    if Analysis.Properties.Pupillometry
+    if Analysis.Parameters.Pupillometry
         Analysis.(thistype).Pupil.Time              =Analysis.AllData.Pupil.Time(thisFilter,:);
         Analysis.(thistype).Pupil.Blink             =Analysis.AllData.Pupil.Blink(thisFilter,:);
         Analysis.(thistype).Pupil.Pupil             =Analysis.AllData.Pupil.Pupil(thisFilter,:);

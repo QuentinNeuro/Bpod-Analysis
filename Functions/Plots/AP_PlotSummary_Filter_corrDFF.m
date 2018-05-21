@@ -1,24 +1,24 @@
 function AP_PlotSummary_Filter_corrDFF(Analysis,Title,Group,channelnb)
 
-thisChStruct=sprintf('Photo_%s',char(Analysis.Properties.PhotoCh{channelnb}));
-FigTitle=sprintf('Analysis-Plot %s %s',char(Analysis.Properties.PhotoCh{channelnb}),Title);
+thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{channelnb}));
+FigTitle=sprintf('Analysis-Plot %s %s',char(Analysis.Parameters.PhotoCh{channelnb}),Title);
 
 %% Plot Parameters
 nboftypes=length(Group);
 color4plot={'k';'b';'r';'g';'c';'c';'k'};
-AVGPosition=Analysis.Properties.NidaqRange(1)/2;
+AVGPosition=Analysis.Parameters.NidaqRange(1)/2;
 
 Title=strrep(Title,'_',' ');
 labelx='Time (sec)';   
-xTime=[Analysis.Properties.PlotEdges(1) Analysis.Properties.PlotEdges(2)];
+xTime=[Analysis.Parameters.PlotEdges(1) Analysis.Parameters.PlotEdges(2)];
 xtickvalues=linspace(xTime(1),xTime(2),5);
-transparency=Analysis.Properties.Transparency;
+transparency=Analysis.Parameters.Transparency;
 LimRanges={[-5 40],[0 10],[-5 100],[-10 50],[-5 50]};
 labelyA={'DFF (%)','Licks (Hz)','Run (cm)','Pupil (%)','Run (cm/sec)'};
 
 %% Figure
 scrsz = get(groot,'ScreenSize');
-FigureLegend=sprintf('%s_%s',Analysis.Properties.Name,Analysis.Properties.Rig);
+FigureLegend=sprintf('%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig);
 figData.figure=figure('Name',FigTitle,'Position', [200 100 1200 700], 'numbertitle','off');
 Legend=uicontrol('style','text');
 set(Legend,'String',FigureLegend,'Position',[10,5,500,20]); 
@@ -60,7 +60,7 @@ if Analysis.(thistype).nTrials~=0
     set(gca,'XLim',LimRanges{1},'YLim',LimRanges{2});
     
 % row 3 Running
-if Analysis.Properties.Wheel
+if Analysis.Parameters.Wheel
     plotIndex(3)=11;
     subplot(4,5,11); hold on;
     shadedErrorBar(Analysis.(thistype).Wheel.Time(1,:),Analysis.(thistype).Wheel.DistanceAVG,Analysis.(thistype).Wheel.DistanceSEM,['-' color4plot{k}],transparency);
@@ -78,7 +78,7 @@ if Analysis.Properties.Wheel
     set(gca,'XLim',LimRanges{1},'YLim',LimRanges{5});
 end
 % row 4 Pupillometry
-if Analysis.Properties.Pupillometry
+if Analysis.Parameters.Pupillometry
     
     plotIndex(4)=16;
     subplot(4,5,16); hold on;
@@ -107,8 +107,8 @@ for i=1:4
     subplot(4,5,thisSubPlot); hold on;
 	ylabel(labelyA{i});
     plot([0 0],LimRanges{i},'-r');
-	plot(Analysis.AllData.CueTime(1,:)+Analysis.Properties.CueTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
-	plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Properties.OutcomeTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
+	plot(Analysis.AllData.CueTime(1,:)+Analysis.Parameters.CueTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
+	plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Parameters.OutcomeTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',LimRanges{i});
 end
 subplot(4,5,1); hold on;

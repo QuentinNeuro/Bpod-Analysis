@@ -5,10 +5,10 @@ function [GTP,GTPB]=AP_Filter_GroupToPlot(Analysis)
 GTP={};
 GTPB={};
 index=0;
-switch Analysis.Properties.Behavior
+switch Analysis.Parameters.Behavior
 %% For CuedOutcome Behavior
     case 'CuedOutcome'
-switch Analysis.Properties.Phase
+switch Analysis.Parameters.Phase
     case 'Training'  %'RewardA' 'Training'
         index=index+1;
 GTP{index,1}='RewExp';
@@ -187,7 +187,7 @@ GTP{index,2}={'CueB_Nogo_FalseAlarm_Pupil',      	{'type_2','Go','Pupil','PupilN
           'CueB_Nogo_CorrectRej_Pupil',       {'type_2','Nogo','Pupil','PupilNaN'};...
           'CueB_Nogo_CorrectRej_NoPupil',     {'type_2','Nogo','PupilInv','PupilNaN'}};
 
-if Analysis.Properties.nbOfTrialTypes==4
+if Analysis.Parameters.nbOfTrialTypes==4
           index=index+1;
 GTP{index,1}='CueCvsCueD_HardTrials';
 GTP{index,2}={'CueC_Go_Hit',                    {'type_3','Go'};...

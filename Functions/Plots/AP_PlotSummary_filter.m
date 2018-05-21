@@ -1,26 +1,26 @@
 function AP_PlotSummary_filter(Analysis,Title,Group,channelnb)
 
-thisChStruct=sprintf('Photo_%s',char(Analysis.Properties.PhotoCh{channelnb}));
-FigTitle=sprintf('Analysis-Plot %s %s',char(Analysis.Properties.PhotoChNames{channelnb}),Title);
+thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{channelnb}));
+FigTitle=sprintf('Analysis-Plot %s %s',char(Analysis.Parameters.PhotoChNames{channelnb}),Title);
 
 %% Plot Parameters
 nboftypes=length(Group);
 color4plot={'-k';'-b';'-r';'-g';'-c';'-c';'-k'};
-AVGPosition=Analysis.Properties.NidaqRange(1)/2;
+AVGPosition=Analysis.Parameters.NidaqRange(1)/2;
 
 Title=strrep(Title,'_',' ');
 labelx='Time (sec)';   
-xTime=[Analysis.Properties.PlotEdges(1) Analysis.Properties.PlotEdges(2)];
+xTime=[Analysis.Parameters.PlotEdges(1) Analysis.Parameters.PlotEdges(2)];
 xtickvalues=linspace(xTime(1),xTime(2),5);
-transparency=Analysis.Properties.Transparency;
+transparency=Analysis.Parameters.Transparency;
 labely1='Licks Rate (Hz)';
 maxrate=10;
 labely2='DF/F (%)';
-NidaqRange=Analysis.Properties.NidaqRange;
+NidaqRange=Analysis.Parameters.NidaqRange;
 
 %% Figure
 scrsz = get(groot,'ScreenSize');
-FigureLegend=sprintf('%s_%s',Analysis.Properties.Name,Analysis.Properties.Rig);
+FigureLegend=sprintf('%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig);
 figData.figure=figure('Name',FigTitle,'Position', [25 25 scrsz(3)/4 scrsz(4)-150], 'numbertitle','off');
 Legend=uicontrol('style','text');
 set(Legend,'String',FigureLegend,'Position',[10,5,500,20]); 
@@ -54,6 +54,6 @@ end
     xlabel(labelx);
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',NidaqRange);
     plot([0 0],NidaqRange,'-r');
-	plot(Analysis.AllData.CueTime(1,:)+Analysis.Properties.CueTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
-	plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Properties.OutcomeTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
+	plot(Analysis.AllData.CueTime(1,:)+Analysis.Parameters.CueTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
+	plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Parameters.OutcomeTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
 end

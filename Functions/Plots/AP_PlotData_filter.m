@@ -7,15 +7,15 @@ function Analysis=AP_PlotData_filter(Analysis,thistype,channelnb)
 %3) a pseudocolored raster plot of the individual photometry traces
 %4) the average photometry signal
 %To plot the different graph, this function is using the parameters
-%specified in Analysis.Properties
+%specified in Analysis.Parameters
 %
 %function designed by Quentin 2017 for Analysis_Photometry
 
 if nargin==2
     channelnb=1;
 end
-thisChStruct=sprintf('Photo_%s',char(Analysis.Properties.PhotoCh{channelnb}));
-FigTitle=sprintf('Analysis-PlotSingle %s',char(Analysis.Properties.PhotoChNames{channelnb}));
+thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{channelnb}));
+FigTitle=sprintf('Analysis-PlotSingle %s',char(Analysis.Parameters.PhotoChNames{channelnb}));
 
 %% Close figures
 try
@@ -25,11 +25,11 @@ end
 %% Plot Parameters
 Title=sprintf('%s (%.0d)',strrep(Analysis.(thistype).Name,'_',' '),Analysis.(thistype).nTrials);
 labelx='Time (sec)';   
-xTime=[Analysis.Properties.PlotEdges(1) Analysis.Properties.PlotEdges(2)];
+xTime=[Analysis.Parameters.PlotEdges(1) Analysis.Parameters.PlotEdges(2)];
 xtickvalues=linspace(xTime(1),xTime(2),5);
 labely1='Trial Number (licks)';
 labely2='Licks Rate (Hz)';
-if Analysis.Properties.Photometry==1
+if Analysis.Parameters.Photometry==1
     labely3='Trial Number (DF/F)';
     labely4='DF/F (%)';
 end
@@ -45,19 +45,19 @@ if maxrate<10
     maxrate=10;
 end
 
-if Analysis.Properties.Photometry==1
+if Analysis.Parameters.Photometry==1
 %Nidaq y axes
-if isempty(Analysis.Properties.NidaqRange)
-        NidaqRange=[0-6*Analysis.Properties.NidaqSTD 6*Analysis.Properties.NidaqSTD];
-        Analysis.Properties.NidaqRange=NidaqRange;
+if isempty(Analysis.Parameters.NidaqRange)
+        NidaqRange=[0-6*Analysis.Parameters.NidaqSTD 6*Analysis.Parameters.NidaqSTD];
+        Analysis.Parameters.NidaqRange=NidaqRange;
 else
-    NidaqRange=Analysis.Properties.NidaqRange;
+    NidaqRange=Analysis.Parameters.NidaqRange;
 end
 end
 
 %% Plot
 scrsz = get(groot,'ScreenSize');
-FigureLegend=sprintf('%s_%s',Analysis.Properties.Name,Analysis.Properties.Rig);
+FigureLegend=sprintf('%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig);
 figData.figure=figure('Name',FigTitle,'Position', [25 25 scrsz(3)/4 scrsz(4)-150], 'numbertitle','off');
 Legend=uicontrol('style','text');
 set(Legend,'String',FigureLegend,'Position',[10,5,500,20]); 
@@ -80,7 +80,7 @@ shadedErrorBar(Analysis.(thistype).Licks.Bin, Analysis.(thistype).Licks.AVG, Ana
 plot([0 0],[0 maxrate+1],'-r');
 plot(Analysis.(thistype).CueTime,[maxrate maxrate],'-b','LineWidth',2);
 
-if Analysis.Properties.Photometry==1    
+if Analysis.Parameters.Photometry==1    
 % Nidaq Raster
 subplot(6,1,[4 5]); hold on;
 ylabel(labely3);

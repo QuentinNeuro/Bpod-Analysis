@@ -19,10 +19,10 @@ else
 end
 
 %Filter
-Logicals=false(Analysis.AllData.nTrials,Analysis.Properties.nbOfTrialTypes);
+Logicals=false(Analysis.AllData.nTrials,Analysis.Parameters.nbOfTrialTypes);
 
 %% Filter
-for i=1:Analysis.Properties.nbOfTrialTypes
+for i=1:Analysis.Parameters.nbOfTrialTypes
     thistype=sprintf('type_%.0d',i);
     Analysis.Filters.Names{i+filterNameCounter}=thistype;
     Logicals(Analysis.AllData.TrialTypes==i,i)=true;

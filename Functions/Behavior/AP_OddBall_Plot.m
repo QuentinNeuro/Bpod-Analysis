@@ -1,8 +1,8 @@
 function Analysis=AP_OddBall_Plot(Analysis,channelnb)
 
 %% test channel
-thisChStruct=sprintf('Photo_%s',char(Analysis.Properties.PhotoCh{channelnb}));
-FigTitle=sprintf('Analysis-Plot %s',char(Analysis.Properties.PhotoCh{channelnb}));
+thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{channelnb}));
+FigTitle=sprintf('Analysis-Plot %s',char(Analysis.Parameters.PhotoCh{channelnb}));
 
 %% Parameters
 FigTitle='Oddball';
@@ -11,15 +11,15 @@ labely='DF/F(%)';
 
 xEdges=[-0.1 1];
 xEdges2=[-0.1 10];
-yEdges=Analysis.Properties.NidaqRange;
-yEdges2=Analysis.Properties.NidaqRange;
+yEdges=Analysis.Parameters.NidaqRange;
+yEdges2=Analysis.Parameters.NidaqRange;
 indexplot=0;
 color4plot={'-k';'-b';'-r';'-g';'-c';'-c';'-k'};
-transparency=Analysis.Properties.Transparency;
+transparency=Analysis.Parameters.Transparency;
 Leg={'Early','Late','Odd'};
 
 %% Figure
-FigureLegend=sprintf('%s_%s',Analysis.Properties.Name,Analysis.Properties.Rig);
+FigureLegend=sprintf('%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig);
 figData.figure=figure('Name',FigTitle,'Position', [200 100 1200 700], 'numbertitle','off');
 Legend=uicontrol('style','text');
 set(Legend,'String',FigureLegend,'Position',[10,5,500,20]); 

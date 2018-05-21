@@ -44,7 +44,7 @@ end
 CutoffTrial=input('Select the cutoff trial #');
 
 %% Save the ignoredTrials file
-% ITFile=[Analysis.Properties.Name '_ignoredTrials.mat'];
+% ITFile=[Analysis.Parameters.Name '_ignoredTrials.mat'];
 % if exist(ITFile,'file')
 %   load(ITFile);  
 % end

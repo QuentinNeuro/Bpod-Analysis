@@ -1,7 +1,7 @@
 function Modulated_LED=AP_Modulation(Analysis,amp,freq)
 %Generates a sin wave for LED amplitude modulation.
 
-SamplingRate=Analysis.Properties.NidaqSamplingRate;
+SamplingRate=Analysis.Parameters.NidaqSamplingRate;
 try
     Duration=SessionData.TrialSettings(1).GUI.NidaqDuration;
 catch

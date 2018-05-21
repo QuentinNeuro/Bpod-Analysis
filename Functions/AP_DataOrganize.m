@@ -13,15 +13,15 @@ if isfield(Analysis,'AllData')==0
         Analysis.AllData.nTrials=0;
         Analysis.AllData.IgnoredTrials=0;
 end
-BaselineTime=Analysis.Properties.NidaqBaseline;
-BaselinePt=Analysis.Properties.NidaqBaselinePoints;
+BaselineTime=Analysis.Parameters.NidaqBaseline;
+BaselinePt=Analysis.Parameters.NidaqBaselinePoints;
 
 %% Compute Pupil Baseline and DPP according to the Baseline timing
-if Analysis.Properties.Pupillometry
+if Analysis.Parameters.Pupillometry
     Pup.PupilSmoothBaseline=mean(Pup.PupilSmooth(Pup.Time>BaselineTime(1) & Pup.Time<BaselineTime(2),:));
     Pup.PupilSmoothBaselineNorm=Pup.PupilSmoothBaseline/mean(Pup.PupilSmoothBaseline);
     Pup.PupilSmoothDPP=100*(Pup.PupilSmooth-Pup.PupilSmoothBaseline)./Pup.PupilSmoothBaseline;
-    nbOfFrames=Analysis.Properties.NidaqDuration*Pup.Parameters.frameRate;
+    nbOfFrames=Analysis.Parameters.NidaqDuration*Pup.Parameters.frameRate;
     if nbOfFrames>Pup.Parameters.nFrames
         nbOfFrames=Pup.Parameters.nFrames;
     end
@@ -37,26 +37,26 @@ try
     Analysis.AllData.TrialNumbers(i)=i;
     Analysis.AllData.TrialTypes(i)=SessionData.TrialTypes(thisTrial);
 % Timimg
-    Analysis.AllData.TrialStartTS(i)    =SessionData.TrialStartTimestamp(thisTrial); 
-    Analysis.AllData.States{i}          =SessionData.RawEvents.Trial{1,thisTrial}.States;        
-    Analysis.AllData.ZeroTime(i)        =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Properties.StateToZero)(1);
-    Analysis.AllData.CueTime(i,:)       =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Properties.StateOfCue)...
-                                            -Analysis.AllData.ZeroTime(i);
-    Analysis.AllData.OutcomeTime(i,:)   =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Properties.StateOfOutcome)...
-                                            -Analysis.AllData.ZeroTime(i);
-    CueTime     =Analysis.AllData.CueTime(i,:)+Analysis.Properties.CueTimeReset;
-    OutcomeTime =Analysis.AllData.OutcomeTime(i,:)+Analysis.Properties.OutcomeTimeReset;
+    Analysis.AllData.Time.TrialStartTS(i)   =SessionData.TrialStartTimestamp(thisTrial); 
+    Analysis.AllData.Time.States{i}         =SessionData.RawEvents.Trial{1,thisTrial}.States;        
+    Analysis.AllData.Time.Zero(i)           =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Parameters.StateToZero)(1);
+    Analysis.AllData.Time.Cue(i,:)          =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Parameters.StateOfCue)...
+                                                -Analysis.AllData.Time.Zero(i);
+    Analysis.AllData.Time.Outcome(i,:)   =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Parameters.StateOfOutcome)...
+                                            -Analysis.AllData.Time.Zero(i);
+    CueTime     =Analysis.AllData.CueTime(i,:)+Analysis.Parameters.CueTimeReset;
+    OutcomeTime =Analysis.AllData.OutcomeTime(i,:)+Analysis.Parameters.OutcomeTimeReset;
 % Licks                                    
     Analysis.AllData.Licks.Events{i}                =thislick;
     Analysis.AllData.Licks.Trials{i}                =linspace(i,i,size(thislick,2));
-    Analysis.AllData.Licks.Bin{i}                   =(Analysis.Properties.LickEdges(1):Analysis.Properties.Bin:Analysis.Properties.LickEdges(2));
-    Analysis.AllData.Licks.Rate(i,:)                =histcounts(thislick,Analysis.AllData.Licks.Bin{i})/Analysis.Properties.Bin;
+    Analysis.AllData.Licks.Bin{i}                   =(Analysis.Parameters.LickEdges(1):Analysis.Parameters.Bin:Analysis.Parameters.LickEdges(2));
+    Analysis.AllData.Licks.Rate(i,:)                =histcounts(thislick,Analysis.AllData.Licks.Bin{i})/Analysis.Parameters.Bin;
     Analysis.AllData.Licks.Cue(i)                   =mean(Analysis.AllData.Licks.Rate(i,Analysis.AllData.Licks.Bin{i}>CueTime(1) & Analysis.AllData.Licks.Bin{i}<CueTime(2)));
     Analysis.AllData.Licks.Outcome(i)               =mean(Analysis.AllData.Licks.Rate(i,Analysis.AllData.Licks.Bin{i}>OutcomeTime(1) & Analysis.AllData.Licks.Bin{i}<OutcomeTime(2)));
 % Photometry    
-    for thisCh=1:length(Analysis.Properties.PhotoCh)
-        thisChStruct=sprintf('Photo_%s',char(Analysis.Properties.PhotoCh{thisCh}));
-        Analysis.AllData.(thisChStruct).Name        =Analysis.Properties.PhotoChNames{thisCh};
+    for thisCh=1:length(Analysis.Parameters.PhotoCh)
+        thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
+        Analysis.AllData.(thisChStruct).Name        =Analysis.Parameters.PhotoChNames{thisCh};
         Analysis.AllData.(thisChStruct).Time(i,:)	=thisPhoto{thisCh}(1,:);
         Analysis.AllData.(thisChStruct).Raw(i,:)  	=thisPhoto{thisCh}(2,:);
         Analysis.AllData.(thisChStruct).DFF(i,:)  	=thisPhoto{thisCh}(3,:);
@@ -66,7 +66,7 @@ try
         Analysis.AllData.(thisChStruct).OutcomeZ(i) =Analysis.AllData.(thisChStruct).Outcome(i)-mean(thisPhoto{thisCh}(3,thisPhoto{thisCh}(1,:)>-0.01 & thisPhoto{thisCh}(1,:)<0.01));
     end
 % Wheel    
-    if Analysis.Properties.Wheel==1
+    if Analysis.Parameters.Wheel==1
         Analysis.AllData.Wheel.Time(i,:)          	=thisWheel(1,:);
         Analysis.AllData.Wheel.Deg(i,:)          	=thisWheel(2,:);
         Analysis.AllData.Wheel.Distance(i,:)       	=thisWheel(3,:);
@@ -75,11 +75,11 @@ try
         Analysis.AllData.Wheel.Outcome(i)           =sumabs(diff(thisWheel(3,thisWheel(1,:)>OutcomeTime(1) & thisWheel(1,:)<OutcomeTime(2))))/(OutcomeTime(2)-OutcomeTime(1));
     end
 % Pupillometry
-    if Analysis.Properties.Pupillometry
+    if Analysis.Parameters.Pupillometry
         thisPupTime=Pup.Time(1:nbOfFrames)'-Analysis.AllData.ZeroTime(i);
         thisPup=Pup.Pupil(1:nbOfFrames,thisTrial)';
         thisPupilDPP=Pup.PupilSmoothDPP(1:nbOfFrames,thisTrial)';
-        if Analysis.Properties.ZeroAtZero
+        if Analysis.Parameters.ZeroAtZero
             thisPupilDPP=thisPupilDPP-mean(thisPupilDPP(thisPupTime>-0.01 & thisPupTime<0.01));
         end
         % Organize in the structure
@@ -97,11 +97,11 @@ try
     end
     
 %% Behavior Specific
-switch Analysis.Properties.Behavior
+switch Analysis.Parameters.Behavior
     case 'Oddball'
     Analysis.AllData.Oddball_StateSeq{i}=SessionData.TrialSettings(thisTrial).StateSequence;
     Analysis.AllData.Oddball_SoundSeq{i}=SessionData.TrialSettings(thisTrial).SoundSequence;
-    Analysis.Properties.Oddball_SoundITI=SessionData.TrialSettings(1).GUI.ITI;
+    Analysis.Parameters.Oddball_SoundITI=SessionData.TrialSettings(1).GUI.ITI;
 end  
 
 %% Ignored Trials
@@ -112,9 +112,9 @@ end
 end
 
 %% Bleaching calculation
-for thisCh=1:length(Analysis.Properties.PhotoCh)
-    thisChStruct=sprintf('Photo_%s',char(Analysis.Properties.PhotoCh{thisCh}));
+for thisCh=1:length(Analysis.Parameters.PhotoCh)
+    thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
     Analysis.AllData.(thisChStruct).Bleach=Analysis.AllData.(thisChStruct).Baseline/mean(Analysis.AllData.(thisChStruct).Baseline(1:2));
-    Analysis.Properties.NidaqSTD=std2(Analysis.AllData.(thisChStruct).DFF(:,BaselinePt(1):BaselinePt(2)));
+    Analysis.Parameters.NidaqSTD=std2(Analysis.AllData.(thisChStruct).DFF(:,BaselinePt(1):BaselinePt(2)));
 end 
 end

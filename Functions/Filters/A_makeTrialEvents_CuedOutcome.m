@@ -4,7 +4,7 @@ function Events=A_makeTrialEvents_CuedOutcome(Analysis)
 %
 
 %% Trial Starting Time
-Events.TrialStartTimes=Analysis.AllData.TrialStartTS;
+Events.TrialStartTimestamp=Analysis.AllData.TrialStartTS;
 
 %% States Time
 Cue=NaN(1,Analysis.AllData.nTrials);

@@ -1,4 +1,4 @@
-function Analysis=AP_OddBall_FiltersAndPlot(Analysis,DefaultParam)
+function Analysis=AP_OddBall_FiltersAndPlot(Analysis)
 
 %% Timing
 Analysis.type_1.Oddball.counter=0;
@@ -42,12 +42,12 @@ for thisTrial=1:Analysis.AllData.nTrials
 end
 
 %% Nidaq
-MaxTime=20*Analysis.Properties.NidaqDecimatedSR; %(sec)
+MaxTime=20*Analysis.Parameters.NidaqDecimatedSR; %(sec)
 MaxNb=1000;
-for i=1:Analysis.Properties.nbOfTrialTypes
+for i=1:Analysis.Parameters.nbOfTrialTypes
     thistype=sprintf('type_%.0d',i);
-    for thisCh=1:length(Analysis.Properties.PhotoCh)
-        thisChStruct=sprintf('Photo_%s',char(Analysis.Properties.PhotoCh{thisCh}));        
+    for thisCh=1:length(Analysis.Parameters.PhotoCh)
+        thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));        
         counter=0;
         % Matrices to store Photometry and timing data
         TimeEarly=[];
@@ -118,11 +118,11 @@ for i=1:Analysis.Properties.nbOfTrialTypes
 end
 
 %% PLOT
-for thisCh=1:length(Analysis.Properties.PhotoCh)
+for thisCh=1:length(Analysis.Parameters.PhotoCh)
 Analysis=AP_OddBall_Plot(Analysis,thisCh);
-saveas(gcf,[Analysis.Properties.DirFig Analysis.Properties.Name char(Analysis.Properties.PhotoCh{thisCh}) '.png']);
-if Analysis.Properties.Illustrator
-    saveas(gcf,[Analysis.Properties.DirFig Analysis.Properties.Name char(Analysis.Properties.PhotoCh{thisCh})],'epsc');
+saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name char(Analysis.Parameters.PhotoCh{thisCh}) '.png']);
+if Analysis.Parameters.Illustrator
+    saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name char(Analysis.Parameters.PhotoCh{thisCh})],'epsc');
 end
 end
 end

@@ -11,18 +11,18 @@ for i=1:length(FilterNames)
     Analysis=A_FilterName(Analysis,FilterNames{i});
 end
 % Licks
-Analysis=A_FilterLick(Analysis,'LicksCue','Cue',Analysis.Properties.LicksCue);
-Analysis=A_FilterLick(Analysis,'LicksOutcome','Outcome',Analysis.Properties.LicksOutcome);
+Analysis=A_FilterLick(Analysis,'LicksCue','Cue',Analysis.Parameters.LicksCue);
+Analysis=A_FilterLick(Analysis,'LicksOutcome','Outcome',Analysis.Parameters.LicksOutcome);
 % Wheel
-Analysis=A_FilterWheel(Analysis,'Run',Analysis.Properties.WheelState,Analysis.Properties.WheelThreshold);
+Analysis=A_FilterWheel(Analysis,'Run',Analysis.Parameters.WheelState,Analysis.Parameters.WheelThreshold);
 % Pupil
-Analysis=A_FilterPupil(Analysis,'Pupil',Analysis.Properties.PupilState,Analysis.Properties.PupilThreshold);
+Analysis=A_FilterPupil(Analysis,'Pupil',Analysis.Parameters.PupilState,Analysis.Parameters.PupilThreshold);
 Analysis=A_FilterPupilNaNCheck(Analysis,'PupilNaN',25);
 % Sequence
 Analysis=A_FilterAfollowsB(Analysis,'Reward_After_Punish','Reward','Punish');
 
 %% Sort and Plot Filtered Trials specified in AP_Filter_GroupToPlot.
-if Analysis.Properties.PlotFiltersSummary || Analysis.Properties.PlotFiltersSingle
+if Analysis.Parameters.PlotFiltersSummary || Analysis.Parameters.PlotFiltersSingle
 [GroupToPlot]=AP_Filter_GroupToPlot(Analysis);
 for i=1:size(GroupToPlot,1)
     Title=GroupToPlot{i,1};
@@ -33,30 +33,30 @@ for i=1:size(GroupToPlot,1)
         MetaFilterGroup{j}=MetaFilter;
         [Analysis,thisFilter]=A_FilterMeta(Analysis,MetaFilter,Filters);
         Analysis=AP_DataSort(Analysis,MetaFilter,thisFilter);
-        if Analysis.Properties.Photometry
-        if Analysis.Properties.PlotFiltersSingle && Analysis.(MetaFilter).nTrials>0
-            for thisCh=1:length(Analysis.Properties.PhotoCh)
+        if Analysis.Parameters.Photometry
+        if Analysis.Parameters.PlotFiltersSingle && Analysis.(MetaFilter).nTrials>0
+            for thisCh=1:length(Analysis.Parameters.PhotoCh)
                 AP_PlotData_filter(Analysis,MetaFilter,thisCh);
-                saveas(gcf,[Analysis.Properties.DirFig Analysis.Properties.Name MetaFilter char(Analysis.Properties.PhotoChNames{thisCh}) '.png']);
-                if Analysis.Properties.Illustrator
-                saveas(gcf,[Analysis.Properties.DirFig Analysis.Properties.Name MetaFilter char(Analysis.Properties.PhotoChNames{thisCh})],'epsc');
+                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name MetaFilter char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
+                if Analysis.Parameters.Illustrator
+                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name MetaFilter char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
                 end
             end
         end
         end
         clear thisFilter
     end
-    for thisCh=1:length(Analysis.Properties.PhotoCh)
+    for thisCh=1:length(Analysis.Parameters.PhotoCh)
         AP_PlotSummary_filter(Analysis,Title,MetaFilterGroup,thisCh);
-        saveas(gcf,[Analysis.Properties.DirFig Analysis.Properties.Name Title char(Analysis.Properties.PhotoChNames{thisCh}) '.png']);
-        if Analysis.Properties.Illustrator
-        saveas(gcf,[Analysis.Properties.DirFig Analysis.Properties.Name Title char(Analysis.Properties.PhotoChNames{thisCh})],'epsc');
+        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
+        if Analysis.Parameters.Illustrator
+        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
         end
     end
 end
 end
 %% Behavior Filters
-if Analysis.Properties.PlotFiltersBehavior
+if Analysis.Parameters.PlotFiltersBehavior
 [~,GroupToPlot]=AP_Filter_GroupToPlot(Analysis);
 for i=1:size(GroupToPlot,1)
     Title=GroupToPlot{i,1};
@@ -67,25 +67,25 @@ for i=1:size(GroupToPlot,1)
         MetaFilterGroup{j}=MetaFilter;
         [Analysis,thisFilter]=A_FilterMeta(Analysis,MetaFilter,Filters);
         Analysis=AP_DataSort(Analysis,MetaFilter,thisFilter);
-        if Analysis.Properties.Photometry
+        if Analysis.Parameters.Photometry
         if Analysis.(MetaFilter).nTrials
-            for thisCh=1:length(Analysis.Properties.PhotoCh)
+            for thisCh=1:length(Analysis.Parameters.PhotoCh)
                 AP_PlotData_Filter_corrDFF(Analysis,MetaFilter,thisCh);
-                saveas(gcf,[Analysis.Properties.DirFig Analysis.Properties.Name MetaFilter char(Analysis.Properties.PhotoChNames{thisCh}) '.png']);
-                if Analysis.Properties.Illustrator
-                saveas(gcf,[Analysis.Properties.DirFig Analysis.Properties.Name MetaFilter char(Analysis.Properties.PhotoChNames{thisCh})],'epsc');
+                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name MetaFilter char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
+                if Analysis.Parameters.Illustrator
+                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name MetaFilter char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
                 end
             end
         end
         end
         clear thisFilter
     end
-    if Analysis.Properties.Photometry
-    for thisCh=1:length(Analysis.Properties.PhotoCh)
+    if Analysis.Parameters.Photometry
+    for thisCh=1:length(Analysis.Parameters.PhotoCh)
         AP_PlotSummary_Filter_corrDFF(Analysis,Title,MetaFilterGroup,thisCh);
-        saveas(gcf,[Analysis.Properties.DirFig Analysis.Properties.Name Title char(Analysis.Properties.PhotoChNames{thisCh}) '.png']);
-        if Analysis.Properties.Illustrator
-        saveas(gcf,[Analysis.Properties.DirFig Analysis.Properties.Name Title char(Analysis.Properties.PhotoChNames{thisCh})],'epsc');
+        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
+        if Analysis.Parameters.Illustrator
+        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
         end
     end
     end
@@ -93,9 +93,9 @@ end
 end
 
 %% TrialEvents
-if Analysis.Properties.TE4CellBase
+if Analysis.Parameters.TE4CellBase
     CuedEvents=A_makeTrialEvents_CuedOutcome(Analysis);
-    FileName=[Analysis.Properties.Name '_CuedEvents.mat'];
+    FileName=[Analysis.Parameters.Name '_CuedEvents.mat'];
     DirEvents=[pwd filesep 'Events' filesep];
     if isdir(DirEvents)==0
         mkdir(DirEvents);

@@ -14,7 +14,7 @@ function Analysis=Analysis_Photometry(DefaultParam)
 if DefaultParam.Load==1
     FileName=DefaultParam.FileToOpen{1}
     cd(DefaultParam.PathName); load(FileName);
-    Analysis.Properties=AP_ParametersUpdate(Analysis.Properties,DefaultParam);
+    Analysis.Parameters=AP_ParametersUpdate(Analysis.Parameters,DefaultParam);
 else
 %% Loads Bpod SessionData File, Extracts and Organizes all the data
 for i=1:length(DefaultParam.FileToOpen)
@@ -31,7 +31,7 @@ else
 end
     % Parameters, Ignored Trials and Data extraction
 try
-        Analysis.Properties=AP_Parameters(SessionData,Pupillometry,DefaultParam,FileNameNoExt);
+        Analysis.Parameters=AP_Parameters(SessionData,Pupillometry,DefaultParam,FileNameNoExt);
         Analysis=A_FilterIgnoredTrials(Analysis,DefaultParam.TrialToFilterOut,DefaultParam.LoadIgnoredTrials);tic
         Analysis=AP_DataOrganize(Analysis,SessionData,Pupillometry);toc
 catch
@@ -45,7 +45,7 @@ end
 Analysis=AP_TrialTypes_FiltersAndPlot(Analysis,DefaultParam);
 
 %% Behavior specific : Sort filtered trials and generates plots
-switch Analysis.Properties.Behavior
+switch Analysis.Parameters.Behavior
     case 'CuedOutcome'
 Analysis=AP_CuedOutcome_FiltersAndPlot(Analysis);
     case 'GoNogo'
@@ -58,12 +58,12 @@ end
 
 %% Save Analysis
 if DefaultParam.Save
-    Analysis.Properties.Files=DefaultParam.FileToOpen;
+    Analysis.Parameters.Files=DefaultParam.FileToOpen;
     DirAnalysis=[DefaultParam.PathName 'Analysis' filesep];
     if isdir(DirAnalysis)==0
         mkdir(DirAnalysis);
     end
-FileName=[Analysis.Properties.Name '_' Analysis.Properties.Phase];
+FileName=[Analysis.Parameters.Name '_' Analysis.Parameters.Phase];
 DirFile=[DirAnalysis FileName];
 save(DirFile,'Analysis');
 end

@@ -19,9 +19,9 @@ for i=1:Analysis.AllData.nTrials
 if ischar(Time)
     switch Time
         case 'Cue'
-            Time=Analysis.AllData.CueTime(i,:)+Analysis.Properties.CueTimeReset;
+            Time=Analysis.AllData.Time.Cue(i,:)+Analysis.Parameters.CueTimeReset;
         case 'Outcome'
-            Time=Analysis.AllData.OutcomeTime(i,:)+Analysis.Properties.OutcomeTimeReset;
+            Time=Analysis.AllData.Time.Outcome(i,:)+Analysis.Parameters.OutcomeTimeReset;
     end
 end
     for j = Analysis.AllData.Licks.Events{i}

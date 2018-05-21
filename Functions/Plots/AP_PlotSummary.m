@@ -9,13 +9,13 @@ function AP_PlotSummary(Analysis,channelnb,varargin)
 %
 %function designed by Quentin 2016 for Analysis_Photometry
 
-thisChStruct=sprintf('Photo_%s',char(Analysis.Properties.PhotoCh{channelnb}));
-FigTitle=sprintf('Analysis-Plot Summary %s',char(Analysis.Properties.PhotoChNames{channelnb}));
+thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{channelnb}));
+FigTitle=sprintf('Analysis-Plot Summary %s',char(Analysis.Parameters.PhotoChNames{channelnb}));
 
 %% Plot Parameters
 nbofgroups=nargin-2;
 color4plot={'-k';'-b';'-r';'-g';'-c';'-c';'-k'};
-AVGPosition=Analysis.Properties.NidaqRange(1)/2;
+AVGPosition=Analysis.Parameters.NidaqRange(1)/2;
 for i=1:nbofgroups
     thisgroup=sprintf('thisgroup_%.0d',i);
 	GP.(thisgroup).types=cell2mat(varargin(i));
@@ -24,23 +24,23 @@ for i=1:nbofgroups
     end
     k=1;
     for j=GP.(thisgroup).types 
-        GP.(thisgroup).title(k)=Analysis.Properties.TrialNames(j);
+        GP.(thisgroup).title(k)=Analysis.Parameters.TrialNames(j);
         k=k+1;
     end
 end
 
 labelx='Time (sec)';   
-xTime=[Analysis.Properties.PlotEdges(1) Analysis.Properties.PlotEdges(2)];
-transparency=Analysis.Properties.Transparency;
+xTime=[Analysis.Parameters.PlotEdges(1) Analysis.Parameters.PlotEdges(2)];
+transparency=Analysis.Parameters.Transparency;
 xtickvalues=linspace(xTime(1),xTime(2),5);
 labely1='Licks Rate (Hz)';
 maxrate=10;
 labely2='DF/F (%)';
-NidaqRange=Analysis.Properties.NidaqRange;
+NidaqRange=Analysis.Parameters.NidaqRange;
 
 %% Table Parameters
 TableTitles={'Trial Type','Cue Max DF/F(%)','Cue AVG DF/F(%)','SEM','Outcome Max DF/F(%)','Outcome AVG DF/F(%)','SEM','nb of trials','ignored trials'};
-for i=1:Analysis.Properties.nbOfTrialTypes
+for i=1:Analysis.Parameters.nbOfTrialTypes
     thistype        =   sprintf('type_%.0d',i);
     TableData{i,1}	=   Analysis.(thistype).Name;
     TableData{i,2}	=   Analysis.(thistype).(thisChStruct).CueMax;
@@ -54,7 +54,7 @@ for i=1:Analysis.Properties.nbOfTrialTypes
 end
 
 %% Figure
-FigureLegend=sprintf('%s_%s',Analysis.Properties.Name,Analysis.Properties.Rig);
+FigureLegend=sprintf('%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig);
 figData.figure=figure('Name',FigTitle,'Position', [200 100 1200 700], 'numbertitle','off');
 Legend=uicontrol('style','text');
 set(Legend,'String',FigureLegend,'Position',[10,5,500,20]); 
@@ -115,7 +115,7 @@ for i=1:nbofgroups
     xlabel(labelx);
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',NidaqRange);
     plot([0 0],NidaqRange,'-r');
-	plot(Analysis.AllData.CueTime(1,:)+Analysis.Properties.CueTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
-	plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Properties.OutcomeTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
+	plot(Analysis.AllData.Time.Cue(1,:)+Analysis.Parameters.CueTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
+	plot(Analysis.AllData.Time.Outcome(1,:)+Analysis.Parameters.OutcomeTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
 end
 end

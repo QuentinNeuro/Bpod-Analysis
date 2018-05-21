@@ -1,7 +1,7 @@
 function Analysis=A_FilterPupilNaNCheck(Analysis,FilterName,Threshold)
 % Function to filter trials according to the running activity of the animal
 % Threshold and behavioral state can be specified in the
-% Analysis.Properties structure (see parameters part).
+% Analysis.Parameters structure (see parameters part).
 % Generates an additional inverted filter.
 %
 % Function designed by Quentin 2017 for Analysis_Photometry
@@ -20,7 +20,7 @@ Analysis.Filters.Names{FilterNb+1}=FilterName;
 % Filter
 Logicals=ones(Analysis.AllData.nTrials,1);
 %% Filter
-if Analysis.Properties.Pupillometry==1   
+if Analysis.Parameters.Pupillometry==1   
     testnan=isnan(Analysis.AllData.Pupil.Pupil);
     sumnan=sum(testnan(:,1:200),2)*(100/200);
     Logicals(sumnan>Threshold)=false;

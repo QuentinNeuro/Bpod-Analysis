@@ -3,39 +3,39 @@ function AP_AuditoryTuning_FiltersAndPlot(Analysis)
 %% Filters
 WNtypes=A_NameToTrialNumber(Analysis,'White');
 ChirpTypes=A_NameToTrialNumber(Analysis,'to');
-if Analysis.Properties.nbOfTrialTypes>3
-    ToneTypes=4:1:Analysis.Properties.nbOfTrialTypes;
+if Analysis.Parameters.nbOfTrialTypes>3
+    ToneTypes=4:1:Analysis.Parameters.nbOfTrialTypes;
 else
     ToneTypes=NaN;
 end
 
 %% Data
-TuningYAVG=NaN(Analysis.Properties.nbOfTrialTypes,1);
-TuningYMAX=NaN(Analysis.Properties.nbOfTrialTypes,1);
-TuningYSEM=NaN(Analysis.Properties.nbOfTrialTypes,1);
-TuningX=1:1:Analysis.Properties.nbOfTrialTypes;
+TuningYAVG=NaN(Analysis.Parameters.nbOfTrialTypes,1);
+TuningYMAX=NaN(Analysis.Parameters.nbOfTrialTypes,1);
+TuningYSEM=NaN(Analysis.Parameters.nbOfTrialTypes,1);
+TuningX=1:1:Analysis.Parameters.nbOfTrialTypes;
 
 %% Plot Parameters
 labelx='Time (sec)';   
-xTime=[Analysis.Properties.PlotEdges(1) Analysis.Properties.PlotEdges(2)];
+xTime=[Analysis.Parameters.PlotEdges(1) Analysis.Parameters.PlotEdges(2)];
 xtickvalues=linspace(xTime(1),xTime(2),5);
 labely='DF/F (%)';
 color4plot={'-k';'-b';'-r';'-g';'-c';'-m';'-y'};
-transparency=Analysis.Properties.Transparency;
+transparency=Analysis.Parameters.Transparency;
 % Photometry
-if isempty(Analysis.Properties.NidaqRange)
-        NidaqRange=[0-6*Analysis.Properties.NidaqSTD 6*Analysis.Properties.NidaqSTD];
-        Analysis.Properties.NidaqRange=NidaqRange;
+if isempty(Analysis.Parameters.NidaqRange)
+        NidaqRange=[0-6*Analysis.Parameters.NidaqSTD 6*Analysis.Parameters.NidaqSTD];
+        Analysis.Parameters.NidaqRange=NidaqRange;
 else
-    NidaqRange=Analysis.Properties.NidaqRange;
+    NidaqRange=Analysis.Parameters.NidaqRange;
 end
 
-for thisCh=1:length(Analysis.Properties.PhotoCh)
-    thisChStruct=sprintf('Photo_%s',char(Analysis.Properties.PhotoCh{thisCh}));
-    FigTitle=['Auditory Tuning Curve' char(Analysis.Properties.PhotoCh{thisCh})];
+for thisCh=1:length(Analysis.Parameters.PhotoCh)
+    thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
+    FigTitle=['Auditory Tuning Curve' char(Analysis.Parameters.PhotoCh{thisCh})];
     
 %% Plot
-FigureLegend=sprintf('%s_%s',Analysis.Properties.Name,Analysis.Properties.Rig);
+FigureLegend=sprintf('%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig);
 figData.figure=figure('Name',FigTitle,'Position', [200 100 1200 700], 'numbertitle','off');
 Legend=uicontrol('style','text');
 set(Legend,'String',FigureLegend,'Position',[10,5,500,20]); 
@@ -115,21 +115,21 @@ end
 
 % AudTuning curve
 subplot(2,3,[4 5]); hold on
-set(gca,'XLim',[0 Analysis.Properties.nbOfTrialTypes+1],'YLim',NidaqRange,...
-                                        'XTick',TuningX,'XTickLabel',Analysis.Properties.TrialNames,'XTickLabelRotation', 15);
+set(gca,'XLim',[0 Analysis.Parameters.nbOfTrialTypes+1],'YLim',NidaqRange,...
+                                        'XTick',TuningX,'XTickLabel',Analysis.Parameters.TrialNames,'XTickLabelRotation', 15);
 title('Auditory Tuning'); ylabel(labely);
 plot(TuningX,TuningYMAX,'sr'); 
 plot(TuningX,TuningYAVG,'sb'); 
-plot([0 Analysis.Properties.nbOfTrialTypes+1],[0 0],'-g');
+plot([0 Analysis.Parameters.nbOfTrialTypes+1],[0 0],'-g');
 % Bleach
 subplot(2,3,6); hold on
 title('Bleaching'); ylabel('Norm. DF/F'); xlabel('Trial Number');
 plot(Analysis.AllData.(thisChStruct).Bleach);
 
 %% Save
-saveas(gcf,[Analysis.Properties.DirFig Analysis.Properties.Name '_AudTun' char(Analysis.Properties.PhotoCh{thisCh}) '.png']);
-if Analysis.Properties.Illustrator
-saveas(gcf,[DAnalysis.Properties.DirFig Analysis.Properties.Name '_AudTun' char(Analysis.Properties.PhotoCh{thisCh})],'epsc');
+saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_AudTun' char(Analysis.Parameters.PhotoCh{thisCh}) '.png']);
+if Analysis.Parameters.Illustrator
+saveas(gcf,[DAnalysis.Parameters.DirFig Analysis.Parameters.Name '_AudTun' char(Analysis.Parameters.PhotoCh{thisCh})],'epsc');
 end
 
 end

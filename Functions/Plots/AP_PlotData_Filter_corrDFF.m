@@ -3,25 +3,25 @@ function AP_PlotData_Filter_corrDFF(Analysis,thistype,channelnb)
 if nargin==2
     channelnb=1;
 end
-thisChStruct=sprintf('Photo_%s',char(Analysis.Properties.PhotoCh{channelnb}));
-FigTitle=sprintf('Analysis-PlotSingle %s',char(Analysis.Properties.PhotoCh{channelnb}));
+thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{channelnb}));
+FigTitle=sprintf('Analysis-PlotSingle %s',char(Analysis.Parameters.PhotoCh{channelnb}));
 
 %% Plot Parameters
 Title=sprintf('%s (%.0d)',strrep(Analysis.(thistype).Name,'_',' '),Analysis.(thistype).nTrials);
 labelx='Time (sec)';   
-xTime=[Analysis.Properties.PlotEdges(1) Analysis.Properties.PlotEdges(2)];
+xTime=[Analysis.Parameters.PlotEdges(1) Analysis.Parameters.PlotEdges(2)];
 xtickvalues=linspace(xTime(1),xTime(2),5);
 labelyA={'DFF (%)','Licks (Hz)','Run (cm)','Pupil (%)','Run (cm/sec)','DFF (%)'};
 LimRanges={[-5 40], [0 10],     [-5 100],   [-10 50],    [-5 30],        [-5 30]};
 labelyB={'Trial # DFF','Trial # Licks','Trial # Run','Trial # Pupi'};
 maxtrial=Analysis.(thistype).nTrials;
 yraster=1:Analysis.(thistype).nTrials;
-transparency=Analysis.Properties.Transparency;
+transparency=Analysis.Parameters.Transparency;
 color4plot={'k';'b';'r';'g';'c';'c';'k'};
 k=1;
 %% Figure
 scrsz = get(groot,'ScreenSize');
-FigureLegend=sprintf('%s_%s',Analysis.Properties.Name,Analysis.Properties.Rig);
+FigureLegend=sprintf('%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig);
 figData.figure=figure('Name',FigTitle,'Position', [200 100 1200 700], 'numbertitle','off');
 Legend=uicontrol('style','text');
 set(Legend,'String',FigureLegend,'Position',[10,5,500,20]); 
@@ -43,8 +43,8 @@ title(Title);
 shadedErrorBar(Analysis.(thistype).(thisChStruct).Time(1,:),Analysis.(thistype).(thisChStruct).DFFAVG,Analysis.(thistype).(thisChStruct).DFFSEM,['-' color4plot{k}],transparency);
 ylabel(labelyA{1}); xlabel(labelx);
 plot([0 0],LimRanges{6},'-r');
-plot(Analysis.AllData.CueTime(1,:)+Analysis.Properties.CueTimeReset,[LimRanges{6}(2) LimRanges{6}(2)],'-b','LineWidth',2);
-plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Properties.OutcomeTimeReset,[LimRanges{6}(2) LimRanges{6}(2)],'-b','LineWidth',2);
+plot(Analysis.AllData.CueTime(1,:)+Analysis.Parameters.CueTimeReset,[LimRanges{6}(2) LimRanges{6}(2)],'-b','LineWidth',2);
+plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Parameters.OutcomeTimeReset,[LimRanges{6}(2) LimRanges{6}(2)],'-b','LineWidth',2);
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',LimRanges{6});
 % Correlation
 subplot(4,5,3); hold on;
@@ -71,8 +71,8 @@ subplot(4,5,7); hold on;
 shadedErrorBar(Analysis.(thistype).Licks.Bin, Analysis.(thistype).Licks.AVG, Analysis.(thistype).Licks.SEM,['-' color4plot{k}],transparency); 
 ylabel(labelyA{2}); xlabel(labelx);
 plot([0 0],LimRanges{2},'-r');
-plot(Analysis.AllData.CueTime(1,:)+Analysis.Properties.CueTimeReset,[LimRanges{2}(2) LimRanges{2}(2)],'-b','LineWidth',2);
-plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Properties.OutcomeTimeReset,[LimRanges{2}(2) LimRanges{2}(2)],'-b','LineWidth',2);
+plot(Analysis.AllData.CueTime(1,:)+Analysis.Parameters.CueTimeReset,[LimRanges{2}(2) LimRanges{2}(2)],'-b','LineWidth',2);
+plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Parameters.OutcomeTimeReset,[LimRanges{2}(2) LimRanges{2}(2)],'-b','LineWidth',2);
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',LimRanges{2});
 % Correlations
 subplot(4,5,8); hold on;
@@ -106,7 +106,7 @@ xlabel('Outcome DFF (%)'); ylabel('Outcome Licks (Hz)');
 set(gca,'XLim',LimRanges{1},'YLim',LimRanges{2});
 
 %% row 3 Running
-if Analysis.Properties.Wheel
+if Analysis.Parameters.Wheel
 % Raster
 subplot(4,5,11); hold on;
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
@@ -121,8 +121,8 @@ subplot(4,5,12); hold on;
 shadedErrorBar(Analysis.(thistype).Wheel.Time(1,:),Analysis.(thistype).Wheel.DistanceAVG,Analysis.(thistype).Wheel.DistanceSEM,['-' color4plot{k}],transparency);
 ylabel(labelyA{3}); xlabel(labelx);
 plot([0 0],LimRanges{3},'-r');
-plot(Analysis.AllData.CueTime(1,:)+Analysis.Properties.CueTimeReset,[LimRanges{3}(2) LimRanges{3}(2)],'-b','LineWidth',2);
-plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Properties.OutcomeTimeReset,[LimRanges{3}(2) LimRanges{3}(2)],'-b','LineWidth',2);
+plot(Analysis.AllData.CueTime(1,:)+Analysis.Parameters.CueTimeReset,[LimRanges{3}(2) LimRanges{3}(2)],'-b','LineWidth',2);
+plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Parameters.OutcomeTimeReset,[LimRanges{3}(2) LimRanges{3}(2)],'-b','LineWidth',2);
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',LimRanges{3});
 % Correlation
 subplot(4,5,13); hold on;
@@ -153,7 +153,7 @@ xlabel('Outcome DFF (%)'); ylabel('Outcome Run (cm/sec)');
 set(gca,'XLim',LimRanges{1},'YLim',LimRanges{5});
 end
 %% row 4 Pupillometry
-if Analysis.Properties.Pupillometry
+if Analysis.Parameters.Pupillometry
 % Raster
 subplot(4,5,16); hold on;
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
@@ -168,8 +168,8 @@ subplot(4,5,17); hold on;
 shadedErrorBar(Analysis.(thistype).Pupil.Time(1,:),Analysis.(thistype).Pupil.PupilAVG,Analysis.(thistype).Pupil.PupilSEM,['-' color4plot{k}],transparency);
 ylabel(labelyA{4}); xlabel(labelx);
 plot([0 0],LimRanges{4},'-r');
-plot(Analysis.AllData.CueTime(1,:)+Analysis.Properties.CueTimeReset,[LimRanges{4}(2) LimRanges{4}(2)],'-b','LineWidth',2);
-plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Properties.OutcomeTimeReset,[LimRanges{4}(2) LimRanges{4}(2)],'-b','LineWidth',2);
+plot(Analysis.AllData.CueTime(1,:)+Analysis.Parameters.CueTimeReset,[LimRanges{4}(2) LimRanges{4}(2)],'-b','LineWidth',2);
+plot(Analysis.AllData.OutcomeTime(1,:)+Analysis.Parameters.OutcomeTimeReset,[LimRanges{4}(2) LimRanges{4}(2)],'-b','LineWidth',2);
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',LimRanges{4});
 % Correlations
 subplot(4,5,18); hold on;
