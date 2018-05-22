@@ -4,18 +4,19 @@ clear SessionData Analysis DefaultParam; close all;
 DefaultParam.Analysis_type='Single';
 DefaultParam.Save=0;
 DefaultParam.Load=0;
-DefaultParam.TrialEvents4CellBase=1;
+DefaultParam.TrialEvents4CellBase=0;
+DefaultParam.SpikesAnalysis=0;
 % Figures - Can be changed upon loading
 DefaultParam.PhotoChNames={'470-BLA' 'none' '470-VS'};
-DefaultParam.PlotSummary1=0;
+DefaultParam.PlotSummary1=1;
 DefaultParam.PlotSummary2=0;
 DefaultParam.PlotFiltersSingle=0; %AP_Filter_GroupToPlot #1 Output
-DefaultParam.PlotFiltersSummary=1;
+DefaultParam.PlotFiltersSummary=0;
 DefaultParam.PlotFiltersBehavior=0; %AP_Filter_GroupToPlot #2 Ouput
 DefaultParam.Illustrator=0;
 DefaultParam.Transparency=1;
 % Axis - Can be changed upon loading
-DefaultParam.PlotYNidaq=[-2 3];
+DefaultParam.PlotYNidaq=[-2 2];
 DefaultParam.PlotX=[-4 4];
 % States
 DefaultParam.StateToZero='StateOfOutcome'; %'StateOfCue' 'StateOfOutcome'
