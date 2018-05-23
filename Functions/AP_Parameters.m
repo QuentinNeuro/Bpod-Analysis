@@ -34,6 +34,8 @@ handles.PlotFiltersBehavior=DefaultParam.PlotFiltersBehavior;
 handles.Illustrator=DefaultParam.Illustrator;
 handles.Transparency=DefaultParam.Transparency;
 handles.TE4CellBase=DefaultParam.TrialEvents4CellBase;
+handles.SpikesAnalysis=DefaultParam.SpikesAnalysis;
+handles.SpikesFigure=DefaultParam.SpikesFigure;
 
 %% Behavior specific : Plots, States and Timing
 if contains(Name,'CuedReward','IgnoreCase',true) 

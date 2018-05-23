@@ -104,6 +104,10 @@ end
         Analysis.(thistype).Pupil.PupilAVG          =nanmean(Analysis.(thistype).Pupil.PupilDPP,1); 
         Analysis.(thistype).Pupil.PupilSEM          =nanstd(Analysis.(thistype).Pupil.PupilDPP,0,1)/sqrt(Analysis.(thistype).nTrials);
     end
+    
+ %% Spikes
+    if Analysis.Parameters.SpikesAnalysis
+        Analysis=Analysis_Spikes(Analysis,'Sort',thistype,thisFilter);
     end
 end
 end

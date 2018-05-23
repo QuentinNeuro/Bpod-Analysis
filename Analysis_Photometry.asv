@@ -1,4 +1,4 @@
-function Analysis=Analysis_Photometry(LauncherParam)
+function Analysis=Analysis_Photometry(DefaultParam)
 % Function to analyze photometry data. 
 % Generates a struct named 'Analysis' using the functions:
 % AP_Parameters                 : extracts parameters of acquisition
@@ -11,16 +11,16 @@ function Analysis=Analysis_Photometry(LauncherParam)
 %function designed by Quentin 2017
 
 %% Update some Parameters if loading a preexisting Analysis structure
-if LauncherParam.Load==1
-    FileName=LauncherParam.FileToOpen{1}
-    cd(LauncherParam.PathName); load(FileName);
-    Analysis.Parameters=AP_ParametersUpdate(Analysis.Parameters,LauncherParam);
+if DefaultParam.Load==1
+    FileName=DefaultParam.FileToOpen{1}
+    cd(DefaultParam.PathName); load(FileName);
+    Analysis.Parameters=AP_ParametersUpdate(Analysis.Parameters,DefaultParam);
 else
 %% Loads Bpod SessionData File, Extracts and Organizes all the data
-for i=1:length(LauncherParam.FileToOpen)
-    FileName=LauncherParam.FileToOpen{1,i}
-    cd(LauncherParam.PathName); load(FileName);
-    DirName=fullfile(LauncherParam.PathName, FileName);
+for i=1:length(DefaultParam.FileToOpen)
+    FileName=DefaultParam.FileToOpen{1,i}
+    cd(DefaultParam.PathName); load(FileName);
+    DirName=fullfile(DefaultParam.PathName, FileName);
     [~,FileNameNoExt]=fileparts(DirName);
     % Pupillometry
 if exist([FileNameNoExt '_Pupil.mat'],'file')==2 
@@ -30,19 +30,19 @@ else
     Pupillometry=[];
 end
     % Parameters, Ignored Trials and Data extraction
-try
-        Analysis.Parameters=AP_Parameters(SessionData,Pupillometry,LauncherParam,FileNameNoExt);
-        Analysis=A_FilterIgnoredTrials(Analysis,LauncherParam.TrialToFilterOut,LauncherParam.LoadIgnoredTrials);tic
+% try
+        Analysis.Parameters=AP_Parameters(SessionData,Pupillometry,DefaultParam,FileNameNoExt);
+        Analysis=A_FilterIgnoredTrials(Analysis,DefaultParam.TrialToFilterOut,DefaultParam.LoadIgnoredTrials);tic
         Analysis=AP_DataOrganize(Analysis,SessionData,Pupillometry);toc
-catch
-        disp([FileName ' NOT ANALYZED - Error in Parameters extraction or Data organization']);
-end   
+% catch
+%         disp([FileName ' NOT ANALYZED - Error in Parameters extraction or Data organization']);
+% end   
 end
 clear SessionData Pupillometry;
 end
 
 %% Sorts data by trial types and generates summary plots
-Analysis=AP_TrialTypes_FiltersAndPlot(Analysis,LauncherParam);
+Analysis=AP_TrialTypes_FiltersAndPlot(Analysis,DefaultParam);
 
 %% Behavior specific : Sort filtered trials and generates plots
 switch Analysis.Parameters.Behavior
@@ -57,9 +57,9 @@ Analysis=AP_OddBall_FiltersAndPlot(Analysis);
 end
 
 %% Save Analysis
-if LauncherParam.Save
-    Analysis.Parameters.Files=LauncherParam.FileToOpen;
-    DirAnalysis=[LauncherParam.PathName 'Analysis' filesep];
+if DefaultParam.Save
+    Analysis.Parameters.Files=DefaultParam.FileToOpen;
+    DirAnalysis=[DefaultParam.PathName 'Analysis' filesep];
     if isdir(DirAnalysis)==0
         mkdir(DirAnalysis);
     end

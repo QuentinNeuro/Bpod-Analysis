@@ -92,7 +92,8 @@ for i=1:size(GroupToPlot,1)
 end
 end
 
-%% TrialEvents
+%% Spikes Analysis
+% TrialEvents
 if Analysis.Parameters.TE4CellBase
     CuedEvents=A_makeTrialEvents_CuedOutcome(Analysis);
     FileName=[Analysis.Parameters.Name '_CuedEvents.mat'];
@@ -103,4 +104,9 @@ if Analysis.Parameters.TE4CellBase
     DirFile=[DirEvents FileName];
     save(DirFile,'CuedEvents');
     clear CuedEvents
+end
+% Figures
+if Analysis.Parameters.SpikesFigure
+    Analysis=Analysis_Spikes(Analysis,'Figure');
+end
 end

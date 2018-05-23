@@ -1,15 +1,17 @@
-function handles=AP_ParametersUpdate(handles,DefaultParam)
+function handles=AP_ParametersUpdate(handles,LauncherParam)
 
 %% Plots
-handles.PlotSummary1=DefaultParam.PlotSummary1;
-handles.PlotSummary2=DefaultParam.PlotSummary2;
-handles.PlotFiltersSingle=DefaultParam.PlotFiltersSingle;
-handles.PlotFiltersSummary=DefaultParam.PlotFiltersSummary; 
-handles.PlotFiltersBehavior=DefaultParam.PlotFiltersBehavior;
-handles.Illustrator=DefaultParam.Illustrator;
-handles.Transparency=DefaultParam.Transparency;
-handles.TE4CellBase=DefaultParam.TrialEvents4CellBase;
+handles.PlotSummary1=LauncherParam.PlotSummary1;
+handles.PlotSummary2=LauncherParam.PlotSummary2;
+handles.PlotFiltersSingle=LauncherParam.PlotFiltersSingle;
+handles.PlotFiltersSummary=LauncherParam.PlotFiltersSummary; 
+handles.PlotFiltersBehavior=LauncherParam.PlotFiltersBehavior;
+handles.Illustrator=LauncherParam.Illustrator;
+handles.Transparency=LauncherParam.Transparency;
+handles.TE4CellBase=LauncherParam.TrialEvents4CellBase;
+handles.SpikesAnalysis=LauncherParam.SpikesAnalysis;
+handles.SpikesFigure=LauncherParam.SpikesFigure;
 
-handles.PlotEdges=DefaultParam.PlotX;
-handles.NidaqRange=DefaultParam.PlotYNidaq;
+handles.PlotEdges=LauncherParam.PlotX;
+handles.NidaqRange=LauncherParam.PlotYNidaq;
 end

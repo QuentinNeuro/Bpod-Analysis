@@ -111,6 +111,11 @@ catch
 end
 end
 
+%% Spike Analysis
+if Analysis.Parameters.SpikesAnalysis
+    Analysis=Analysis_Spikes(Analysis,'Organize');
+end
+
 %% Bleaching calculation
 for thisCh=1:length(Analysis.Parameters.PhotoCh)
     thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
