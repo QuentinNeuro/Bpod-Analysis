@@ -16,7 +16,7 @@
 % Designed by Quentin 2017
 
 %% Parameters
-Batch=0;
+Batch=1;
 
 %% Folder management and run the script
 warning('off','all')
@@ -26,7 +26,7 @@ if Batch==1
     ListFolders=ls(FoldDir);
     ListFolders=ListFolders(3:end,:);
     for i=1:size(ListFolders,1)
-        thisFolder=[FoldDir filesep ListFolders(i,:)];
+        thisFolder=[FoldDir filesep ListFolders(i,:)]
         try
         Pupillometry_FIJI_Data_Reader(thisFolder);
         catch

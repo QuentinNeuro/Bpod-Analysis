@@ -1,4 +1,4 @@
-function handles=AP_ParametersUpdate(handles,LauncherParam)
+function handles=AP_Parameters_Update(handles,LauncherParam)
 
 %% Plots
 handles.PlotSummary1=LauncherParam.PlotSummary1;

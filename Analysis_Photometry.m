@@ -14,7 +14,7 @@ function Analysis=Analysis_Photometry(LauncherParam)
 if LauncherParam.Load==1
     FileName=LauncherParam.FileToOpen{1}
     cd(LauncherParam.PathName); load(FileName);
-    Analysis.Parameters=AP_ParametersUpdate(Analysis.Parameters,LauncherParam);
+    Analysis.Parameters=AP_Parameters_Update(Analysis.Parameters,LauncherParam);
 else
 %% Loads Bpod SessionData File, Extracts and Organizes all the data
 for i=1:length(LauncherParam.FileToOpen)
@@ -30,13 +30,13 @@ else
     Pupillometry=[];
 end
     % Parameters, Ignored Trials and Data extraction
-try
+% try
         Analysis.Parameters=AP_Parameters(SessionData,Pupillometry,LauncherParam,FileNameNoExt);
         Analysis=A_FilterIgnoredTrials(Analysis,LauncherParam.TrialToFilterOut,LauncherParam.LoadIgnoredTrials);tic
         Analysis=AP_DataOrganize(Analysis,SessionData,Pupillometry);toc
-catch
-        disp([FileName ' NOT ANALYZED - Error in Parameters extraction or Data organization']);
-end   
+% catch
+%         disp([FileName ' NOT ANALYZED - Error in Parameters extraction or Data organization']);
+% end   
 end
 clear SessionData Pupillometry;
 end
@@ -60,11 +60,11 @@ end
 if LauncherParam.Save
     Analysis.Parameters.Files=LauncherParam.FileToOpen;
     DirAnalysis=[LauncherParam.PathName 'Analysis' filesep];
-    if isdir(DirAnalysis)==0
+    if isfolder(DirAnalysis)==0
         mkdir(DirAnalysis);
     end
 FileName=[Analysis.Parameters.Name '_' Analysis.Parameters.Phase];
-DirFile=[DirAnalysis FileName];
+DirFile=[DirAnalysis FileName '.mat'];
 save(DirFile,'Analysis');
 end
 end

@@ -6,7 +6,7 @@ function Analysis=Analysis_Spikes(Analysis,action,thistype,Filter)
 
 Time_Tagging=[-0.1 0.1];
 Time_Behav=Analysis.Parameters.PlotEdges;
-BinSize=0.3;
+BinSize=0.1;
 BinTT=Time_Behav(1):BinSize:Time_Behav(2);
 FileList=ls;
 
@@ -21,6 +21,9 @@ end
 TTLTS_SpikeTS_Factor=10000;
 %% Load TTLs
 load 1HzEvents.mat
+if isempty(Events_TS)
+    load allStimEvents.mat
+end
 Analysis.AllData.Spikes.Time.Tagging=Events_TS(Events_TTL==TTL_Tagging);
 load behavEvents.mat
 Analysis.AllData.Spikes.Time.Behavior=Events_TS(Events_TTL==TTL_Behavior);
@@ -70,7 +73,7 @@ counterOK=0;
         Analysis.AllData.Spikes.Behavior.(thisTT_Name).Events=thisTT_Events;
         Analysis.AllData.Spikes.Behavior.(thisTT_Name).Trials=thisTT_Trials;
         Analysis.AllData.Spikes.Behavior.(thisTT_Name).Rate=thisTT_Rate;
-         Analysis.AllData.Spikes.Behavior.(thisTT_Name).Bin=thisTT_Bin;
+        Analysis.AllData.Spikes.Behavior.(thisTT_Name).Bin=thisTT_Bin;
         clear thisEvents_Window thisTT_Events thisTT_Trials thisTT_Rate
     end
 end

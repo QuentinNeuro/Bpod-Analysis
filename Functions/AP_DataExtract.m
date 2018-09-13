@@ -64,7 +64,7 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     DFFBaseline=mean(Data(Baseline(1):Baseline(2)));
     DFF=(Data'-DFFBaseline)/DFFBaseline;
     if Analysis.Parameters.ZeroAtZero
-        DFF=DFF-mean(DFF(Time>-0.01 & Time<0.01));
+        DFF=DFF-mean(DFF(Time>-0.1 & Time<=0));
     end
     Photo{thisCh}(1,:)=Time;
     Photo{thisCh}(2,:)=Data';

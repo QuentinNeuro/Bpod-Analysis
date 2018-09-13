@@ -4,6 +4,7 @@ function Events=A_makeTrialEvents_CuedOutcome(Analysis)
 %
 
 %% Trial Starting Time
+Events.TrialStartRel=zeros(1,Analysis.AllData.nTrials);
 Events.TrialStartTimestamp=Analysis.AllData.Time.TrialStartTS;
 
 %% States Time
@@ -17,7 +18,7 @@ end
 
 %% Behavior specific filters
 Filters4Outcome={'AnticipLick_CueA_Reward','NoAnticipLick_CueA_Reward',...
-                  'Uncued_Reward'};
+                 'Uncued_Reward'};
 for i=1:length(Filters4Outcome)
     thisTS=Outcome;
 	thisFilter=Filters4Outcome{i};
@@ -37,7 +38,8 @@ for i=1:length(Filters4Outcome)
    end
 end
 
-Filters4Cue={'AnticipLick_CueA','NoAnticipLick_CueA'};
+Filters4Cue={'Cue_A','Cue_B','NoCue',...
+             'AnticipLick_CueA','NoAnticipLick_CueA'};
 for i=1:length(Filters4Cue)
     thisTS=Cue;
 	thisFilter=Filters4Cue{i};

@@ -19,7 +19,7 @@ BaselinePt=Analysis.Parameters.NidaqBaselinePoints;
 %% Compute Pupil Baseline and DPP according to the Baseline timing
 if Analysis.Parameters.Pupillometry
     Pup.PupilSmoothBaseline=mean(Pup.PupilSmooth(Pup.Time>BaselineTime(1) & Pup.Time<BaselineTime(2),:));
-    Pup.PupilSmoothBaselineNorm=Pup.PupilSmoothBaseline/mean(Pup.PupilSmoothBaseline);
+    Pup.PupilSmoothBaselineNorm=Pup.PupilSmoothBaseline/nanmean(Pup.PupilSmoothBaseline);
     Pup.PupilSmoothDPP=100*(Pup.PupilSmooth-Pup.PupilSmoothBaseline)./Pup.PupilSmoothBaseline;
     nbOfFrames=Analysis.Parameters.NidaqDuration*Pup.Parameters.frameRate;
     if nbOfFrames>Pup.Parameters.nFrames

@@ -5,12 +5,12 @@ isPunish=0;
 if contains(Analysis.Parameters.Phase,'Punish')
     isPunish=1;
 end
-CueType={'Cue_A','Cue_B','NoCue'};
-CueColors=['-g';'-r';'-k'];
-RewardType={'AnticipLick_CueA_Reward','NoAnticipLick_CueA_Reward','Uncued_Reward'};
-RewardColors=['-g';'-b';'-k'];
+CueType={'AnticipLick_CueA','NoAnticipLick_CueB','NoCue'};
+CueColors=['-k';'-b';'-g'];
+RewardType={'AnticipLick_CueA_Reward','Uncued_Reward'};
+RewardColors=['-k';'-g'];
 PunishType={'NoAnticipLick_CueB_Punish','Uncued_Punish'};
-PunishColors=['-r';'-k'];
+PunishColors=['-k';'-r'];
 
 %% Parameters
 transp=Analysis.Parameters.Transparency;
@@ -21,22 +21,20 @@ yLabelSpikeAll='Spikes';
 ySpikeAll=[-0.1 0.1];
 % Subplot Tagging Raster
 xLabelTag='Time from Laser (s)';
-xTimeTag=[-0.01 0.02];
+xTimeTag=[-0.02 0.05];
 yTrialsTag1=[0 100];
 yTrialsTag2=[100 200];
 % Subplot Licks
-xLabelLicks='Time from Outcome (s)';
-xTimeLicks=[-3 3];
+xLabelBehav='Time from Outcome (s)';
+xTimeLicks=[-4 4];
 yLabelLicks='Licks (Hz)';
 yLicks=[0 15];
 % Subplot Spikes Rate
-xLabelSpikeRate='Time from Outcome (s)';
-xTimeSpikeRate=[-3 3];
+xTimeSpikeRate=[-4 4];
 yLabelSpikeRate='Spikes (Hz)';
-ySpikeRate=[0 30];
+ySpikeRate=[0 10];
 % Subplot Behavior Raster
-xLabelTime='Time from Outcome(s)';
-xTimeSpikes=[-3 3];
+xTimeSpikes=[-4 4];
 yLabelSpikeRaster='Trials (Spikes)';
 
 %% Data
@@ -76,7 +74,7 @@ plot([0 0],yTrialsTag1,'-r');
 set(gca,'XLim',xTimeTag,'YDir','reverse');
 xlabel(xLabelTag);
 
-if size(Analysis.AllData.Spikes.Tagging.(thisTT).Events,2)==200
+if size(Analysis.AllData.Spikes.Tagging.(thisTT).Events,2)>=200
 thisTagging_Events2=cell2mat(Analysis.AllData.Spikes.Tagging.(thisTT).Events(101:200));
 thisTagging_Trials2=cell2mat(Analysis.AllData.Spikes.Tagging.(thisTT).Trials(101:200));
 subplot(6,3,3); hold on;
@@ -136,7 +134,7 @@ end
 end
 plot([0 0],ySpikeRate,'-b');
 plot(Analysis.(CueType{1}).Time.Cue(1,:),[ySpikeRate(2) ySpikeRate(2)],'-b','LineWidth',2);
-set(gca,'XLim',xTimeSpikeRate,'YLim',ySpikeRate);
+set(gca,'XLim',xTimeSpikeRate);
 ylabel(yLabelSpikeRate);
 % Reward
 subplot(6,3,8); hold on;
@@ -148,19 +146,19 @@ end
 end
 plot([0 0],ySpikeRate,'-b');
 plot(Analysis.(CueType{1}).Time.Cue(1,:),[ySpikeRate(2) ySpikeRate(2)],'-b','LineWidth',2);
-set(gca,'XLim',xTimeSpikeRate,'YLim',ySpikeRate);
+set(gca,'XLim',xTimeSpikeRate);
 % Punish
 if isPunish
 subplot(6,3,9); hold on;
 title('Punish')
 for i=1:length(PunishType)
 if Analysis.(PunishType{i}).nTrials>0
-shadedErrorBar(Analysis.(PunishType{i}).Spikes.Behavior.(thisTT).Bin(1,:),Analysis.(PunishType{i}).Spikes.Behavior.(thisTT).AVG,Analysis.(PunishType{i}).Spikes.Behavior.(thisTT).SEM,CueColors(i,:),transp);
+shadedErrorBar(Analysis.(PunishType{i}).Spikes.Behavior.(thisTT).Bin(1,:),Analysis.(PunishType{i}).Spikes.Behavior.(thisTT).AVG,Analysis.(PunishType{i}).Spikes.Behavior.(thisTT).SEM,PunishColors(i,:),transp);
 end
 end
 plot([0 0],ySpikeRate,'-b');
 plot(Analysis.(CueType{1}).Time.Cue(1,:),[ySpikeRate(2) ySpikeRate(2)],'-b','LineWidth',2);
-set(gca,'XLim',xTimeSpikeRate,'YLim',ySpikeRate);
+set(gca,'XLim',xTimeSpikeRate);
 end
 
 %% Spike Rasters
@@ -176,7 +174,7 @@ for i=1:length(CueType)
     set(gca,'XLim',xTimeSpikes,'YDir','reverse');
     ylabel(yLabelSpikeRaster)
 end
-xlabel(xLabelTime);
+xlabel(xLabelBehav);
 % Reward
 for i=1:length(RewardType)
     thisBehav_Events=Analysis.(RewardType{i}).Spikes.Behavior.(thisTT).Events;
@@ -188,29 +186,32 @@ for i=1:length(RewardType)
     plot(Analysis.(RewardType{1}).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
     set(gca,'XLim',xTimeSpikes,'YDir','reverse');   
 end
-xlabel(xLabelTime);
+xlabel(xLabelBehav);
 % Punish
 if isPunish
-for i=1:length(RewardType)
+for i=1:length(PunishType)
     thisBehav_Events=Analysis.(RewardType{i}).Spikes.Behavior.(thisTT).Events;
     thisBehav_Trials=Analysis.(RewardType{i}).Spikes.Behavior.(thisTT).Trials;
-    subplot(6,3,8+i*3); hold on;
+    subplot(6,3,9+i*3); hold on;
     title(PunishType{i});
     plot(thisBehav_Events,thisBehav_Trials,'sk','MarkerSize',2,'MarkerFaceColor','k');
     plot([0 0],[0 max(thisBehav_Events)],'-b');
     plot(Analysis.(RewardType{1}).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
     set(gca,'XLim',xTimeSpikes,'YDir','reverse');   
 end
-xlabel(xLabelTime);
+xlabel(xLabelBehav);
 end
 
 %% Save
-FileName=[Analysis.Parameters.Name thisTT '.png'];
+FileName=[Analysis.Parameters.Name thisTT];
 DirEvents=[pwd filesep 'Figure_Spikes' filesep];
 if isdir(DirEvents)==0
     mkdir(DirEvents);
 end
 DirFile=[DirEvents FileName];
-saveas(gcf,DirFile);
+saveas(gcf,DirFile,'png');
+if Analysis.Parameters.Illustrator
+	saveas(gcf,DirFile,'epsc');
+end
 close 'Figure TT';    
 end
