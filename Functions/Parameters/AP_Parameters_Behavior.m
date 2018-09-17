@@ -42,6 +42,13 @@ elseif contains(Name,'Oddball','IgnoreCase',true)
     handles.CueTimeReset=[0 1];
     handles.OutcomeTimeReset=[0 2];
     handles.NidaqBaseline=[0 1];
+elseif contains(Name,'Sensor','IgnoreCase',true)
+    handles.Behavior='Sensor';
+    handles.StateOfCue='CueDelivery';
+    handles.StateOfOutcome='Outcome';
+    handles.CueTimeReset=[0 1];
+    handles.OutcomeTimeReset=[0 2];
+    handles.NidaqBaseline=[1 2];
 else
     handles.Behavior=DefaultParam.Behavior;
 	handles.StateOfCue=DefaultParam.StateOfCue;

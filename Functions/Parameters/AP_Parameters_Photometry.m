@@ -1,19 +1,21 @@
 function handles=AP_Parameters_Photometry(handles,SessionData,DefaultParam)
 
+%% 
 % if isfield(SessionData.TrialSettings(1).GUI,'LED1_Name')
 %     LEDNames={SessionData.TrialSettings(1).GUI.LED1_Name SessionData.TrialSettings(1).GUI.LED1b_Name SessionData.TrialSettings(1).GUI.LED2_Name};
 % else
     LEDNames=DefaultParam.PhotoChNames;
 % end
 
-if isfield(SessionData.TrialSettings(1).GUI,version)
+%% Auto-Detection
+if isfield(SessionData.TrialSettings(1).GUI,'PhotometryVersion')
     if SessionData.TrialSettings(1).GUI.Photometry
 % General parameters        
     handles.SpikesAnalysis=0;
     handles.SpikesFigure=0;
     handles.Photometry=1;
     handles.Modulation=SessionData.TrialSettings(1).GUI.Modulation;
-    if size(SessionData.(PhotometryField){1,1},2)>1
+    if size(SessionData.(handles.PhotometryField){1,1},2)>1
         handles.recordedMod=1;
     else
         handles.recordedMod=0;
@@ -34,7 +36,7 @@ if SessionData.TrialSettings(1).GUI.Isobestic405
     handles.PhotoFreqField{length(handles.PhotoFreqField)+1}={'LED2_Freq'};
     handles.PhotoModulData=[handles.PhotoModulData 3];
 end
-% Fiber1 565
+% Fiber1 - 565
 if SessionData.TrialSettings(1).GUI.RedChannel
     handles.PhotoCh{length(handles.PhotoCh)+1}={'565'};
     handles.PhotoChNames{length(handles.PhotoChNames)+1}=LEDNames{2};
@@ -43,8 +45,8 @@ if SessionData.TrialSettings(1).GUI.RedChannel
     handles.PhotoFreqField{length(handles.PhotoFreqField)+1}={'LED2_Freq'};
     handles.PhotoModulData=[handles.PhotoModulData 2];
 end
-% Fiber 2
-if SessionData.TrialSettings(1).GUI.DbleChannel
+% Fiber 2 - 470
+if SessionData.TrialSettings(1).GUI.DbleFibers
     handles.PhotoCh{length(handles.PhotoCh)+1}={'470b'};
     handles.PhotoChNames{length(handles.PhotoChNames)+1}=LEDNames{3};
     handles.PhotoField{length(handles.PhotoField)+1}={handles.Photometry2Field};

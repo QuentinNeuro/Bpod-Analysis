@@ -6,9 +6,9 @@ function [handles,DefaultParam]=AP_Parameters(SessionData,Pup,DefaultParam,Name)
 % Used by Analysis_Photometry
 
 %% Nidaq Fields
+handles.WheelField='NidaqWheelData';
 handles.PhotometryField='NidaqData';
 handles.Photometry2Field='Nidaq2Data';
-handles.WheelField='NidaqWheelData';
 
 %% General
 % Animal Name

@@ -1,7 +1,7 @@
 %% Bpod Photometry Launcher
 clear SessionData Analysis LauncherParam; close all;
 %% Analysis type Single/Group
-LauncherParam.Analysis_type='Group';
+LauncherParam.Analysis_type='Single';
 LauncherParam.Save=0;
 LauncherParam.Load=0;
 % Electrophysiology
@@ -11,7 +11,7 @@ LauncherParam.SpikesFigure=0;
 % Figures - Can be changed upon loading
 LauncherParam.PhotoChNames={'470-A1' '405-A1' '470-mPFC'};%%{'470-BLA' 'none' '470-VS'};
 LauncherParam.PlotSummary1=1;
-LauncherParam.PlotSummary2=1;
+LauncherParam.PlotSummary2=0;
 LauncherParam.PlotFiltersSingle=0; %AP_Filter_GroupToPlot #1 Output
 LauncherParam.PlotFiltersSummary=1;
 LauncherParam.PlotFiltersBehavior=0; %AP_Filter_GroupToPlot #2 Ouput
