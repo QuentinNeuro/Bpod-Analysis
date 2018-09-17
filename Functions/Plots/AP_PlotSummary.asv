@@ -29,8 +29,8 @@ for i=1:nbofgroups
         else
         GP.(thisgroup).title(k)={'unknown'};
         end
-    k=k+1;    
-    end 
+    end
+    k=k+1;
 end
 
 labelx='Time (sec)';   
@@ -99,8 +99,8 @@ for i=1:nbofgroups
         hp(k)=hs.mainLine;
         subplot(3,4,i+4); hold on;
         shadedErrorBar(Analysis.(thistype).(thisChStruct).Time(1,:),Analysis.(thistype).(thisChStruct).DFFAVG,Analysis.(thistype).(thisChStruct).DFFSEM,color4plot{k},transparency);
-        k=k+1;
     end
+    k=k+1;
 % Makes Plot pretty
     subplot(3,4,i); hold on;
 	if i==1

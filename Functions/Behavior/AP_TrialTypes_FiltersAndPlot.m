@@ -36,11 +36,7 @@ end
 if Analysis.Parameters.Photometry
     if Analysis.Parameters.PlotSummary2==1
         for thisCh=1:length(Analysis.Parameters.PhotoCh)
-    if contains(Analysis.Parameters.Phase,'Pun')
         AP_PlotSummary(Analysis,thisCh,'Cue A','Cue B','Reward','Punish');
-    else
-        AP_PlotSummary(Analysis,thisCh,'Cue A','Cue B','Reward');
-    end
         saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_Summary' char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
         if Analysis.Parameters.Illustrator
         saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_Summary' char(Analysis.Parameters.PhotoChNames{thisCh}) ],'epsc');

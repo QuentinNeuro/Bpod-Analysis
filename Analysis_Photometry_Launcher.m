@@ -4,21 +4,22 @@ clear SessionData Analysis LauncherParam; close all;
 LauncherParam.Analysis_type='Single';
 LauncherParam.Save=0;
 LauncherParam.Load=0;
+LauncherParam.Online=0;
 % Electrophysiology
 LauncherParam.TrialEvents4CellBase=0;
 LauncherParam.SpikesAnalysis=0;
 LauncherParam.SpikesFigure=0;
 % Figures - Can be changed upon loading
-LauncherParam.PhotoChNames={'470-A1' '405-A1' '470-mPFC'};%%{'470-BLA' 'none' '470-VS'};
+LauncherParam.PhotoChNames={'470-BLA' 'none' '470-VS'};%%{'470-BLA' 'none' '470-VS'};
 LauncherParam.PlotSummary1=1;
-LauncherParam.PlotSummary2=0;
+LauncherParam.PlotSummary2=1;
 LauncherParam.PlotFiltersSingle=0; %AP_Filter_GroupToPlot #1 Output
-LauncherParam.PlotFiltersSummary=1;
+LauncherParam.PlotFiltersSummary=0;
 LauncherParam.PlotFiltersBehavior=0; %AP_Filter_GroupToPlot #2 Ouput
 LauncherParam.Illustrator=0;
 LauncherParam.Transparency=1;
 % Axis - Can be changed upon loading
-LauncherParam.PlotYNidaq=[-2 5];
+LauncherParam.PlotYNidaq=[-1 1];
 LauncherParam.PlotX=[-4 4];
 % States
 LauncherParam.StateToZero='StateOfOutcome'; %'StateOfCue' 'StateOfOutcome'
@@ -50,11 +51,16 @@ LauncherParam.NewSamplingRate=100; %(Hz)
 LauncherParam.NidaqDuration=15;
 
 %% Run Analysis_Photometry
+if LauncherParam.Online==0
 try
 [LauncherParam.FileList,LauncherParam.PathName]=uigetfile('*.mat','Select the BPod file(s)','MultiSelect', 'on');
 catch
     return
 end
+else
+    LauncherParam=AP_Launcher_Online(LauncherParam,BpodSystem);
+end
+
 if iscell(LauncherParam.FileList)==0
     LauncherParam.FileToOpen=cellstr(LauncherParam.FileList);
     LauncherParam.Analysis_type='Single';
