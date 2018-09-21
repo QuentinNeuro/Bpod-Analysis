@@ -30,13 +30,13 @@ else
     Pupillometry=[];
 end
     % Parameters, Ignored Trials and Data extraction
-% try
+try
         Analysis.Parameters=AP_Parameters(SessionData,Pupillometry,LauncherParam,FileNameNoExt);
         Analysis=A_FilterIgnoredTrials(Analysis,LauncherParam.TrialToFilterOut,LauncherParam.LoadIgnoredTrials);tic
         Analysis=AP_DataOrganize(Analysis,SessionData,Pupillometry);toc
-% catch
-%         disp([FileName ' NOT ANALYZED - Error in Parameters extraction or Data organization']);
-% end   
+catch
+        disp([FileName ' NOT ANALYZED - Error in Parameters extraction or Data organization']);
+end   
 end
 clear SessionData Pupillometry;
 end

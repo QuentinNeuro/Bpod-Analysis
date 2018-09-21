@@ -39,13 +39,7 @@ for thisTrial=1:SessionData.nTrials
 % Timimg
     Analysis.AllData.Time.TrialStartTS(i)   =SessionData.TrialStartTimestamp(thisTrial); 
     Analysis.AllData.Time.States{i}         =SessionData.RawEvents.Trial{1,thisTrial}.States;
-    if ~isempty(Analysis.Parameters.StateZeroOffset)
-        Analysis.AllData.Time.ZeroOffset(i)     =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Parameters.StateZeroOffset)(1);
-    else
-        Analysis.AllData.Time.ZeroOffset(i)=0;
-    end
     Analysis.AllData.Time.Zero(i)           =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Parameters.StateToZero)(1);
-                                                -Analysis.AllData.Time.ZeroOffset(i);
     Analysis.AllData.Time.Cue(i,:)          =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Parameters.StateOfCue)...
                                                 -Analysis.AllData.Time.Zero(i);
     Analysis.AllData.Time.Outcome(i,:)      =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Parameters.StateOfOutcome)...

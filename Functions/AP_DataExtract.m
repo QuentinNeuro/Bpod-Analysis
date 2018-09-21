@@ -11,8 +11,6 @@ StateZeroOffset=Analysis.Parameters.StateZeroOffset;
 TimeToZero=SessionData.RawEvents.Trial{1,thisTrial}.States.(StateToZero)(1);
 if ~isempty(StateZeroOffset)
 ZeroOffset=SessionData.RawEvents.Trial{1,thisTrial}.States.(StateZeroOffset)(1);
-else
-ZeroOffset=0;
 end
 %% Licks
 LickPort=Analysis.Parameters.LickPort;
@@ -32,16 +30,8 @@ DecimateFactor=Analysis.Parameters.NidaqDecimateFactor;
 Baseline=Analysis.Parameters.NidaqBaselinePoints;         %points with decimated SR
 Duration=Analysis.Parameters.NidaqDuration;
 ExpectedSize=Duration*SRDecimated;
-% Time vector and offset
-if ~isempty(StateZeroOffset)
-ZeroOffsetPoints=ZeroOffset*SRDecimated;
-extrapoint=0;
-else
-ZeroOffsetPoints=1;
-extrapoint=1;
-end
-thisTime=linspace(0,Duration+ZeroOffset,ExpectedSize+ZeroOffsetPoints-extrapoint)-TimeToZero;
-Time=thisTime(ZeroOffsetPoints:end);
+% Time vector
+Time=linspace(0,Duration,ExpectedSize)-TimeToZero;
 % Data
 Photo=cell(length(Analysis.Parameters.PhotoCh),1);
 for thisCh=1:length(Analysis.Parameters.PhotoCh)
@@ -65,8 +55,7 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     else        % no modulation of this channel for this trial
         thisData=decimate(SessionData.NidaqData{1,thisTrial}(:,1),DecimateFactor);
     end
-% Resize data vector according to offset and length of expected data
-    thisData=thisData(ZeroOffsetPoints:end);  
+% Resize data vector according to the length of expected data  
     if length(thisData)>ExpectedSize
         Data=thisData(1:length(Data));
     else
@@ -82,6 +71,18 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     Photo{thisCh}(1,:)=Time;
     Photo{thisCh}(2,:)=Data;
     Photo{thisCh}(3,:)=100*DFF;
+
+% remove variable ITI at beggining of the session
+if ~isempty(StateZeroOffset)
+NewPhoto=NaN(3,ExpectedSize);
+ZeroOffsetPoints=ceil(ZeroOffset*SRDecimated);
+NewTime=linspace(0,Duration+ZeroOffset,ExpectedSize+ZeroOffsetPoints)-TimeToZero;
+NewTime=NewTime(ZeroOffsetPoints:end);
+NewPhoto(1,1:length(NewTime))=NewTime;
+NewPhoto([2 3],1:(ExpectedSize-ZeroOffsetPoints+1))=Photo{thisCh}([2 3],ZeroOffsetPoints:end);
+Photo{thisCh}=NewPhoto;
+end
+    
 end  
     else
         Photo=[];
@@ -95,16 +96,7 @@ SRDecimated=Analysis.Parameters.NidaqDecimatedSR;
 DecimateFactor=Analysis.Parameters.NidaqDecimateFactor;
 Duration=Analysis.Parameters.NidaqDuration;
 ExpectedSize=Duration*SRDecimated;
-% Time vector and offset
-if ~isempty(StateZeroOffset)
-ZeroOffsetPoints=ZeroOffset*SRDecimated;
-extrapoint=0;
-else
-ZeroOffsetPoints=1;
-extrapoint=1;
-end
-thisTime=linspace(0,Duration+ZeroOffset,ExpectedSize+ZeroOffsetPoints-extrapoint)-TimeToZero;
-Time=thisTime(ZeroOffsetPoints:end);
+Time=linspace(0,Duration,ExpectedSize)-TimeToZero;
     end
 DTsec=0.01; % in sec
 DTpoints=SRDecimated*DTsec;
@@ -126,6 +118,17 @@ DataWheelDistance=DataWheel.*(Analysis.Parameters.WheelPolarity*Analysis.Paramet
 Wheel(1,:)=Time;
 Wheel(2,:)=DataWheel;
 Wheel(3,:)=DataWheelDistance;
+
+% remove variable ITI at beggining of the session
+if ~isempty(StateZeroOffset)
+NewWheel=NaN(3,ExpectedSize);
+ZeroOffsetPoints=ZeroOffset*SRDecimated;
+NewTime=linspace(0,Duration+ZeroOffset,ExpectedSize+ZeroOffsetPoints)-TimeToZero;
+NewTime=NewTime(ZeroOffsetPoints:end);
+NewWheel(1,1:length(NewTime))=NewTime;
+NewWheel([2 3],1:(ExpectedSize-ZeroOffsetPoints+1))=Wheel([2 3],ZeroOffsetPoints:end);
+Wheel=NewWheel;
+end
 
 else
     Wheel=[];
