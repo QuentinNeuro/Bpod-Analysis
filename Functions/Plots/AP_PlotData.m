@@ -64,7 +64,7 @@ end
 
 %% Plot
 FigureLegend=sprintf('%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig);
-figData.figure=figure('Name',FigTitle,'Position', [200 100 1200 700], 'numbertitle','off');
+figure('Name',FigTitle,'Position', [200 100 1200 700], 'numbertitle','off');
 Legend=uicontrol('style','text');
 set(Legend,'String',FigureLegend,'Position',[10,5,500,20]); 
 
@@ -100,8 +100,12 @@ if Analysis.Parameters.Photometry==1
                 ylabel(labely3);
     end
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
+    % Removed by QC on 9/18/2018 for variable ITI at beginning
     yrasternidaq=1:Analysis.(thistype).nTrials;
     imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,NidaqRange);
+%     for thistrial=1:Analysis.(thistype).nTrials
+%     imagesc(Analysis.(thistype).(thisChStruct).Time(thistrial,:),thistrial,Analysis.(thistype).(thisChStruct).DFF(thistrial,:),NidaqRange);
+%     end
     plot([0 0],[0 maxtrial],'-r');
     plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
     if thisplot==nbOfTrialTypes

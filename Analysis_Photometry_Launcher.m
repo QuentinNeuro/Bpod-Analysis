@@ -2,7 +2,7 @@
 clear SessionData Analysis LauncherParam; close all;
 %% Analysis type Single/Group
 LauncherParam.Analysis_type='Single';
-LauncherParam.Save=0;
+LauncherParam.Save=1;
 LauncherParam.Load=0;
 LauncherParam.Online=0;
 % Electrophysiology
@@ -19,7 +19,7 @@ LauncherParam.PlotFiltersBehavior=0; %AP_Filter_GroupToPlot #2 Ouput
 LauncherParam.Illustrator=0;
 LauncherParam.Transparency=1;
 % Axis - Can be changed upon loading
-LauncherParam.PlotYNidaq=[-1 1];
+LauncherParam.PlotYNidaq=[-1 2];
 LauncherParam.PlotX=[-4 4];
 % States
 LauncherParam.StateToZero='StateOfOutcome'; %'StateOfCue' 'StateOfOutcome'

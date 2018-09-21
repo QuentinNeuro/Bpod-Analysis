@@ -1,6 +1,7 @@
 function handles=AP_Parameters_Behavior(handles,SessionData,DefaultParam,Name)
 
-if contains(Name,'Cued','IgnoreCase',true) 
+handles.StateZeroOffset=[];
+if contains(Name,'Cued','IgnoreCase',true) && ~contains(Name,'Sensor','IgnoreCase',true)
     handles.Behavior='CuedOutcome';
     if isfield(SessionData.RawEvents.Trial{1,1}.States,'SoundDelivery')
         handles.StateOfCue='SoundDelivery';
@@ -49,6 +50,7 @@ elseif contains(Name,'Sensor','IgnoreCase',true)
     handles.CueTimeReset=[0 1];
     handles.OutcomeTimeReset=[0 2];
     handles.NidaqBaseline=[1 2];
+    handles.StateZeroOffset='PreState';
 else
     handles.Behavior=DefaultParam.Behavior;
 	handles.StateOfCue=DefaultParam.StateOfCue;
