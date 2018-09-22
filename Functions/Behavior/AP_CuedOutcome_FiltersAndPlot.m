@@ -58,7 +58,7 @@ end
 end
 %% Behavior Filters
 if Analysis.Parameters.PlotFiltersBehavior
-[~,GroupToPlot]=AP_Filter_GroupToPlot(Analysis);
+[~,GroupToPlot]=AP_CuedOutcome_GroupToPlot(Analysis);
 for i=1:size(GroupToPlot,1)
     Title=GroupToPlot{i,1};
     MetaFilterGroup=cell(size(GroupToPlot{i,2},1),1);

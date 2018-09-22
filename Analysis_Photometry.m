@@ -54,6 +54,8 @@ Analysis=AP_GoNogo_FiltersAndPlot(Analysis);
 AP_AuditoryTuning_FiltersAndPlot(Analysis);
     case 'Oddball'
 Analysis=AP_OddBall_FiltersAndPlot(Analysis);
+    case 'Sensor'
+Analysis=AP_Sensor_FiltersAndPlot(Analysis);        
 end
 
 %% Save Analysis

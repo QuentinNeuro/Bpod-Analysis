@@ -73,6 +73,7 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     Photo{thisCh}(3,:)=100*DFF;
 
 % remove variable ITI at beggining of the session
+% QC 9/21 should I ceil or not the ZeroOffsetPoints? / is adding a point on line 83 necessary) 
 if ~isempty(StateZeroOffset)
 NewPhoto=NaN(3,ExpectedSize);
 ZeroOffsetPoints=ceil(ZeroOffset*SRDecimated);

@@ -19,12 +19,10 @@ Analysis=A_FilterWheel(Analysis,'Run',Analysis.Parameters.WheelState,Analysis.Pa
 Analysis=A_FilterPupil(Analysis,'Pupil',Analysis.Parameters.PupilState,Analysis.Parameters.PupilThreshold);
 Analysis=A_FilterPupil(Analysis,'CuePupil','Cue',2);
 Analysis=A_FilterPupilNaNCheck(Analysis,'PupilNaN',25);
-% Sequence
-Analysis=A_FilterAfollowsB(Analysis,'Reward_After_Punish','Reward','Punish');
 
 %% Sort and Plot Filtered Trials specified in AP_Filter_GroupToPlot.
 if Analysis.Parameters.PlotFiltersSummary || Analysis.Parameters.PlotFiltersSingle
-[GroupToPlot]=AP_Filter_GroupToPlot(Analysis);
+[GroupToPlot]=AP_Sensor_GroupToPlot(Analysis);
 for i=1:size(GroupToPlot,1)
     Title=GroupToPlot{i,1};
     MetaFilterGroup=cell(size(GroupToPlot{i,2},1),1);
@@ -91,25 +89,5 @@ for i=1:size(GroupToPlot,1)
     end
     end
 end
-end
-
-%% Spikes Analysis
-% TrialEvents
-if Analysis.Parameters.TE4CellBase
-    CuedEvents=A_makeTrialEvents_CuedOutcome(Analysis);
-%     FileName=[Analysis.Parameters.Name '_CuedEvents.mat'];
-%     DirEvents=[pwd filesep 'Events' filesep];
-%     if isdir(DirEvents)==0
-%         mkdir(DirEvents);
-%     end
-%     DirFile=[DirEvents FileName];
-%     save(DirFile,'CuedEvents');
-%     clear CuedEvents
-save('CuedEvents','CuedEvents');
-end
-
-% Figures
-if Analysis.Parameters.SpikesFigure
-    Analysis=Analysis_Spikes(Analysis,'Figure');
 end
 end

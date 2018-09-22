@@ -16,7 +16,7 @@ Analysis=A_FilterPupilNaNCheck(Analysis,'PupilNaN',25);
 
 %% Plot Filters
 if Analysis.Parameters.PlotFiltersSummary==1
-GroupToPlot=AP_Filter_GroupToPlot(Analysis);
+GroupToPlot=AP_GoNogo_GroupToPlot(Analysis);
 for i=1:size(GroupToPlot,1)
     Title=GroupToPlot{i,1};
     MetaFilterGroup=cell(size(GroupToPlot{i,2},1),1);
