@@ -110,9 +110,6 @@ signedThreshold = 2^(Analysis.Parameters.WheelCounterNbits-1);
 signedData(signedData > signedThreshold) = signedData(signedData > signedThreshold) - 2^Analysis.Parameters.WheelCounterNbits;
 DataDeg  = signedData * 360/Analysis.Parameters.WheelEncoderCPR;
 DataDeg  = decimate(DataDeg,DecimateFactor);
-ZeroOffsetPoints=(ZeroOffset+1)*SRDecimated;
-DataDeg=DataDeg(ZeroOffsetPoints:end);
-
 DataWheel(1:length(DataDeg))=DataDeg;
 DataWheelDistance=DataWheel.*(Analysis.Parameters.WheelPolarity*Analysis.Parameters.WheelDiameter*pi/360);
 

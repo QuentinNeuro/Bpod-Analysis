@@ -12,10 +12,10 @@ LauncherParam.SpikesFigure=0;
 % Figures - Can be changed upon loading
 LauncherParam.PhotoChNames={'470-BLA' 'none' '470-VS'};%%{'470-BLA' 'none' '470-VS'};
 LauncherParam.PlotSummary1=1;
-LauncherParam.PlotSummary2=1;
+LauncherParam.PlotSummary2=0;
 LauncherParam.PlotFiltersSingle=0; %AP_Filter_GroupToPlot #1 Output
 LauncherParam.PlotFiltersSummary=0;
-LauncherParam.PlotFiltersBehavior=0; %AP_Filter_GroupToPlot #2 Ouput
+LauncherParam.PlotFiltersBehavior=1; %AP_Filter_GroupToPlot #2 Ouput
 LauncherParam.Illustrator=0;
 LauncherParam.Transparency=1;
 % Axis - Can be changed upon loading
@@ -29,8 +29,8 @@ LauncherParam.PupilState='NormBaseline'; %'NormBaseline','Cue','Outcome'
 % Filters
 LauncherParam.PupilThreshold=1;
 LauncherParam.WheelThreshold=2; %Speed cm/s
-LauncherParam.LicksCue=1;
-LauncherParam.LicksOutcome=5;
+LauncherParam.LicksCue=3;
+LauncherParam.LicksOutcome=2;
 LauncherParam.TrialToFilterOut=[];
 LauncherParam.LoadIgnoredTrials=1;
 %% Overwrite Parameters found in AP_Parameters

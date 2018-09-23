@@ -29,7 +29,7 @@ end
 
 %% Extract and organize data 
 for thisTrial=1:SessionData.nTrials
-% try
+try
     if Analysis.Filters.ignoredTrials(thisTrial)==1
     [thislick,thisPhoto,thisWheel]=AP_DataExtract(SessionData,Analysis,thisTrial);
     i=Analysis.AllData.nTrials+1;
@@ -105,10 +105,10 @@ switch Analysis.Parameters.Behavior
 end  
 
 %% Ignored Trials
-% catch
-%         Analysis.Filters.IgnoredTrials(thisTrial)=0;
-%         Analysis.AllData.IgnoredTrials=Analysis.AllData.IgnoredTrials+1;
-% end
+catch
+        Analysis.Filters.IgnoredTrials(thisTrial)=0;
+        Analysis.AllData.IgnoredTrials=Analysis.AllData.IgnoredTrials+1;
+end
 end
 
 %% Spike Analysis
