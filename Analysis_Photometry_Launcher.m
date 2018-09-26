@@ -14,8 +14,8 @@ LauncherParam.PhotoChNames={'470-BLA' 'none' '470-VS'};%%{'470-BLA' 'none' '470-
 LauncherParam.PlotSummary1=1;
 LauncherParam.PlotSummary2=0;
 LauncherParam.PlotFiltersSingle=0; %AP_Filter_GroupToPlot #1 Output
-LauncherParam.PlotFiltersSummary=0;
-LauncherParam.PlotFiltersBehavior=1; %AP_Filter_GroupToPlot #2 Ouput
+LauncherParam.PlotFiltersSummary=1;
+LauncherParam.PlotFiltersBehavior=0; %AP_Filter_GroupToPlot #2 Ouput
 LauncherParam.Illustrator=0;
 LauncherParam.Transparency=1;
 % Axis - Can be changed upon loading
@@ -52,11 +52,7 @@ LauncherParam.NidaqDuration=15;
 
 %% Run Analysis_Photometry
 if LauncherParam.Online==0
-try
 [LauncherParam.FileList,LauncherParam.PathName]=uigetfile('*.mat','Select the BPod file(s)','MultiSelect', 'on');
-catch
-    return
-end
 else
     LauncherParam=AP_Launcher_Online(LauncherParam,BpodSystem);
 end

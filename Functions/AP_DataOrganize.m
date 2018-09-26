@@ -51,8 +51,10 @@ try
     Analysis.AllData.Licks.Trials{i}                =linspace(i,i,size(thislick,2));
     Analysis.AllData.Licks.Bin{i}                   =(Analysis.Parameters.LickEdges(1):Analysis.Parameters.Bin:Analysis.Parameters.LickEdges(2));
     Analysis.AllData.Licks.Rate(i,:)                =histcounts(thislick,Analysis.AllData.Licks.Bin{i})/Analysis.Parameters.Bin;
+    Analysis.AllData.Licks.Baseline(i)              =mean(Analysis.AllData.Licks.Rate(i,Analysis.AllData.Licks.Bin{i}>(CueTime(1)-2) & Analysis.AllData.Licks.Bin{i}<(CueTime(1)-1)));
     Analysis.AllData.Licks.Cue(i)                   =mean(Analysis.AllData.Licks.Rate(i,Analysis.AllData.Licks.Bin{i}>CueTime(1) & Analysis.AllData.Licks.Bin{i}<CueTime(2)));
     Analysis.AllData.Licks.Outcome(i)               =mean(Analysis.AllData.Licks.Rate(i,Analysis.AllData.Licks.Bin{i}>OutcomeTime(1) & Analysis.AllData.Licks.Bin{i}<OutcomeTime(2)));
+    
 % Photometry    
     for thisCh=1:length(Analysis.Parameters.PhotoCh)
         thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));

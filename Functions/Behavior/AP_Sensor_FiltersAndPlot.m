@@ -52,6 +52,8 @@ for i=1:size(GroupToPlot,1)
         saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
         end
     end
+    % Stats ROC
+    
 end
 end
 %% Behavior Filters

@@ -6,17 +6,17 @@
 %3) a pseudocolored raster plot of the individual photometry traces
 %4) the average photometry signal
 %To plot the different graph, this function is using the parameters
-%specified in Analysis.Properties
+%specified in Analysis.Parameters
 %
 %function designed by Quentin 2016 for Analysis_Photometry
 
 %% Plot Parameters
 thisChStruct='Photo_470';
 labelx='Time (sec)';   
-xTime=[Analysis.Properties.PlotEdges(1) Analysis.Properties.PlotEdges(2)];
+xTime=[Analysis.Parameters.PlotEdges(1) Analysis.Parameters.PlotEdges(2)];
 xtickvalues=linspace(xTime(1),xTime(2),5);
 
-nbOfTrialTypes=Analysis.Properties.nbOfTrialTypes;
+nbOfTrialTypes=Analysis.Parameters.nbOfTrialTypes;
 if nbOfTrialTypes>6
     nbOfPlots=nbOfTrialTypes;
 else
@@ -34,13 +34,13 @@ for i=1:nbOfTrialTypes
 end
 maxtrial=Analysis.(thistype).nTrials;
 maxrate=10;
-NidaqRange=Analysis.Properties.NidaqRange;
+NidaqRange=Analysis.Parameters.NidaqRange;
 RunRange=[0 100];
 PupilRange=[-5 20];
 
 
 %% Plot
-FigureLegend=sprintf('%s_%s',Analysis.Properties.Name,Analysis.Properties.Rig);
+FigureLegend=sprintf('%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig);
 figData.figure=figure('Name','Figure','Position', [200 100 1200 700], 'numbertitle','off');
 Legend=uicontrol('style','text');
 set(Legend,'String',FigureLegend,'Position',[10,5,500,20]); 
@@ -58,7 +58,7 @@ for i=1:nbOfTrialTypes
     plot(Analysis.(thistype).Licks.Events,Analysis.(thistype).Licks.Trials,'sk',...
         'MarkerSize',2,'MarkerFaceColor','k');
     plot([0 0],[0 maxtrial],'-r');
-    plot(Analysis.(thistype).CueTime,[0 0],'-b','LineWidth',2);
+    plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
 
 % Nidaq Raster
     subplot(8,nbOfPlots,[thisplot+(2*nbOfPlots) thisplot+(3*nbOfPlots)]); hold on;
@@ -69,7 +69,7 @@ for i=1:nbOfTrialTypes
     yrasterrun=1:Analysis.(thistype).nTrials;
     imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasterrun,Analysis.(thistype).(thisChStruct).DFF,NidaqRange);
     plot([0 0],[0 maxtrial],'-r');
-    plot(Analysis.(thistype).CueTime,[0 0],'-b','LineWidth',2);
+    plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
     if thisplot==nbOfTrialTypes
         pos=get(gca,'pos');
         c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
@@ -85,27 +85,27 @@ for i=1:nbOfTrialTypes
     yrasterrun=1:Analysis.(thistype).nTrials;
     imagesc(Analysis.(thistype).Wheel.Time(1,:),yrasterrun,Analysis.(thistype).Wheel.Distance,RunRange);
     plot([0 0],[0 maxtrial],'-r');
-    plot(Analysis.(thistype).CueTime,[0 0],'-b','LineWidth',2);
+    plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
     if thisplot==nbOfTrialTypes
         pos=get(gca,'pos');
         c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
         c.Label.String = 'Run (cm)';
     end
 % Pupil Raster
-    subplot(8,nbOfPlots,[thisplot+(6*nbOfPlots) thisplot+(7*nbOfPlots)]); hold on;
-    if thisplot==1
-        ylabel('Trial # Pupil');
-    end
-    set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
-    yrasterpupil=1:Analysis.(thistype).nTrials;
-    imagesc(Analysis.(thistype).Pupil.Time(1,:),yrasterpupil,Analysis.(thistype).Pupil.PupilDPP,PupilRange);
-    plot([0 0],[0 maxtrial],'-r');
-    plot(Analysis.(thistype).CueTime,[0 0],'-b','LineWidth',2);
-    if thisplot==nbOfTrialTypes
-        pos=get(gca,'pos');
-        c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
-        c.Label.String = 'Pupil (%)';
-    end
+%     subplot(8,nbOfPlots,[thisplot+(6*nbOfPlots) thisplot+(7*nbOfPlots)]); hold on;
+%     if thisplot==1
+%         ylabel('Trial # Pupil');
+%     end
+%     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
+%     yrasterpupil=1:Analysis.(thistype).nTrials;
+%     imagesc(Analysis.(thistype).Pupil.Time(1,:),yrasterpupil,Analysis.(thistype).Pupil.PupilDPP,PupilRange);
+%     plot([0 0],[0 maxtrial],'-r');
+%     plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
+%     if thisplot==nbOfTrialTypes
+%         pos=get(gca,'pos');
+%         c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
+%         c.Label.String = 'Pupil (%)';
+%     end
     thisplot=thisplot+1;
 end
 % end

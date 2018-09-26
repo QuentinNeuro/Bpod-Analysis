@@ -48,7 +48,8 @@ if Analysis.(thistype).nTrials>0
     Analysis.(thistype).Licks.Trials=cell2mat(thisTrials);
     Analysis.(thistype).Licks.Bin                       =Analysis.AllData.Licks.Bin{thisFilter};
     Analysis.(thistype).Licks.Rate                      =Analysis.AllData.Licks.Rate(thisFilter,:);
-	Analysis.(thistype).Licks.Cue                       =Analysis.AllData.Licks.Cue(thisFilter);
+    Analysis.(thistype).Licks.Baseline                  =Analysis.AllData.Licks.Baseline(thisFilter);
+    Analysis.(thistype).Licks.Cue                       =Analysis.AllData.Licks.Cue(thisFilter);
     Analysis.(thistype).Licks.Outcome                   =Analysis.AllData.Licks.Outcome(thisFilter);
     % Average
     Analysis.(thistype).Licks.AVG                       =mean(Analysis.(thistype).Licks.Rate,1);

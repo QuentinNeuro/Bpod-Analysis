@@ -76,7 +76,7 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
 % QC 9/21 should I ceil or not the ZeroOffsetPoints? / is adding a point on line 83 necessary) 
 if ~isempty(StateZeroOffset)
 NewPhoto=NaN(3,ExpectedSize);
-ZeroOffsetPoints=ceil(ZeroOffset*SRDecimated);
+ZeroOffsetPoints=round(ZeroOffset*SRDecimated);
 NewTime=linspace(0,Duration+ZeroOffset,ExpectedSize+ZeroOffsetPoints)-TimeToZero;
 NewTime=NewTime(ZeroOffsetPoints:end);
 NewPhoto(1,1:length(NewTime))=NewTime;
@@ -120,7 +120,7 @@ Wheel(3,:)=DataWheelDistance;
 % remove variable ITI at beggining of the session
 if ~isempty(StateZeroOffset)
 NewWheel=NaN(3,ExpectedSize);
-ZeroOffsetPoints=ZeroOffset*SRDecimated;
+ZeroOffsetPoints=round(ZeroOffset*SRDecimated);
 NewTime=linspace(0,Duration+ZeroOffset,ExpectedSize+ZeroOffsetPoints)-TimeToZero;
 NewTime=NewTime(ZeroOffsetPoints:end);
 NewWheel(1,1:length(NewTime))=NewTime;
