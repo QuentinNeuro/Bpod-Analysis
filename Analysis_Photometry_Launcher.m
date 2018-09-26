@@ -10,11 +10,11 @@ LauncherParam.TrialEvents4CellBase=0;
 LauncherParam.SpikesAnalysis=0;
 LauncherParam.SpikesFigure=0;
 % Figures - Can be changed upon loading
-LauncherParam.PhotoChNames={'470-BLA' 'none' '470-VS'};%%{'470-BLA' 'none' '470-VS'};
+LauncherParam.PhotoChNames={'470-BLA' 'none' '470-VS'};%{'470-A1' '405-A1' 'fiber2'};%%{'470-BLA' 'none' '470-VS'};
 LauncherParam.PlotSummary1=1;
-LauncherParam.PlotSummary2=0;
+LauncherParam.PlotSummary2=1;
 LauncherParam.PlotFiltersSingle=0; %AP_Filter_GroupToPlot #1 Output
-LauncherParam.PlotFiltersSummary=1;
+LauncherParam.PlotFiltersSummary=0;
 LauncherParam.PlotFiltersBehavior=0; %AP_Filter_GroupToPlot #2 Ouput
 LauncherParam.Illustrator=0;
 LauncherParam.Transparency=1;
@@ -47,7 +47,7 @@ LauncherParam.OutcomeTimeReset=[]; % overwrite preloaded parameters
 LauncherParam.NidaqBaseline=[];    % overwrite preloaded parameters
 % Photometry - being used if cannot find the parameters in the bpod file
 LauncherParam.SamplingRate=2000;  %(Hz)
-LauncherParam.NewSamplingRate=100; %(Hz)
+LauncherParam.NewSamplingRate=20; %(Hz)
 LauncherParam.NidaqDuration=15;
 
 %% Run Analysis_Photometry

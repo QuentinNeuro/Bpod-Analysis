@@ -24,7 +24,7 @@ Analysis=A_FilterAfollowsB(Analysis,'Reward_After_Punish','Reward','Punish');
 
 %% Sort and Plot Filtered Trials specified in AP_Filter_GroupToPlot.
 if Analysis.Parameters.PlotFiltersSummary || Analysis.Parameters.PlotFiltersSingle
-[GroupToPlot]=AP_Filter_GroupToPlot(Analysis);
+[GroupToPlot]=AP_CuedOutcome_GroupToPlot(Analysis);
 for i=1:size(GroupToPlot,1)
     Title=GroupToPlot{i,1};
     MetaFilterGroup=cell(size(GroupToPlot{i,2},1),1);

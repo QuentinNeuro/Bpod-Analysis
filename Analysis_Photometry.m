@@ -1,7 +1,7 @@
 function Analysis=Analysis_Photometry(LauncherParam)
 % Function to analyze photometry data. 
 % Generates a struct named 'Analysis' using the functions:
-% AP_Parameters                 : extracts parameters of acquisition
+% AP_Parameters_#               : extracts parameters of acquisition
 % AP_DataOrganize               : extracts data from SessionData
 % A_Filer#                      : filters out trials
 % AP_DataSort                   : sort data according to trialtypes and filters
