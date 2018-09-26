@@ -11,7 +11,7 @@ indexb=0;
 switch Analysis.Parameters.Phase
     case 'L1-CuedReward' 
 % Performance - should be 3 trial types, see AP_Sensor_Performance
-GTT={'Cue_A','Cue_A','Cue_A','NoCue'};
+GTT={'type_1','type_1','type_1','type_2'};
 % Plot
         index=index+1;
 GTP{index,1}='RewardExpectation';
@@ -75,7 +75,7 @@ return
 
     case 'V1-Probability'
 % Performance
-GTT={'Cue_A','Cue_A','Cue_A','Cue_B'};
+GTT={'type_1','type_1','type_1','type_2'};
 % Plot
         index=index+1;
 GTP{index,1}='RewardExpectation';
@@ -100,7 +100,7 @@ GTPB{indexb,2}={'Cue_A_Reward_CuePupil',                  {'Cue A','Reward','Lic
 end           
     case 'V2-Probability'
 % Performance
-GTT={'type_2','Cue_B','Cue_A','Cue_B'};
+GTT={'type_2','type_2','type_1','type_2'};
 % Plot
         index=index+1;
 GTP{index,1}='RewardExpectation';

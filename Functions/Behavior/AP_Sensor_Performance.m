@@ -32,7 +32,9 @@ testIO(4)=InterROC>ThreshROC;
 testIO(5)=InterTT==1;
 end
 %% Compute decision variable
-Analysis.Parameters.Decision=sum(testIO)==length(testIO);
-
+Decision=sum(testIO)==length(testIO);
+%% Save in Analysis Structure
+Analysis.Performance.Decision=Decision;
+Analysis.Performance.testIO=testIO;
 end
 

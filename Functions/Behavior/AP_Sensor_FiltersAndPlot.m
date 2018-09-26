@@ -20,6 +20,10 @@ Analysis=A_FilterPupil(Analysis,'Pupil',Analysis.Parameters.PupilState,Analysis.
 Analysis=A_FilterPupil(Analysis,'CuePupil','Cue',2);
 Analysis=A_FilterPupilNaNCheck(Analysis,'PupilNaN',25);
 
+%% Performance test
+[~,~,GTT]=AP_Sensor_GroupToPlot(Analysis);
+Analysis=AP_Sensor_Performance(Analysis,GTT);
+
 %% Sort and Plot Filtered Trials specified in AP_Filter_GroupToPlot.
 if Analysis.Parameters.PlotFiltersSummary || Analysis.Parameters.PlotFiltersSingle
 [GroupToPlot]=AP_Sensor_GroupToPlot(Analysis);
@@ -52,8 +56,6 @@ for i=1:size(GroupToPlot,1)
         saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
         end
     end
-    % Stats ROC
-    
 end
 end
 %% Behavior Filters
