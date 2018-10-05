@@ -7,8 +7,8 @@ if contains(Analysis.Parameters.Phase,'Punish')
 end
 CueType={'AnticipLick_CueA','NoAnticipLick_CueB','NoCue'};
 CueColors=['-k';'-b';'-g'];
-RewardType={'AnticipLick_CueA_Reward','Uncued_Reward'};
-RewardColors=['-k';'-g'];
+RewardType={'AnticipLick_CueA_Reward','NoAnticipLick_CueA_Reward','Uncued_Reward'};
+RewardColors=['-k';'-b';'-g'];
 PunishType={'NoAnticipLick_CueB_Punish','Uncued_Punish'};
 PunishColors=['-k';'-r'];
 

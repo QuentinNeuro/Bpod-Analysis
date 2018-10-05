@@ -4,12 +4,12 @@ LauncherParam.FileList=[thisName thisExt];
 LauncherParam.PathName=thisPath;
 % ByDefault parameters    
 LauncherParam.Analysis_type='Single';
-LauncherParam.Save=1;
+LauncherParam.Save=0;
 LauncherParam.Load=0;
 % Figures - Can be changed upon loading
 LauncherParam.PhotoChNames={'Fiber1' 'Color2' 'Fiber2'};%%{'470-BLA' 'none' '470-VS'};
-LauncherParam.PlotSummary1=1;
-LauncherParam.PlotSummary2=1;
+LauncherParam.PlotSummary1=0;
+LauncherParam.PlotSummary2=0;
 LauncherParam.PlotFiltersSingle=0; %AP_Filter_GroupToPlot #1 Output
 LauncherParam.PlotFiltersSummary=0;
 LauncherParam.PlotFiltersBehavior=0; %AP_Filter_GroupToPlot #2 Ouput
