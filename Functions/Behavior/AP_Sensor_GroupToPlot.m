@@ -98,7 +98,7 @@ GTPB{indexb,1}='CuePupil';
 GTPB{indexb,2}={'Cue_A_Reward_CuePupil',                  {'Cue A','Reward','LicksOutcome','CuePupil','PupilNaN'};...
            'Cue_A_Reward_CuenoPupil',                {'Cue A','Reward','LicksOutcome','CuePupilInv','PupilNaN'}};
 end           
-    case 'V2-Probability'
+    case 'V2-Extinction'
 % Performance
 GTT={'type_2','type_2','type_1','type_2'};
 % Plot
@@ -114,14 +114,14 @@ GTP{index,2}={'Cue_A',                          {'Cue A'};...
 if Analysis.Parameters.Wheel
     indexb=indexb+1;
 GTPB{indexb,1}='Running';
-GTPB{indexb,2}={'Cue_A_Reward_Run',                    {'Cue A','Reward','LicksOutcome','Run'};...
-           'Cue_A_Reward_noRun',                  {'Cue A','Reward','LicksOutcome','RunInv'}};
+GTPB{indexb,2}={'Cue_B_Reward_Run',                    {'Cue A','Reward','LicksOutcome','Run'};...
+           'Cue_B_Reward_noRun',                  {'Cue A','Reward','LicksOutcome','RunInv'}};
  end
 if Analysis.Parameters.Pupillometry
     indexb=indexb+1;
 GTPB{indexb,1}='CuePupil';
-GTPB{indexb,2}={'Cue_A_Reward_CuePupil',                  {'Cue A','Reward','LicksOutcome','CuePupil','PupilNaN'};...
-           'Cue_A_Reward_CuenoPupil',                {'Cue A','Reward','LicksOutcome','CuePupilInv','PupilNaN'}};
+GTPB{indexb,2}={'Cue_B_Reward_CuePupil',                  {'Cue A','Reward','LicksOutcome','CuePupil','PupilNaN'};...
+           'Cue_B_Reward_CuenoPupil',                {'Cue A','Reward','LicksOutcome','CuePupilInv','PupilNaN'}};
 end        
           
     case 'S-RewPun'
