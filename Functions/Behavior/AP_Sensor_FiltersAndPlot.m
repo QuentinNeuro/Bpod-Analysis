@@ -24,10 +24,6 @@ Analysis=A_FilterPupilNaNCheck(Analysis,'PupilNaN',25);
 [~,~,GTT]=AP_Sensor_GroupToPlot(Analysis);
 Analysis=AP_Sensor_Performance(Analysis,GTT);
 
-%% Post recording plot
-AP_Sensor_OnlineSummaryPlot(Analysis)
-saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name 'Online.png']);
-
 %% Sort and Plot Filtered Trials specified in AP_Filter_GroupToPlot.
 if Analysis.Parameters.PlotFiltersSummary || Analysis.Parameters.PlotFiltersSingle
 [GroupToPlot]=AP_Sensor_GroupToPlot(Analysis);

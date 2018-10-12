@@ -4,7 +4,6 @@ clear SessionData Analysis LauncherParam; close all;
 LauncherParam.Analysis_type='Single';
 LauncherParam.Save=0;
 LauncherParam.Load=0;
-LauncherParam.Online=1;
 % Electrophysiology
 LauncherParam.TrialEvents4CellBase=0;
 LauncherParam.SpikesAnalysis=0;
@@ -51,12 +50,6 @@ LauncherParam.NewSamplingRate=20; %(Hz)
 LauncherParam.NidaqDuration=15;
 
 %% Run Analysis_Photometry
-if LauncherParam.Online==0
-[LauncherParam.FileList,LauncherParam.PathName]=uigetfile('*.mat','Select the BPod file(s)','MultiSelect', 'on');
-else
-    LauncherParam=AP_Launcher_Online(LauncherParam,BpodSystem);
-end
-
 if iscell(LauncherParam.FileList)==0
     LauncherParam.FileToOpen=cellstr(LauncherParam.FileList);
     LauncherParam.Analysis_type='Single';

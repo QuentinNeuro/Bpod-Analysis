@@ -1,8 +1,17 @@
-function AP_Sensor_OnlineSummaryPlot(Analysis)
+function thisfig=AP_Sensor_OnlineSummaryPlot(Analysis)
+%% Summary plot - used for postrecording quick analysis - but can also be used for posthoc
+%% To use with the Bpod Analysis pipeline
+%% Design by QC 2018
 
-FigureTitle='PostTraining_Plot';
+%% Check whether performance data exists
+if isfield(Analysis,'Performance')
+    Decision=int8(Analysis.Performance.Decision);
+else
+    Decision=NaN;
+end
+
 %% Plotting Parameters
-Analysis.Parameters.PhotoChNames={'470-BLA','470-VS'};
+FigureTitle='PostTraining_Plot';
 nbOfTrialTypes=Analysis.Parameters.nbOfTrialTypes;
 labely={'Licks',Analysis.Parameters.PhotoChNames{1},Analysis.Parameters.PhotoChNames{2},'Wheel'};
 labelx='Time (s)'; 
@@ -29,7 +38,7 @@ xtickvalues=linspace(xTime(1),xTime(2),5);
 
 %% Figure
 FigureLegend=sprintf('%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig);
-figure('Name',FigureTitle,'Position', [200 100 1200 700], 'numbertitle','off');
+thisfig=figure('Name',FigureTitle,'Position', [200 100 1200 700], 'numbertitle','off');
 Legend=uicontrol('style','text');
 set(Legend,'String',FigureLegend,'Position',[10,5,500,20]); 
 
@@ -121,7 +130,7 @@ end
 % Adjust y axis and add reward and cue timing
 % Licks
 subplot(SubplotDimensions(1),SubplotDimensions(2),summaryplots); hold on;
-title(sprintf('Performance = %d',int8(Analysis.Performance.Decision)));
+title(sprintf('Performance = %d',Decision));
 axis tight
 thisYLim=get(gca,'YLim');
 plot([0 0],[0 thisYLim(2)],'-r');
