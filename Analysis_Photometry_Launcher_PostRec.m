@@ -1,4 +1,8 @@
-function Analysis=Analysis_Photometry_Launcher_PostRec(BpodSystem,ChannelNames,YPhoto)
+function Analysis=Analysis_Photometry_Launcher_PostRec(BpodSystem,ChannelNames,YPhoto,Water)
+
+%% Check nargin
+% todo
+
 %% Analysis type Single/Group
 LauncherParam.Analysis_type='Single';
 LauncherParam.Save=0;
@@ -55,7 +59,7 @@ LauncherParam.PathName=thisPath;
 %% Analysis Photometry
 Analysis=Analysis_Photometry(LauncherParam); 
 %% Figure
-Analysis.Figure.PostRec=AP_Sensor_OnlineSummaryPlot(Analysis);
+Analysis.Figure.PostRec=AP_Sensor_OnlineSummaryPlot(Analysis,Water);
 % saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name 'Online.png']);
 
 end

@@ -1,14 +1,15 @@
-function thisfig=AP_Sensor_OnlineSummaryPlot(Analysis)
+function thisfig=AP_Sensor_OnlineSummaryPlot(Analysis,water)
 %% Summary plot - used for postrecording quick analysis - but can also be used for posthoc
 %% To use with the Bpod Analysis pipeline
 %% Design by QC 2018
 
-%% Check whether performance data exists
+%% Check whether performance data exists and generate title
 if isfield(Analysis,'Performance')
     Decision=int8(Analysis.Performance.Decision);
 else
     Decision=NaN;
 end
+TitlePerfWat=sprintf('Performance = %d - Water = %d ul',Decision,water);
 
 %% Plotting Parameters
 FigureTitle='PostTraining_Plot';
@@ -130,7 +131,7 @@ end
 % Adjust y axis and add reward and cue timing
 % Licks
 subplot(SubplotDimensions(1),SubplotDimensions(2),summaryplots); hold on;
-title(sprintf('Performance = %d',Decision));
+title(TitlePerfWat);
 axis tight
 thisYLim=get(gca,'YLim');
 plot([0 0],[0 thisYLim(2)],'-r');
