@@ -55,6 +55,7 @@ LauncherParam.NidaqDuration=15;
 %% File path 
 [thisPath,thisName,thisExt]=fileparts(BpodSystem.DataPath);
 LauncherParam.FileList=[thisName thisExt];
+LauncherParam.FileToOpen=cellstr(LauncherParam.FileList);
 LauncherParam.PathName=thisPath;
 %% Analysis Photometry
 Analysis=Analysis_Photometry(LauncherParam); 
