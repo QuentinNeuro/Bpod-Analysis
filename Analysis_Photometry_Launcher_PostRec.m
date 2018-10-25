@@ -61,9 +61,10 @@ LauncherParam.PathName=thisPath;
 Analysis=Analysis_Photometry(LauncherParam); 
 %% Figure
 Analysis.Figure.PostRec=AP_Sensor_OnlineSummaryPlot(Analysis,Water);
+SummaryPlotPath = [Analysis.Parameters.DirFig Analysis.Parameters.Name '_Online.png'];
 tic
-disp(['Saving Figure to ' Analysis.Parameters.DirFig Analysis.Parameters.Name 'Online.png'])
-saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name 'Online.png']);
+disp(['Saving Figure to ' SummaryPlotPath])
+saveas(gcf,SummaryPlotPath);
 toc
 %% Pop-up water supplement reminder
 water2Supplement = 800 - Water;
