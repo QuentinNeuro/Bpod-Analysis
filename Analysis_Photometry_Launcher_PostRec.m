@@ -65,4 +65,7 @@ tic
 disp(['Saving Figure to ' Analysis.Parameters.DirFig Analysis.Parameters.Name 'Online.png'])
 saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name 'Online.png']);
 toc
+%% Pop-up water supplement reminder
+water2Supplement = 800 - Water;
+msgbox({['Give ' Analysis.Parameters.Animal ' ' num2str(water2Supplement) 'uL water']}, 'Water reminder')
 end
