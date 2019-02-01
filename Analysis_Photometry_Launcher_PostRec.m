@@ -62,4 +62,9 @@ Analysis=Analysis_Photometry(LauncherParam);
 Analysis.Figure.PostRec=AP_Sensor_OnlineSummaryPlot(Analysis,Water);
 saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name 'Online.png']);
 
+%% Behavior specific Evernote
+switch Analysis.Parameters.Behavior
+    case 'Sensor'
+        AP_Sensors_Evernote(Analysis)
+end
 end
