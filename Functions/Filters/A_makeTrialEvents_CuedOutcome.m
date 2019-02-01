@@ -11,7 +11,7 @@ Events.TrialStartTimestamp=Analysis.AllData.Time.TrialStartTS;
 Cue=NaN(1,Analysis.AllData.nTrials);
 Outcome=NaN(1,Analysis.AllData.nTrials);
 for i=1:Analysis.AllData.nTrials
-    Cue(i)=Analysis.AllData.Time.States{1,i}.SoundDelivery(1);
+    Cue(i)=Analysis.AllData.Time.States{1,i}.CueDelivery(1);
     Outcome(i)=Analysis.AllData.Time.States{1,i}.Outcome(1);
     Events.Licks{i}=Analysis.AllData.Licks.Events{1,i}+Analysis.AllData.Time.Zero(i);
 end

@@ -18,18 +18,12 @@ if isdir(Analysis.Parameters.DirFig)==0
 end
 %% Summary Plot 1
 if Analysis.Parameters.PlotSummary1==1
-    if Analysis.Parameters.Photometry==0
-        Analysis=AP_PlotData(Analysis,'nophoto');
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_AllData.png']);
-    else 
+    Analysis=AP_PlotData(Analysis);
+    phototitlelabel=[];
     for thisCh=1:length(Analysis.Parameters.PhotoCh)
-        Analysis=AP_PlotData(Analysis,thisCh);
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_AllData' char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
-        if Analysis.Parameters.Illustrator
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_AllData' char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
-        end
+        phototitlelabel=[phototitlelabel '_' char(Analysis.Parameters.PhotoChNames{thisCh})];
     end
-    end
+    saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_AllData' phototitlelabel '.png']);
 end
 
 %% Summary Plot 2 (Only if Photometry)

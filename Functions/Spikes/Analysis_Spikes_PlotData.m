@@ -21,7 +21,7 @@ yLabelSpikeAll='Spikes';
 ySpikeAll=[-0.1 0.1];
 % Subplot Tagging Raster
 xLabelTag='Time from Laser (s)';
-xTimeTag=[-0.02 0.05];
+xTimeTag=[-0.05 0.2];
 yTrialsTag1=[0 100];
 yTrialsTag2=[100 200];
 % Subplot Licks

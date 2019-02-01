@@ -60,6 +60,6 @@ LauncherParam.PathName=thisPath;
 Analysis=Analysis_Photometry(LauncherParam); 
 %% Figure
 Analysis.Figure.PostRec=AP_Sensor_OnlineSummaryPlot(Analysis,Water);
-% saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name 'Online.png']);
+saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name 'Online.png']);
 
 end

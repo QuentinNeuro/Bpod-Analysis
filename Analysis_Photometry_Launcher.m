@@ -1,7 +1,7 @@
 %% Bpod Photometry Launcher
 clear SessionData Analysis LauncherParam; close all;
 %% Analysis type Single/Group
-LauncherParam.Analysis_type='Single';
+LauncherParam.Analysis_type='Group';
 LauncherParam.Save=0;
 LauncherParam.Load=0;
 % Electrophysiology
@@ -9,27 +9,28 @@ LauncherParam.TrialEvents4CellBase=0;
 LauncherParam.SpikesAnalysis=0;
 LauncherParam.SpikesFigure=0;
 % Figures - Can be changed upon loading
-LauncherParam.PhotoChNames={'470-BLA' 'none' '470-VS'};%{'470-A1' '405-A1' 'fiber2'} {'470-BLA' 'none' '470-VS'};
-LauncherParam.PlotSummary1=0;
+LauncherParam.PhotoChNames={'470-A1' '405-A1' '470-mPFC'};%{'470-A1' '405-A1' '470-mPFC'} {'470-BLA' 'none' '470-VS'};
+LauncherParam.PlotSummary1=1;
 LauncherParam.PlotSummary2=0;
 LauncherParam.PlotFiltersSingle=0; %AP_CuedOutcome_GroupToPlot #1 Output
-LauncherParam.PlotFiltersSummary=0;
+LauncherParam.PlotFiltersSummary=1;
 LauncherParam.PlotFiltersBehavior=0; %AP_Filter_GroupToPlot #2 Ouput
 LauncherParam.Illustrator=0;
 LauncherParam.Transparency=1;
 % Axis - Can be changed upon loading
-LauncherParam.PlotYNidaq=[-2 5];
+LauncherParam.Zscore=0;
+LauncherParam.PlotYNidaq=[-2 2];
 LauncherParam.PlotX=[-4 4];
 % States
 LauncherParam.StateToZero='StateOfOutcome'; %'StateOfCue' 'StateOfOutcome'
 LauncherParam.ZeroAtZero=0;
-LauncherParam.WheelState='Cue'; %'Baseline','Cue','Outcome'
+LauncherParam.WheelState='Outcome'; %'Baseline','Cue','Outcome'
 LauncherParam.PupilState='NormBaseline'; %'NormBaseline','Cue','Outcome'
 % Filters
 LauncherParam.PupilThreshold=1;
 LauncherParam.WheelThreshold=2; %Speed cm/s
 LauncherParam.LicksCue=2;
-LauncherParam.LicksOutcome=2;
+LauncherParam.LicksOutcome=5;
 LauncherParam.TrialToFilterOut=[];
 LauncherParam.LoadIgnoredTrials=1;
 %% Overwrite Parameters found in AP_Parameters
@@ -50,6 +51,7 @@ LauncherParam.NewSamplingRate=20; %(Hz)
 LauncherParam.NidaqDuration=15;
 
 %% Run Analysis_Photometry
+[LauncherParam.FileList,LauncherParam.PathName]=uigetfile('*.mat','Select the BPod file(s)','MultiSelect', 'on');
 if iscell(LauncherParam.FileList)==0
     LauncherParam.FileToOpen=cellstr(LauncherParam.FileList);
     LauncherParam.Analysis_type='Single';

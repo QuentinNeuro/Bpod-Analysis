@@ -13,6 +13,9 @@ end
 % Licks
 Analysis=A_FilterLick(Analysis,'LicksCue','Cue',Analysis.Parameters.LicksCue);
 Analysis=A_FilterLick(Analysis,'LicksOutcome','Outcome',Analysis.Parameters.LicksOutcome);
+if contains(Analysis.Parameters.Phase,'L3')
+    Analysis=A_FilterLick(Analysis,'Licks2ndCue',[-3 -1.5],Analysis.Parameters.LicksOutcome);
+end
 % Wheel
 Analysis=A_FilterWheel(Analysis,'Run',Analysis.Parameters.WheelState,Analysis.Parameters.WheelThreshold);
 % Pupil
@@ -22,8 +25,11 @@ Analysis=A_FilterPupilNaNCheck(Analysis,'PupilNaN',25);
 
 %% Performance test
 [~,~,GTT]=AP_Sensor_GroupToPlot(Analysis);
+if ~isempty(GTT)
 Analysis=AP_Sensor_Performance(Analysis,GTT);
-
+end
+AP_Sensor_OnlineSummaryPlot(Analysis,0);
+saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name 'Online.png']);
 %% Sort and Plot Filtered Trials specified in AP_Filter_GroupToPlot.
 if Analysis.Parameters.PlotFiltersSummary || Analysis.Parameters.PlotFiltersSingle
 [GroupToPlot]=AP_Sensor_GroupToPlot(Analysis);

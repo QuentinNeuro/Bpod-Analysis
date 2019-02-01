@@ -1,4 +1,4 @@
-function Analysis=AP_PlotData(Analysis,channelnb)
+function Analysis=AP_PlotData(Analysis)
 %AP_PlotData generates a figure from the licks and the photometry data
 %contained in the structure 'Analysis'. The figure shows for each trial types: 
 %1) a raster plot of the licks events 
@@ -10,38 +10,32 @@ function Analysis=AP_PlotData(Analysis,channelnb)
 %
 %function designed by Quentin 2016 for Analysis_Photometry
 
-%% test for channels
-if Analysis.Parameters.Photometry==1
-    if nargin==1
-        channelnb=1;
-    end
-        thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{channelnb}));
-        FigTitle=sprintf('Analysis-Plot %s',char(Analysis.Parameters.PhotoChNames{channelnb}));
-    else
-    FigTitle='Analysis-Plot';
-end
-
-%% Plot Parameters
+%% Legends
+FigTitle='Summary-Plot';
 labelx='Time (sec)';   
 xTime=[Analysis.Parameters.PlotEdges(1) Analysis.Parameters.PlotEdges(2)];
 xtickvalues=linspace(xTime(1),xTime(2),5);
 labely1='Trial Number (licks)';
 labely2='Licks Rate (Hz)';
-if Analysis.Parameters.Photometry==1
-    labely3='Trial Number (DF/F)';
-    labely4='DF/F (%)';
+labelyDFF='DF/Fo (%)';
+%% Nb of plots
+nbOfPlotsY=6;
+for thisCh=2:length(Analysis.Parameters.PhotoCh)
+    nbOfPlotsY=nbOfPlotsY+3;
 end
+    
 nbOfTrialTypes=Analysis.Parameters.nbOfTrialTypes;
 if nbOfTrialTypes>6
-    nbOfPlots=nbOfTrialTypes;
+    nbOfPlotsX=nbOfTrialTypes;
 else
-    nbOfPlots=6;
+    nbOfPlotsX=6;
 end
-
+%% Axes
 % Automatic definition of axes
 maxtrial=0; maxrate=10;
 for i=1:nbOfTrialTypes
     thistype=sprintf('type_%.0d',i);
+    if Analysis.(thistype).nTrials~=0
 %Raster plots y axes
     if Analysis.(thistype).nTrials > maxtrial
         maxtrial=Analysis.(thistype).nTrials;
@@ -49,6 +43,7 @@ for i=1:nbOfTrialTypes
 %Lick AVG y axes
     if max(Analysis.(thistype).Licks.AVG)>maxrate
         maxrate=max(Analysis.(thistype).Licks.AVG);
+    end
     end
 end
 
@@ -71,19 +66,21 @@ set(Legend,'String',FigureLegend,'Position',[10,5,500,20]);
 thisplot=1;
 for i=1:nbOfTrialTypes
     thistype=sprintf('type_%.0d',i);
+    
 % Lick Raster
-    subplot(6,nbOfPlots,[thisplot thisplot+nbOfPlots]); hold on;
+    subplot(nbOfPlotsY,nbOfPlotsX,[thisplot thisplot+nbOfPlotsX]); hold on;
     title(Analysis.(thistype).Name);
     if thisplot==1
         ylabel(labely1);
     end
+    if Analysis.(thistype).nTrials~=0
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial+1],'YDir','reverse');
     plot(Analysis.(thistype).Licks.Events,Analysis.(thistype).Licks.Trials,'sk',...
         'MarkerSize',2,'MarkerFaceColor','k');
     plot([0 0],[0 maxtrial],'-r');
     plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
 % Lick AVG
-    subplot(6,nbOfPlots,thisplot+(2*nbOfPlots)); hold on;
+    subplot(nbOfPlotsY,nbOfPlotsX,thisplot+(2*nbOfPlotsX)); hold on;
     if thisplot==1
         ylabel(labely2);
     end
@@ -93,16 +90,19 @@ for i=1:nbOfTrialTypes
     plot([0 0],[0 maxrate+1],'-r');
     plot(Analysis.(thistype).Time.Cue(1,:),[maxrate maxrate],'-b','LineWidth',2);
     
-if Analysis.Parameters.Photometry==1    
+    counterphotoplot=[3 4 5];
+for thisCh=1:length(Analysis.Parameters.PhotoCh)
+    thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
 % Nidaq Raster
-    subplot(6,nbOfPlots,[thisplot+(3*nbOfPlots) thisplot+(4*nbOfPlots)]); hold on;
+    subplot(nbOfPlotsY,nbOfPlotsX,[thisplot+(counterphotoplot(1)*nbOfPlotsX) thisplot+(counterphotoplot(2)*nbOfPlotsX)]); hold on;
     if thisplot==1
-                ylabel(labely3);
+                ylabel(char(Analysis.Parameters.PhotoChNames{thisCh}));
     end
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
-    % Removed by QC on 9/18/2018 for variable ITI at beginning
+    
     yrasternidaq=1:Analysis.(thistype).nTrials;
     imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,NidaqRange);
+% Removed by QC on 9/18/2018 for variable ITI at beginning
 %     for thistrial=1:Analysis.(thistype).nTrials
 %     imagesc(Analysis.(thistype).(thisChStruct).Time(thistrial,:),thistrial,Analysis.(thistype).(thisChStruct).DFF(thistrial,:),NidaqRange);
 %     end
@@ -111,19 +111,22 @@ if Analysis.Parameters.Photometry==1
     if thisplot==nbOfTrialTypes
         pos=get(gca,'pos');
         c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
-        c.Label.String = labely4;
+        c.Label.String = labelyDFF;
     end
 % Nidaq AVG
-    subplot(6,nbOfPlots,thisplot+(5*nbOfPlots)); hold on;
+    subplot(nbOfPlotsY,nbOfPlotsX,thisplot+(counterphotoplot(3)*nbOfPlotsX)); hold on;
     if thisplot==1
-        ylabel(labely4);
+        ylabel(labelyDFF);
     end
     xlabel(labelx);
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',NidaqRange);
     shadedErrorBar(Analysis.(thistype).(thisChStruct).Time(1,:),Analysis.(thistype).(thisChStruct).DFFAVG,Analysis.(thistype).(thisChStruct).DFFSEM,'-k',0);
     plot([0 0],NidaqRange,'-r');
     plot(Analysis.(thistype).Time.Cue(1,:),[NidaqRange(2) NidaqRange(2)],'-b','LineWidth',2);
-end    
+    
+    counterphotoplot=counterphotoplot+3;
+end  
+end
     thisplot=thisplot+1;
 end
 end

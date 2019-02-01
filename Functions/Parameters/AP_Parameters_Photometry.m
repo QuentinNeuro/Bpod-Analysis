@@ -6,7 +6,7 @@ function handles=AP_Parameters_Photometry(handles,SessionData,DefaultParam)
 % else
     LEDNames=DefaultParam.PhotoChNames;
 % end
-
+handles.Zscore=DefaultParam.Zscore;
 %% Auto-Detection
 if isfield(SessionData.TrialSettings(1).GUI,'PhotometryVersion')
     if SessionData.TrialSettings(1).GUI.Photometry

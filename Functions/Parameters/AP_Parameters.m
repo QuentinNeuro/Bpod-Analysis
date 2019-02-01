@@ -64,6 +64,7 @@ end
 end
 %% Timing
 handles.StateToZero     =handles.(DefaultParam.StateToZero);
+handles.ZeroFirstLick   =0;
 ZeroTime                =SessionData.RawEvents.Trial{1,1}.States.(handles.StateToZero)(1);
 handles.CueTime         =SessionData.RawEvents.Trial{1,1}.States.(handles.StateOfCue)-ZeroTime;
 handles.OutcomeTime     =SessionData.RawEvents.Trial{1,1}.States.(handles.StateOfOutcome)-ZeroTime;

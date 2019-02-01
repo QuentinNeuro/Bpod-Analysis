@@ -2,70 +2,63 @@ function [GTP,GTPB]=AP_CuedOutcome_GroupToPlot(Analysis)
 %
 %
 %function designed by Quentin 2017
+GTT={};
+GTS={};
 GTP={};
-GTPB={};
+GTP_Behav={};
 index=0;
+indexb=0;
 
+%% Adjust phase names
 switch Analysis.Parameters.Phase
-    case 'Training'  %'RewardA' 'Training'
-        index=index+1;
-GTP{index,1}='RewExp';
-GTP{index,2}={'AnticipLick_CueA_Reward',        {'Cue A','LicksCue','Reward','LicksOutcome'};...
-          'NoAnticipLick_CueA_Reward',      {'Cue A','LicksCueInv','Reward','LicksOutcome'};...
-          'Uncued_Reward',                  {'Uncued','Reward','LicksOutcome'}};
-index=index+1;
-GTP{index,1}='Cues';
-GTP{index,2}={'Cue_A',                          {'Cue A'};...
-          'Cue_B',                          {'Cue B'};...
-          'NoCue',                          {'Uncued'}};
-      index=index+1;
-GTP{index,1}='Cues_Licks';
-GTP{index,2}={'AnticipLick_CueA',               {'Cue A','LicksCue'};...
-          'NoAnticipLick_CueA',             {'Cue A','LicksCueInv'};...
-          'AnticipLick_CueB',               {'Cue B','LicksCue'};...
-          'NoAnticipLick_CueB',             {'Cue B','LicksCueInv'}};
-      index=index+1;
-GTP{index,1}='Learning';
-GTP{index,2}={'Cue_A_Reward',                  {'Cue A','Reward','LicksOutcome'};...
-          'Uncued_Reward',                  {'Uncued','LicksOutcome'};...
-          'Cue_B_Omission',                 {'Cue B','Omission'}};
-      
-          case 'RewardA'  %'RewardA' 'Training'
-index=index+1;
-GTP{index,1}='RewExp2';
-GTP{index,2}={  'CueA_Reward',        {'Cue A','Reward','LicksOutcome'};...
-                'CueB_Omission',      {'Cue B','LicksCueInv'};...
-                'Uncued_Reward',      {'Uncued','Reward','LicksOutcome'}};             
+    case 'Training'
+Analysis.Parameters.Phase='RewardA';
+    case 'RewardA_woOmi'
+Analysis.Parameters.Phase='RewardA';
+end
+
+%% Groups
+switch Analysis.Parameters.Phase
+          case 'RewardA'  %'RewardA' 'Training'     
 index=index+1;
 GTP{index,1}='RewExp';
 GTP{index,2}={  'AnticipLick_CueA_Reward',        {'Cue A','LicksCue','Reward','LicksOutcome'};...
                 'NoAnticipLick_CueA_Reward',      {'Cue A','LicksCueInv','Reward','LicksOutcome'};...
                 'Uncued_Reward',                  {'Uncued','Reward','LicksOutcome'}};
 index=index+1;
+GTP{index,1}='RewExp2';
+GTP{index,2}={  'CueA_Reward',        {'Cue A','Reward','LicksOutcome'};...
+                'CueB_Omission',      {'Cue B'};...
+                'Uncued_Reward',      {'Uncued','Reward','LicksOutcome'}};        
+index=index+1;
 GTP{index,1}='Cues';
 GTP{index,2}={'Cue_A',                          {'Cue A'};...
-          'Cue_B',                          {'Cue B'};...
-          'NoCue',                          {'Uncued'}};
+            'Cue_B',                          {'Cue B'};...
+            'NoCue',                          {'Uncued'}};
       index=index+1;
 GTP{index,1}='Cues_Licks2';
 GTP{index,2}={'AnticipLick_CueA',               {'Cue A','LicksCue'};...
           'NoAnticipLick_CueA',             {'Cue A','LicksCueInv'};...
           'AnticipLick_CueB',               {'Cue B','LicksCue'};...
           'NoAnticipLick_CueB',             {'Cue B','LicksCueInv'}};
-%       index=index+1;
-% GTPB{1,1}='Pupil';
-% GTPB{1,2}={'Cue_A_Reward_Pupil',                  {'Cue A','Reward','LicksOutcome','Pupil','PupilNaN'};...
-%            'Cue_A_Reward_noPupil',                {'Cue A','Reward','LicksOutcome','PupilInv','PupilNaN'};...
-%            'Uncued_Reward',                       {'Uncued','Reward'}};
-GTPB{1,1}='Running';
-GTPB{1,2}={'Cue_A_Reward_Run',                    {'Cue A','Reward','LicksOutcome','Run'};...
-           'Cue_A_Reward_noRun',                  {'Cue A','Reward','LicksOutcome','RunInv'};...
-           'Uncued_Reward',                       {'Uncued','Reward'}};
-GTPB{2,1}='CuePupil';
-GTPB{2,2}={'Cue_A_Reward_CuePupil',                  {'Cue A','Reward','LicksOutcome','CuePupil','PupilNaN'};...
+      
+% Arousal
+if Analysis.Parameters.Wheel
+    indexb=indexb+1;
+GTPB{indexb,1}='Running';
+GTPB{indexb,2}={'Cue_A_Reward_Run',                    {'Cue A','Reward','LicksOutcome','Run'};...
+                'Cue_A_Reward_noRun',                  {'Cue A','Reward','LicksOutcome','RunInv'};...
+                'Uncued_Reward',                       {'Uncued','Reward'}};
+end
+if Analysis.Parameters.Pupillometry
+indexb=indexb+1;
+GTPB{indexb,1}='CuePupil';
+GTPB{indexb,2}={'Cue_A_Reward_CuePupil',                  {'Cue A','Reward','LicksOutcome','CuePupil','PupilNaN'};...
            'Cue_A_Reward_CuenoPupil',                {'Cue A','Reward','LicksOutcome','CuePupilInv','PupilNaN'};...
            'Uncued_Reward',                          {'Uncued','Reward'}};
-       
+end     
+      
+%        
     case 'RewardB'
 GTP{1,1}='RewExp';        
 GTP{1,2}={'AnticipLick_CueB_Reward',        {'Cue B','LicksCue','Reward','LicksOutcome'};...

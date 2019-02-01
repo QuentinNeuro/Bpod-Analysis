@@ -38,6 +38,8 @@ transparency=0;
 maxtrial=Analysis.(thistype).nTrials;
 if maxtrial<20
     maxtrial=20;
+else
+    maxtrial=40;
 end
 %Lick AVG y axes
 maxrate=max(Analysis.(thistype).Licks.AVG);

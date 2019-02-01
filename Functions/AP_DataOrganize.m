@@ -39,7 +39,11 @@ try
 % Timimg
     Analysis.AllData.Time.TrialStartTS(i)   =SessionData.TrialStartTimestamp(thisTrial); 
     Analysis.AllData.Time.States{i}         =SessionData.RawEvents.Trial{1,thisTrial}.States;
+    if Analysis.Parameters.ZeroFirstLick
+        %function to come
+    else
     Analysis.AllData.Time.Zero(i)           =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Parameters.StateToZero)(1);
+    end
     Analysis.AllData.Time.Cue(i,:)          =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Parameters.StateOfCue)...
                                                 -Analysis.AllData.Time.Zero(i);
     Analysis.AllData.Time.Outcome(i,:)      =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Parameters.StateOfOutcome)...

@@ -4,7 +4,7 @@ function Analysis=Analysis_Spikes(Analysis,action,thistype,Filter)
 % Requiers TTL timestamps for tagging (1HzEvents) and for behavioral Events
 % and TT files
 
-Time_Tagging=[-0.1 0.1];
+Time_Tagging=[-0.2 0.3];
 Time_Behav=Analysis.Parameters.PlotEdges;
 BinSize=0.1;
 BinTT=Time_Behav(1):BinSize:Time_Behav(2);
@@ -16,7 +16,7 @@ switch action
 TTL_Tagging=2;
 switch Analysis.Parameters.Behavior
     case 'CuedOutcome'
-TTL_Behavior=14;
+TTL_Behavior=6;
 end
 TTLTS_SpikeTS_Factor=10000;
 %% Load TTLs
@@ -29,7 +29,8 @@ load behavEvents.mat
 Analysis.AllData.Spikes.Time.Behavior=Events_TS(Events_TTL==TTL_Behavior);
 %% Warning - check nb of trials
 if Analysis.Parameters.nTrials ~= length(Analysis.AllData.Spikes.Time.Behavior)
-    disp('mismatch between the number of trials in Bpods and TTLs')
+    disp({'mismatch between the number of trials in Bpod ' Analysis.Parameters.nTrials ...
+            ' and TTLs ' length(Analysis.AllData.Spikes.Time.Behavior)});
     Analysis.Parameters.SpikesAnalysis=0;
     return
 end

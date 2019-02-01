@@ -63,14 +63,26 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     end  
 % DFF 
     DFFBaseline=mean(Data(Baseline(1):Baseline(2)));
-    DFF=(Data-DFFBaseline)/DFFBaseline;
+%     DFFSTD=std2(Data(Baseline(1):Baseline(2)));
+%     if Analysis.Parameters.Zscore
+%         DFF=(Data-DFFBaseline)/DFFSTD;
+%     else
+%     DFF=100*(Data-DFFBaseline)/DFFBaseline;
+%     end
+    DFF=100*(Data-DFFBaseline)/DFFBaseline;
+    if Analysis.Parameters.Zscore
+        DFFZBaseline=mean(DFF(Baseline(1):Baseline(2)));
+        DFFZSTD=std2(DFF(Baseline(1):Baseline(2)));
+        DFF=(DFF-DFFZBaseline)/DFFZSTD;
+    end
+    
     if Analysis.Parameters.ZeroAtZero
         DFF=DFF-mean(DFF(Time>-0.1 & Time<=0));
     end
 
     Photo{thisCh}(1,:)=Time;
     Photo{thisCh}(2,:)=Data;
-    Photo{thisCh}(3,:)=100*DFF;
+    Photo{thisCh}(3,:)=DFF;
 
 % remove variable ITI at beggining of the session
 % QC 9/21 should I ceil or not the ZeroOffsetPoints? / is adding a point on line 83 necessary) 
