@@ -14,7 +14,7 @@ end
 Analysis=A_FilterLick(Analysis,'LicksCue','Cue',Analysis.Parameters.LicksCue);
 Analysis=A_FilterLick(Analysis,'LicksOutcome','Outcome',Analysis.Parameters.LicksOutcome);
 if contains(Analysis.Parameters.Phase,'L3')
-    Analysis=A_FilterLick(Analysis,'Licks2ndCue',[-3 -1.5],Analysis.Parameters.LicksOutcome);
+    Analysis=A_FilterLick(Analysis,'Licks2ndCue',[-1.5 -0],Analysis.Parameters.LicksOutcome);
 end
 % Wheel
 Analysis=A_FilterWheel(Analysis,'Run',Analysis.Parameters.WheelState,Analysis.Parameters.WheelThreshold);

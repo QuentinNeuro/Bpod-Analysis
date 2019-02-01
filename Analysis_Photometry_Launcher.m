@@ -9,7 +9,7 @@ LauncherParam.TrialEvents4CellBase=0;
 LauncherParam.SpikesAnalysis=0;
 LauncherParam.SpikesFigure=0;
 % Figures - Can be changed upon loading
-LauncherParam.PhotoChNames={'470-A1' '405-A1' '470-mPFC'};%{'470-A1' '405-A1' '470-mPFC'} {'470-BLA' 'none' '470-VS'};
+LauncherParam.PhotoChNames={'470-BLA' 'none' '470-VS'};%{'470-A1' '405-A1' '470-mPFC'} {'470-BLA' 'none' '470-VS'};
 LauncherParam.PlotSummary1=1;
 LauncherParam.PlotSummary2=0;
 LauncherParam.PlotFiltersSingle=0; %AP_CuedOutcome_GroupToPlot #1 Output
@@ -19,7 +19,7 @@ LauncherParam.Illustrator=0;
 LauncherParam.Transparency=1;
 % Axis - Can be changed upon loading
 LauncherParam.Zscore=0;
-LauncherParam.PlotYNidaq=[-2 2];
+LauncherParam.PlotYNidaq=[-5 10];
 LauncherParam.PlotX=[-4 4];
 % States
 LauncherParam.StateToZero='StateOfOutcome'; %'StateOfCue' 'StateOfOutcome'
