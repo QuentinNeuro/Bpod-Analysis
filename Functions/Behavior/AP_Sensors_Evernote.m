@@ -1,4 +1,5 @@
-function AP_Sensors_Evernote(Analysis)
+function AP_Sensors_Evernote(Analysis,Water)
+SummaryPlotPath = [Analysis.Parameters.DirFig Analysis.Parameters.Name 'Online.png'];
 % email configuration 
 setpref('Internet','E_mail','kepecslab.cshl@gmail.com')
 setpref('Internet','SMTP_Server','smtp.gmail.com')

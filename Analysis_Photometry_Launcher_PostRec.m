@@ -20,6 +20,7 @@ LauncherParam.PlotFiltersSummary=0;
 LauncherParam.PlotFiltersBehavior=0; %AP_Filter_GroupToPlot #2 Ouput
 LauncherParam.Illustrator=0;
 LauncherParam.Transparency=1;
+LauncherParam.Zscore=0;
 % Axis - Can be changed upon loading
 LauncherParam.PlotYNidaq=YPhoto;
 LauncherParam.PlotX=[-4 4];
@@ -56,15 +57,12 @@ LauncherParam.NidaqDuration=15;
 [thisPath,thisName,thisExt]=fileparts(BpodSystem.DataPath);
 LauncherParam.FileList=[thisName thisExt];
 LauncherParam.PathName=thisPath;
+LauncherParam.FileToOpen=cellstr(LauncherParam.FileList);
 %% Analysis Photometry
 Analysis=Analysis_Photometry(LauncherParam); 
-%% Figure
-Analysis.Figure.PostRec=AP_Sensor_OnlineSummaryPlot(Analysis,Water);
-saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name 'Online.png']);
-
 %% Behavior specific Evernote
 switch Analysis.Parameters.Behavior
     case 'Sensor'
-        AP_Sensors_Evernote(Analysis)
+        AP_Sensors_Evernote(Analysis,Water)
 end
 end
