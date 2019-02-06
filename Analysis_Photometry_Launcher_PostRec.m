@@ -1,4 +1,4 @@
-function Analysis=Analysis_Photometry_Launcher_PostRec(BpodSystem,ChannelNames,YPhoto,Water)
+function Analysis=Analysis_Photometry_Launcher_PostRec(BpodSystem,ChannelNames,YPhoto)
 
 %% Check nargin
 % todo
@@ -60,9 +60,4 @@ LauncherParam.PathName=thisPath;
 LauncherParam.FileToOpen=cellstr(LauncherParam.FileList);
 %% Analysis Photometry
 Analysis=Analysis_Photometry(LauncherParam); 
-%% Behavior specific Evernote
-switch Analysis.Parameters.Behavior
-    case 'Sensor'
-        AP_Sensors_Evernote(Analysis,Water)
-end
 end
