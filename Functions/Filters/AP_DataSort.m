@@ -64,6 +64,7 @@ if Analysis.(thistype).nTrials>0
         Analysis.(thistype).(thisChStruct).Time         =Analysis.AllData.(thisChStruct).Time(thisFilter,:);
         Analysis.(thistype).(thisChStruct).DFF          =Analysis.AllData.(thisChStruct).DFF(thisFilter,:);
         Analysis.(thistype).(thisChStruct).Cue          =Analysis.AllData.(thisChStruct).Cue(thisFilter);
+        Analysis.(thistype).(thisChStruct).CueZ         =Analysis.AllData.(thisChStruct).CueZ(thisFilter);
         Analysis.(thistype).(thisChStruct).Outcome      =Analysis.AllData.(thisChStruct).Outcome(thisFilter);
         Analysis.(thistype).(thisChStruct).OutcomeZ     =Analysis.AllData.(thisChStruct).OutcomeZ(thisFilter);
     % Average
@@ -77,6 +78,13 @@ if Analysis.(thistype).nTrials>0
         Analysis.(thistype).(thisChStruct).OutcomeZAVG  =nanmean(Analysis.(thistype).(thisChStruct).OutcomeZ,2);
         Analysis.(thistype).(thisChStruct).OutcomeZSEM  =nanstd(Analysis.(thistype).(thisChStruct).OutcomeZ,0,2)/sqrt(Analysis.(thistype).nTrials);
         Analysis.(thistype).(thisChStruct).OutcomeMax   =max(Analysis.(thistype).(thisChStruct).DFFAVG(Analysis.(thistype).(thisChStruct).Time(1,:)>OutcomeTime(1) & Analysis.(thistype).(thisChStruct).Time(1,:)<OutcomeTime(2))); 
+    % Correlaton
+        p=polyfit(Analysis.(thistype).(thisChStruct).CueZ,Analysis.(thistype).(thisChStruct).OutcomeZ,1);
+        f=polyval(p,Analysis.(thistype).(thisChStruct).CueZ);
+        [Rho,Pval]=corr(Analysis.(thistype).(thisChStruct).CueZ,Analysis.(thistype).(thisChStruct).OutcomeZ);
+        Analysis.(thistype).(thisChStruct).Fit.PPolyfit=p;
+        Analysis.(thistype).(thisChStruct).Fit.Fpolyval=f;
+        Analysis.(thistype).(thisChStruct).Fit.RhoPValcorr=[Rho,Pval];
     end
 %% Wheel
     if Analysis.Parameters.Wheel==1

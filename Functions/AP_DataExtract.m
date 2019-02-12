@@ -16,10 +16,18 @@ end
 LickPort=Analysis.Parameters.LickPort;
 try
     LickData=SessionData.RawEvents.Trial{1,thisTrial}.Events.(LickPort);
-    LickData=LickData-TimeToZero;
 catch
     LickData=NaN;  
 end
+
+%% FirstLick
+if Analysis.Parameters.ZeroFirstLick
+    LicksDuringZeroState  =LickData(LickData> TimeToZero & thislick < TimeToZero+1);
+    if ~isempty(LicksDuringZeroState)
+        TimeToZero   = LicksDuringZeroState(1);                                 
+    end
+end
+LickData=LickData-TimeToZero;
 
 %% Nidaq
 if Analysis.Parameters.Photometry==1
@@ -63,18 +71,18 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     end  
 % DFF 
     DFFBaseline=mean(Data(Baseline(1):Baseline(2)));
-%     DFFSTD=std2(Data(Baseline(1):Baseline(2)));
-%     if Analysis.Parameters.Zscore
-%         DFF=(Data-DFFBaseline)/DFFSTD;
-%     else
-%     DFF=100*(Data-DFFBaseline)/DFFBaseline;
-%     end
-    DFF=100*(Data-DFFBaseline)/DFFBaseline;
+    DFFSTD=std2(Data(Baseline(1):Baseline(2)));
     if Analysis.Parameters.Zscore
-        DFFZBaseline=mean(DFF(Baseline(1):Baseline(2)));
-        DFFZSTD=std2(DFF(Baseline(1):Baseline(2)));
-        DFF=(DFF-DFFZBaseline)/DFFZSTD;
+        DFF=(Data-DFFBaseline)/DFFSTD;
+    else
+    DFF=100*(Data-DFFBaseline)/DFFBaseline;
     end
+%     DFF=100*(Data-DFFBaseline)/DFFBaseline;
+%     if Analysis.Parameters.Zscore
+%         DFFZBaseline=mean(DFF(Baseline(1):Baseline(2)));
+%         DFFZSTD=std2(DFF(Baseline(1):Baseline(2)));
+%         DFF=(DFF-DFFZBaseline)/DFFZSTD;
+%     end
     
     if Analysis.Parameters.ZeroAtZero
         DFF=DFF-mean(DFF(Time>-0.1 & Time<=0));
@@ -89,6 +97,9 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
 if ~isempty(StateZeroOffset)
 NewPhoto=NaN(3,ExpectedSize);
 ZeroOffsetPoints=round(ZeroOffset*SRDecimated);
+if ZeroOffsetPoints==0
+    ZeroOffsetPoints=1;
+end
 NewTime=linspace(0,Duration+ZeroOffset,ExpectedSize+ZeroOffsetPoints)-TimeToZero;
 NewTime=NewTime(ZeroOffsetPoints:end);
 NewPhoto(1,1:length(NewTime))=NewTime;
@@ -122,7 +133,13 @@ signedThreshold = 2^(Analysis.Parameters.WheelCounterNbits-1);
 signedData(signedData > signedThreshold) = signedData(signedData > signedThreshold) - 2^Analysis.Parameters.WheelCounterNbits;
 DataDeg  = signedData * 360/Analysis.Parameters.WheelEncoderCPR;
 DataDeg  = decimate(DataDeg,DecimateFactor);
-DataWheel(1:length(DataDeg))=DataDeg;
+
+if length(DataDeg)>ExpectedSize
+        DataWheel=DataDeg(1:length(DataWheel));
+    else
+        DataWheel(1:length(DataDeg))=DataDeg;
+end  
+
 DataWheelDistance=DataWheel.*(Analysis.Parameters.WheelPolarity*Analysis.Parameters.WheelDiameter*pi/360);
 
 Wheel(1,:)=Time;
@@ -133,6 +150,9 @@ Wheel(3,:)=DataWheelDistance;
 if ~isempty(StateZeroOffset)
 NewWheel=NaN(3,ExpectedSize);
 ZeroOffsetPoints=round(ZeroOffset*SRDecimated);
+if ZeroOffsetPoints==0
+    ZeroOffsetPoints=1;
+end
 NewTime=linspace(0,Duration+ZeroOffset,ExpectedSize+ZeroOffsetPoints)-TimeToZero;
 NewTime=NewTime(ZeroOffsetPoints:end);
 NewWheel(1,1:length(NewTime))=NewTime;

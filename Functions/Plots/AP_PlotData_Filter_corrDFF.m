@@ -55,7 +55,8 @@ plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plo
 p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
 plot(x,f,'-r');
 xlabel('Outcome DFF (%)'); ylabel('Cue DFF (%)');
-set(gca,'XLim',LimRanges{1},'YLim',LimRanges{1});
+axis tight
+% set(gca,'XLim',LimRanges{1},'YLim',LimRanges{1});
 
 %% row 2 Licks 
 % Raster
@@ -83,7 +84,8 @@ plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plo
 p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
 plot(x,f,'-r');
 xlabel('Outcome DFF (%)'); ylabel('Cue Licks (Hz)');
-set(gca,'XLim',LimRanges{1},'YLim',LimRanges{2});
+%set(gca,'XLim',LimRanges{1},'YLim',LimRanges{2});
+axis tight
 
 subplot(4,5,9); hold on;
 title('Cue DFF vs Cue');
@@ -93,7 +95,8 @@ xlabel('Cue DFF (%)'); ylabel('Cue Licks (Hz)');
 %fit
 p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
 plot(x,f,'-r');
-set(gca,'XLim',LimRanges{1},'YLim',LimRanges{2});
+%set(gca,'XLim',LimRanges{1},'YLim',LimRanges{2});
+axis tight
 
 subplot(4,5,10); hold on;
 title('Outcome DFF vs Outcome');
@@ -103,7 +106,8 @@ plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plo
 p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
 plot(x,f,'-r');
 xlabel('Outcome DFF (%)'); ylabel('Outcome Licks (Hz)');
-set(gca,'XLim',LimRanges{1},'YLim',LimRanges{2});
+%set(gca,'XLim',LimRanges{1},'YLim',LimRanges{2});
+axis tight
 
 %% row 3 Running
 if Analysis.Parameters.Wheel
@@ -132,7 +136,8 @@ plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plo
 p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
 plot(x,f,'-r');
 xlabel('Outcome DFF (%)'); ylabel('Cue Run (cm/sec)');
-set(gca,'XLim',LimRanges{1},'YLim',LimRanges{5});
+%set(gca,'XLim',LimRanges{1},'YLim',LimRanges{5});
+axis tight
 
 subplot(4,5,14); hold on;
 x=Analysis.(thistype).(thisChStruct).Cue;y=Analysis.(thistype).Wheel.Cue;
@@ -141,7 +146,8 @@ plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plo
 p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
 plot(x,f,'-r');
 xlabel('Cue DFF (%)'); ylabel('Cue Run (cm/sec)');
-set(gca,'XLim',LimRanges{1},'YLim',LimRanges{5});
+%set(gca,'XLim',LimRanges{1},'YLim',LimRanges{5});
+axis tight
 
 subplot(4,5,15); hold on;
 x=Analysis.(thistype).(thisChStruct).Outcome;y=Analysis.(thistype).Wheel.Outcome;
@@ -150,7 +156,8 @@ plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plo
 p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
 plot(x,f,'-r');
 xlabel('Outcome DFF (%)'); ylabel('Outcome Run (cm/sec)');
-set(gca,'XLim',LimRanges{1},'YLim',LimRanges{5});
+%set(gca,'XLim',LimRanges{1},'YLim',LimRanges{5});
+axis tight
 end
 %% row 4 Pupillometry
 if Analysis.Parameters.Pupillometry
@@ -179,7 +186,8 @@ plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plo
 p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
 plot(x,f,'-r');
 xlabel('Outcome DFF (%)'); ylabel('Cue Pupil (%)');
-set(gca,'XLim',LimRanges{1},'YLim',LimRanges{4});	
+%set(gca,'XLim',LimRanges{1},'YLim',LimRanges{4});	
+axis tight
 
 subplot(4,5,19); hold on;
 x=Analysis.(thistype).(thisChStruct).Cue;y=Analysis.(thistype).Pupil.Cue;
@@ -188,7 +196,8 @@ plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plo
 p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
 plot(x,f,'-r');
 xlabel('Cue DFF (%)'); ylabel('Cue Pupil (%)');
-set(gca,'XLim',LimRanges{1},'YLim',LimRanges{4});
+%set(gca,'XLim',LimRanges{1},'YLim',LimRanges{4});
+axis tight
 
 subplot(4,5,20); hold on;
 x=Analysis.(thistype).(thisChStruct).Outcome;y=Analysis.(thistype).Pupil.Outcome;
@@ -197,6 +206,7 @@ plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plo
 p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
 plot(x,f,'-r');
 xlabel('Outcome DFF (%)'); ylabel('Outcome Pupil (%)');
-set(gca,'XLim',LimRanges{1},'YLim',LimRanges{4});
+%set(gca,'XLim',LimRanges{1},'YLim',LimRanges{4});
+axis tight
 end
 end

@@ -29,9 +29,13 @@ xTime=[Analysis.Parameters.PlotEdges(1) Analysis.Parameters.PlotEdges(2)];
 xtickvalues=linspace(xTime(1),xTime(2),5);
 labely1='Trial Number (licks)';
 labely2='Licks Rate (Hz)';
-if Analysis.Parameters.Photometry==1
-    labely3='Trial Number (DF/F)';
-    labely4='DF/F (%)';
+
+if Analysis.Parameters.Zscore
+    labelyFluoRaster='Trial Number (z-score)';
+    labelyFluo='Z-scored Fluo';
+else
+    labelyFluoRaster='Trial Number (DF/Fo)';
+    labelyFluo='DF/Fo (%)';
 end
 transparency=0;
 % Automatic definition of axes
@@ -46,16 +50,7 @@ maxrate=max(Analysis.(thistype).Licks.AVG);
 if maxrate<10
     maxrate=10;
 end
-
-if Analysis.Parameters.Photometry==1
-%Nidaq y axes
-if isempty(Analysis.Parameters.NidaqRange)
-        NidaqRange=[0-6*Analysis.Parameters.NidaqSTD 6*Analysis.Parameters.NidaqSTD];
-        Analysis.Parameters.NidaqRange=NidaqRange;
-else
-    NidaqRange=Analysis.Parameters.NidaqRange;
-end
-end
+NidaqRange=Analysis.Parameters.NidaqRange;
 
 %% Plot
 scrsz = get(groot,'ScreenSize');
@@ -85,24 +80,35 @@ plot(Analysis.(thistype).Time.Cue(1,:),[maxrate maxrate],'-b','LineWidth',2);
 if Analysis.Parameters.Photometry==1    
 % Nidaq Raster
 subplot(6,1,[4 5]); hold on;
-ylabel(labely3);
+ylabel(labelyFluoRaster);
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
 yrasternidaq=1:Analysis.(thistype).nTrials;
-imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,NidaqRange);
+ if ~isempty(NidaqRange)
+    imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,NidaqRange);
+ else
+     imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF);
+ end 
 plot([0 0],[0 maxtrial],'-r');
 plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
 pos=get(gca,'pos');
 c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
-c.Label.String = labely4;
+c.Label.String = labelyFluo;
 
 % Nidaq AVG
 subplot(6,1,6); hold on;
-ylabel(labely4);
+ylabel(labelyFluo);
 xlabel(labelx);
-set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',NidaqRange);
 shadedErrorBar(Analysis.(thistype).(thisChStruct).Time(1,:),Analysis.(thistype).(thisChStruct).DFFAVG,Analysis.(thistype).(thisChStruct).DFFSEM,'-k',transparency);
+if ~isempty(NidaqRange)
+set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',NidaqRange);
 plot([0 0],NidaqRange,'-r');
 plot(Analysis.(thistype).Time.Cue(1,:),[NidaqRange(2) NidaqRange(2)],'-b','LineWidth',2);
+else
+     axis tight
+     set(gca,'XLim',xTime,'XTick',xtickvalues);
+     thisYLim=get(gca,'YLim');
+     plot([0 0],thisYLim,'-r');
+     plot(Analysis.(thistype).Time.Cue(1,:),[thisYLim(2) thisYLim(2)],'-b','LineWidth',2);
 end    
-
+end    
 end

@@ -14,9 +14,9 @@ switch Analysis.Parameters.Phase
 % Performance - should be 3 trial types, see AP_Sensor_Performance
 GTT={'type_1','type_1','type_1','type_2'};
 % Plot
-        index=index+1;
-GTP{index,1}='RewardExpectation';
-GTP{index,2}={'AnticipLick_Cued_Reward',        {'Cue A','LicksCue','Reward','LicksOutcome'};...
+        indexb=indexb+1;
+GTPB{indexb,1}='RewardExpectation';
+GTPB{indexb,2}={'AnticipLick_Cued_Reward',        {'Cue A','LicksCue','Reward','LicksOutcome'};...
 %               'NoAnticipLick_Cued_Reward',      {'Cue A','LicksCueInv','Reward','LicksOutcome'};...
               'Uncued_Reward',                  {'Uncued','Reward','LicksOutcome'}};
 index=index+1;
@@ -45,15 +45,21 @@ end
 GTT={'type_1','type_1'};
 % Plot
 index=index+1;
-GTP{index,1}='RewardSize';
-GTP{index,2}={'Cued_Reward',        {'type_1','LicksCue','LicksOutcome'};...
-              'BiggerReward',       {'type_2','LicksCue','LicksOutcome'};...
-              'SmallerReward',      {'type_3','LicksCue','LicksOutcome'}};
+GTPB{index,1}='RewardSize';
+GTPB{index,2}={'Cued_Reward',        {'type_1','LicksCue','LicksOutcome'};...
+                'BiggerReward',       {'type_3','LicksCue','LicksOutcome'};...
+                'SmallerReward',      {'type_2','LicksCue','LicksOutcome'}};
 index=index+1;
 GTP{index,1}='RewardExpectation';
 GTP{index,2}={'AnticipLick_Cued_Reward',        {'type_1','LicksCue','LicksOutcome'};...
               'NoAnticipLick_Cued_Reward',      {'type_1','LicksCueInv','LicksOutcome'}};
 % Arousal 
+indexb=indexb+1;
+GTPB{indexb,1}='RewardTest';
+GTPB{indexb,2}={'Cued_Reward',        {'type_1','LicksCue','LicksOutcome'};...
+                'BiggerReward',       {'type_3','LicksCue','LicksOutcome'};...
+                'SmallerReward',      {'type_2','LicksCue','LicksOutcome'}};
+
 if Analysis.Parameters.Wheel
     indexb=indexb+1;
 GTPB{indexb,1}='Running';

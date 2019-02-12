@@ -41,15 +41,13 @@ try
     Analysis.AllData.Time.TrialStartTS(i)   =SessionData.TrialStartTimestamp(thisTrial); 
     Analysis.AllData.Time.States{i}         =SessionData.RawEvents.Trial{1,thisTrial}.States;
     
-    Analysis.AllData.Time.Zero(i)               =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Parameters.StateToZero)(1);
-% Align to first lick   
-    Analysis.Filters.FirstLick(i)	=true;
+    Analysis.AllData.Time.Zero(i)           =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Parameters.StateToZero)(1);
     if Analysis.Parameters.ZeroFirstLick
         LicksDuringZeroState                =thislick(thislick> Analysis.AllData.Time.Zero(i) & thislick < Analysis.AllData.Time.Zero(i)+1);
         if ~isempty(LicksDuringZeroState)
             Analysis.AllData.Time.Zero(i)   =LicksDuringZeroState(1);
         else
-            Analysis.AllData.Temp.Filters.FirstLick(i) =false;
+            Analysis.AllData.TemFilter.FirstLick(i)   =false;
         end                                   
     end
     

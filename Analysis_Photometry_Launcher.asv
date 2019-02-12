@@ -21,7 +21,7 @@ LauncherParam.PhotoChNames={'470-BLA' 'none' '470-VS'};%{'470-A1' '405-A1' '470-
 LauncherParam.PlotSummary1=1;
 LauncherParam.PlotSummary2=0;
 LauncherParam.PlotFiltersSingle=0; %AP_CuedOutcome_GroupToPlot #1 Output
-LauncherParam.PlotFiltersSummary=0;
+LauncherParam.PlotFiltersSummary=1;
 LauncherParam.PlotFiltersBehavior=1; %AP_Filter_GroupToPlot #2 Ouput
 LauncherParam.Illustrator=0;
 LauncherParam.Transparency=1;
@@ -30,7 +30,6 @@ LauncherParam.PlotYNidaq=[-1 2];
 LauncherParam.PlotX=[-4 4];
 % States
 LauncherParam.StateToZero='StateOfOutcome'; %'StateOfCue' 'StateOfOutcome'
-LauncherParam.ZeroFirstLick=1;
 LauncherParam.ZeroAtZero=0;
 LauncherParam.WheelState='Outcome'; %'Baseline','Cue','Outcome'
 LauncherParam.PupilState='NormBaseline'; %'NormBaseline','Cue','Outcome'

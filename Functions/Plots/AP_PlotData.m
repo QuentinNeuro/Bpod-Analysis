@@ -17,7 +17,12 @@ xTime=[Analysis.Parameters.PlotEdges(1) Analysis.Parameters.PlotEdges(2)];
 xtickvalues=linspace(xTime(1),xTime(2),5);
 labely1='Trial Number (licks)';
 labely2='Licks Rate (Hz)';
-labelyDFF='DF/Fo (%)';
+if Analysis.Parameters.Zscore
+    labelyFluo='Z-scored Fluo';
+else
+    labelyFluo='DF/Fo (%)';
+end
+
 %% Nb of plots
 nbOfPlotsY=6;
 for thisCh=2:length(Analysis.Parameters.PhotoCh)
@@ -46,16 +51,7 @@ for i=1:nbOfTrialTypes
     end
     end
 end
-
-if Analysis.Parameters.Photometry==1
-%Nidaq y axes
-if isempty(Analysis.Parameters.NidaqRange)
-        NidaqRange=[0-6*Analysis.Parameters.NidaqSTD 6*Analysis.Parameters.NidaqSTD];
-        Analysis.Parameters.NidaqRange=NidaqRange;
-else
-    NidaqRange=Analysis.Parameters.NidaqRange;
-end
-end
+NidaqRange=Analysis.Parameters.NidaqRange;
 
 %% Plot
 FigureLegend=sprintf('%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig);
@@ -101,8 +97,12 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
     
     yrasternidaq=1:Analysis.(thistype).nTrials;
-    imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,NidaqRange);
-% Removed by QC on 9/18/2018 for variable ITI at beginning
+     if ~isempty(NidaqRange)
+        imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,NidaqRange);
+     else
+         imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF);
+     end    
+    % Removed by QC on 9/18/2018 for variable ITI at beginning
 %     for thistrial=1:Analysis.(thistype).nTrials
 %     imagesc(Analysis.(thistype).(thisChStruct).Time(thistrial,:),thistrial,Analysis.(thistype).(thisChStruct).DFF(thistrial,:),NidaqRange);
 %     end
@@ -111,19 +111,26 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     if thisplot==nbOfTrialTypes
         pos=get(gca,'pos');
         c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
-        c.Label.String = labelyDFF;
+        c.Label.String = labelyFluo;
     end
 % Nidaq AVG
     subplot(nbOfPlotsY,nbOfPlotsX,thisplot+(counterphotoplot(3)*nbOfPlotsX)); hold on;
     if thisplot==1
-        ylabel(labelyDFF);
+        ylabel(labelyFluo);
     end
     xlabel(labelx);
-    set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',NidaqRange);
     shadedErrorBar(Analysis.(thistype).(thisChStruct).Time(1,:),Analysis.(thistype).(thisChStruct).DFFAVG,Analysis.(thistype).(thisChStruct).DFFSEM,'-k',0);
+    if ~isempty(NidaqRange)
+    set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',NidaqRange);
     plot([0 0],NidaqRange,'-r');
     plot(Analysis.(thistype).Time.Cue(1,:),[NidaqRange(2) NidaqRange(2)],'-b','LineWidth',2);
-    
+    else
+         axis tight
+         set(gca,'XLim',xTime,'XTick',xtickvalues);
+         thisYLim=get(gca,'YLim');
+         plot([0 0],thisYLim,'-r');
+         plot(Analysis.(thistype).Time.Cue(1,:),[thisYLim(2) thisYLim(2)],'-b','LineWidth',2);
+    end    
     counterphotoplot=counterphotoplot+3;
 end  
 end

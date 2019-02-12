@@ -6,8 +6,6 @@ FigTitle=sprintf('Analysis-Plot %s %s',char(Analysis.Parameters.PhotoChNames{cha
 %% Plot Parameters
 nboftypes=length(Group);
 color4plot={'-k';'-b';'-r';'-g';'-c';'-c';'-k'};
-AVGPosition=Analysis.Parameters.NidaqRange(1)/2;
-
 Title=strrep(Title,'_',' ');
 labelx='Time (sec)';   
 xTime=[Analysis.Parameters.PlotEdges(1) Analysis.Parameters.PlotEdges(2)];
@@ -15,7 +13,11 @@ xtickvalues=linspace(xTime(1),xTime(2),5);
 transparency=Analysis.Parameters.Transparency;
 labely1='Licks Rate (Hz)';
 maxrate=10;
-labely2='DF/F (%)';
+if Analysis.Parameters.Zscore
+    labelyFluo='Z-scored Fluo';
+else
+    labelyFluo='DF/Fo (%)';
+end
 NidaqRange=Analysis.Parameters.NidaqRange;
 
 %% Figure
@@ -50,10 +52,17 @@ end
     clear hp hs;
     
     subplot(2,1,2); hold on;
-	ylabel(labely2);
+	ylabel(labelyFluo);
     xlabel(labelx);
+    if ~isempty(NidaqRange)
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',NidaqRange);
     plot([0 0],NidaqRange,'-r');
-	plot(Analysis.(thistype).Time.Cue(1,:)+Analysis.Parameters.CueTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
-	plot(Analysis.(thistype).Time.Outcome(1,:)+Analysis.Parameters.OutcomeTimeReset,[AVGPosition AVGPosition],'-b','LineWidth',2);
+    plot(Analysis.(thistype).Time.Cue(1,:),[NidaqRange(2) NidaqRange(2)],'-b','LineWidth',2);
+    else
+         axis tight
+         set(gca,'XLim',xTime,'XTick',xtickvalues);
+         thisYLim=get(gca,'YLim');
+         plot([0 0],thisYLim,'-r');
+         plot(Analysis.(thistype).Time.Cue(1,:),[thisYLim(2) thisYLim(2)],'-b','LineWidth',2);
+    end
 end

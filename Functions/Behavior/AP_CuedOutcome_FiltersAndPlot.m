@@ -13,6 +13,7 @@ end
 % Licks
 Analysis=A_FilterLick(Analysis,'LicksCue','Cue',Analysis.Parameters.LicksCue);
 Analysis=A_FilterLick(Analysis,'LicksOutcome','Outcome',Analysis.Parameters.LicksOutcome);
+Analysis=A_FilterFirstLick(Analysis,'FirstLick');
 % Wheel
 Analysis=A_FilterWheel(Analysis,'Run',Analysis.Parameters.WheelState,Analysis.Parameters.WheelThreshold);
 % Pupil
