@@ -12,6 +12,7 @@ handles.TE4CellBase=LauncherParam.TrialEvents4CellBase;
 handles.SpikesAnalysis=LauncherParam.SpikesAnalysis;
 handles.SpikesFigure=LauncherParam.SpikesFigure;
 
-handles.PlotEdges=LauncherParam.PlotX;
-handles.NidaqRange=LauncherParam.PlotYNidaq;
+handles.PlotX=LauncherParam.PlotX;
+handles.PlotY_photo=LauncherParam.PlotY_photo;
+
 end

@@ -65,9 +65,7 @@ end
 %% Timing
 handles.StateToZero     =handles.(DefaultParam.StateToZero);
 handles.ZeroFirstLick   =DefaultParam.ZeroFirstLick;
-ZeroTime                =SessionData.RawEvents.Trial{1,1}.States.(handles.StateToZero)(1);
-handles.CueTime         =SessionData.RawEvents.Trial{1,1}.States.(handles.StateOfCue)-ZeroTime;
-handles.OutcomeTime     =SessionData.RawEvents.Trial{1,1}.States.(handles.StateOfOutcome)-ZeroTime;
+handles.ReshapedTime=DefaultParam.ReshapedTime;
 % Overwritting
 if ~isempty(DefaultParam.CueTimeReset)
 handles.CueTimeReset    =DefaultParam.CueTimeReset;
@@ -94,8 +92,8 @@ handles.Bin=0.25;
 
 %% DAQ parameters and plotting
 % Plots
-handles.PlotEdges=DefaultParam.PlotX;
-handles.NidaqRange=DefaultParam.PlotYNidaq;
+handles.PlotX=DefaultParam.PlotX;
+handles.PlotY_photo=DefaultParam.PlotY_photo;
 % Processing
 if isfield(SessionData.TrialSettings(1).GUI,'NidaqSamplingRate')
     handles.NidaqSamplingRate=SessionData.TrialSettings(1).GUI.NidaqSamplingRate;
@@ -120,10 +118,8 @@ if handles.NidaqBaselinePoints(1)==0
     handles.NidaqBaselinePoints(1)=1;
 end
 handles.ZeroAtZero=DefaultParam.ZeroAtZero;
-
 %% Photometry
 handles=AP_Parameters_Photometry(handles,SessionData,DefaultParam);
-
 %% Wheel 
 handles.Wheel=0;
 handles.WheelCounterNbits=32;

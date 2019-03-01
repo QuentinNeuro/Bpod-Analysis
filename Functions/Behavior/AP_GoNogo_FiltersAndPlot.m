@@ -28,8 +28,8 @@ for i=1:size(GroupToPlot,1)
         Analysis=AP_DataSort(Analysis,MetaFilter,thisFilter);
         if Analysis.Parameters.PlotFiltersSingle==1 && Analysis.(MetaFilter).nTrials>0
             for thisCh=1:length(Analysis.Parameters.PhotoCh)
-                %AP_PlotData_filter(Analysis,MetaFilter,thisCh);
-                AP_PlotData_Filter_corrDFF(Analysis,MetaFilter,thisCh);
+                AP_PlotData_filter(Analysis,MetaFilter,thisCh);
+                %AP_PlotData_Filter_corrDFF(Analysis,MetaFilter,thisCh);
                 saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name MetaFilter char(Analysis.Parameters.PhotoCh{thisCh}) '.png']);
                 if Analysis.Parameters.Illustrator
                 saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name MetaFilter char(Analysis.Parameters.PhotoCh{thisCh})],'epsc');
@@ -38,8 +38,8 @@ for i=1:size(GroupToPlot,1)
         end
     end
     for thisCh=1:length(Analysis.Parameters.PhotoCh)
-        %AP_PlotSummary_filter(Analysis,Title,MetaFilterGroup,thisCh);
-        AP_PlotSummary_Filter_corrDFF(Analysis,Title,MetaFilterGroup,thisCh);
+        AP_PlotSummary_filter(Analysis,Title,MetaFilterGroup,thisCh);
+%        AP_PlotSummary_Filter_corrDFF(Analysis,Title,MetaFilterGroup,thisCh);
         saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title char(Analysis.Parameters.PhotoCh{thisCh}) '.png']);
         if Analysis.Parameters.Illustrator
         saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title char(Analysis.Parameters.PhotoCh{thisCh})],'epsc');

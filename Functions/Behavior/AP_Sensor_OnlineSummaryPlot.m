@@ -32,9 +32,9 @@ for i=1:nbOfTrialTypes
     end
 end
 
-NidaqRange=Analysis.Parameters.NidaqRange;
+PlotY_photo=Analysis.Parameters.PlotY_photo;
 WheelRange=[0 100];
-xTime=[-4 4];
+xTime=Analysis.Parameters.PlotX;
 xtickvalues=linspace(xTime(1),xTime(2),5);
 
 %% Figure
@@ -71,7 +71,11 @@ for j=1:size(Analysis.Parameters.PhotoField,2)
     end
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
     yrasternidaq=1:Analysis.(thistype).nTrials;
-    imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,NidaqRange);
+if ~isnan(PlotY_photo(j,:))
+    imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,PlotY_photo(j,:));
+ else
+     imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF);
+ end    
     plot([0 0],[0 maxtrial],'-r');
     plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
     if thistypeplots==nbOfTrialTypes

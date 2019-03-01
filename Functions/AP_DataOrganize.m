@@ -32,7 +32,7 @@ end
 for thisTrial=1:SessionData.nTrials
 try
     if Analysis.Filters.ignoredTrials(thisTrial)==1
-    [thislick,thisPhoto,thisWheel]=AP_DataExtract(SessionData,Analysis,thisTrial);
+    [TimeToZero,thislick,thisPhoto,thisWheel]=AP_DataExtract(SessionData,Analysis,thisTrial);
     i=Analysis.AllData.nTrials+1;
     Analysis.AllData.nTrials=i;
     Analysis.AllData.TrialNumbers(i)=i;
@@ -41,18 +41,14 @@ try
     Analysis.AllData.Time.TrialStartTS(i)   =SessionData.TrialStartTimestamp(thisTrial); 
     Analysis.AllData.Time.States{i}         =SessionData.RawEvents.Trial{1,thisTrial}.States;
     
-    Analysis.AllData.Time.Zero(i)               =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Parameters.StateToZero)(1);
+    Analysis.AllData.Time.Zero(i)           =TimeToZero;
 % Align to first lick   
     Analysis.Filters.FirstLick(i)	=true;
     if Analysis.Parameters.ZeroFirstLick
-        LicksDuringZeroState                =thislick(thislick> Analysis.AllData.Time.Zero(i) & thislick < Analysis.AllData.Time.Zero(i)+1);
-        if ~isempty(LicksDuringZeroState)
-            Analysis.AllData.Time.Zero(i)   =LicksDuringZeroState(1);
-        else
+        if isempty(thislick(thislick> 0 & thislick < 1))
             Analysis.AllData.Temp.Filters.FirstLick(i) =false;
         end                                   
     end
-    
     Analysis.AllData.Time.Cue(i,:)          =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Parameters.StateOfCue)...
                                                 -Analysis.AllData.Time.Zero(i);
     Analysis.AllData.Time.Outcome(i,:)      =SessionData.RawEvents.Trial{1,thisTrial}.States.(Analysis.Parameters.StateOfOutcome)...
@@ -67,7 +63,6 @@ try
     Analysis.AllData.Licks.Baseline(i)              =mean(Analysis.AllData.Licks.Rate(i,Analysis.AllData.Licks.Bin{i}>(CueTime(1)-2) & Analysis.AllData.Licks.Bin{i}<(CueTime(1)-1)));
     Analysis.AllData.Licks.Cue(i)                   =mean(Analysis.AllData.Licks.Rate(i,Analysis.AllData.Licks.Bin{i}>CueTime(1) & Analysis.AllData.Licks.Bin{i}<CueTime(2)));
     Analysis.AllData.Licks.Outcome(i)               =mean(Analysis.AllData.Licks.Rate(i,Analysis.AllData.Licks.Bin{i}>OutcomeTime(1) & Analysis.AllData.Licks.Bin{i}<OutcomeTime(2)));
-    
 % Photometry    
     for thisCh=1:length(Analysis.Parameters.PhotoCh)
         thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
@@ -77,12 +72,11 @@ try
         Analysis.AllData.(thisChStruct).DFF(i,:)  	=thisPhoto{thisCh}(3,:);
         Analysis.AllData.(thisChStruct).Baseline(i)	=mean(thisPhoto{thisCh}(2,BaselinePt(1):BaselinePt(2)));
         Analysis.AllData.(thisChStruct).Cue(i)     	=max(thisPhoto{thisCh}(3,thisPhoto{thisCh}(1,:)>CueTime(1) & thisPhoto{thisCh}(1,:)<CueTime(2)));
-        Analysis.AllData.(thisChStruct).Outcome(i)	=max(thisPhoto{thisCh}(3,thisPhoto{thisCh}(1,:)>OutcomeTime(1) & thisPhoto{thisCh}(1,:)<OutcomeTime(2)));
-        
+        Analysis.AllData.(thisChStruct).Outcome(i)	=max(thisPhoto{thisCh}(3,thisPhoto{thisCh}(1,:)>OutcomeTime(1) & thisPhoto{thisCh}(1,:)<OutcomeTime(2)));   
         Analysis.AllData.(thisChStruct).CueZ(i)     =Analysis.AllData.(thisChStruct).Cue(i)...
-                                -nanmean(thisPhoto{thisCh}(3,thisPhoto{thisCh}(1,:)>CueTime(1)-0.04 & thisPhoto{thisCh}(1,:)<CueTime(1)-0.01));
+                                -nanmean(thisPhoto{thisCh}(3,thisPhoto{thisCh}(1,:)>CueTime(1)-0.2 & thisPhoto{thisCh}(1,:)<CueTime(1)-0.01));
         Analysis.AllData.(thisChStruct).OutcomeZ(i) =Analysis.AllData.(thisChStruct).Outcome(i)...
-                                -nanmean(thisPhoto{thisCh}(3,thisPhoto{thisCh}(1,:)>OutcomeTime(1)-0.04 & thisPhoto{thisCh}(1,:)<OutcomeTime(1)-0.01));
+                                -nanmean(thisPhoto{thisCh}(3,thisPhoto{thisCh}(1,:)>OutcomeTime(1)-0.2 & thisPhoto{thisCh}(1,:)<OutcomeTime(1)-0.01));
     end
 % Wheel    
     if Analysis.Parameters.Wheel==1
@@ -98,14 +92,21 @@ try
         thisPupTime=Pup.Time(1:nbOfFrames)'-Analysis.AllData.Time.Zero(i);
         thisPup=Pup.Pupil(1:nbOfFrames,thisTrial)';
         thisPupilDPP=Pup.PupilSmoothDPP(1:nbOfFrames,thisTrial)';
+        thisBlink=Pup.Blink(1:nbOfFrames,thisTrial)';
         if Analysis.Parameters.ZeroAtZero
             thisPupilDPP=thisPupilDPP-mean(thisPupilDPP(thisPupTime>-0.01 & thisPupTime<0.01));
+        end
+        % Reshape if Variable ITI before 'zero' or ZeroAtFirstLick
+        if Analysis.Parameters.TimeReshaping
+            [~,thisPup]=AP_TimeReshaping(Analysis,thisPupTime,thisPup,Pup.Parameters.frameRate,Analysis.Parameters.ReshapedTime);
+            [~,thisPupilDPP]=AP_TimeReshaping(Analysis,thisPupTime,thisPupilDPP,Pup.Parameters.frameRate,Analysis.Parameters.ReshapedTime);
+            [thisPupTime,thisBlink]=AP_TimeReshaping(Analysis,thisPupTime,thisBlink,Pup.Parameters.frameRate,Analysis.Parameters.ReshapedTime);
         end
         % Organize in the structure
         Analysis.AllData.Pupil.Time(i,:)            =thisPupTime;
         Analysis.AllData.Pupil.Pupil(i,:)           =thisPup;
         Analysis.AllData.Pupil.PupilDPP(i,:)        =thisPupilDPP;
-        Analysis.AllData.Pupil.Blink(i,:)           =Pup.Blink(1:nbOfFrames,thisTrial)';
+        Analysis.AllData.Pupil.Blink(i,:)           =thisBlink;
         Analysis.AllData.Pupil.Baseline(i)          =Pup.PupilSmoothBaseline(thisTrial);
         Analysis.AllData.Pupil.NormBaseline(i)      =Pup.PupilSmoothBaselineNorm(thisTrial);
         Analysis.AllData.Pupil.Cue(i)               =nanmean(thisPupilDPP(thisPupTime>CueTime(1) & thisPupTime<CueTime(2)));
@@ -139,6 +140,5 @@ end
 for thisCh=1:length(Analysis.Parameters.PhotoCh)
     thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
     Analysis.AllData.(thisChStruct).Bleach=Analysis.AllData.(thisChStruct).Baseline/mean(Analysis.AllData.(thisChStruct).Baseline(1:2));
-    Analysis.Parameters.NidaqSTD=std2(Analysis.AllData.(thisChStruct).DFF(:,BaselinePt(1):BaselinePt(2)));
 end 
 end

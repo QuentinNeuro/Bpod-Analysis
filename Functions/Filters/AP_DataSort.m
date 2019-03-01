@@ -79,9 +79,18 @@ if Analysis.(thistype).nTrials>0
         Analysis.(thistype).(thisChStruct).OutcomeZSEM  =nanstd(Analysis.(thistype).(thisChStruct).OutcomeZ,0,2)/sqrt(Analysis.(thistype).nTrials);
         Analysis.(thistype).(thisChStruct).OutcomeMax   =max(Analysis.(thistype).(thisChStruct).DFFAVG(Analysis.(thistype).(thisChStruct).Time(1,:)>OutcomeTime(1) & Analysis.(thistype).(thisChStruct).Time(1,:)<OutcomeTime(2))); 
     % Correlaton
-        p=polyfit(Analysis.(thistype).(thisChStruct).CueZ,Analysis.(thistype).(thisChStruct).OutcomeZ,1);
-        f=polyval(p,Analysis.(thistype).(thisChStruct).CueZ);
-        [Rho,Pval]=corr(Analysis.(thistype).(thisChStruct).CueZ,Analysis.(thistype).(thisChStruct).OutcomeZ);
+        x=Analysis.(thistype).(thisChStruct).OutcomeZ;
+        y=Analysis.(thistype).(thisChStruct).CueZ;
+        xnan=~isnan(x);
+        y=y(xnan);
+        x=x(xnan);
+        ynan=~isnan(y);
+        x=x(ynan);
+        y=y(ynan);
+        p=polyfit(x,y,1);
+        f=polyval(p,x);
+        [Rho,Pval]=corr(x,y);
+        Analysis.(thistype).(thisChStruct).Fit.Xfit=x;
         Analysis.(thistype).(thisChStruct).Fit.PPolyfit=p;
         Analysis.(thistype).(thisChStruct).Fit.Fpolyval=f;
         Analysis.(thistype).(thisChStruct).Fit.RhoPValcorr=[Rho,Pval];

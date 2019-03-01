@@ -1,6 +1,9 @@
 function handles=AP_Parameters_Behavior(handles,SessionData,DefaultParam,Name)
+%% Time reshaping Part1
+% See end of the function to overwrite based on defaultParam
+handles.TimeReshaping=0;
 
-handles.StateZeroOffset=[];
+%% Behavior specific
 if contains(Name,'Cued','IgnoreCase',true) && ~contains(Name,'Sensor','IgnoreCase',true)
     handles.Behavior='CuedOutcome';
     if isfield(SessionData.RawEvents.Trial{1,1}.States,'SoundDelivery')
@@ -11,14 +14,15 @@ if contains(Name,'Cued','IgnoreCase',true) && ~contains(Name,'Sensor','IgnoreCas
     handles.StateOfOutcome='Outcome';
     handles.CueTimeReset=[0 1];
     handles.OutcomeTimeReset=[0 2];
-    handles.NidaqBaseline=[1 2];
+    handles.NidaqBaseline=[0.2 1.2];
 elseif contains(Name,'GoNogo','IgnoreCase',true)
     handles.Behavior='GoNogo';
 	handles.StateOfCue='CueDelivery';
     handles.StateOfOutcome='PostOutcome';
-    handles.CueTimeReset=[-0.01 0];
+    handles.CueTimeReset=[-0.1 0];
     handles.OutcomeTimeReset=[0 -3];
-    handles.NidaqBaseline=[3.5 4.5];
+    handles.NidaqBaseline=[0.2 1.2];
+    handles.TimeReshaping=1;
 elseif contains(Name,'AuditoryTuning','IgnoreCase',true)
     handles.Behavior='AuditoryTuning';
 	handles.StateOfCue='CueDelivery';
@@ -30,7 +34,7 @@ elseif contains(Name,'AuditoryTuning','IgnoreCase',true)
     handles.PlotFiltersBehavior=0;
     handles.CueTimeReset=[0 1];
     handles.OutcomeTimeReset=[0 2];
-    handles.NidaqBaseline=[0 1];
+    handles.NidaqBaseline=[0.2 1.2];
 elseif contains(Name,'Oddball','IgnoreCase',true)
     handles.Behavior='Oddball';
 	handles.StateOfCue='PreState';
@@ -49,8 +53,8 @@ elseif contains(Name,'Sensor','IgnoreCase',true)
     handles.StateOfOutcome='Outcome';
     handles.CueTimeReset=[0 1];
     handles.OutcomeTimeReset=[0 2];
-    handles.NidaqBaseline=[1 2];
-    handles.StateZeroOffset='PreState';
+    handles.NidaqBaseline=[0.2 1.2];
+    handles.TimeReshaping=1;
 else
     handles.Behavior=DefaultParam.Behavior;
 	handles.StateOfCue=DefaultParam.StateOfCue;
@@ -64,4 +68,13 @@ else
         return
     end
 end
+
+%% Time reshaping Part2
+if ~isempty(DefaultParam.TimeReshaping)
+handles.TimeReshaping=DefaultParam.TimeReshaping;
+end
+if DefaultParam.ZeroFirstLick
+    handles.TimeReshaping=1;
+end
+
 end

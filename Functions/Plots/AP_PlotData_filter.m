@@ -25,7 +25,7 @@ end
 %% Plot Parameters
 Title=sprintf('%s (%.0d)',strrep(Analysis.(thistype).Name,'_',' '),Analysis.(thistype).nTrials);
 labelx='Time (sec)';   
-xTime=[Analysis.Parameters.PlotEdges(1) Analysis.Parameters.PlotEdges(2)];
+xTime=Analysis.Parameters.PlotX;
 xtickvalues=linspace(xTime(1),xTime(2),5);
 labely1='Trial Number (licks)';
 labely2='Licks Rate (Hz)';
@@ -50,7 +50,7 @@ maxrate=max(Analysis.(thistype).Licks.AVG);
 if maxrate<10
     maxrate=10;
 end
-NidaqRange=Analysis.Parameters.NidaqRange;
+PlotY_photo=Analysis.Parameters.PlotY_photo;
 
 %% Plot
 scrsz = get(groot,'ScreenSize');
@@ -83,8 +83,8 @@ subplot(6,1,[4 5]); hold on;
 ylabel(labelyFluoRaster);
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
 yrasternidaq=1:Analysis.(thistype).nTrials;
- if ~isempty(NidaqRange)
-    imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,NidaqRange);
+ if ~isnan(PlotY_photo(channelnb,:))
+    imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,PlotY_photo(channelnb,:));
  else
      imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF);
  end 
@@ -99,10 +99,10 @@ subplot(6,1,6); hold on;
 ylabel(labelyFluo);
 xlabel(labelx);
 shadedErrorBar(Analysis.(thistype).(thisChStruct).Time(1,:),Analysis.(thistype).(thisChStruct).DFFAVG,Analysis.(thistype).(thisChStruct).DFFSEM,'-k',transparency);
-if ~isempty(NidaqRange)
-set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',NidaqRange);
-plot([0 0],NidaqRange,'-r');
-plot(Analysis.(thistype).Time.Cue(1,:),[NidaqRange(2) NidaqRange(2)],'-b','LineWidth',2);
+if ~isnan(PlotY_photo(channelnb,:))
+set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',PlotY_photo(channelnb,:));
+plot([0 0],PlotY_photo,'-r');
+plot(Analysis.(thistype).Time.Cue(1,:),[PlotY_photo(channelnb,2) PlotY_photo(channelnb,2)],'-b','LineWidth',2);
 else
      axis tight
      set(gca,'XLim',xTime,'XTick',xtickvalues);

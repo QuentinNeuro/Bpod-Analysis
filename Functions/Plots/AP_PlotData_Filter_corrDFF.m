@@ -9,10 +9,10 @@ FigTitle=sprintf('Analysis-PlotSingle %s',char(Analysis.Parameters.PhotoCh{chann
 %% Plot Parameters
 Title=sprintf('%s (%.0d)',strrep(Analysis.(thistype).Name,'_',' '),Analysis.(thistype).nTrials);
 labelx='Time (sec)';   
-xTime=[Analysis.Parameters.PlotEdges(1) Analysis.Parameters.PlotEdges(2)];
+xTime=Analysis.Parameters.PlotX;
 xtickvalues=linspace(xTime(1),xTime(2),5);
 labelyA={'DFF (%)','Licks (Hz)','Run (cm)','Pupil (%)','Run (cm/sec)','DFF (%)'};
-LimRanges={Analysis.Parameters.NidaqRange, [0 10],     [-5 100],   [-10 20],    [-5 30], Analysis.Parameters.NidaqRange};
+LimRanges={Analysis.Parameters.PlotY_photo(channelnb,:), [0 10],     [-5 100],   [-10 20],    [-5 30], Analysis.Parameters.PlotY_photo(channelnb,:)};
 labelyB={'Trial # DFF','Trial # Licks','Trial # Run','Trial # Pupi'};
 maxtrial=Analysis.(thistype).nTrials;
 yraster=1:Analysis.(thistype).nTrials;
@@ -49,13 +49,14 @@ set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',LimRanges{6});
 % Correlation
 subplot(4,5,3); hold on;
 title('Correlations');
-x=Analysis.(thistype).(thisChStruct).Outcome;y=Analysis.(thistype).(thisChStruct).Cue;
-plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plot{k});
-%fit
-p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
-plot(x,f,'-r');
+plot(Analysis.(thistype).(thisChStruct).OutcomeZ,Analysis.(thistype).(thisChStruct).CueZ,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plot{k});
+plot(Analysis.(thistype).(thisChStruct).Fit.Xfit,Analysis.(thistype).(thisChStruct).Fit.Fpolyval,'-r');
 xlabel('Outcome DFF (%)'); ylabel('Cue DFF (%)');
 axis tight
+
+%fit - QC 2/13 to clean
+% x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).(thisChStruct).CueZ;
+% p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
 % set(gca,'XLim',LimRanges{1},'YLim',LimRanges{1});
 
 %% row 2 Licks 
@@ -78,7 +79,7 @@ set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',LimRanges{2});
 % Correlations
 subplot(4,5,8); hold on;
 title('Outcome DFF vs Cue');
-x=Analysis.(thistype).(thisChStruct).Outcome;y=Analysis.(thistype).Licks.Cue;
+x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).Licks.Cue;
 plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plot{k});
 %fit
 p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
@@ -89,7 +90,7 @@ axis tight
 
 subplot(4,5,9); hold on;
 title('Cue DFF vs Cue');
-x=Analysis.(thistype).(thisChStruct).Cue;y=Analysis.(thistype).Licks.Cue;
+x=Analysis.(thistype).(thisChStruct).CueZ;y=Analysis.(thistype).Licks.Cue;
 plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plot{k});
 xlabel('Cue DFF (%)'); ylabel('Cue Licks (Hz)');
 %fit
@@ -100,7 +101,7 @@ axis tight
 
 subplot(4,5,10); hold on;
 title('Outcome DFF vs Outcome');
-x=Analysis.(thistype).(thisChStruct).Outcome;y=Analysis.(thistype).Licks.Outcome;
+x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).Licks.Outcome;
 plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plot{k});
 %fit
 p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
@@ -130,7 +131,7 @@ plot(Analysis.(thistype).Time.Outcome(1,:)+Analysis.Parameters.OutcomeTimeReset,
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',LimRanges{3});
 % Correlation
 subplot(4,5,13); hold on;
-x=Analysis.(thistype).(thisChStruct).Outcome; y=Analysis.(thistype).Wheel.Cue;
+x=Analysis.(thistype).(thisChStruct).OutcomeZ; y=Analysis.(thistype).Wheel.Cue;
 plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plot{k});
 %fit
 p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
@@ -140,7 +141,7 @@ xlabel('Outcome DFF (%)'); ylabel('Cue Run (cm/sec)');
 axis tight
 
 subplot(4,5,14); hold on;
-x=Analysis.(thistype).(thisChStruct).Cue;y=Analysis.(thistype).Wheel.Cue;
+x=Analysis.(thistype).(thisChStruct).CueZ;y=Analysis.(thistype).Wheel.Cue;
 plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plot{k});
 %fit
 p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
@@ -150,7 +151,7 @@ xlabel('Cue DFF (%)'); ylabel('Cue Run (cm/sec)');
 axis tight
 
 subplot(4,5,15); hold on;
-x=Analysis.(thistype).(thisChStruct).Outcome;y=Analysis.(thistype).Wheel.Outcome;
+x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).Wheel.Outcome;
 plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plot{k});
 %fit
 p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
@@ -180,7 +181,7 @@ plot(Analysis.(thistype).Time.Outcome(1,:)+Analysis.Parameters.OutcomeTimeReset,
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',LimRanges{4});
 % Correlations
 subplot(4,5,18); hold on;
-x=Analysis.(thistype).(thisChStruct).Outcome;y=Analysis.(thistype).Pupil.Cue;
+x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).Pupil.Cue;
 plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plot{k});
 %fit
 p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
@@ -190,7 +191,7 @@ xlabel('Outcome DFF (%)'); ylabel('Cue Pupil (%)');
 axis tight
 
 subplot(4,5,19); hold on;
-x=Analysis.(thistype).(thisChStruct).Cue;y=Analysis.(thistype).Pupil.Cue;
+x=Analysis.(thistype).(thisChStruct).CueZ;y=Analysis.(thistype).Pupil.Cue;
 plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plot{k});
 %fit
 p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);
@@ -200,7 +201,7 @@ xlabel('Cue DFF (%)'); ylabel('Cue Pupil (%)');
 axis tight
 
 subplot(4,5,20); hold on;
-x=Analysis.(thistype).(thisChStruct).Outcome;y=Analysis.(thistype).Pupil.Outcome;
+x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).Pupil.Outcome;
 plot(x,y,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plot{k});
 %fit
 p=polyfit(x,y,1); f=polyval(p,x); [Rho,Pval]=corr(x,y);

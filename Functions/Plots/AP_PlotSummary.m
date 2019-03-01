@@ -33,7 +33,7 @@ for i=1:nbofgroups
 end
 
 labelx='Time (sec)';   
-xTime=[Analysis.Parameters.PlotEdges(1) Analysis.Parameters.PlotEdges(2)];
+xTime=Analysis.Parameters.PlotX;
 transparency=Analysis.Parameters.Transparency;
 xtickvalues=linspace(xTime(1),xTime(2),5);
 labely1='Licks Rate (Hz)';
@@ -44,7 +44,7 @@ if Analysis.Parameters.Zscore
 else
     labelyFluo='DF/Fo (%)';
 end
-NidaqRange=Analysis.Parameters.NidaqRange;
+PlotY_photo=Analysis.Parameters.PlotY_photo;
 
 %% Table Parameters
 TableTitles={'Trial Type','Cue Max DF/F(%)','Cue AVG DF/F(%)','SEM','Outcome Max DF/F(%)','Outcome AVG DF/F(%)','SEM','nb of trials','ignored trials'};
@@ -123,10 +123,10 @@ for i=1:nbofgroups
     end
     xlabel(labelx);
     
-    if ~isempty(NidaqRange)
-    set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',NidaqRange);
-    plot([0 0],NidaqRange,'-r');
-    plot(Analysis.(thistype).Time.Cue(1,:),[NidaqRange(2) NidaqRange(2)],'-b','LineWidth',2);
+    if ~isnan(PlotY_photo(channelnb,:))
+    set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',PlotY_photo(channelnb,:));
+    plot([0 0],PlotY_photo(channelnb,:),'-r');
+    plot(Analysis.(thistype).Time.Cue(1,:),[PlotY_photo(channelnb,2) PlotY_photo(channelnb,2)],'-b','LineWidth',2);
     else
          axis tight
          set(gca,'XLim',xTime,'XTick',xtickvalues);

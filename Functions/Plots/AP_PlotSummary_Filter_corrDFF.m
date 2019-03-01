@@ -6,15 +6,15 @@ FigTitle=sprintf('Analysis-Plot %s %s',char(Analysis.Parameters.PhotoCh{channeln
 %% Plot Parameters
 nboftypes=length(Group);
 color4plot={'k';'b';'r';'g';'c';'c';'k'};
-AVGPosition=Analysis.Parameters.NidaqRange(1)/2;
+AVGPosition=Analysis.Parameters.PlotY_photo(channelnb,1)/2;
 
 Title=strrep(Title,'_',' ');
 labelx='Time (sec)';   
-xTime=[Analysis.Parameters.PlotEdges(1) Analysis.Parameters.PlotEdges(2)];
+xTime=Analysis.Parameters.PlotX;
 xtickvalues=linspace(xTime(1),xTime(2),5);
 transparency=Analysis.Parameters.Transparency;
 %           DFF     Licks   Run     Pup
-LimRanges={Analysis.Parameters.NidaqRange,[0 10],[-5 100],[-10 50],[-5 50]};
+LimRanges={Analysis.Parameters.PlotY_photo(channelnb,:),[0 10],[-5 100],[-10 50],[-5 50]};
 labelyA={'DFF (%)','Licks (Hz)','Run (cm)','Pupil (%)','Run (cm/sec)'};
 
 %% Figure
@@ -36,9 +36,11 @@ if Analysis.(thistype).nTrials~=0
     subplot(4,5,1); hold on;
     shadedErrorBar(Analysis.(thistype).(thisChStruct).Time(1,:),Analysis.(thistype).(thisChStruct).DFFAVG,Analysis.(thistype).(thisChStruct).DFFSEM,['-' color4plot{k}],transparency);
     subplot(4,5,2); hold on;
-    plot(Analysis.(thistype).(thisChStruct).Outcome,Analysis.(thistype).(thisChStruct).Cue,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plot{k});
+    plot(Analysis.(thistype).(thisChStruct).OutcomeZ,Analysis.(thistype).(thisChStruct).CueZ,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plot{k});
+    plot(Analysis.(thistype).(thisChStruct).Fit.Xfit,Analysis.(thistype).(thisChStruct).Fit.Fpolyval,['-' color4plot{k}]);
     xlabel('Outcome DFF (%)'); ylabel('Cue DFF (%)');
-    set(gca,'XLim',LimRanges{1},'YLim',LimRanges{1});
+    axis tight
+%     set(gca,'XLim',LimRanges{1},'YLim',LimRanges{1});
     subplot(4,5,3); hold on;
     plot(-1,-1,'o','markerSize',5,'MarkerEdgeColor','none','MarkerFaceColor',color4plot{k});    
 % row 2 Licks 

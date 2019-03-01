@@ -13,7 +13,7 @@ function Analysis=AP_PlotData(Analysis)
 %% Legends
 FigTitle='Summary-Plot';
 labelx='Time (sec)';   
-xTime=[Analysis.Parameters.PlotEdges(1) Analysis.Parameters.PlotEdges(2)];
+xTime=Analysis.Parameters.PlotX;
 xtickvalues=linspace(xTime(1),xTime(2),5);
 labely1='Trial Number (licks)';
 labely2='Licks Rate (Hz)';
@@ -51,7 +51,7 @@ for i=1:nbOfTrialTypes
     end
     end
 end
-NidaqRange=Analysis.Parameters.NidaqRange;
+PlotY_photo=Analysis.Parameters.PlotY_photo;
 
 %% Plot
 FigureLegend=sprintf('%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig);
@@ -62,19 +62,18 @@ set(Legend,'String',FigureLegend,'Position',[10,5,500,20]);
 thisplot=1;
 for i=1:nbOfTrialTypes
     thistype=sprintf('type_%.0d',i);
-    
 % Lick Raster
     subplot(nbOfPlotsY,nbOfPlotsX,[thisplot thisplot+nbOfPlotsX]); hold on;
     title(Analysis.(thistype).Name);
     if thisplot==1
         ylabel(labely1);
     end
-    if Analysis.(thistype).nTrials~=0
+if Analysis.(thistype).nTrials
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial+1],'YDir','reverse');
     plot(Analysis.(thistype).Licks.Events,Analysis.(thistype).Licks.Trials,'sk',...
         'MarkerSize',2,'MarkerFaceColor','k');
-    plot([0 0],[0 maxtrial],'-r');
-    plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
+    plot(Analysis.(thistype).Time.Outcome(:,1),1:Analysis.(thistype).nTrials,'.r');
+    plot(Analysis.(thistype).Time.Cue(:,1),1:Analysis.(thistype).nTrials,'.m');
 % Lick AVG
     subplot(nbOfPlotsY,nbOfPlotsX,thisplot+(2*nbOfPlotsX)); hold on;
     if thisplot==1
@@ -97,17 +96,13 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
     
     yrasternidaq=1:Analysis.(thistype).nTrials;
-     if ~isempty(NidaqRange)
-        imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,NidaqRange);
-     else
-         imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF);
-     end    
-    % Removed by QC on 9/18/2018 for variable ITI at beginning
-%     for thistrial=1:Analysis.(thistype).nTrials
-%     imagesc(Analysis.(thistype).(thisChStruct).Time(thistrial,:),thistrial,Analysis.(thistype).(thisChStruct).DFF(thistrial,:),NidaqRange);
-%     end
-    plot([0 0],[0 maxtrial],'-r');
-    plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
+ if ~isnan(PlotY_photo(thisCh,:))
+    imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,PlotY_photo(thisCh,:));
+ else
+     imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF);
+ end    
+    plot(Analysis.(thistype).Time.Outcome(:,1),1:Analysis.(thistype).nTrials,'.r');
+    plot(Analysis.(thistype).Time.Cue(:,1),1:Analysis.(thistype).nTrials,'.m');
     if thisplot==nbOfTrialTypes
         pos=get(gca,'pos');
         c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
@@ -120,10 +115,10 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     end
     xlabel(labelx);
     shadedErrorBar(Analysis.(thistype).(thisChStruct).Time(1,:),Analysis.(thistype).(thisChStruct).DFFAVG,Analysis.(thistype).(thisChStruct).DFFSEM,'-k',0);
-    if ~isempty(NidaqRange)
-    set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',NidaqRange);
-    plot([0 0],NidaqRange,'-r');
-    plot(Analysis.(thistype).Time.Cue(1,:),[NidaqRange(2) NidaqRange(2)],'-b','LineWidth',2);
+    if ~isnan(PlotY_photo(thisCh,:))
+    set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',PlotY_photo(thisCh,:));
+    plot([0 0],PlotY_photo(thisCh,:),'-r');
+    plot(Analysis.(thistype).Time.Cue(1,:),[PlotY_photo(thisCh,2) PlotY_photo(thisCh,2)],'-b','LineWidth',2);
     else
          axis tight
          set(gca,'XLim',xTime,'XTick',xtickvalues);
