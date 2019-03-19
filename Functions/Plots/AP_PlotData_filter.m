@@ -55,60 +55,52 @@ PlotY_photo=Analysis.Parameters.PlotY_photo;
 %% Plot
 scrsz = get(groot,'ScreenSize');
 FigureLegend=sprintf('%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig);
-figData.figure=figure('Name',FigTitle,'Position', [25 25 scrsz(3)/4 scrsz(4)-150], 'numbertitle','off');
+figure('Name',FigTitle,'Position', [25 25 scrsz(3)/4 scrsz(4)-150], 'numbertitle','off');
 Legend=uicontrol('style','text');
 set(Legend,'String',FigureLegend,'Position',[10,5,500,20]); 
 
 % Lick Raster
 subplot(6,1,[1 2]); hold on;
 title(Title);
-ylabel(labely1);
-set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial+1],'YDir','reverse');
 plot(Analysis.(thistype).Licks.Events,Analysis.(thistype).Licks.Trials,'sk',...
     'MarkerSize',2,'MarkerFaceColor','k');
 plot([0 0],[0 maxtrial],'-r');
 plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
+ylabel(labely1);
+set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial+1],'YDir','reverse');
 % Lick AVG
 subplot(6,1,3); hold on;
-ylabel(labely2);
-xlabel(labelx);
-set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxrate+1]);
 shadedErrorBar(Analysis.(thistype).Licks.Bin, Analysis.(thistype).Licks.AVG, Analysis.(thistype).Licks.SEM,'-k',transparency);
 plot([0 0],[0 maxrate+1],'-r');
 plot(Analysis.(thistype).Time.Cue(1,:),[maxrate maxrate],'-b','LineWidth',2);
+ylabel(labely2); xlabel(labelx);
+set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxrate+1]);
 
-if Analysis.Parameters.Photometry==1    
+%% Photometry
+% Avg
+if Analysis.Parameters.Photometry==1
+subplot(6,1,6); hold on;
+shadedErrorBar(Analysis.(thistype).(thisChStruct).Time(1,:),Analysis.(thistype).(thisChStruct).DFFAVG,Analysis.(thistype).(thisChStruct).DFFSEM,'-k',transparency);
+if isnan(PlotY_photo(channelnb,:))
+    axis tight;
+    PlotY_photo(channelnb,:)=get(gca,'YLim');
+end
+plot([0 0],PlotY_photo,'-r');
+plot(Analysis.(thistype).Time.Cue(1,:),[PlotY_photo(channelnb,2) PlotY_photo(channelnb,2)],'-b','LineWidth',2);
+ylabel(labelyFluo); xlabel(labelx);
+set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',PlotY_photo(channelnb,:));
+    
 % Nidaq Raster
 subplot(6,1,[4 5]); hold on;
-ylabel(labelyFluoRaster);
-set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
 yrasternidaq=1:Analysis.(thistype).nTrials;
- if ~isnan(PlotY_photo(channelnb,:))
-    imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,PlotY_photo(channelnb,:));
- else
-     imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF);
- end 
+imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,PlotY_photo(channelnb,:));
 plot([0 0],[0 maxtrial],'-r');
 plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
 pos=get(gca,'pos');
 c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
 c.Label.String = labelyFluo;
+ylabel(labelyFluoRaster);
+set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
 
-% Nidaq AVG
-subplot(6,1,6); hold on;
-ylabel(labelyFluo);
-xlabel(labelx);
-shadedErrorBar(Analysis.(thistype).(thisChStruct).Time(1,:),Analysis.(thistype).(thisChStruct).DFFAVG,Analysis.(thistype).(thisChStruct).DFFSEM,'-k',transparency);
-if ~isnan(PlotY_photo(channelnb,:))
-set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',PlotY_photo(channelnb,:));
-plot([0 0],PlotY_photo,'-r');
-plot(Analysis.(thistype).Time.Cue(1,:),[PlotY_photo(channelnb,2) PlotY_photo(channelnb,2)],'-b','LineWidth',2);
-else
-     axis tight
-     set(gca,'XLim',xTime,'XTick',xtickvalues);
-     thisYLim=get(gca,'YLim');
-     plot([0 0],thisYLim,'-r');
-     plot(Analysis.(thistype).Time.Cue(1,:),[thisYLim(2) thisYLim(2)],'-b','LineWidth',2);
-end    
 end    
 end

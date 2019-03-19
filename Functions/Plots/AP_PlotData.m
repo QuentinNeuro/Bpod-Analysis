@@ -88,19 +88,30 @@ if Analysis.(thistype).nTrials
     counterphotoplot=[3 4 5];
 for thisCh=1:length(Analysis.Parameters.PhotoCh)
     thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
+% Nidaq AVG
+    subplot(nbOfPlotsY,nbOfPlotsX,thisplot+(counterphotoplot(3)*nbOfPlotsX)); hold on;
+    shadedErrorBar(Analysis.(thistype).(thisChStruct).Time(1,:),Analysis.(thistype).(thisChStruct).DFFAVG,Analysis.(thistype).(thisChStruct).DFFSEM,'-k',0);
+    if isnan(PlotY_photo(thisCh,:))
+        axis tight;
+        thisPlotY_photo(thisCh,:)=get(gca,'YLim');
+    else
+        thisPlotY_photo(thisCh,:)=PlotY_photo(thisCh,:);
+    end
+    plot([0 0],thisPlotY_photo(thisCh,:),'-r');
+    plot(Analysis.(thistype).Time.Cue(1,:),[thisPlotY_photo(thisCh,2) thisPlotY_photo(thisCh,2)],'-b','LineWidth',2);  
+    if thisplot==1
+        ylabel(labelyFluo);
+    end
+    xlabel(labelx);
+    set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',thisPlotY_photo(thisCh,:));
+    
 % Nidaq Raster
     subplot(nbOfPlotsY,nbOfPlotsX,[thisplot+(counterphotoplot(1)*nbOfPlotsX) thisplot+(counterphotoplot(2)*nbOfPlotsX)]); hold on;
     if thisplot==1
                 ylabel(char(Analysis.Parameters.PhotoChNames{thisCh}));
     end
-    set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
-    
     yrasternidaq=1:Analysis.(thistype).nTrials;
- if ~isnan(PlotY_photo(thisCh,:))
-    imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,PlotY_photo(thisCh,:));
- else
-     imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF);
- end    
+    imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,thisPlotY_photo(thisCh,:));
     plot(Analysis.(thistype).Time.Outcome(:,1),1:Analysis.(thistype).nTrials,'.r');
     plot(Analysis.(thistype).Time.Cue(:,1),1:Analysis.(thistype).nTrials,'.m');
     if thisplot==nbOfTrialTypes
@@ -108,24 +119,7 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
         c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
         c.Label.String = labelyFluo;
     end
-% Nidaq AVG
-    subplot(nbOfPlotsY,nbOfPlotsX,thisplot+(counterphotoplot(3)*nbOfPlotsX)); hold on;
-    if thisplot==1
-        ylabel(labelyFluo);
-    end
-    xlabel(labelx);
-    shadedErrorBar(Analysis.(thistype).(thisChStruct).Time(1,:),Analysis.(thistype).(thisChStruct).DFFAVG,Analysis.(thistype).(thisChStruct).DFFSEM,'-k',0);
-    if ~isnan(PlotY_photo(thisCh,:))
-    set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',PlotY_photo(thisCh,:));
-    plot([0 0],PlotY_photo(thisCh,:),'-r');
-    plot(Analysis.(thistype).Time.Cue(1,:),[PlotY_photo(thisCh,2) PlotY_photo(thisCh,2)],'-b','LineWidth',2);
-    else
-         axis tight
-         set(gca,'XLim',xTime,'XTick',xtickvalues);
-         thisYLim=get(gca,'YLim');
-         plot([0 0],thisYLim,'-r');
-         plot(Analysis.(thistype).Time.Cue(1,:),[thisYLim(2) thisYLim(2)],'-b','LineWidth',2);
-    end    
+    set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
     counterphotoplot=counterphotoplot+3;
 end  
 end

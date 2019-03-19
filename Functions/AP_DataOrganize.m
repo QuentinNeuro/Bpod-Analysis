@@ -10,10 +10,12 @@ function Analysis=AP_DataOrganize(Analysis,SessionData,Pup)
 %
 %function designed by Quentin 2016 for Analysis_Photometry
 
-if isfield(Analysis,'AllData')==0
+if ~isfield(Analysis,'AllData')
         Analysis.AllData.nTrials=0;
         Analysis.AllData.IgnoredTrials=0;
+        Analysis.AllData.Session(1)=0;
 end
+thisSession=Analysis.AllData.Session(end)+1;
 BaselineTime=Analysis.Parameters.NidaqBaseline;
 BaselinePt=Analysis.Parameters.NidaqBaselinePoints;
 
@@ -34,6 +36,7 @@ try
     if Analysis.Filters.ignoredTrials(thisTrial)==1
     [TimeToZero,thislick,thisPhoto,thisWheel]=AP_DataExtract(SessionData,Analysis,thisTrial);
     i=Analysis.AllData.nTrials+1;
+    Analysis.AllData.Session(i)=thisSession;
     Analysis.AllData.nTrials=i;
     Analysis.AllData.TrialNumbers(i)=i;
     Analysis.AllData.TrialTypes(i)=SessionData.TrialTypes(thisTrial);

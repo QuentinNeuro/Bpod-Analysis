@@ -78,22 +78,17 @@ if Analysis.(thistype).nTrials>0
         Analysis.(thistype).(thisChStruct).OutcomeZAVG  =nanmean(Analysis.(thistype).(thisChStruct).OutcomeZ,2);
         Analysis.(thistype).(thisChStruct).OutcomeZSEM  =nanstd(Analysis.(thistype).(thisChStruct).OutcomeZ,0,2)/sqrt(Analysis.(thistype).nTrials);
         Analysis.(thistype).(thisChStruct).OutcomeMax   =max(Analysis.(thistype).(thisChStruct).DFFAVG(Analysis.(thistype).(thisChStruct).Time(1,:)>OutcomeTime(1) & Analysis.(thistype).(thisChStruct).Time(1,:)<OutcomeTime(2))); 
-    % Correlaton
-        x=Analysis.(thistype).(thisChStruct).OutcomeZ;
-        y=Analysis.(thistype).(thisChStruct).CueZ;
-        xnan=~isnan(x);
-        y=y(xnan);
-        x=x(xnan);
-        ynan=~isnan(y);
-        x=x(ynan);
-        y=y(ynan);
-        p=polyfit(x,y,1);
-        f=polyval(p,x);
-        [Rho,Pval]=corr(x,y);
-        Analysis.(thistype).(thisChStruct).Fit.Xfit=x;
-        Analysis.(thistype).(thisChStruct).Fit.PPolyfit=p;
-        Analysis.(thistype).(thisChStruct).Fit.Fpolyval=f;
-        Analysis.(thistype).(thisChStruct).Fit.RhoPValcorr=[Rho,Pval];
+    % Fit
+        model=fitlm(Analysis.(thistype).(thisChStruct).OutcomeZ,Analysis.(thistype).(thisChStruct).CueZ);
+        Analysis.(thistype).(thisChStruct).Fit.XData=Analysis.(thistype).(thisChStruct).OutcomeZ;
+        Analysis.(thistype).(thisChStruct).Fit.YFit=model.Fitted;
+        Analysis.(thistype).(thisChStruct).Fit.Function=model.Coefficients.Estimate;
+        Analysis.(thistype).(thisChStruct).Fit.Rsquared=model.Rsquared.Ordinary;
+        Analysis.(thistype).(thisChStruct).Fit.Pvalue=model.Coefficients.pValue(2); 
+	% Cumulatives
+        Analysis.(thistype).(thisChStruct).Cumul.Prob=(1:Analysis.(thistype).nTrials)/Analysis.(thistype).nTrials; 
+        Analysis.(thistype).(thisChStruct).Cumul.CueSort=sort(Analysis.(thistype).(thisChStruct).CueZ);
+        Analysis.(thistype).(thisChStruct).Cumul.OutcomeSort=sort(Analysis.(thistype).(thisChStruct).OutcomeZ);       
     end
 %% Wheel
     if Analysis.Parameters.Wheel==1

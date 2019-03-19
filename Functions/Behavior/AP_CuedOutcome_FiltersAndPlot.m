@@ -24,14 +24,15 @@ Analysis=A_FilterPupilNaNCheck(Analysis,'PupilNaN',25);
 Analysis=A_FilterAfollowsB(Analysis,'Reward_After_Punish','Reward','Punish');
 
 %% Sort and Plot Filtered Trials specified in AP_Filter_GroupToPlot.
+[Group_Plot,Group_Corr,Group_Perf]=AP_CuedOutcome_GroupToPlot(Analysis);
+Analysis=AP_Performance(Analysis,Group_Perf);
 if Analysis.Parameters.PlotFiltersSummary || Analysis.Parameters.PlotFiltersSingle
-[GroupToPlot]=AP_CuedOutcome_GroupToPlot(Analysis);
-for i=1:size(GroupToPlot,1)
-    Title=GroupToPlot{i,1};
-    MetaFilterGroup=cell(size(GroupToPlot{i,2},1),1);
-    for j=1:size(GroupToPlot{i,2},1)
-        MetaFilter=GroupToPlot{i,2}{j,1};
-        Filters=GroupToPlot{i,2}{j,2};
+for i=1:size(Group_Plot,1)
+    Title=Group_Plot{i,1};
+    MetaFilterGroup=cell(size(Group_Plot{i,2},1),1);
+    for j=1:size(Group_Plot{i,2},1)
+        MetaFilter=Group_Plot{i,2}{j,1};
+        Filters=Group_Plot{i,2}{j,2};
         MetaFilterGroup{j}=MetaFilter;
         [Analysis,thisFilter]=A_FilterMeta(Analysis,MetaFilter,Filters);
         Analysis=AP_DataSort(Analysis,MetaFilter,thisFilter);
@@ -57,15 +58,14 @@ for i=1:size(GroupToPlot,1)
     end
 end
 end
-%% Behavior Filters
+%% Correlations
 if Analysis.Parameters.PlotFiltersBehavior
-[~,GroupToPlot]=AP_CuedOutcome_GroupToPlot(Analysis);
-for i=1:size(GroupToPlot,1)
-    Title=GroupToPlot{i,1};
-    MetaFilterGroup=cell(size(GroupToPlot{i,2},1),1);
-    for j=1:size(GroupToPlot{i,2},1)
-        MetaFilter=GroupToPlot{i,2}{j,1};
-        Filters=GroupToPlot{i,2}{j,2};
+for i=1:size(Group_Corr,1)
+    Title=Group_Corr{i,1};
+    MetaFilterGroup=cell(size(Group_Corr{i,2},1),1);
+    for j=1:size(Group_Corr{i,2},1)
+        MetaFilter=Group_Corr{i,2}{j,1};
+        Filters=Group_Corr{i,2}{j,2};
         MetaFilterGroup{j}=MetaFilter;
         [Analysis,thisFilter]=A_FilterMeta(Analysis,MetaFilter,Filters);
         Analysis=AP_DataSort(Analysis,MetaFilter,thisFilter);

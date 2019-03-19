@@ -1,6 +1,6 @@
 %% Bpod Photometry Launcher
 % Launcher for an analysis pipeline originally designed for photometry
-% acquisition using Bpod to control the behavior of the animal.
+% using Bpod to control the behavior of the animal.
 % 'Analysis_Photometry' is the core function used to extract, organize and
 % filters the data according to the behavioral task
 % 'Analysis_spike' is an addon that can be used to quickly plot PSTH from 
@@ -17,28 +17,28 @@ LauncherParam.TrialEvents4CellBase=0;
 LauncherParam.SpikesAnalysis=0;
 LauncherParam.SpikesFigure=0;
 % Figures - Can be changed upon loading
-LauncherParam.PhotoChNames={'470-A1' '405-A1' '470-mPFC'};%{'470-A1' '405-A1' '470-mPFC'} {'470-BLA' 'none' '470-VS'};
-LauncherParam.PlotSummary1=1;
+LauncherParam.PhotoChNames={'470-BLA' 'none' '470-VS'};  %{'470-A1' '405-A1' '470-mPFC'} {'470-BLA' 'none' '470-VS'};
+LauncherParam.PlotSummary1=0;
 LauncherParam.PlotSummary2=0;
-LauncherParam.PlotFiltersSingle=0; %AP_CuedOutcome_GroupToPlot #1 Output
+LauncherParam.PlotFiltersSingle=0;              %AP_CuedOutcome_GroupToPlot #1 Output
 LauncherParam.PlotFiltersSummary=0;
-LauncherParam.PlotFiltersBehavior=0; %AP_Filter_GroupToPlot #2 Ouput
+LauncherParam.PlotFiltersBehavior=1;           	%AP_Filter_GroupToPlot #2 Ouput
 LauncherParam.Illustrator=0;
-LauncherParam.Transparency=0;
+LauncherParam.Transparency=1;
 % Axis - Can be changed upon loading
 LauncherParam.PlotX=[-3 3];
-LauncherParam.PlotY_photo(1,:)=[NaN NaN]; % Tight axis if NaNs.
-LauncherParam.PlotY_photo(2,:)=[NaN NaN]; % Tight axis if NaNs.
+LauncherParam.PlotY_photo(1,:)=[NaN NaN];     	% Tight axis if NaNs.
+LauncherParam.PlotY_photo(2,:)=[NaN NaN];      	% Tight axis if NaNs.
 % States and Timing
-LauncherParam.StateToZero='StateOfOutcome'; %'StateOfCue' 'StateOfOutcome'
-LauncherParam.ZeroFirstLick=0; % Will activate TimeReshaping
+LauncherParam.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
+LauncherParam.ZeroFirstLick=0;                 	% Will activate TimeReshaping
 LauncherParam.ZeroAtZero=0;
-LauncherParam.WheelState='Outcome'; %'Baseline','Cue','Outcome'
-LauncherParam.PupilState='NormBaseline'; %'NormBaseline','Cue','Outcome'
+LauncherParam.WheelState='Outcome';          	%'Baseline','Cue','Outcome'
+LauncherParam.PupilState='NormBaseline';       	%'NormBaseline','Cue','Outcome'
 LauncherParam.ReshapedTime=[-3 3];
 % Filters
 LauncherParam.PupilThreshold=1;
-LauncherParam.WheelThreshold=2; %Speed cm/s
+LauncherParam.WheelThreshold=2;             	%Speed cm/s
 LauncherParam.LicksCue=2;
 LauncherParam.LicksOutcome=2;
 LauncherParam.TrialToFilterOut=[];
