@@ -3,6 +3,13 @@ function handles=AP_Parameters_Behavior(handles,SessionData,DefaultParam,Name)
 % See end of the function to overwrite based on defaultParam
 handles.TimeReshaping=0;
 
+% Phase
+try
+    handles.Phase=SessionData.TrialSettings(1).Names.Phase{SessionData.TrialSettings(1).GUI.Phase};
+catch
+    handles.Phase=DefaultParam.Phase;
+end
+
 %% Behavior specific
 if contains(Name,'Cued','IgnoreCase',true) && ~contains(Name,'Sensor','IgnoreCase',true)
     handles.Behavior='CuedOutcome';
@@ -27,6 +34,7 @@ elseif contains(Name,'AuditoryTuning','IgnoreCase',true)
     handles.Behavior='AuditoryTuning';
 	handles.StateOfCue='CueDelivery';
     handles.StateOfOutcome='CueDelivery';
+    handles.Phase='AuditoryTuning';
     handles.PlotSummary1=0;
     handles.PlotSummary2=0;
     handles.PlotFiltersSingle=0;

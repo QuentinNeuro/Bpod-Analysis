@@ -44,12 +44,6 @@ handles.SpikesFigure=DefaultParam.SpikesFigure;
 
 %% Behavior specific : Plots, States and Timing
 handles=AP_Parameters_Behavior(handles,SessionData,DefaultParam,Name);
-% Phase
-try
-    handles.Phase=SessionData.TrialSettings(1).Names.Phase{SessionData.TrialSettings(1).GUI.Phase};
-catch
-    handles.Phase=DefaultParam.Phase;
-end
 % Trial types and Names
 handles.nTrials=SessionData.nTrials;
 handles.nbOfTrialTypes=max(SessionData.TrialTypes);
@@ -65,7 +59,7 @@ end
 %% Timing
 handles.StateToZero     =handles.(DefaultParam.StateToZero);
 handles.ZeroFirstLick   =DefaultParam.ZeroFirstLick;
-handles.ReshapedTime=DefaultParam.ReshapedTime;
+handles.ReshapedTime    =DefaultParam.ReshapedTime;
 % Overwritting
 if ~isempty(DefaultParam.CueTimeReset)
 handles.CueTimeReset    =DefaultParam.CueTimeReset;
@@ -101,7 +95,7 @@ else
     handles.NidaqSamplingRate=DefaultParam.SamplingRate;
 end
 handles.NidaqDecimatedSR=DefaultParam.NewSamplingRate;
-handles.NidaqDecimateFactor=handles.NidaqSamplingRate/handles.NidaqDecimatedSR;
+handles.NidaqDecimateFactor=ceil(handles.NidaqSamplingRate/handles.NidaqDecimatedSR);
 switch DefaultParam.Analysis_type
     case 'Group'
 handles.NidaqDuration=DefaultParam.NidaqDuration;
@@ -127,9 +121,14 @@ handles.WheelEncoderCPR=1024;
 handles.WheelThreshold=DefaultParam.WheelThreshold;
 handles.WheelState=DefaultParam.WheelState;
 handles.WheelDiameter=14; %cm
-handles.WheelPolarity=-1;
 if isfield(SessionData,handles.WheelField)
     handles.Wheel=1;
+end
+switch handles.Rig
+    case 'Photometry5'
+        handles.WheelPolarity=1;
+    otherwise
+        handles.WheelPolarity=-1;
 end
 %% Pupillometry
 handles.Pupillometry=0;

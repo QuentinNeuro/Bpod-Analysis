@@ -8,7 +8,7 @@ FigTitle=sprintf('Analysis-PlotSingle %s',char(Analysis.Parameters.PhotoCh{chann
 
 %% Plot Parameters
 Title=sprintf('%s (%.0d)',strrep(Analysis.(thistype).Name,'_',' '),Analysis.(thistype).nTrials);
-labelx='Time (sec)';   
+labelx='Time (s)';   
 xTime=Analysis.Parameters.PlotX;
 xtickvalues=linspace(xTime(1),xTime(2),5);
 
@@ -41,8 +41,8 @@ set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',PlotY_photo(channelnb,:));
 subplot(4,5,1); hold on;
 title('Raster');
 imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yraster,Analysis.(thistype).(thisChStruct).DFF,PlotY_photo(channelnb,:));
-plot([0 0],[0 maxtrial],'-r');
-plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Outcome(:,1),1:Analysis.(thistype).nTrials,'.r','MarkerSize',4);
+plot(Analysis.(thistype).Time.Cue(:,1),1:Analysis.(thistype).nTrials,'.m','MarkerSize',4);  
 pos=get(gca,'pos');
 colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.005 pos(4)]);
 xlabel(labelx); ylabel('DF/Fo (%)');
@@ -68,8 +68,8 @@ axis tight
 subplot(4,5,6); hold on;
 plot(Analysis.(thistype).Licks.Events,Analysis.(thistype).Licks.Trials,'sk',...
     'MarkerSize',2,'MarkerFaceColor','k');
-plot([0 0],[0 maxtrial],'-r');
-plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Outcome(:,1),1:Analysis.(thistype).nTrials,'.r','MarkerSize',4);
+plot(Analysis.(thistype).Time.Cue(:,1),1:Analysis.(thistype).nTrials,'.m','MarkerSize',4);  
 xlabel(labelx); ylabel('Licks');
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial+1],'YDir','reverse');
 % Time
@@ -84,7 +84,7 @@ xlabel(labelx); ylabel('Lick rate (Hz)');
 set(gca,'XLim',xTime,'XTick',xtickvalues);
 % Correlations
 subplot(4,5,8); hold on;
-title('Outcome DFF vs Cue');
+title('Outcome Fluo vs Cue');
 x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).Licks.Cue;
 model=fitlm(x,y);
 plot(x,model.Fitted,'-r');
@@ -98,7 +98,7 @@ xlabel('Outcome DF/Fo (%)'); ylabel('Cue Licks (Hz)');
 axis tight
 
 subplot(4,5,9); hold on;
-title('Cue DFF vs Cue');
+title('Cue Fluo vs Cue');
 x=Analysis.(thistype).(thisChStruct).CueZ;y=Analysis.(thistype).Licks.Cue;
 model=fitlm(x,y);
 plot(x,model.Fitted,'-r');
@@ -112,7 +112,7 @@ xlabel('Cue DF/Fo (%)'); ylabel('Cue Licks (Hz)');
 axis tight
 
 subplot(4,5,10); hold on;
-title('Outcome DFF vs Outcome');
+title('Outcome Fluo vs Outcome');
 x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).Licks.Outcome;
 model=fitlm(x,y);
 plot(x,model.Fitted,'-r');
@@ -159,7 +159,7 @@ thisleg{2}=sprintf('R2=%.2f p-val=%.2d',model.Rsquared.Ordinary,model.Coefficien
 lgd=legend(TempLgd,'Location','northeast','FontSize',8);
 anno=annotation('textbox',lgd.Position,'String',thisleg,'FitBoxToText','on');
 anno.Color='red'; legend('off');
-xlabel('Outcome DFF (%)'); ylabel('Cue Run (cm/sec)');
+xlabel('Outcome DF/Fo (%)'); ylabel('Cue Run (cm/sec)');
 axis tight
 
 subplot(4,5,14); hold on;
@@ -172,7 +172,7 @@ thisleg{2}=sprintf('R2=%.2f p-val=%.2d',model.Rsquared.Ordinary,model.Coefficien
 lgd=legend(TempLgd,'Location','northeast','FontSize',8);
 anno=annotation('textbox',lgd.Position,'String',thisleg,'FitBoxToText','on');
 anno.Color='red'; legend('off');
-xlabel('Cue DFF (%)'); ylabel('Cue Run (cm/sec)');
+xlabel('Cue DF/Fo (%)'); ylabel('Cue Run (cm/sec)');
 axis tight
 
 subplot(4,5,15); hold on;
@@ -185,7 +185,7 @@ thisleg{2}=sprintf('R2=%.2f p-val=%.2d',model.Rsquared.Ordinary,model.Coefficien
 lgd=legend(TempLgd,'Location','northeast','FontSize',8);
 anno=annotation('textbox',lgd.Position,'String',thisleg,'FitBoxToText','on');
 anno.Color='red'; legend('off');
-xlabel('Outcome DFF (%)'); ylabel('Outcome Run (cm/sec)');
+xlabel('Outcome DF/Fo (%)'); ylabel('Outcome Run (cm/sec)');
 axis tight
 end
 %% row 4 Pupillometry
@@ -220,7 +220,7 @@ thisleg{2}=sprintf('R2=%.2f p-val=%.2d',model.Rsquared.Ordinary,model.Coefficien
 lgd=legend(TempLgd,'Location','northeast','FontSize',8);
 anno=annotation('textbox',lgd.Position,'String',thisleg,'FitBoxToText','on');
 anno.Color='red'; legend('off');
-xlabel('Outcome DFF (%)'); ylabel('Cue Pupil (%)');
+xlabel('Outcome DF/Fo (%)'); ylabel('Cue Pupil (%)');
 axis tight
 
 subplot(4,5,19); hold on;
@@ -233,7 +233,7 @@ thisleg{2}=sprintf('R2=%.2f p-val=%.2d',model.Rsquared.Ordinary,model.Coefficien
 lgd=legend(TempLgd,'Location','northeast','FontSize',8);
 anno=annotation('textbox',lgd.Position,'String',thisleg,'FitBoxToText','on');
 anno.Color='red'; legend('off');
-xlabel('Cue DFF (%)'); ylabel('Cue Pupil (%)');
+xlabel('Cue DF/Fo(%)'); ylabel('Cue Pupil (%)');
 axis tight
 
 subplot(4,5,20); hold on;
@@ -245,7 +245,7 @@ thisleg{2}=sprintf('R2=%.2f p-val=%.2d',model.Rsquared.Ordinary,model.Coefficien
 lgd=legend(TempLgd,'Location','northeast','FontSize',8);
 anno=annotation('textbox',lgd.Position,'String',thisleg,'FitBoxToText','on');
 anno.Color='red'; legend('off');
-xlabel('Outcome DFF (%)'); ylabel('Outcome Pupil (%)');
+xlabel('Outcome DF/Fo (%)'); ylabel('Outcome Pupil (%)');
 axis tight
 end
 end

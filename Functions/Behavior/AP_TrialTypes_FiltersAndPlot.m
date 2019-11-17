@@ -21,7 +21,7 @@ if Analysis.Parameters.PlotSummary1==1
     Analysis=AP_PlotData(Analysis);
     phototitlelabel=[];
     for thisCh=1:length(Analysis.Parameters.PhotoCh)
-        phototitlelabel=[phototitlelabel '_' char(Analysis.Parameters.PhotoChNames{thisCh})];
+        phototitlelabel=[phototitlelabel '_' Analysis.Parameters.PhotoChNames{thisCh}];
     end
     saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_AllData' phototitlelabel '.png']);
 end

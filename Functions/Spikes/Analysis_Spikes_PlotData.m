@@ -5,10 +5,10 @@ isPunish=0;
 if contains(Analysis.Parameters.Phase,'Punish')
     isPunish=1;
 end
-CueType={'AnticipLick_CueA','NoAnticipLick_CueB','NoCue'};
+CueType={'Cue_A','NoAnticipLick_CueB'};%,'NoCue'};
 CueColors=['-k';'-b';'-g'];
-RewardType={'AnticipLick_CueA_Reward','NoAnticipLick_CueA_Reward','Uncued_Reward'};
-RewardColors=['-k';'-b';'-g'];
+RewardType={'AnticipLick_CueA_Reward','Uncued_Reward'};%'NoAnticipLick_CueA_Reward',
+RewardColors=['-k';'-g';'-g'];
 PunishType={'NoAnticipLick_CueB_Punish','Uncued_Punish'};
 PunishColors=['-k';'-r'];
 
@@ -21,20 +21,20 @@ yLabelSpikeAll='Spikes';
 ySpikeAll=[-0.1 0.1];
 % Subplot Tagging Raster
 xLabelTag='Time from Laser (s)';
-xTimeTag=[-0.05 0.2];
+xTimeTag=[-0.02 0.05];
 yTrialsTag1=[0 100];
 yTrialsTag2=[100 200];
 % Subplot Licks
 xLabelBehav='Time from Outcome (s)';
-xTimeLicks=[-4 4];
+xTimeLicks=[-3 3];
 yLabelLicks='Licks (Hz)';
-yLicks=[0 15];
+yLicks=[0 10];
 % Subplot Spikes Rate
-xTimeSpikeRate=[-4 4];
+xTimeSpikeRate=[-3 3];
 yLabelSpikeRate='Spikes (Hz)';
 ySpikeRate=[0 10];
 % Subplot Behavior Raster
-xTimeSpikes=[-4 4];
+xTimeSpikes=[-3 3];
 yLabelSpikeRaster='Trials (Spikes)';
 
 %% Data

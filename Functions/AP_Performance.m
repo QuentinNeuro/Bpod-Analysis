@@ -37,6 +37,7 @@ Decision=sum(testIO)==length(testIO)
 else
 Decision=NaN;
 testIO=NaN;
+end
 %% Save in Analysis Structure
 Analysis.Performance.Decision=Decision;
 Analysis.Performance.testIO=testIO;

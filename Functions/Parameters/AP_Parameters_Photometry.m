@@ -4,9 +4,22 @@ function handles=AP_Parameters_Photometry(handles,SessionData,DefaultParam)
 % if isfield(SessionData.TrialSettings(1).GUI,'LED1_Name')
 %     LEDNames={SessionData.TrialSettings(1).GUI.LED1_Name SessionData.TrialSettings(1).GUI.LED1b_Name SessionData.TrialSettings(1).GUI.LED2_Name};
 % else
-    LEDNames=DefaultParam.PhotoChNames;
-% end
+switch handles.Behavior
+    case 'Sensor'
+        LEDNames={'470-BLA' '565' '470-VS'};
+    otherwise
+        if isempty(DefaultParam.PhotoChNames)
+            LEDNames={'470-A1' '405-A1' '470-mPFC'};
+        else
+        LEDNames=DefaultParam.PhotoChNames;
+        end
+end
 handles.Zscore=DefaultParam.Zscore;
+handles.CueStats=DefaultParam.CueStats;
+handles.OutcomeStats=DefaultParam.OutcomeStats;
+handles.BaselineHisto=DefaultParam.BaselineHisto;
+handles.BaselineHistoParam=DefaultParam.BaselineHistoParam;
+
 %% Auto-Detection
 if isfield(SessionData.TrialSettings(1).GUI,'PhotometryVersion')
     if SessionData.TrialSettings(1).GUI.Photometry

@@ -8,7 +8,7 @@ nboftypes=length(Group);
 color4plot={'k';'b';'r';'g';'c';'c';'k'};
 
 Title=strrep(Title,'_',' ');
-labelx='Time (sec)';   
+labelx='Time (s)';   
 xTime=Analysis.Parameters.PlotX;
 xtickvalues=linspace(xTime(1),xTime(2),5);
 transparency=Analysis.Parameters.Transparency;
@@ -43,20 +43,20 @@ if Analysis.(thistype).nTrials~=0
     plot(Analysis.(thistype).(thisChStruct).Cumul.CueSort,Analysis.(thistype).(thisChStruct).Cumul.Prob,['-' color4plot{k}]);
     axis tight
     ylim([0 1]);
-    xlabel('Cue DF/Fo(%)')
+    xlabel('DF/Fo(%)')
     subplot(4,5,4); hold on;
     title('Cumul. Outcome');
     plot(Analysis.(thistype).(thisChStruct).Cumul.OutcomeSort,Analysis.(thistype).(thisChStruct).Cumul.Prob,['-' color4plot{k}]);
     axis tight
     ylim([0 1]);
-    xlabel('Outcome DF/Fo(%)')
+    xlabel('DF/Fo(%)')
 % row 2 Licks 
     subplot(4,5,6); hold on;
     shadedErrorBar(Analysis.(thistype).Licks.Bin, Analysis.(thistype).Licks.AVG, Analysis.(thistype).Licks.SEM,['-' color4plot{k}],transparency); 
     axis tight
 	xlabel(labelx); ylabel('Licks (Hz)');
     subplot(4,5,7); hold on;
-    title('Outcome DF/Fo vs Cue');
+    title('Outcome Fluo vs Cue');
     x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).Licks.Cue;
     model=fitlm(x,y);
     plot(x,y,'o','markerSize',5,'MarkerEdgeColor',color4plot{k});
@@ -65,16 +65,16 @@ if Analysis.(thistype).nTrials~=0
     xlabel('Outcome DF/Fo (%)'); ylabel('Cue Licks (Hz)');
    
 	subplot(4,5,8); hold on;
-    title('Cue DF/Fo vs Cue');
+    title('Cue Fluo vs Cue');
     x=Analysis.(thistype).(thisChStruct).CueZ;y=Analysis.(thistype).Licks.Cue;
     model=fitlm(x,y);
     plot(x,y,'o','markerSize',5,'MarkerEdgeColor',color4plot{k});
     plot(x,model.Fitted,['-' color4plot{k}]);
     axis tight
-    xlabel('Cue DFF (%)'); ylabel('Cue Licks (Hz)');
+    xlabel('Cue DF/Fo (%)'); ylabel('Cue Licks (Hz)');
     
     subplot(4,5,9); hold on;
-    title('Outcome DF/Fo vs Outcome');
+    title('Outcome Fluo vs Outcome');
     x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).Licks.Outcome;
     model=fitlm(x,y);
     plot(x,y,'o','markerSize',5,'MarkerEdgeColor',color4plot{k});
@@ -166,6 +166,6 @@ subplot(4,5,1); hold on;
 title(Title);
 xlabel('Outcome DF/Fo (%)'); ylabel('Cue DF/Fo (%)');
 subplot(4,5,4); hold on;
-legend(titleLegend,'Location','northwest','FontSize',8);
+legend(titleLegend,'Location','southwest','FontSize',8);
 legend('boxoff');
 end

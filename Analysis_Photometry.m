@@ -29,7 +29,7 @@ else
     disp('Could not find the pupillometry data');
     Pupillometry=[];
 end
-    % Parameters, Ignored Trials and Data extraction
+%     Parameters, Ignored Trials and Data extraction
 try
         Analysis.Parameters=AP_Parameters(SessionData,Pupillometry,LauncherParam,FileNameNoExt);
         Analysis=A_FilterIgnoredTrials(Analysis,LauncherParam.TrialToFilterOut,LauncherParam.LoadIgnoredTrials);tic

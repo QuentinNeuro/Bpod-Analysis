@@ -11,8 +11,14 @@ FilterNb=length(Analysis.Filters.Names);
 Analysis.Filters.Names{FilterNb+1}=FilterName;
 Analysis.Filters.Names{FilterNb+2}=[FilterName 'Inv'];
 
-%% Filter
-Logicals=Analysis.Filters.FirstLick;
-LogicalsInv=~Logicals; 
+%% Check whether filter is present
+if isfield(Analysis.Filters,'FirstLick')
+    Logicals=Analysis.Filters.FirstLick';
+else
+    Logicals=ones(Analysis.AllData.nTrials,1);
+end
+LogicalsInv=~Logicals;
+%% Reallocate filer
+ 
 Analysis.Filters.Logicals=[Analysis.Filters.Logicals Logicals LogicalsInv];
 end

@@ -24,7 +24,7 @@ end
 
 %% Plot Parameters
 Title=sprintf('%s (%.0d)',strrep(Analysis.(thistype).Name,'_',' '),Analysis.(thistype).nTrials);
-labelx='Time (sec)';   
+labelx='Time (s)';   
 xTime=Analysis.Parameters.PlotX;
 xtickvalues=linspace(xTime(1),xTime(2),5);
 labely1='Trial Number (licks)';
@@ -64,8 +64,8 @@ subplot(6,1,[1 2]); hold on;
 title(Title);
 plot(Analysis.(thistype).Licks.Events,Analysis.(thistype).Licks.Trials,'sk',...
     'MarkerSize',2,'MarkerFaceColor','k');
-plot([0 0],[0 maxtrial],'-r');
-plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Outcome(:,1),1:Analysis.(thistype).nTrials,'.r','MarkerSize',4);
+plot(Analysis.(thistype).Time.Cue(:,1),1:Analysis.(thistype).nTrials,'.m','MarkerSize',4);  
 ylabel(labely1);
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial+1],'YDir','reverse');
 % Lick AVG
@@ -94,8 +94,8 @@ set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',PlotY_photo(channelnb,:));
 subplot(6,1,[4 5]); hold on;
 yrasternidaq=1:Analysis.(thistype).nTrials;
 imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,PlotY_photo(channelnb,:));
-plot([0 0],[0 maxtrial],'-r');
-plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
+plot(Analysis.(thistype).Time.Outcome(:,1),1:Analysis.(thistype).nTrials,'.r','MarkerSize',4);
+plot(Analysis.(thistype).Time.Cue(:,1),1:Analysis.(thistype).nTrials,'.m','MarkerSize',4);  
 pos=get(gca,'pos');
 c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
 c.Label.String = labelyFluo;

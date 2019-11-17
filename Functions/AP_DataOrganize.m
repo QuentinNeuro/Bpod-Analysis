@@ -34,7 +34,7 @@ end
 for thisTrial=1:SessionData.nTrials
 try
     if Analysis.Filters.ignoredTrials(thisTrial)==1
-    [TimeToZero,thislick,thisPhoto,thisWheel]=AP_DataExtract(SessionData,Analysis,thisTrial);
+    [TimeToZero,thislick,thisPhoto,thisWheel,thisphase]=AP_DataExtract(SessionData,Analysis,thisTrial);
     i=Analysis.AllData.nTrials+1;
     Analysis.AllData.Session(i)=thisSession;
     Analysis.AllData.nTrials=i;
@@ -74,8 +74,15 @@ try
         Analysis.AllData.(thisChStruct).Raw(i,:)  	=thisPhoto{thisCh}(2,:);
         Analysis.AllData.(thisChStruct).DFF(i,:)  	=thisPhoto{thisCh}(3,:);
         Analysis.AllData.(thisChStruct).Baseline(i)	=mean(thisPhoto{thisCh}(2,BaselinePt(1):BaselinePt(2)));
-        Analysis.AllData.(thisChStruct).Cue(i)     	=max(thisPhoto{thisCh}(3,thisPhoto{thisCh}(1,:)>CueTime(1) & thisPhoto{thisCh}(1,:)<CueTime(2)));
-        Analysis.AllData.(thisChStruct).Outcome(i)	=max(thisPhoto{thisCh}(3,thisPhoto{thisCh}(1,:)>OutcomeTime(1) & thisPhoto{thisCh}(1,:)<OutcomeTime(2)));   
+        Analysis.AllData.(thisChStruct).Phase{i}    =thisphase;
+        switch Analysis.Parameters.CueStats
+            case 'AVG'; Analysis.AllData.(thisChStruct).Cue(i)     	=nanmean(thisPhoto{thisCh}(3,thisPhoto{thisCh}(1,:)>CueTime(1) & thisPhoto{thisCh}(1,:)<CueTime(2)));
+            case 'MAX'; Analysis.AllData.(thisChStruct).Cue(i)     	=max(thisPhoto{thisCh}(3,thisPhoto{thisCh}(1,:)>CueTime(1) & thisPhoto{thisCh}(1,:)<CueTime(2)));
+        end
+        switch Analysis.Parameters.OutcomeStats
+            case 'AVG'; Analysis.AllData.(thisChStruct).Outcome(i)	=nanmean(thisPhoto{thisCh}(3,thisPhoto{thisCh}(1,:)>OutcomeTime(1) & thisPhoto{thisCh}(1,:)<OutcomeTime(2)));   
+            case 'MAX'; Analysis.AllData.(thisChStruct).Outcome(i)	=max(thisPhoto{thisCh}(3,thisPhoto{thisCh}(1,:)>OutcomeTime(1) & thisPhoto{thisCh}(1,:)<OutcomeTime(2)));   
+        end      
         Analysis.AllData.(thisChStruct).CueZ(i)     =Analysis.AllData.(thisChStruct).Cue(i)...
                                 -nanmean(thisPhoto{thisCh}(3,thisPhoto{thisCh}(1,:)>CueTime(1)-0.2 & thisPhoto{thisCh}(1,:)<CueTime(1)-0.01));
         Analysis.AllData.(thisChStruct).OutcomeZ(i) =Analysis.AllData.(thisChStruct).Outcome(i)...

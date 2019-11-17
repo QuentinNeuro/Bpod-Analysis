@@ -75,20 +75,20 @@ if Analysis.(thistype).nTrials>0
         Analysis.(thistype).(thisChStruct).CueMax       =max(Analysis.(thistype).(thisChStruct).DFFAVG(Analysis.(thistype).(thisChStruct).Time(1,:)>CueTime(1) & Analysis.(thistype).(thisChStruct).Time(1,:)<CueTime(2)));
         Analysis.(thistype).(thisChStruct).OutcomeAVG   =nanmean(Analysis.(thistype).(thisChStruct).Outcome,2);
         Analysis.(thistype).(thisChStruct).OutcomeSEM   =nanstd(Analysis.(thistype).(thisChStruct).Outcome,0,2)/sqrt(Analysis.(thistype).nTrials);
-        Analysis.(thistype).(thisChStruct).OutcomeZAVG  =nanmean(Analysis.(thistype).(thisChStruct).OutcomeZ,2);
-        Analysis.(thistype).(thisChStruct).OutcomeZSEM  =nanstd(Analysis.(thistype).(thisChStruct).OutcomeZ,0,2)/sqrt(Analysis.(thistype).nTrials);
+         Analysis.(thistype).(thisChStruct).OutcomeZAVG  =nanmean(Analysis.(thistype).(thisChStruct).OutcomeZ,2);
+         Analysis.(thistype).(thisChStruct).OutcomeZSEM  =nanstd(Analysis.(thistype).(thisChStruct).OutcomeZ,0,2)/sqrt(Analysis.(thistype).nTrials);
         Analysis.(thistype).(thisChStruct).OutcomeMax   =max(Analysis.(thistype).(thisChStruct).DFFAVG(Analysis.(thistype).(thisChStruct).Time(1,:)>OutcomeTime(1) & Analysis.(thistype).(thisChStruct).Time(1,:)<OutcomeTime(2))); 
     % Fit
-        model=fitlm(Analysis.(thistype).(thisChStruct).OutcomeZ,Analysis.(thistype).(thisChStruct).CueZ);
-        Analysis.(thistype).(thisChStruct).Fit.XData=Analysis.(thistype).(thisChStruct).OutcomeZ;
-        Analysis.(thistype).(thisChStruct).Fit.YFit=model.Fitted;
-        Analysis.(thistype).(thisChStruct).Fit.Function=model.Coefficients.Estimate;
-        Analysis.(thistype).(thisChStruct).Fit.Rsquared=model.Rsquared.Ordinary;
-        Analysis.(thistype).(thisChStruct).Fit.Pvalue=model.Coefficients.pValue(2); 
+         model=fitlm(Analysis.(thistype).(thisChStruct).OutcomeZ,Analysis.(thistype).(thisChStruct).CueZ);
+         Analysis.(thistype).(thisChStruct).Fit.XData=Analysis.(thistype).(thisChStruct).OutcomeZ;
+         Analysis.(thistype).(thisChStruct).Fit.YFit=model.Fitted;
+         Analysis.(thistype).(thisChStruct).Fit.Function=model.Coefficients.Estimate;
+         Analysis.(thistype).(thisChStruct).Fit.Rsquared=model.Rsquared.Ordinary;
+         Analysis.(thistype).(thisChStruct).Fit.Pvalue=model.Coefficients.pValue(2); 
 	% Cumulatives
-        Analysis.(thistype).(thisChStruct).Cumul.Prob=(1:Analysis.(thistype).nTrials)/Analysis.(thistype).nTrials; 
-        Analysis.(thistype).(thisChStruct).Cumul.CueSort=sort(Analysis.(thistype).(thisChStruct).CueZ);
-        Analysis.(thistype).(thisChStruct).Cumul.OutcomeSort=sort(Analysis.(thistype).(thisChStruct).OutcomeZ);       
+         Analysis.(thistype).(thisChStruct).Cumul.Prob=(1:Analysis.(thistype).nTrials)/Analysis.(thistype).nTrials; 
+         Analysis.(thistype).(thisChStruct).Cumul.CueSort=sort(Analysis.(thistype).(thisChStruct).CueZ);
+         Analysis.(thistype).(thisChStruct).Cumul.OutcomeSort=sort(Analysis.(thistype).(thisChStruct).OutcomeZ);       
     end
 %% Wheel
     if Analysis.Parameters.Wheel==1

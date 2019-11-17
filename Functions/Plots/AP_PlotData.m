@@ -37,7 +37,7 @@ else
 end
 %% Axes
 % Automatic definition of axes
-maxtrial=0; maxrate=10;
+maxtrial=20; maxrate=10;
 for i=1:nbOfTrialTypes
     thistype=sprintf('type_%.0d',i);
     if Analysis.(thistype).nTrials~=0
@@ -72,8 +72,8 @@ if Analysis.(thistype).nTrials
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial+1],'YDir','reverse');
     plot(Analysis.(thistype).Licks.Events,Analysis.(thistype).Licks.Trials,'sk',...
         'MarkerSize',2,'MarkerFaceColor','k');
-    plot(Analysis.(thistype).Time.Outcome(:,1),1:Analysis.(thistype).nTrials,'.r');
-    plot(Analysis.(thistype).Time.Cue(:,1),1:Analysis.(thistype).nTrials,'.m');
+    plot(Analysis.(thistype).Time.Outcome(:,1),1:Analysis.(thistype).nTrials,'.r','MarkerSize',4);
+    plot(Analysis.(thistype).Time.Cue(:,1),1:Analysis.(thistype).nTrials,'.m','MarkerSize',4);  
 % Lick AVG
     subplot(nbOfPlotsY,nbOfPlotsX,thisplot+(2*nbOfPlotsX)); hold on;
     if thisplot==1
@@ -112,8 +112,8 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     end
     yrasternidaq=1:Analysis.(thistype).nTrials;
     imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,thisPlotY_photo(thisCh,:));
-    plot(Analysis.(thistype).Time.Outcome(:,1),1:Analysis.(thistype).nTrials,'.r');
-    plot(Analysis.(thistype).Time.Cue(:,1),1:Analysis.(thistype).nTrials,'.m');
+    plot(Analysis.(thistype).Time.Outcome(:,1),1:Analysis.(thistype).nTrials,'.r','MarkerSize',4);
+    plot(Analysis.(thistype).Time.Cue(:,1),1:Analysis.(thistype).nTrials,'.m','MarkerSize',4);
     if thisplot==nbOfTrialTypes
         pos=get(gca,'pos');
         c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);

@@ -15,4 +15,9 @@ handles.SpikesFigure=LauncherParam.SpikesFigure;
 handles.PlotX=LauncherParam.PlotX;
 handles.PlotY_photo=LauncherParam.PlotY_photo;
 
+%% Add missing parameter fields for old data
+if ~isfield(handles,'Zscore')
+    handles.Zscore=0;
+end
+
 end

@@ -30,6 +30,7 @@ Analysis=AP_Performance(Analysis,Group_Perf);
 end
 AP_Sensor_OnlineSummaryPlot(Analysis,0);
 saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name 'Online.png']);
+
 %% Sort and Plot Filtered Trials specified in AP_Filter_GroupToPlot.
 if Analysis.Parameters.PlotFiltersSummary || Analysis.Parameters.PlotFiltersSingle
 for i=1:size(Group_Plot,1)
@@ -53,17 +54,21 @@ for i=1:size(Group_Plot,1)
         end
         end
         clear thisFilter
-    end 
-    for thisCh=1:length(Analysis.Parameters.PhotoCh)
-        AP_PlotSummary_filter(Analysis,Title,MetaFilterGroup,thisCh);
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
-        if Analysis.Parameters.Illustrator
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
-        end
     end
+  %  for thisCh=1:length(Analysis.Parameters.PhotoCh)
+        AP_PlotSummary_filter(Analysis,Title,MetaFilterGroup);
+        phototitlelabel=[];
+        for thisCh=1:length(Analysis.Parameters.PhotoCh)
+            phototitlelabel=[phototitlelabel '_' Analysis.Parameters.PhotoChNames{thisCh}];
+        end
+        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title phototitlelabel '.png']);
+        if Analysis.Parameters.Illustrator
+        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title phototitlelabel],'epsc');
+        end
+  %  end
 end
 end
-%% Behavior Filters
+%% Correlations
 if Analysis.Parameters.PlotFiltersBehavior
 for i=1:size(Group_Corr,1)
     Title=Group_Corr{i,1};

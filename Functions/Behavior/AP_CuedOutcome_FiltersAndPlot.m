@@ -13,7 +13,7 @@ end
 % Licks
 Analysis=A_FilterLick(Analysis,'LicksCue','Cue',Analysis.Parameters.LicksCue);
 Analysis=A_FilterLick(Analysis,'LicksOutcome','Outcome',Analysis.Parameters.LicksOutcome);
-% Analysis=A_FilterFirstLick(Analysis,'FirstLick');
+Analysis=A_FilterFirstLick(Analysis,'FirstLick');
 % Wheel
 Analysis=A_FilterWheel(Analysis,'Run',Analysis.Parameters.WheelState,Analysis.Parameters.WheelThreshold);
 % Pupil
@@ -25,7 +25,11 @@ Analysis=A_FilterAfollowsB(Analysis,'Reward_After_Punish','Reward','Punish');
 
 %% Sort and Plot Filtered Trials specified in AP_Filter_GroupToPlot.
 [Group_Plot,Group_Corr,Group_Perf]=AP_CuedOutcome_GroupToPlot(Analysis);
+try
 Analysis=AP_Performance(Analysis,Group_Perf);
+catch
+    disp('Something is wrong with the performance index')
+end
 if Analysis.Parameters.PlotFiltersSummary || Analysis.Parameters.PlotFiltersSingle
 for i=1:size(Group_Plot,1)
     Title=Group_Plot{i,1};
@@ -49,13 +53,17 @@ for i=1:size(Group_Plot,1)
         end
         clear thisFilter
     end
-    for thisCh=1:length(Analysis.Parameters.PhotoCh)
-        AP_PlotSummary_filter(Analysis,Title,MetaFilterGroup,thisCh);
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
-        if Analysis.Parameters.Illustrator
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
+  %  for thisCh=1:length(Analysis.Parameters.PhotoCh)
+        AP_PlotSummary_filter(Analysis,Title,MetaFilterGroup);
+        phototitlelabel=[];
+        for thisCh=1:length(Analysis.Parameters.PhotoCh)
+            phototitlelabel=[phototitlelabel '_' Analysis.Parameters.PhotoChNames{thisCh}];
         end
-    end
+        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title phototitlelabel '.png']);
+        if Analysis.Parameters.Illustrator
+        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title phototitlelabel],'epsc');
+        end
+  %  end
 end
 end
 %% Correlations
@@ -98,15 +106,7 @@ end
 % TrialEvents
 if Analysis.Parameters.TE4CellBase
     CuedEvents=A_makeTrialEvents_CuedOutcome(Analysis);
-%     FileName=[Analysis.Parameters.Name '_CuedEvents.mat'];
-%     DirEvents=[pwd filesep 'Events' filesep];
-%     if isdir(DirEvents)==0
-%         mkdir(DirEvents);
-%     end
-%     DirFile=[DirEvents FileName];
-%     save(DirFile,'CuedEvents');
-%     clear CuedEvents
-save('CuedEvents','CuedEvents');
+    save('CuedEvents','CuedEvents');
 end
 
 % Figures

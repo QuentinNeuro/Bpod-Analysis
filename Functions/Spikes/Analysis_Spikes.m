@@ -5,7 +5,7 @@ function Analysis=Analysis_Spikes(Analysis,action,thistype,Filter)
 % and TT files
 
 Time_Tagging=[-0.2 0.3];
-Time_Behav=Analysis.Parameters.PlotEdges;
+Time_Behav=Analysis.Parameters.PlotX;
 BinSize=0.1;
 BinTT=Time_Behav(1):BinSize:Time_Behav(2);
 FileList=ls;
