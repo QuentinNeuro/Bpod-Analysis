@@ -11,12 +11,16 @@ catch
 end
 
 %% Behavior specific
+handles.TypeOfCue='na';
 if contains(Name,'Cued','IgnoreCase',true) && ~contains(Name,'Sensor','IgnoreCase',true)
     handles.Behavior='CuedOutcome';
     if isfield(SessionData.RawEvents.Trial{1,1}.States,'SoundDelivery')
         handles.StateOfCue='SoundDelivery';
     elseif isfield(SessionData.RawEvents.Trial{1,1}.States,'CueDelivery')
         handles.StateOfCue='CueDelivery';
+    end
+    if isfield(SessionData.TrialSettings(1),'Names')
+        handles.TypeOfCue=SessionData.TrialSettings(1).Names.Cue{SessionData.TrialSettings(1).GUI.CueType};
     end
     handles.StateOfOutcome='Outcome';
     handles.CueTimeReset=[0 1];

@@ -34,8 +34,9 @@ end
 for thisTrial=1:SessionData.nTrials
 try
     if Analysis.Filters.ignoredTrials(thisTrial)==1
-    [TimeToZero,thislick,thisPhoto,thisWheel,thisphase]=AP_DataExtract(SessionData,Analysis,thisTrial);
+    [TimeToZero,thislick,thisPhoto,thisWheel,thisphase,Raw]=AP_DataExtract(SessionData,Analysis,thisTrial);
     i=Analysis.AllData.nTrials+1;
+    Analysis.AllData.Raw{i}=Raw;
     Analysis.AllData.Session(i)=thisSession;
     Analysis.AllData.nTrials=i;
     Analysis.AllData.TrialNumbers(i)=i;
@@ -121,6 +122,8 @@ try
         Analysis.AllData.Pupil.NormBaseline(i)      =Pup.PupilSmoothBaselineNorm(thisTrial);
         Analysis.AllData.Pupil.Cue(i)               =nanmean(thisPupilDPP(thisPupTime>CueTime(1) & thisPupTime<CueTime(2)));
         Analysis.AllData.Pupil.Outcome(i)           =nanmean(thisPupilDPP(thisPupTime>OutcomeTime(1) & thisPupTime<OutcomeTime(2)));
+        Analysis.AllData.Raw{i}.PupilTime=Pup.Time;
+        Analysis.AllData.Raw{i}.Pupil=Pup.PupilSmooth(:,i);
     end
     else
         Analysis.AllData.IgnoredTrials=Analysis.AllData.IgnoredTrials+1;

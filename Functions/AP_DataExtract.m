@@ -1,4 +1,4 @@
-function [TimeToZero,LickData, Photo, Wheel, thisphase]=AP_DataExtract(SessionData,Analysis,thisTrial)
+function [TimeToZero,LickData, Photo, Wheel, thisphase, Raw]=AP_DataExtract(SessionData,Analysis,thisTrial)
 %AP_DataExtract extracts licks timestamp, raw and normalized photometry value together with
 %a time array of the trial 'thistrial' from the 'sessiondata' file. This
 %function is using the parameters contained in the 'Analysis' structure
@@ -17,7 +17,7 @@ try
 catch
     LickData=NaN;  
 end
-
+Raw.Lick=LickData;
 %% FirstLick
 if Analysis.Parameters.ZeroFirstLick
     LicksDuringZeroState  =LickData(LickData> TimeToZero & LickData < TimeToZero+1);
@@ -65,7 +65,7 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
         end
     else        % no modulation of this channel for this trial
         thisData=decimate(SessionData.NidaqData{1,thisTrial}(:,1),DecimateFactor);
-    end 
+    end
 % Reshape if Variable time before 'zero' or ZeroAtFirstLick
 if Analysis.Parameters.TimeReshaping
 	[Time,Data]=AP_TimeReshaping(Analysis,Time,thisData,SRDecimated,Analysis.Parameters.ReshapedTime);
@@ -92,6 +92,7 @@ end
     Photo{thisCh}(1,:)=Time;
     Photo{thisCh}(2,:)=Data;
     Photo{thisCh}(3,:)=DFF;
+    Raw.Photometry{thisCh}=thisData;
 end  
     else
         Photo=[];
@@ -113,7 +114,7 @@ signedThreshold = 2^(Analysis.Parameters.WheelCounterNbits-1);
 signedData(signedData > signedThreshold) = signedData(signedData > signedThreshold) - 2^Analysis.Parameters.WheelCounterNbits;
 DataDeg  = signedData * 360/Analysis.Parameters.WheelEncoderCPR;
 DataDeg  = decimate(DataDeg,DecimateFactor);
-
+Raw.Wheel=DataDeg;
 % Reshape if Variable ITI before 'zero' or ZeroAtFirstLick
 if Analysis.Parameters.TimeReshaping
 	[Time,DataWheel]=AP_TimeReshaping(Analysis,Time,DataDeg,SRDecimated,Analysis.Parameters.ReshapedTime);
@@ -124,10 +125,8 @@ else % Make sure Data are the correct size
         DataWheel(1:length(DataDeg))=DataDeg;
     end  
 end
-
 % Deg to Distance
 DataWheelDistance=DataWheel.*(Analysis.Parameters.WheelPolarity*Analysis.Parameters.WheelDiameter*pi/360);
-
 % Output
 Wheel(1,:)=Time;
 Wheel(2,:)=DataWheel;

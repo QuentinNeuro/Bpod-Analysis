@@ -1,5 +1,5 @@
 %% Parameters
-nboftrials=100;
+nboftrials=20;
 IndTrialFit=0;
 opol = 6;
 colors='br';
@@ -14,7 +14,7 @@ thisNaN=~isnan(thisData);
 AllData=thisData(thisNaN);
 %% concat
 for thistrial=2:nboftrials
-   thisData=Analysis.AllData.(thisChStruct).DFF(thistrial,:);
+   thisData=Analysis.type_5.(thisChStruct).DFF(thistrial,:);
    thisNaN=~isnan(thisData);
    thisData=thisData(thisNaN);
    if IndTrialFit

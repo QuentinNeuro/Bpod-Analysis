@@ -18,7 +18,7 @@ PlotY_photo=Analysis.Parameters.PlotY_photo;
 TempLgd={'TA','TB'};
 %% Figure
 scrsz = get(groot,'ScreenSize');
-FigureLegend=sprintf('%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig);
+FigureLegend=sprintf('%s_%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig,Analysis.Parameters.TypeOfCue);
 figure('Name',FigTitle,'Position', [200 100 1200 700], 'numbertitle','off');
 LgdFig=uicontrol('style','text');
 set(LgdFig,'String',FigureLegend,'Position',[10,5,500,20]); 

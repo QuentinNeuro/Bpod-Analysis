@@ -16,7 +16,7 @@
 % Designed by Quentin 2017
 
 %% Parameters
-Batch=1;
+Batch=0;
 
 %% Folder management and run the script
 warning('off','all')

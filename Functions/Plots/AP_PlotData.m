@@ -54,7 +54,7 @@ end
 PlotY_photo=Analysis.Parameters.PlotY_photo;
 
 %% Plot
-FigureLegend=sprintf('%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig);
+FigureLegend=sprintf('%s_%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig,Analysis.Parameters.TypeOfCue);
 figure('Name',FigTitle,'Position', [200 100 1200 700], 'numbertitle','off');
 Legend=uicontrol('style','text');
 set(Legend,'String',FigureLegend,'Position',[10,5,500,20]); 

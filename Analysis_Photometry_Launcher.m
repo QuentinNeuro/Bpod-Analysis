@@ -42,21 +42,22 @@ LauncherParam.ReshapedTime=[-4 4];
 LauncherParam.PupilThreshold=1;
 LauncherParam.WheelThreshold=5;             	%Speed cm/s
 LauncherParam.LicksCue=2;
-LauncherParam.LicksOutcome=1;
+LauncherParam.LicksOutcome=2;
 LauncherParam.TrialToFilterOut=[];
 LauncherParam.LoadIgnoredTrials=1;
 %% Parameters being used if cannot be extracted from the bpod file
 LauncherParam.Name='VIP';
 LauncherParam.Rig='Unknown';
 LauncherParam.Behavior='CuedOutcome';
-LauncherParam.PhotoChNames={'470-A1L' '405-A1' '470-mPFC'};%{'470-A1L' '405-A1' '470-A1R'};{'470-A1' '405-A1' '470-mPFC'}
+LauncherParam.CueType='Chirp';
+LauncherParam.PhotoChNames={'470-A1' '405-A1' '470-mPFC'};%{'470-A1L' '405-A1' '470-A1R'};{'470-A1' '405-A1' '470-mPFC'}
 LauncherParam.Phase='RewardA';
 LauncherParam.TrialNames={'T1','T2','T3','T4','T5','T6','T7','T8','T9','T10'};
 LauncherParam.LickPort='Port1In';
-LauncherParam.StateOfCue='Cue';
-LauncherParam.StateOfOutcome='Outcome';
+LauncherParam.StateOfCue='Outcome';
+LauncherParam.StateOfOutcome='Outcome2';
 LauncherParam.TimeReshaping=1;          % overwrite preloaded parameters; 0 or 1;
-LauncherParam.CueTimeReset=[0 2];       % overwrite preloaded parameters
+LauncherParam.CueTimeReset=[];       % overwrite preloaded parameters
 LauncherParam.OutcomeTimeReset=[];      % overwrite preloaded parameters
 LauncherParam.NidaqBaseline=[];         % overwrite preloaded parameters
 % Photometry - being used if cannot find the parameters in the bpod file
