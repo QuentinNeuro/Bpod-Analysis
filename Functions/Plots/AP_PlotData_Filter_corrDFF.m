@@ -18,10 +18,9 @@ PlotY_photo=Analysis.Parameters.PlotY_photo;
 TempLgd={'TA','TB'};
 %% Figure
 scrsz = get(groot,'ScreenSize');
-FigureLegend=sprintf('%s_%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig,Analysis.Parameters.TypeOfCue);
 figure('Name',FigTitle,'Position', [200 100 1200 700], 'numbertitle','off');
-LgdFig=uicontrol('style','text');
-set(LgdFig,'String',FigureLegend,'Position',[10,5,500,20]); 
+Legend=uicontrol('style','text');
+set(Legend,'String',Analysis.Parameters.Legend,'Position',[10,5,500,20]); 
 
 %% row 1 DFF
 % Time
@@ -51,12 +50,10 @@ set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
 % Correlation
 subplot(4,5,3); hold on;
 title('Correlations');
-x=Analysis.(thistype).(thisChStruct).OutcomeZ; y=Analysis.(thistype).(thisChStruct).CueZ;
-model=fitlm(x,y);
-plot(x,model.Fitted,'-r');
-plot(x,y,'ok','markerSize',5);
-thisleg{1}=sprintf('y=%.1f*x+%.1f',model.Coefficients.Estimate(2),model.Coefficients.Estimate(1));
-thisleg{2}=sprintf('R2=%.2f p-val=%.2d',model.Rsquared.Ordinary,model.Coefficients.pValue(2));
+plot(Analysis.(thistype).(thisChStruct).OutcomeStat,Analysis.(thistype).(thisChStruct).Fit.YFit,'-r');
+plot(Analysis.(thistype).(thisChStruct).OutcomeStat,Analysis.(thistype).(thisChStruct).CueStat,'ok','markerSize',5);
+thisleg{1}=sprintf('y=%.1f*x+%.1f',Analysis.(thistype).(thisChStruct).Fit.Function(2),Analysis.(thistype).(thisChStruct).Fit.Function(1));
+thisleg{2}=sprintf('R2=%.2f p-val=%.2d',Analysis.(thistype).(thisChStruct).Fit.Rsquared,Analysis.(thistype).(thisChStruct).Fit.Pvalue);
 lgd=legend(TempLgd,'Location','northeast','FontSize',8);
 anno=annotation('textbox',lgd.Position,'String',thisleg,'FitBoxToText','on');
 anno.Color='red'; legend('off');
@@ -85,7 +82,7 @@ set(gca,'XLim',xTime,'XTick',xtickvalues);
 % Correlations
 subplot(4,5,8); hold on;
 title('Outcome Fluo vs Cue');
-x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).Licks.Cue;
+x=Analysis.(thistype).(thisChStruct).OutcomeStat;y=Analysis.(thistype).Licks.Cue;
 model=fitlm(x,y);
 plot(x,model.Fitted,'-r');
 plot(x,y,'ok','markerSize',5);
@@ -99,7 +96,7 @@ axis tight
 
 subplot(4,5,9); hold on;
 title('Cue Fluo vs Cue');
-x=Analysis.(thistype).(thisChStruct).CueZ;y=Analysis.(thistype).Licks.Cue;
+x=Analysis.(thistype).(thisChStruct).CueStat;y=Analysis.(thistype).Licks.Cue;
 model=fitlm(x,y);
 plot(x,model.Fitted,'-r');
 plot(x,y,'ok','markerSize',5);
@@ -113,7 +110,7 @@ axis tight
 
 subplot(4,5,10); hold on;
 title('Outcome Fluo vs Outcome');
-x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).Licks.Outcome;
+x=Analysis.(thistype).(thisChStruct).OutcomeStat;y=Analysis.(thistype).Licks.Outcome;
 model=fitlm(x,y);
 plot(x,model.Fitted,'-r');
 plot(x,y,'ok','markerSize',5);
@@ -129,7 +126,7 @@ axis tight
 if Analysis.Parameters.Wheel
 % Time
 subplot(4,5,12); hold on;
-shadedErrorBar(Analysis.(thistype).Wheel.Time(1,:),Analysis.(thistype).Wheel.DistanceAVG,Analysis.(thistype).Wheel.DistanceSEM,'-k',0);
+shadedErrorBar(Analysis.(thistype).Time.Wheel,Analysis.(thistype).Wheel.DistanceAVG,Analysis.(thistype).Wheel.DistanceSEM,'-k',0);
 axis tight;
 thisYLimRun=get(gca,'YLim');
 plot(Analysis.(thistype).Time.Cue(1,:)+Analysis.Parameters.CueTimeReset,[thisYLimRun(2) thisYLimRun(2)],'-b','LineWidth',2);
@@ -140,7 +137,7 @@ set(gca,'XLim',xTime,'XTick',xtickvalues);
       
 % Raster
 subplot(4,5,11); hold on;
-imagesc(Analysis.(thistype).Wheel.Time(1,:),yraster,Analysis.(thistype).Wheel.Distance,thisYLimRun);
+imagesc(Analysis.(thistype).Time.Wheel,yraster,Analysis.(thistype).Wheel.Distance,thisYLimRun);
 plot([0 0],[0 maxtrial],'-r');
 plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
 pos=get(gca,'pos');
@@ -150,7 +147,7 @@ set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
 
 % Correlation
 subplot(4,5,13); hold on;
-x=Analysis.(thistype).(thisChStruct).OutcomeZ; y=Analysis.(thistype).Wheel.Cue;
+x=Analysis.(thistype).(thisChStruct).OutcomeStat; y=Analysis.(thistype).Wheel.Cue;
 model=fitlm(x,y);
 plot(x,model.Fitted,'-r');
 plot(x,y,'ok','markerSize',5);
@@ -163,7 +160,7 @@ xlabel('Outcome DF/Fo (%)'); ylabel('Cue Run (cm/sec)');
 axis tight
 
 subplot(4,5,14); hold on;
-x=Analysis.(thistype).(thisChStruct).CueZ;y=Analysis.(thistype).Wheel.Cue;
+x=Analysis.(thistype).(thisChStruct).CueStat;y=Analysis.(thistype).Wheel.Cue;
 model=fitlm(x,y);
 plot(x,model.Fitted,'-r');
 plot(x,y,'ok','markerSize',5);
@@ -176,7 +173,7 @@ xlabel('Cue DF/Fo (%)'); ylabel('Cue Run (cm/sec)');
 axis tight
 
 subplot(4,5,15); hold on;
-x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).Wheel.Outcome;
+x=Analysis.(thistype).(thisChStruct).OutcomeStat;y=Analysis.(thistype).Wheel.Outcome;
 model=fitlm(x,y);
 plot(x,model.Fitted,'-r');
 plot(x,y,'ok','markerSize',5);
@@ -192,7 +189,7 @@ end
 if Analysis.Parameters.Pupillometry
 % Time
 subplot(4,5,17); hold on;
-shadedErrorBar(Analysis.(thistype).Pupil.Time(1,:),Analysis.(thistype).Pupil.PupilAVG,Analysis.(thistype).Pupil.PupilSEM,'-k',0);
+shadedErrorBar(Analysis.(thistype).Time.Pupil,Analysis.(thistype).Pupil.PupilAVG,Analysis.(thistype).Pupil.PupilSEM,'-k',0);
 axis tight;
 thisYLimPup=get(gca,'YLim');
 plot(Analysis.(thistype).Time.Cue(1,:)+Analysis.Parameters.CueTimeReset,[thisYLimPup(2) thisYLimPup(2)],'-b','LineWidth',2);
@@ -202,7 +199,7 @@ xlabel(labelx); ylabel('DP/Po)');
 set(gca,'XLim',xTime,'XTick',xtickvalues);
 % Raster
 subplot(4,5,16); hold on;
-imagesc(Analysis.(thistype).Pupil.Time(1,:),yraster,Analysis.(thistype).Pupil.PupilDPP,thisYLimPup);
+imagesc(Analysis.(thistype).Time.Pupil,yraster,Analysis.(thistype).Pupil.PupilDPP,thisYLimPup);
 plot([0 0],[0 maxtrial],'-r');
 plot(Analysis.(thistype).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
 pos=get(gca,'pos');
@@ -211,7 +208,7 @@ xlabel(labelx);ylabel('DP/Po');
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
 % Correlations
 subplot(4,5,18); hold on;
-x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).Pupil.Cue;
+x=Analysis.(thistype).(thisChStruct).OutcomeStat;y=Analysis.(thistype).Pupil.Cue;
 model=fitlm(x,y);
 plot(x,model.Fitted,'-r');
 plot(x,y,'ok','markerSize',5);
@@ -224,7 +221,7 @@ xlabel('Outcome DF/Fo (%)'); ylabel('Cue Pupil (%)');
 axis tight
 
 subplot(4,5,19); hold on;
-x=Analysis.(thistype).(thisChStruct).CueZ;y=Analysis.(thistype).Pupil.Cue;
+x=Analysis.(thistype).(thisChStruct).CueStat;y=Analysis.(thistype).Pupil.Cue;
 model=fitlm(x,y);
 plot(x,model.Fitted,'-r');
 plot(x,y,'ok','markerSize',5);

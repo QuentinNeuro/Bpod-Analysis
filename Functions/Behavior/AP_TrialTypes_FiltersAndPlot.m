@@ -23,7 +23,7 @@ if Analysis.Parameters.PlotSummary1==1
     for thisCh=1:length(Analysis.Parameters.PhotoCh)
         phototitlelabel=[phototitlelabel '_' Analysis.Parameters.PhotoChNames{thisCh}];
     end
-    saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_AllData' phototitlelabel '.png']);
+    saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend '_AllData' phototitlelabel '.png']);
 end
 
 %% Summary Plot 2 (Only if Photometry)
@@ -31,9 +31,9 @@ if Analysis.Parameters.Photometry
     if Analysis.Parameters.PlotSummary2==1
         for thisCh=1:length(Analysis.Parameters.PhotoCh)
         AP_PlotSummary(Analysis,thisCh,'Cue A','Cue B','Reward','Punish');
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_Summary' char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
+        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend '_Summary' char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
         if Analysis.Parameters.Illustrator
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_Summary' char(Analysis.Parameters.PhotoChNames{thisCh}) ],'epsc');
+        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend '_Summary' char(Analysis.Parameters.PhotoChNames{thisCh}) ],'epsc');
         end
         end
     end

@@ -1,4 +1,4 @@
-function [handles,DefaultParam]=AP_Parameters(SessionData,Pup,DefaultParam,Name)
+function Par=AP_Parameters(SessionData,Pup,LP,Name,Par)
 % Function to extract the parameters used in the recording
 % Uses : AP_Parameters_Behavior to detect the task being performed
 %        AP_Parameters_Photometry to detect the parameters for the
@@ -6,142 +6,92 @@ function [handles,DefaultParam]=AP_Parameters(SessionData,Pup,DefaultParam,Name)
 % Used by Analysis_Photometry
 
 %% Nidaq Fields
-handles.WheelField='NidaqWheelData';
-handles.PhotometryField='NidaqData';
-handles.Photometry2Field='Nidaq2Data';
+Par.WheelField='NidaqWheelData';
+Par.PhotometryField='NidaqData';
+Par.Photometry2Field='Nidaq2Data';
+
+%% Parameters from Launcher
+FieldsLP_P=fieldnames(LP.P);
+for thisField=1:size(FieldsLP_P,1)
+    Par.(FieldsLP_P{thisField})=LP.P.(FieldsLP_P{thisField});
+end
 
 %% General
 % Animal Name
 USindex=strfind(Name,'_');
-if isempty(USindex)==0
-    handles.Animal=Name(1:USindex(1)-1);
+if ~isempty(USindex)
+    Par.Animal=Name(1:USindex(1)-1);
 else
-    handles.Animal=DefaultParam.Name;
+    Par.Animal=LP.D.Name; % Default
 end
-switch DefaultParam.Analysis_type
+switch LP.Analysis_type
     case 'Group'
-handles.Name=handles.Animal;
+Par.Name=Par.Animal;
     otherwise
-handles.Name=Name;
+Par.Name=Name;
 end
 % Rig Name
 try
-    handles.Rig=SessionData.TrialSettings(1).Names.Rig;
+    Par.Rig=SessionData.TrialSettings(1).Names.Rig;
 catch
-    handles.Rig=DefaultParam.Rig;
+    Par.Rig=LP.D.Rig; %Default
 end
-% Plots
-handles.PlotSummary1=DefaultParam.PlotSummary1;
-handles.PlotSummary2=DefaultParam.PlotSummary2;
-handles.PlotFiltersSingle=DefaultParam.PlotFiltersSingle;
-handles.PlotFiltersSummary=DefaultParam.PlotFiltersSummary; 
-handles.PlotFiltersBehavior=DefaultParam.PlotFiltersBehavior;
-handles.Illustrator=DefaultParam.Illustrator;
-handles.Transparency=DefaultParam.Transparency;
-handles.TE4CellBase=DefaultParam.TrialEvents4CellBase;
-handles.SpikesAnalysis=DefaultParam.SpikesAnalysis;
-handles.SpikesFigure=DefaultParam.SpikesFigure;
-
+% File
+if ~isfield(Par,'Files')
+    Par.Files=Name;
+else
+    Par.Files{end+1}=Name;
+end
 %% Behavior specific : Plots, States and Timing
-handles=AP_Parameters_Behavior(handles,SessionData,DefaultParam,Name);
-% Trial types and Names
-handles.nTrials=SessionData.nTrials;
-handles.nbOfTrialTypes=max(SessionData.TrialTypes);
-if isfield(SessionData.TrialSettings(1),'TrialsNames')
-    handles.TrialNames=SessionData.TrialSettings(1).TrialsNames;
-else
-if isfield(SessionData.TrialSettings(1),'TirlasNames')
-    handles.TrialNames=SessionData.TrialSettings(1).TirlasNames;
-else
-    handles.TrialNames=DefaultParam.TrialNames;
-end
-end
-%% Timing
-handles.StateToZero     =handles.(DefaultParam.StateToZero);
-handles.ZeroFirstLick   =DefaultParam.ZeroFirstLick;
-handles.ReshapedTime    =DefaultParam.ReshapedTime;
-% Overwritting
-if ~isempty(DefaultParam.CueTimeReset)
-handles.CueTimeReset    =DefaultParam.CueTimeReset;
-end
-if ~isempty(DefaultParam.OutcomeTimeReset)
-    handles.OutcomeTimeReset=DefaultParam.OutcomeTimeReset;
-end
-if ~isempty(DefaultParam.NidaqBaseline)
-    handles.NidaqBaseline=DefaultParam.NidaqBaseline;
-end
-
+Par=AP_Parameters_Behavior(Par,SessionData,LP,Name);
+Par.StateToZero     =Par.(LP.P.StateToZero);
 %% Licks
 if isfield(SessionData.RawEvents.Trial{1, 1}.Events,'Port1In')
-    handles.LickPort='Port1In';
+    Par.LickPort='Port1In';
 elseif isfield(SessionData.RawEvents.Trial{1, 1}.Events,'Port2In')
-    handles.LickPort='Port2In';
+    Par.LickPort='Port2In';
 else
-    handles.LickPort=DefaultParam.LickPort;
+    Par.LickPort=LP.D.LickPort; %Default
 end
-handles.LicksCue=DefaultParam.LicksCue;
-handles.LicksOutcome=DefaultParam.LicksOutcome;
-handles.LickEdges=DefaultParam.PlotX;
-handles.Bin=0.25;
+Par.LickEdges=LP.P.PlotX;
+Par.Bin=0.25;
 
 %% DAQ parameters and plotting
-% Plots
-handles.PlotX=DefaultParam.PlotX;
-handles.PlotY_photo=DefaultParam.PlotY_photo;
 % Processing
 if isfield(SessionData.TrialSettings(1).GUI,'NidaqSamplingRate')
-    handles.NidaqSamplingRate=SessionData.TrialSettings(1).GUI.NidaqSamplingRate;
+    Par.NidaqSamplingRate=SessionData.TrialSettings(1).GUI.NidaqSamplingRate;
 else
-    handles.NidaqSamplingRate=DefaultParam.SamplingRate;
+    Par.NidaqSamplingRate=LP.D.SamplingRate; % Default
 end
-handles.NidaqDecimatedSR=DefaultParam.NewSamplingRate;
-handles.NidaqDecimateFactor=ceil(handles.NidaqSamplingRate/handles.NidaqDecimatedSR);
-switch DefaultParam.Analysis_type
-    case 'Group'
-handles.NidaqDuration=DefaultParam.NidaqDuration;
-    otherwise
-if isfield(SessionData.TrialSettings(1).GUI,'NidaqDuration')
-	handles.NidaqDuration=SessionData.TrialSettings(1).GUI.NidaqDuration;
-else
-    handles.NidaqDuration=DefaultParam.NidaqDuration;
-end
-end
-% Baseline Points
-handles.NidaqBaselinePoints=handles.NidaqBaseline*handles.NidaqDecimatedSR;
-if handles.NidaqBaselinePoints(1)==0
-    handles.NidaqBaselinePoints(1)=1;
-end
-handles.ZeroAtZero=DefaultParam.ZeroAtZero;
+Par.NidaqDecimateFactor=ceil(Par.NidaqSamplingRate/Par.NidaqDecimatedSR);
 %% Photometry
-handles=AP_Parameters_Photometry(handles,SessionData,DefaultParam);
+Par=AP_Parameters_Photometry(Par,SessionData,LP);
 %% Wheel 
-handles.Wheel=0;
-handles.WheelCounterNbits=32;
-handles.WheelEncoderCPR=1024;
-handles.WheelThreshold=DefaultParam.WheelThreshold;
-handles.WheelState=DefaultParam.WheelState;
-handles.WheelDiameter=14; %cm
-if isfield(SessionData,handles.WheelField)
-    handles.Wheel=1;
+Par.Wheel=0;
+Par.WheelCounterNbits=32;
+Par.WheelEncoderCPR=1024;
+Par.WheelDiameter=14; %cm
+if isfield(SessionData,Par.WheelField)
+    Par.Wheel=1;
 end
-switch handles.Rig
+switch Par.Rig
     case 'Photometry5'
-        handles.WheelPolarity=1;
+        Par.WheelPolarity=1;
     otherwise
-        handles.WheelPolarity=-1;
+        Par.WheelPolarity=-1;
 end
 %% Pupillometry
-handles.Pupillometry=0;
-handles.PupilThreshold=DefaultParam.PupilThreshold;
-handles.PupilState=DefaultParam.PupilState;
-if ~isempty(Pup)
-    if handles.nTrials==Pup.Parameters.nTrials
-                handles.Pupillometry=1;
-                handles.Pupillometry_Parameters=Pup.Parameters;    
-    else
-        disp('not the same number of trials analyzed for Bpod and for pupillometry');
-        handles.Pupillometry=0;
+Par=AP_Parameters_Pupillometry(Par,Pup,SessionData);
+%% Overwritting
+FieldsLP_OW=fieldnames(LP.OW);
+for thisField=1:size(FieldsLP_OW,1)
+    if ~isempty(LP.OW.(FieldsLP_OW{thisField})) || ~isfield(Par,FieldsLP_OW{thisField})
+    Par.(FieldsLP_OW{thisField})=LP.OW.(FieldsLP_OW{thisField});
     end
-    handles.nTrials=SessionData.nTrials;
+end
+%
+Par.NidaqBaselinePoints=Par.NidaqBaseline*Par.NidaqDecimatedSR;
+if Par.NidaqBaselinePoints(1)==0
+    Par.NidaqBaselinePoints(1)=1;
 end
 end  

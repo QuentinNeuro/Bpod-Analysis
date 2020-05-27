@@ -5,8 +5,18 @@ function Analysis=A_FilterPupil(Analysis,FilterName,State,threshold)
 % Generates an additional inverted filter.
 %
 % Function designed by Quentin 2017 for Analysis_Photometry
-%% Parameters
 
+%% Check
+checkExist=FilterName;
+if isfield(Analysis.Filters,checkExist)
+    disp(['Filter ' checkExist ' already generated']);
+return
+end
+if ~Analysis.Parameters.Pupillometry
+    disp('Unable to generate pupillometry based filters');
+    return
+end
+%% Parameters
 switch nargin
     case 1
         FilterName='Pupil';
@@ -16,20 +26,15 @@ switch nargin
         State=Analysis.Parameters.PupilState;
         threshold=Analysis.Parameters.PupilThreshold;
 end
-
-% Name
-FilterNb=length(Analysis.Filters.Names);
-Analysis.Filters.Names{FilterNb+1}=FilterName;
-Analysis.Filters.Names{FilterNb+2}=[FilterName 'Inv'];
-% Filter
-Logicals=false(Analysis.AllData.nTrials,1);
-
+PupillometryFilter=Analysis.Filters.Pupillometry;
 %% Filter
-if Analysis.Parameters.Pupillometry==1
-    Logicals(Analysis.AllData.Pupil.(State)>threshold)=true;
-    LogicalsInv=~Logicals;
-else
-    LogicalsInv=Logicals;
-end
-Analysis.Filters.Logicals=[Analysis.Filters.Logicals Logicals LogicalsInv];
+Logicals=false(Analysis.AllData.nTrials,1);
+Logicals(Analysis.AllData.Pupil.(State)>threshold)=true;
+
+Logicals=Logicals.*PupillometryFilter;
+LogicalsInv=(~Logicals).*PupillometryFilter;
+
+%% Save
+Analysis.Filters.(FilterName)=Logicals;
+Analysis.Filters.([FilterName 'Inv'])=LogicalsInv;
 end

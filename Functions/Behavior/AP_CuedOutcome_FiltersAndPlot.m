@@ -8,14 +8,13 @@ function Analysis=AP_CuedOutcome_FiltersAndPlot(Analysis)
 % Groups
 FilterNames={'Cue A','Cue B','Uncued','Reward','Punish','Omission','Cue C'};
 for i=1:length(FilterNames)
-    Analysis=A_FilterName(Analysis,FilterNames{i});
+    Analysis=A_FilterTrialName(Analysis,FilterNames{i});
 end
 % Licks
 Analysis=A_FilterLick(Analysis,'LicksCue','Cue',Analysis.Parameters.LicksCue);
 Analysis=A_FilterLick(Analysis,'LicksOutcome','Outcome',Analysis.Parameters.LicksOutcome);
-Analysis=A_FilterFirstLick(Analysis,'FirstLick');
 % Wheel
-Analysis=A_FilterWheel(Analysis,'Run',Analysis.Parameters.WheelState,Analysis.Parameters.WheelThreshold);
+Analysis=A_FilterRunning(Analysis,'Run',Analysis.Parameters.WheelState,Analysis.Parameters.WheelThreshold);
 % Pupil
 Analysis=A_FilterPupil(Analysis,'Pupil',Analysis.Parameters.PupilState,Analysis.Parameters.PupilThreshold);
 Analysis=A_FilterPupil(Analysis,'CuePupil','Cue',2);
@@ -44,9 +43,9 @@ for i=1:size(Group_Plot,1)
         if Analysis.Parameters.PlotFiltersSingle && Analysis.(MetaFilter).nTrials>0
             for thisCh=1:length(Analysis.Parameters.PhotoCh)
                 AP_PlotData_filter(Analysis,MetaFilter,thisCh);
-                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name MetaFilter char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
+                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend MetaFilter char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
                 if Analysis.Parameters.Illustrator
-                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name MetaFilter char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
+                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend MetaFilter char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
                 end
             end
         end
@@ -59,9 +58,9 @@ for i=1:size(Group_Plot,1)
         for thisCh=1:length(Analysis.Parameters.PhotoCh)
             phototitlelabel=[phototitlelabel '_' Analysis.Parameters.PhotoChNames{thisCh}];
         end
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title phototitlelabel '.png']);
+        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend Title phototitlelabel '.png']);
         if Analysis.Parameters.Illustrator
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title phototitlelabel],'epsc');
+        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend Title phototitlelabel],'epsc');
         end
   %  end
 end
@@ -81,9 +80,9 @@ for i=1:size(Group_Corr,1)
         if Analysis.(MetaFilter).nTrials
             for thisCh=1:length(Analysis.Parameters.PhotoCh)
                 AP_PlotData_Filter_corrDFF(Analysis,MetaFilter,thisCh);
-                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name MetaFilter char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
+                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend MetaFilter char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
                 if Analysis.Parameters.Illustrator
-                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name MetaFilter char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
+                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend MetaFilter char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
                 end
             end
         end
@@ -93,9 +92,9 @@ for i=1:size(Group_Corr,1)
     if Analysis.Parameters.Photometry
     for thisCh=1:length(Analysis.Parameters.PhotoCh)
         AP_PlotSummary_Filter_corrDFF(Analysis,Title,MetaFilterGroup,thisCh);
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
+        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend Title char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
         if Analysis.Parameters.Illustrator
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name Title char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
+        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend Title char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
         end
     end
     end

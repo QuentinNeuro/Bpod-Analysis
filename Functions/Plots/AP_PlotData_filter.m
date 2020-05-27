@@ -54,10 +54,9 @@ PlotY_photo=Analysis.Parameters.PlotY_photo;
 
 %% Plot
 scrsz = get(groot,'ScreenSize');
-FigureLegend=sprintf('%s_%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig,Analysis.Parameters.TypeOfCue);
 figure('Name',FigTitle,'Position', [25 25 scrsz(3)/4 scrsz(4)-150], 'numbertitle','off');
 Legend=uicontrol('style','text');
-set(Legend,'String',FigureLegend,'Position',[10,5,500,20]); 
+set(Legend,'String',Analysis.Parameters.Legend,'Position',[10,5,500,20]); 
 
 % Lick Raster
 subplot(6,1,[1 2]); hold on;

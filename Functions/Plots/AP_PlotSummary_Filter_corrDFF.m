@@ -15,10 +15,9 @@ transparency=Analysis.Parameters.Transparency;
 
 %% Figure
 scrsz = get(groot,'ScreenSize');
-FigureLegend=sprintf('%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig);
 figure('Name',FigTitle,'Position', [200 100 1200 700], 'numbertitle','off');
 Legend=uicontrol('style','text');
-set(Legend,'String',FigureLegend,'Position',[10,5,500,20]); 
+set(Legend,'String',Analysis.Parameters.Legend,'Position',[10,5,500,20]); 
 
 plotIndex=[1 6 NaN NaN];
 %% Group plot
@@ -32,10 +31,8 @@ if Analysis.(thistype).nTrials~=0
     shadedErrorBar(Analysis.(thistype).(thisChStruct).Time(1,:),Analysis.(thistype).(thisChStruct).DFFAVG,Analysis.(thistype).(thisChStruct).DFFSEM,['-' color4plot{k}],transparency);
     xlabel(labelx); ylabel('DF/Fo(%)');
     subplot(4,5,2); hold on;
-    x=Analysis.(thistype).(thisChStruct).OutcomeZ; y=Analysis.(thistype).(thisChStruct).CueZ;
-    model=fitlm(x,y);
-    plot(x,y,'o','markerSize',5,'MarkerEdgeColor',color4plot{k});
-    plot(x,model.Fitted,['-' color4plot{k}]);
+    plot(Analysis.(thistype).(thisChStruct).OutcomeStat,Analysis.(thistype).(thisChStruct).CueStat,'o','markerSize',5,'MarkerEdgeColor',color4plot{k});
+    plot(Analysis.(thistype).(thisChStruct).OutcomeStat,Analysis.(thistype).(thisChStruct).Fit.YFit,['-' color4plot{k}]);
     xlabel('Outcome DF/Fo (%)'); ylabel('Cue DF/Fo (%)');
     axis tight
     subplot(4,5,3); hold on;
@@ -57,7 +54,7 @@ if Analysis.(thistype).nTrials~=0
 	xlabel(labelx); ylabel('Licks (Hz)');
     subplot(4,5,7); hold on;
     title('Outcome Fluo vs Cue');
-    x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).Licks.Cue;
+    x=Analysis.(thistype).(thisChStruct).OutcomeStat;y=Analysis.(thistype).Licks.Cue;
     model=fitlm(x,y);
     plot(x,y,'o','markerSize',5,'MarkerEdgeColor',color4plot{k});
     plot(x,model.Fitted,['-' color4plot{k}]);
@@ -66,7 +63,7 @@ if Analysis.(thistype).nTrials~=0
    
 	subplot(4,5,8); hold on;
     title('Cue Fluo vs Cue');
-    x=Analysis.(thistype).(thisChStruct).CueZ;y=Analysis.(thistype).Licks.Cue;
+    x=Analysis.(thistype).(thisChStruct).CueStat;y=Analysis.(thistype).Licks.Cue;
     model=fitlm(x,y);
     plot(x,y,'o','markerSize',5,'MarkerEdgeColor',color4plot{k});
     plot(x,model.Fitted,['-' color4plot{k}]);
@@ -75,7 +72,7 @@ if Analysis.(thistype).nTrials~=0
     
     subplot(4,5,9); hold on;
     title('Outcome Fluo vs Outcome');
-    x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).Licks.Outcome;
+    x=Analysis.(thistype).(thisChStruct).OutcomeStat;y=Analysis.(thistype).Licks.Outcome;
     model=fitlm(x,y);
     plot(x,y,'o','markerSize',5,'MarkerEdgeColor',color4plot{k});
     plot(x,model.Fitted,['-' color4plot{k}]);
@@ -86,12 +83,12 @@ if Analysis.(thistype).nTrials~=0
 if Analysis.Parameters.Wheel
     plotIndex(3)=11;
     subplot(4,5,11); hold on;
-    shadedErrorBar(Analysis.(thistype).Wheel.Time(1,:),Analysis.(thistype).Wheel.DistanceAVG,Analysis.(thistype).Wheel.DistanceSEM,['-' color4plot{k}],transparency);
+    shadedErrorBar(Analysis.(thistype).Time.Wheel,Analysis.(thistype).Wheel.DistanceAVG,Analysis.(thistype).Wheel.DistanceSEM,['-' color4plot{k}],transparency);
     axis tight
     xlabel(labelx); ylabel('Run (cm)');
     
     subplot(4,5,12); hold on;
-    x=Analysis.(thistype).(thisChStruct).OutcomeZ; y=Analysis.(thistype).Wheel.Cue;
+    x=Analysis.(thistype).(thisChStruct).OutcomeStat; y=Analysis.(thistype).Wheel.Cue;
     model=fitlm(x,y);
     plot(x,y,'o','markerSize',5,'MarkerEdgeColor',color4plot{k});
     plot(x,model.Fitted,['-' color4plot{k}]);
@@ -99,7 +96,7 @@ if Analysis.Parameters.Wheel
     xlabel('Outcome DF/Fo (%)'); ylabel('Cue Run (cm/sec)');
     
     subplot(4,5,13); hold on;
-    x=Analysis.(thistype).(thisChStruct).CueZ;y=Analysis.(thistype).Wheel.Cue;
+    x=Analysis.(thistype).(thisChStruct).CueStat;y=Analysis.(thistype).Wheel.Cue;
     model=fitlm(x,y);
     plot(x,y,'o','markerSize',5,'MarkerEdgeColor',color4plot{k});
     plot(x,model.Fitted,['-' color4plot{k}]);
@@ -107,7 +104,7 @@ if Analysis.Parameters.Wheel
     xlabel('Cue DF/Fo (%)'); ylabel('Cue Run (cm/sec)');
     
     subplot(4,5,14); hold on;
-    x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).Wheel.Outcome;
+    x=Analysis.(thistype).(thisChStruct).OutcomeStat;y=Analysis.(thistype).Wheel.Outcome;
     model=fitlm(x,y);
     plot(x,y,'o','markerSize',5,'MarkerEdgeColor',color4plot{k});
     plot(x,model.Fitted,['-' color4plot{k}]);
@@ -118,12 +115,12 @@ end
 if Analysis.Parameters.Pupillometry  
     plotIndex(4)=16;
     subplot(4,5,16); hold on;
-	shadedErrorBar(Analysis.(thistype).Pupil.Time(1,:),Analysis.(thistype).Pupil.PupilAVG,Analysis.(thistype).Pupil.PupilSEM,['-' color4plot{k}],transparency);
+	shadedErrorBar(Analysis.(thistype).Time.Pupil,Analysis.(thistype).Pupil.PupilAVG,Analysis.(thistype).Pupil.PupilSEM,['-' color4plot{k}],transparency);
     axis tight
     xlabel(labelx); ylabel('Pupil DP/Po (%)');
     
     subplot(4,5,17); hold on;
-    x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).Pupil.Cue;
+    x=Analysis.(thistype).(thisChStruct).OutcomeStat;y=Analysis.(thistype).Pupil.Cue;
     model=fitlm(x,y);
     plot(x,y,'o','markerSize',5,'MarkerEdgeColor',color4plot{k});
     plot(x,model.Fitted,['-' color4plot{k}]);
@@ -131,7 +128,7 @@ if Analysis.Parameters.Pupillometry
     xlabel('Outcome DF/Fo (%)'); ylabel('Cue Pupil (%)');
     
     subplot(4,5,18); hold on;
-    x=Analysis.(thistype).(thisChStruct).CueZ;y=Analysis.(thistype).Pupil.Cue;
+    x=Analysis.(thistype).(thisChStruct).CueStat;y=Analysis.(thistype).Pupil.Cue;
     model=fitlm(x,y);
     plot(x,y,'o','markerSize',5,'MarkerEdgeColor',color4plot{k});
     plot(x,model.Fitted,['-' color4plot{k}]);
@@ -139,7 +136,7 @@ if Analysis.Parameters.Pupillometry
     xlabel('Cue DF/Fo (%)'); ylabel('Cue Pupil (%)');
     
     subplot(4,5,19); hold on;
-    x=Analysis.(thistype).(thisChStruct).OutcomeZ;y=Analysis.(thistype).Pupil.Outcome;
+    x=Analysis.(thistype).(thisChStruct).OutcomeStat;y=Analysis.(thistype).Pupil.Outcome;
     model=fitlm(x,y);
     plot(x,y,'o','markerSize',5,'MarkerEdgeColor',color4plot{k});
     plot(x,model.Fitted,['-' color4plot{k}]);

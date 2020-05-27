@@ -1,39 +1,33 @@
-function [ReshapedTime,ReshapedData]=AP_TimeReshaping(Analysis,Time,Data,SampRate,TimeBoundaries)
+function [TimeNew,DataNew]=AP_TimeReshaping(DataOG,TW,TZ,SR)
 
-%% Input check
-if nargin==4
-    try
-        TimeBoundaries=Analysis.Parameters.ReshapedTime;
-    catch
-        disp('Error in AP_TimeReshaping /n');
-        disp('Cannot find parameters for reshaping data with new time boundaries /n');
-        return
-    end
-end
-% if ~size(Time)==[1 2] && ~size(Time)==[2 1]
-%     disp('Error in AP_TimeReshaping /n');
-%     disp('Time array should be a one dimension vector');
-%         return
-% end
-% if size(Data,1)>size(Data,2)
-%     Data=Data';
-% end
-    
+%% Initialize expected arrays
+ExpectedSize=diff(TW)*SR+1;
+DataNew=NaN(1,ExpectedSize);
+TimeNew=TW(1):1/SR:TW(2);
+
+if ~isempty(DataOG)
+%% Create Time Array Matching Data
+DataSize=length(DataOG);
+Time=(1/SR:1/SR:(1/SR*DataSize))-TZ;
+Index0=find(~TimeNew);
 %% Reshape the data
-Data=Data(Time>=TimeBoundaries(1) & Time<=TimeBoundaries(2));
-Time=Time(Time>=TimeBoundaries(1) & Time<=TimeBoundaries(2));
-
-%% Output the data with the expected size
-ExpectedSize=diff(TimeBoundaries)*SampRate-1;
-ReshapedData=NaN(ExpectedSize,1);
-ReshapedTime=NaN(ExpectedSize,1);
-if length(Data)>=ExpectedSize
-    ReshapedTime=Time(1:ExpectedSize);
-    ReshapedData=Data(1:ExpectedSize);
+DataBegin=DataOG(Time>=TW(1) & Time<=0);
+DataEnd=DataOG(Time>=0 & Time<=TW(2));
+if (Index0-length(DataBegin))==0
+    IndexBegin=[1 Index0];
+    IndexEnd=[Index0 Index0+length(DataEnd)-1];
 else
-    ReshapedTime(1:length(Data))=Time;
-    ReshapedData(1:length(Data))=Data;
-    disp('Warning in AP_TimeReshaping /n');
-    disp('Might have NaNs in data /n');
-end 
+    IndexBegin=[Index0-length(DataBegin) Index0-1];
+    IndexEnd=[Index0 Index0+length(DataEnd)-1];
+end    
+DataNew(IndexBegin(1):IndexBegin(2))=DataBegin;
+DataNew(IndexEnd(1):IndexEnd(2))=DataEnd;
+
+% DataNew(Index0-length(DataBegin):Index0-1)=DataBegin;
+% DataNew(Index0:Index0+length(DataEnd)-1)=DataEnd;
+
+if length(DataNew)>length(TimeNew)
+    DataNew=DataNew(1:length(TimeNew));
+end
+end
 end

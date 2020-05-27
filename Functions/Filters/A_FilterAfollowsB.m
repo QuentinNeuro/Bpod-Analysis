@@ -1,8 +1,14 @@
 function Analysis=A_FilterAfollowsB(Analysis,FilterName,TypeA,TypeB)
 % Function to filter trials according to a trial type sequence
 %
-% function designed by Quentin 2016 for Analysis_Photometry
+% function designed by Quentin 2020 for Analysis_Photometry
 
+%% Check
+checkExist=FilterName;
+if isfield(Analysis.Filters,checkExist)
+    disp(['Filter ' checkExist ' already generated']);
+return
+end
 %% Parameters
 if ischar(TypeA)
     TypeA=A_NameToTrialNumber(Analysis,TypeA);
@@ -26,17 +32,13 @@ elseif iscell(TypeB)
     TypeB=TempTypeB;
 end
 
-% Name
-FilterNb=length(Analysis.Filters.Names);
-Analysis.Filters.Names{FilterNb+1}=FilterName;
-% Filter
-Logicals=false(Analysis.AllData.nTrials,1);
-
 %% Filter
+Logicals=false(Analysis.AllData.nTrials,1);
 for i=1:Analysis.AllData.nTrials-1
     if ismember(Analysis.AllData.TrialTypes(i),TypeB) && ismember (Analysis.AllData.TrialTypes(i+1),TypeA) 
         Logicals(i+1)=true;
     end
 end
-Analysis.Filters.Logicals=[Analysis.Filters.Logicals Logicals];
+%% Save
+Analysis.Filters.(FilterName)=Logicals;
 end

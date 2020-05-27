@@ -6,90 +6,91 @@
 % 'Analysis_spike' is an addon that can be used to quickly plot PSTH from 
 % spiking units clustered using MClust (TT.mat) and using TTL sync information
 
-clear SessionData Analysis LauncherParam; close all;
-%% Analysis type Single/Group
-LauncherParam.Analysis_type='Single';
-LauncherParam.Save=0;
-LauncherParam.Load=0;
-LauncherParam.Zscore=0;
-LauncherParam.BaselineHisto=0;
-LauncherParam.CueStats='AVG';       %'AVG' or 'MAX'
-LauncherParam.OutcomeStats='MAX';   %'AVG' or 'MAX'
-% Electrophysiology
-LauncherParam.TrialEvents4CellBase=0;
-LauncherParam.SpikesAnalysis=0;
-LauncherParam.SpikesFigure=0;
-% Figures - Can be changed upon loading
-LauncherParam.PlotSummary1=1;
-LauncherParam.PlotSummary2=0;
-LauncherParam.PlotFiltersSingle=0;              %AP_CuedOutcome_GroupToPlot #1 Output
-LauncherParam.PlotFiltersSummary=0;
-LauncherParam.PlotFiltersBehavior=0;           	%AP_Filter_GroupToPlot #2 Ouput
-LauncherParam.Illustrator=0;
-LauncherParam.Transparency=1;
-% Axis - Can be changed upon loading
-LauncherParam.PlotX=[-4 4];
-LauncherParam.PlotY_photo(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN]
-LauncherParam.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN].
+clear SessionData Analysis LP; close all;
+% DB_Stat=struct();
+DB_Stat_Group=[];
+%% Analysis type Single/Group etc
+LP.Analysis_type='Group';
+LP.Save=0; % 1: Core Data only     // 2: Analysis Structure
+LP.SaveTag=[]; % string to be added to the saved analysis file name
+LP.Load=1; % 1: Load and reprocess
+%% Overwritting Parameters
+LP.OW.PhotoChNames={'ACx' 'mPFC'}; %{'ACx' 'mPFC' 'ACxL' ACxR'}
+LP.OW.CueTimeReset=[];
+LP.OW.OutcomeTimeReset=[]; 
+LP.OW.NidaqBaseline=[]; 
+%% Analysis Parameters
+% Figures
+LP.P.PlotSummary1=1;
+LP.P.PlotSummary2=0;
+LP.P.PlotFiltersSingle=0;               % AP_####_GroupToPlot Output 1
+LP.P.PlotFiltersSummary=1;
+LP.P.PlotFiltersBehavior=1;           	% AP_####_GroupToPlot Oupput 2
+LP.P.Illustrator=0;
+LP.P.Transparency=0;
+% Axis
+LP.P.PlotX=[-3 4];
+LP.P.PlotY_photo(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
+LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max]
 % States and Timing
-LauncherParam.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
-LauncherParam.ZeroFirstLick=0;                 	% Will activate TimeReshaping
-LauncherParam.ZeroAtZero=0;
-LauncherParam.WheelState='Baseline';                 %'Baseline','Cue','Outcome'
-LauncherParam.PupilState='NormBaseline';       	%'NormBaseline','Cue','Outcome'
-LauncherParam.ReshapedTime=[-4 4];
+LP.P.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
+LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after state to Zero starts
+LP.P.ZeroAtZero=0;
+LP.P.WheelState='Baseline';             %Options : 'Baseline','Cue','Outcome'
+LP.P.PupilState='NormBaseline';       	%Options : 'NormBaseline','Cue','Outcome'
+LP.P.ReshapedTime=[-4 5];
 % Filters
-LauncherParam.PupilThreshold=1;
-LauncherParam.WheelThreshold=5;             	%Speed cm/s
-LauncherParam.LicksCue=2;
-LauncherParam.LicksOutcome=2;
-LauncherParam.TrialToFilterOut=[];
-LauncherParam.LoadIgnoredTrials=1;
-%% Parameters being used if cannot be extracted from the bpod file
-LauncherParam.Name='VIP';
-LauncherParam.Rig='Unknown';
-LauncherParam.Behavior='CuedOutcome';
-LauncherParam.CueType='Chirp';
-LauncherParam.PhotoChNames={'470-A1' '405-A1' '470-mPFC'};%{'470-A1L' '405-A1' '470-A1R'};{'470-A1' '405-A1' '470-mPFC'}
-LauncherParam.Phase='RewardA';
-LauncherParam.TrialNames={'T1','T2','T3','T4','T5','T6','T7','T8','T9','T10'};
-LauncherParam.LickPort='Port1In';
-LauncherParam.StateOfCue='Outcome';
-LauncherParam.StateOfOutcome='Outcome2';
-LauncherParam.TimeReshaping=1;          % overwrite preloaded parameters; 0 or 1;
-LauncherParam.CueTimeReset=[];       % overwrite preloaded parameters
-LauncherParam.OutcomeTimeReset=[];      % overwrite preloaded parameters
-LauncherParam.NidaqBaseline=[];         % overwrite preloaded parameters
-% Photometry - being used if cannot find the parameters in the bpod file
-LauncherParam.BaselineHistoParam=20; % percentage of data from the baseline to use
-LauncherParam.SamplingRate=2000;  %(Hz)
-LauncherParam.NewSamplingRate=20; %(Hz)
-LauncherParam.NidaqDuration=60;
-
+LP.P.PupilThreshold=1;
+LP.P.WheelThreshold=5;                  % Speed cm/s
+LP.P.LicksCue=1;
+LP.P.LicksOutcome=2;
+LP.P.TrialToFilterOut=[];
+LP.P.LoadIgnoredTrials=1;
+% Photometry
+LP.P.Zscore=0;
+LP.P.BaselineBefAft=2;                  % Options : 1 or 2 - Before extracting time window
+LP.P.BaselineHisto=0;
+LP.P.CueStats='AVG';                    % Options : AVG AVGZ MAX MAXZ
+LP.P.OutcomeStats='MAX';                % Options : AVG AVGZ MAX MAXZ
+LP.P.BaselineHistoParam=20;             % percentage of data from the baseline to use
+LP.P.NidaqDecimatedSR=20;               % in Hz
+% Electrophysiology
+LP.P.TE4CellBase=0;
+LP.P.SpikesAnalysis=0;
+LP.P.SpikesFigure=0; 
+%% Default Parameters [Used if not found in Bpod file]
+LP.D.Name='VIP';
+LP.D.Rig='Unknown';
+LP.D.Behavior='CuedOutcome';
+LP.D.Phase='RewardA';
+LP.D.CueType='Chirp';
+LP.D.PhotoChNames={'470-A1L' '405-A1' '470-A1R'};%{'470-A1L' '405-A1' '470-A1R'};{'470-A1' '405-A1' '470-mPFC'}
+LP.D.SamplingRate=2000;  %(Hz)
+LP.D.TrialNames={'T1','T2','T3','T4','T5','T6','T7','T8','T9','T10'};
+LP.D.LickPort='Port1In';
+LP.D.StateOfCue='Cue';
+LP.D.StateOfOutcome='Outcome';
 %% Run Analysis_Photometry
-[LauncherParam.FileList,LauncherParam.PathName]=uigetfile('*.mat','Select the BPod file(s)','MultiSelect', 'on');
-if iscell(LauncherParam.FileList)==0
-    LauncherParam.FileToOpen=cellstr(LauncherParam.FileList);
-    LauncherParam.Analysis_type='Single';
-	Analysis=Analysis_Photometry(LauncherParam); 
+[LP.FileList,LP.PathName]=uigetfile('*.mat','Select the BPod file(s)','MultiSelect', 'on');
+if iscell(LP.FileList)==0
+    LP.FileToOpen=cellstr(LP.FileList);
+    LP.Analysis_type='Single';
+	Analysis=Analysis_Photometry(LP); 
 else
-switch LauncherParam.Analysis_type
+switch LP.Analysis_type
     case 'Single'
-         for i=1:length(LauncherParam.FileList)
-            LauncherParam.FileToOpen=LauncherParam.FileList(i);
+         for i=1:length(LP.FileList)
+            LP.FileToOpen=LP.FileList(i);
             try
-            Analysis=Analysis_Photometry(LauncherParam);
+            Analysis=Analysis_Photometry(LP);
             catch
-            disp([LauncherParam.FileToOpen ' NOT ANALYZED']);
+            disp([LP.FileToOpen ' NOT ANALYZED']);
             end
             close all;
+            %DB_Stat=DB_StatExtract(Analysis,DB_Stat,LP.FileToOpen,DB_Stat_Group);
          end    
 	case 'Group'
-        if LauncherParam.Load
-            disp('Cannot group preexisting Analysis structure')
-            return
-        end
-        LauncherParam.FileToOpen=LauncherParam.FileList;
-        Analysis=Analysis_Photometry(LauncherParam);
+        LP.FileToOpen=LP.FileList;
+        Analysis=Analysis_Photometry(LP);
 end
 end

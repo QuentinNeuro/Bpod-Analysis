@@ -1,4 +1,6 @@
 function A_FilterIgnoredTrials_StopLicks(Analysis,testrun)
+%% BROKEN
+
 if testrun
 %% Looking for the filter
 FilterName='Reward';

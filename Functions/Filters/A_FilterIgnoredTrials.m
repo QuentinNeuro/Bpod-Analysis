@@ -7,8 +7,18 @@ function Analysis=A_FilterIgnoredTrials(Analysis,IT,test)
 %function designed by Quentin 2016 for Analysis_Photometry
 
 %% Checks and loads IT
-if nargin==2
-    test=1;
+switch nargin
+    case 1
+        if isfield(Analysis.Parameters,'LoadIgnoredTrials') && isfield(Analysis.Parameters,'TrialToFilterOut')
+IT=Analysis.Parameters.TrialToFilterOut;
+test=Analysis.Parameters.LoadIgnoredTrials;
+        else
+disp('Cannot find parameters for ignoredTrials filter function - Will continue with default parameters');
+IT=[];
+test=1;
+        end
+    case 2
+test=1;
 end
 
 ITFile=[Analysis.Parameters.Name '_ignoredTrials.mat'];
@@ -17,9 +27,20 @@ if isempty(IT)==1 && exist(ITFile,'file') && test==1
 end
 
 %% Generates the filter
-Analysis.Filters.ignoredTrials=true(1,Analysis.Parameters.nTrials);
-Analysis.Filters.ignoredTrials(IT)=false;
-%% Saves the filter
+Logicals=true(1,Analysis.Parameters.nTrials);
+Logicals(IT)=false;
+
+if isfield(Analysis,'Filters')
+if isfield(Analysis.Filters,'ignoredTrials')
+    Analysis.Filters.ignoredTrials=[Analysis.Filters.ignoredTrials Logicals];
+else
+    Analysis.Filters.ignoredTrials=Logicals;
+end
+else
+    Analysis.Filters.ignoredTrials=Logicals;
+end
+
+%% Saves the filter in a file
 if isempty(IT)==0
     Analysis.Parameters.ignoredTrials=IT;
     save(ITFile,'IT');

@@ -8,7 +8,7 @@ function Analysis=AP_Sensor_FiltersAndPlot(Analysis)
 % Groups
 FilterNames={'Cue A','Cue B','Uncued','Reward','Punish','Omission','Cue C'};
 for i=1:length(FilterNames)
-    Analysis=A_FilterName(Analysis,FilterNames{i});
+    Analysis=A_FilterTrialName(Analysis,FilterNames{i});
 end
 % Licks
 Analysis=A_FilterLick(Analysis,'LicksCue','Cue',Analysis.Parameters.LicksCue);
@@ -17,7 +17,7 @@ if contains(Analysis.Parameters.Phase,'L3')
     Analysis=A_FilterLick(Analysis,'Licks2ndCue',[-1.5 -0],Analysis.Parameters.LicksOutcome);
 end
 % Wheel
-Analysis=A_FilterWheel(Analysis,'Run',Analysis.Parameters.WheelState,Analysis.Parameters.WheelThreshold);
+Analysis=A_FilterRunning(Analysis,'Run',Analysis.Parameters.WheelState,Analysis.Parameters.WheelThreshold);
 % Pupil
 Analysis=A_FilterPupil(Analysis,'Pupil',Analysis.Parameters.PupilState,Analysis.Parameters.PupilThreshold);
 Analysis=A_FilterPupil(Analysis,'CuePupil','Cue',2);

@@ -2,6 +2,21 @@ function Analysis=A_FilterPupilNaNCheck(Analysis,FilterName,Threshold)
 %
 %
 % Function designed by Quentin 2017 for Analysis_Photometry
+
+%% Check
+if nargin==1
+    checkExist='PupilNaN';
+else
+checkExist=FilterName;
+end
+if isfield(Analysis.Filters,checkExist)
+    disp(['Filter ' checkExist ' already generated']);
+return
+end
+if ~Analysis.Parameters.Pupillometry
+    disp('Unable to generate pupillometry based filters');
+    return
+end
 %% Parameters
 switch nargin
     case 1
@@ -10,18 +25,18 @@ switch nargin
     case 2
        Threshold=25;
 end
-
-% Name
-FilterNb=length(Analysis.Filters.Names);
-Analysis.Filters.Names{FilterNb+1}=FilterName;
-% Filter
-Logicals=ones(Analysis.AllData.nTrials,1);
+PupillometryFilter=Analysis.Filters.Pupillometry;
 %% Filter
+Logicals=ones(Analysis.AllData.nTrials,1);
 nbofframes=100; % to test whether nan
-if Analysis.Parameters.Pupillometry==1   
-    testnan=isnan(Analysis.AllData.Pupil.Pupil);
-    sumnan=sum(testnan(:,1:nbofframes),2)*(nbofframes/100);
-    Logicals(sumnan>Threshold)=false;
-end
-Analysis.Filters.Logicals=[Analysis.Filters.Logicals Logicals];
+testnan=isnan(Analysis.AllData.Pupil.Pupil);
+sumnan=sum(testnan(:,1:nbofframes),2)*(nbofframes/100);
+Logicals(sumnan>Threshold)=false;
+
+Logicals=Logicals.*PupillometryFilter;
+LogicalsInv=(~Logicals).*PupillometryFilter;
+
+%% Save
+Analysis.Filters.(FilterName)=logical(Logicals);
+Analysis.Filters.([FilterName 'Inv'])=logical(LogicalsInv);
 end

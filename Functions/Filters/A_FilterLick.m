@@ -2,17 +2,16 @@ function Analysis=A_FilterLick(Analysis,FilterName,Time,Number)
 % Function to filter trials according to the number of Lick in a defined
 % time window. Generates an additional inverted filter.
 %
-% Function designed by Quentin 2017 for Analysis_Photometry
+% Function designed by Quentin 2020 for Analysis_Photometry
 
-%% Parameters
-% Name
-FilterNb=length(Analysis.Filters.Names);
-Analysis.Filters.Names{FilterNb+1}=FilterName;
-Analysis.Filters.Names{FilterNb+2}=[FilterName 'Inv'];
-% Filter
-Logicals=false(Analysis.AllData.nTrials,1);
-
+%% Check
+checkExist=FilterName;
+if isfield(Analysis.Filters,checkExist)
+    disp(['Filter ' checkExist ' already generated']);
+return
+end
 %% Filter
+Logicals=false(Analysis.AllData.nTrials,1);
 for i=1:Analysis.AllData.nTrials
 	counter = 0;
 % Quentin Specific Timing
@@ -33,5 +32,8 @@ end
         Logicals(i)=true;
     end
 end
-Analysis.Filters.Logicals=[Analysis.Filters.Logicals Logicals ~Logicals];
+
+%% Save
+Analysis.Filters.(FilterName)=Logicals;
+Analysis.Filters.([FilterName 'Inv'])=~Logicals;
 end

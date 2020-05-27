@@ -51,21 +51,20 @@ TableTitles={'Trial Type','Cue Max DF/F(%)','Cue AVG DF/F(%)','SEM','Outcome Max
 for i=1:Analysis.Parameters.nbOfTrialTypes
     thistype        =   sprintf('type_%.0d',i);
     TableData{i,1}	=   Analysis.(thistype).Name;
-    TableData{i,2}	=   Analysis.(thistype).(thisChStruct).CueMax;
-    TableData{i,3}	=   Analysis.(thistype).(thisChStruct).CueAVG;
-    TableData{i,4}	=   Analysis.(thistype).(thisChStruct).CueSEM;
-    TableData{i,5}	=   Analysis.(thistype).(thisChStruct).OutcomeMax;
-    TableData{i,6} =    Analysis.(thistype).(thisChStruct).OutcomeAVG;
-    TableData{i,7} =    Analysis.(thistype).(thisChStruct).OutcomeSEM;
+    TableData{i,2}	=   Analysis.(thistype).(thisChStruct).CueAVG_MAX;
+    TableData{i,3}	=   Analysis.(thistype).(thisChStruct).CueAVG_AVG;
+    TableData{i,4}	=   Analysis.(thistype).(thisChStruct).CueAVG_SEM;
+    TableData{i,5}	=   Analysis.(thistype).(thisChStruct).OutcomeAVG_MAX;
+    TableData{i,6} =    Analysis.(thistype).(thisChStruct).OutcomeAVG_AVG;
+    TableData{i,7} =    Analysis.(thistype).(thisChStruct).OutcomeAVG_SEM;
     TableData{i,8} =    Analysis.(thistype).nTrials;
     TableData{i,9} =    Analysis.(thistype).IgnoredTrials;
 end
 
 %% Figure
-FigureLegend=sprintf('%s_%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig,Analysis.Parameters.TypeOfCue);
 figData.figure=figure('Name',FigTitle,'Position', [200 100 1200 700], 'numbertitle','off');
 Legend=uicontrol('style','text');
-set(Legend,'String',FigureLegend,'Position',[10,5,500,20]); 
+set(Legend,'String',Analysis.Parameters.Legend,'Position',[10,5,500,20]); 
 
 %% Table
 spt=subplot(3,4,[9 11]);

@@ -1,23 +1,21 @@
-function handles=AP_Parameters_Update(handles,LauncherParam)
-
-%% Plots
-handles.PlotSummary1=LauncherParam.PlotSummary1;
-handles.PlotSummary2=LauncherParam.PlotSummary2;
-handles.PlotFiltersSingle=LauncherParam.PlotFiltersSingle;
-handles.PlotFiltersSummary=LauncherParam.PlotFiltersSummary; 
-handles.PlotFiltersBehavior=LauncherParam.PlotFiltersBehavior;
-handles.Illustrator=LauncherParam.Illustrator;
-handles.Transparency=LauncherParam.Transparency;
-handles.TE4CellBase=LauncherParam.TrialEvents4CellBase;
-handles.SpikesAnalysis=LauncherParam.SpikesAnalysis;
-handles.SpikesFigure=LauncherParam.SpikesFigure;
-
-handles.PlotX=LauncherParam.PlotX;
-handles.PlotY_photo=LauncherParam.PlotY_photo;
-
-%% Add missing parameter fields for old data
-if ~isfield(handles,'Zscore')
-    handles.Zscore=0;
+function Par=AP_Parameters_Update(Par,LP)
+%% Update Analysis Parameters using Launcher Parameters
+FieldsLP_P=fieldnames(LP.P);
+for thisField=1:size(FieldsLP_P,1)
+    Par.(FieldsLP_P{thisField})=LP.P.(FieldsLP_P{thisField});
 end
-
+%
+Par.StateToZero=Par.(LP.P.StateToZero);
+%% Overwritting
+FieldsLP_OW=fieldnames(LP.OW);
+for thisField=1:size(FieldsLP_OW,1)
+    if ~isempty(LP.OW.(FieldsLP_OW{thisField})) || ~isfield(Par,FieldsLP_OW{thisField})
+    Par.(FieldsLP_OW{thisField})=LP.OW.(FieldsLP_OW{thisField});
+    end
+end
+%
+Par.NidaqBaselinePoints=Par.NidaqBaseline*Par.NidaqDecimatedSR;
+if Par.NidaqBaselinePoints(1)==0
+    Par.NidaqBaselinePoints(1)=1;
+end
 end
