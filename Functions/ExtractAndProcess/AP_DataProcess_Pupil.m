@@ -52,6 +52,7 @@ Analysis.AllData.Pupil.Baseline(thisTrial)          =thisBaseline;
 Analysis.AllData.Pupil.NormBaseline(thisTrial)      =thisBaseline;
 Analysis.AllData.Pupil.Cue(thisTrial)               =nanmean(thisPupDPP(thisTime>CueTime(1) & thisTime<CueTime(2)));
 Analysis.AllData.Pupil.Outcome(thisTrial)           =nanmean(thisPupDPP(thisTime>OutcomeTime(1) & thisTime<OutcomeTime(2)));
+
 else
     if isfield(Analysis.AllData,'Pupil')
 Analysis.AllData.Pupil.Time(thisTrial,:)          	=NaN(1,size(Analysis.AllData.Pupil.Time,2));

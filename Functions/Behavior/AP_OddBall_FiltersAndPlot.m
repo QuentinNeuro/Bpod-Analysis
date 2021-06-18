@@ -1,5 +1,7 @@
 function Analysis=AP_OddBall_FiltersAndPlot(Analysis)
 
+thisRatioMetric='AVG_MAX'; %'MAX_AVG' 'AVG_AVG'
+Analysis.Parameters.OddballMetric=thisRatioMetric;
 %% Timing
 Analysis.type_1.Oddball.counter=0;
 Analysis.type_2.Oddball.counter=0;
@@ -12,9 +14,9 @@ for thisTrial=1:Analysis.AllData.nTrials
     counterTrials=Analysis.(thistype).Oddball.counter+1;
     Analysis.(thistype).Oddball.counter=counterTrials;
     TimeToZero      =   Analysis.AllData.Time.Zero(thisTrial);
-    SequenceNb      =	Analysis.AllData.Oddball_SoundSeq{1,thisTrial};
-    SequenceNames   =   Analysis.AllData.Oddball_StateSeq{1,thisTrial};
-    SequenceState   =   Analysis.AllData.Time.States{1,thisTrial};
+    SequenceNb      =	Analysis.Core.Oddball_SoundSeq{1,thisTrial};
+    SequenceNames   =   Analysis.Core.Oddball_StateSeq{1,thisTrial};
+    SequenceState   =   Analysis.Core.States{1,thisTrial};
     % Extract timing of Early and Late Standard sound and Odd Stimulus
     testFirst=1;
     counterOdd=1;
@@ -119,14 +121,31 @@ end
 
 for thisCh=1:length(Analysis.Parameters.PhotoCh)
     thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh})); 
-% Values
-    Analysis.Ratio.(thisChStruct).Early1=mean(max(Analysis.type_1.Oddball.(thisChStruct).PhotoEarly));
-    Analysis.Ratio.(thisChStruct).Early2=mean(max(Analysis.type_2.Oddball.(thisChStruct).PhotoEarly));
-    Analysis.Ratio.(thisChStruct).Late1=mean(max(Analysis.type_1.Oddball.(thisChStruct).PhotoLate));
-    Analysis.Ratio.(thisChStruct).Late2=mean(max(Analysis.type_2.Oddball.(thisChStruct).PhotoLate));
-    Analysis.Ratio.(thisChStruct).Odd1=mean(max(Analysis.type_1.Oddball.(thisChStruct).PhotoOdd));
-    Analysis.Ratio.(thisChStruct).Odd2=mean(max(Analysis.type_2.Oddball.(thisChStruct).PhotoOdd));
-% Ratio
+switch thisRatioMetric
+    case 'MAX_AVG'
+    % Values
+    Analysis.Ratio.(thisChStruct).Early1=mean(max(Analysis.type_1.Oddball.(thisChStruct).PhotoEarly'));
+    Analysis.Ratio.(thisChStruct).Early2=mean(max(Analysis.type_2.Oddball.(thisChStruct).PhotoEarly'));
+    Analysis.Ratio.(thisChStruct).Late1=mean(max(Analysis.type_1.Oddball.(thisChStruct).PhotoLate'));
+    Analysis.Ratio.(thisChStruct).Late2=mean(max(Analysis.type_2.Oddball.(thisChStruct).PhotoLate'));
+    Analysis.Ratio.(thisChStruct).Odd1=mean(max(Analysis.type_1.Oddball.(thisChStruct).PhotoOdd'));
+    Analysis.Ratio.(thisChStruct).Odd2=mean(max(Analysis.type_2.Oddball.(thisChStruct).PhotoOdd'));
+    case 'AVG_MAX'
+    Analysis.Ratio.(thisChStruct).Early1=max(Analysis.type_1.Oddball.(thisChStruct).PhotoEarlyAVG);
+    Analysis.Ratio.(thisChStruct).Early2=max(Analysis.type_2.Oddball.(thisChStruct).PhotoEarlyAVG);
+    Analysis.Ratio.(thisChStruct).Late1=max(Analysis.type_1.Oddball.(thisChStruct).PhotoLateAVG);
+    Analysis.Ratio.(thisChStruct).Late2=max(Analysis.type_2.Oddball.(thisChStruct).PhotoLateAVG);
+    Analysis.Ratio.(thisChStruct).Odd1=max(Analysis.type_1.Oddball.(thisChStruct).PhotoOddAVG);
+    Analysis.Ratio.(thisChStruct).Odd2=max(Analysis.type_2.Oddball.(thisChStruct).PhotoOddAVG);
+    case 'AVG_AVG'
+    Analysis.Ratio.(thisChStruct).Early1=mean(Analysis.type_1.Oddball.(thisChStruct).PhotoEarlyAVG);
+    Analysis.Ratio.(thisChStruct).Early2=mean(Analysis.type_2.Oddball.(thisChStruct).PhotoEarlyAVG);
+    Analysis.Ratio.(thisChStruct).Late1=mean(Analysis.type_1.Oddball.(thisChStruct).PhotoLateAVG);
+    Analysis.Ratio.(thisChStruct).Late2=mean(Analysis.type_2.Oddball.(thisChStruct).PhotoLateAVG);
+    Analysis.Ratio.(thisChStruct).Odd1=mean(Analysis.type_1.Oddball.(thisChStruct).PhotoOddAVG);
+    Analysis.Ratio.(thisChStruct).Odd2=mean(Analysis.type_2.Oddball.(thisChStruct).PhotoOddAVG);
+end
+    % Ratio
     Analysis.Ratio.(thisChStruct).ratioEO=(Analysis.Ratio.(thisChStruct).Odd1+Analysis.Ratio.(thisChStruct).Odd2)/...
              (Analysis.Ratio.(thisChStruct).Early1+Analysis.Ratio.(thisChStruct).Early2);
     Analysis.Ratio.(thisChStruct).ratioLO=(Analysis.Ratio.(thisChStruct).Odd1+Analysis.Ratio.(thisChStruct).Odd2)/...

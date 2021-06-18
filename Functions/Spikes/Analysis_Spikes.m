@@ -16,7 +16,17 @@ switch action
 TTL_Tagging=2;
 switch Analysis.Parameters.Behavior
     case 'CuedOutcome'
-TTL_Behavior=6;
+FieldStates=fieldnames(Analysis.Core.States{1,1});
+TTL_Behavior=find(contains(FieldStates,Analysis.Parameters.StateToZero));
+if size(TTL_Behavior,1)~=1
+    TTL_Behavior=TTL_Behavior(1);
+end
+    case 'AuditoryTuning'
+FieldStates=fieldnames(Analysis.Core.States{1,1});
+TTL_Behavior=find(contains(FieldStates,Analysis.Parameters.StateToZero));
+if size(TTL_Behavior,1)~=1
+    TTL_Behavior=TTL_Behavior(1);
+end
 end
 TTLTS_SpikeTS_Factor=10000;
 %% Load TTLs
@@ -29,21 +39,18 @@ load behavEvents.mat
 Analysis.AllData.Spikes.Time.Behavior=Events_TS(Events_TTL==TTL_Behavior);
 %% Warning - check nb of trials
 if Analysis.Parameters.nTrials ~= length(Analysis.AllData.Spikes.Time.Behavior)
-    disp({'mismatch between the number of trials in Bpod ' Analysis.Parameters.nTrials ...
-            ' and TTLs ' length(Analysis.AllData.Spikes.Time.Behavior)});
-    Analysis.Parameters.SpikesAnalysis=0;
-    return
+    disp('mismatch between the number of trials in Bpod and TTLs - Trying to autocorrect');
+    Analysis=AS_TTLmismatch(Analysis);
 end
-
 %% Load All Spikes
 counterTT=0;
 for i=1:size(FileList,1)
-    if contains(FileList(i,:),'TT')
+    if contains(FileList(i,:),'TT') && contains(FileList(i,:),'mat')'
         counterTT=counterTT+1;
         thisTT_Name=FileList(i,:);
         thisTT_Name=thisTT_Name(1:strfind(thisTT_Name,'.mat')-1);
         load(thisTT_Name);
-        thisTT_TS=TS./TTLTS_SpikeTS_Factor;
+        thisTT_TS=TS/TTLTS_SpikeTS_Factor;
         Analysis.AllData.Spikes.TTList{counterTT}=thisTT_Name;
         Analysis.AllData.Spikes.Raw.(thisTT_Name)=thisTT_TS;
 %% Extract PhotoStim
@@ -93,12 +100,18 @@ for i=1:length(Analysis.AllData.Spikes.TTList)
     Analysis.(thistype).Spikes.Behavior.(thisTT_Name).Rate=Analysis.AllData.Spikes.Behavior.(thisTT_Name).Rate(Filter,:);
     Analysis.(thistype).Spikes.Behavior.(thisTT_Name).Bin=Time_Behav(1)+BinSize:BinSize:Time_Behav(2);
     Analysis.(thistype).Spikes.Behavior.(thisTT_Name).AVG=mean(Analysis.(thistype).Spikes.Behavior.(thisTT_Name).Rate,1);
+    Analysis.(thistype).Spikes.Behavior.(thisTT_Name).AVG2=(histcounts(Analysis.(thistype).Spikes.Behavior.(thisTT_Name).Events,BinTT)/BinSize)/Analysis.(thistype).nTrials;
     Analysis.(thistype).Spikes.Behavior.(thisTT_Name).SEM=std(Analysis.(thistype).Spikes.Behavior.(thisTT_Name).Rate,1)/sqrt(Analysis.(thistype).nTrials); 
 end
 
     case 'Figure'
 for i=1:length(Analysis.AllData.Spikes.TTList)
     thisTT_Name=Analysis.AllData.Spikes.TTList{i};
-    Analysis_Spikes_PlotData(Analysis,thisTT_Name);
+switch Analysis.Parameters.Behavior
+    case 'CuedOutcome'
+        Analysis_Spikes_PlotData(Analysis,thisTT_Name);
+    case 'AuditoryTuning'
+        Analysis_Spikes_PlotData_AudT(Analysis,thisTT_Name);
+end
 end
 end

@@ -14,9 +14,10 @@ function Analysis=Analysis_Photometry(LauncherParam)
 %% Load Bpod or preexisting Analysis files
 Analysis=AP_Load(LauncherParam);
 %% Save core data
-if LauncherParam.Save==1
+if LauncherParam.Save==1 %&& Analysis.Parameters.Pupillometry
 AP_Save(Analysis,LauncherParam);
 end
+if ~LauncherParam.ArchiveOnly % temporary condition
 %% Process the data
 Analysis=AP_DataProcess(Analysis);
 %% Sorts data by trial types and generates summary plots
@@ -38,5 +39,6 @@ end
 %% Save Analysis
 if LauncherParam.Save==2
 AP_Save(Analysis,LauncherParam);
+end
 end
 end

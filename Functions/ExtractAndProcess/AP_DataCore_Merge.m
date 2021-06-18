@@ -24,7 +24,11 @@ if A_OG.(FParameters).Wheel~=A_ToAdd.(FParameters).Wheel
 end
 %% Merge Parameters and Filters
 A_New.Parameters=A_OG.Parameters;
-A_New.Parameters.Files=[A_OG.Parameters.Files,A_ToAdd.Parameters.Files];
+if ischar(A_New.Parameters.Files)
+    temp{1}=A_New.Parameters.Files;
+    A_New.Parameters.Files=temp;
+end
+A_New.Parameters.Files{end+1}=A_ToAdd.Parameters.Files;
 A_New.Parameters.Pupillometry_Parameters{end+1}=A_ToAdd.Parameters.Pupillometry_Parameters{:};
 % Filters
 A_New.Filters.ignoredTrials=[A_OG.Filters.ignoredTrials,A_ToAdd.Filters.ignoredTrials];

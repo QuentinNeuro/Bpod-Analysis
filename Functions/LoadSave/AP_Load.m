@@ -52,6 +52,12 @@ try
         Analysis=A_FilterPupillometry(Analysis);
         tic;
         Analysis=AP_DataCore(Analysis,SessionData,Pupillometry);toc
+        if LP.Archive==1
+            AP_Archive(Analysis,SessionData,LP);
+        end
+        if isfield(SessionData,'Modulation')
+            Analysis.Parameters.Modulation=SessionData.Modulation;
+        end
 catch
         disp([FileName ' NOT ANALYZED - Error in Parameters extraction or Data organization']);
 end   

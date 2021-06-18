@@ -51,7 +51,7 @@ elseif contains(Name,'GoNogo','IgnoreCase',true)
     Par.CueTimeReset=[-0.1 0];
     Par.OutcomeTimeReset=[0 -3];
     Par.NidaqBaseline=[0.2 1.2];
-    Par.TimeReshaping=1;
+%     Par.TimeReshaping=1;
 elseif contains(Name,'AuditoryTuning','IgnoreCase',true)
     Par.Behavior='AuditoryTuning';
 	Par.StateOfCue='CueDelivery';
@@ -77,6 +77,7 @@ elseif contains(Name,'Oddball','IgnoreCase',true)
     Par.CueTimeReset=[0 1];
     Par.OutcomeTimeReset=[0 2];
     Par.NidaqBaseline=[0 1];
+    Par.ReshapedTime=[0 180];
 elseif contains(Name,'Sensor','IgnoreCase',true)
     Par.Behavior='Sensor';
     Par.StateOfCue='CueDelivery';
@@ -84,13 +85,26 @@ elseif contains(Name,'Sensor','IgnoreCase',true)
     Par.CueTimeReset=[0 1];
     Par.OutcomeTimeReset=[0 2];
     Par.NidaqBaseline=[0.2 1.2];
-    Par.TimeReshaping=1;
+%     Par.TimeReshaping=1;
+elseif contains(Name,'Continuous','IgnoreCase',true)
+    Par.Behavior='Continuous';
+	Par.StateOfCue='PreState';
+    Par.StateOfOutcome='Outcome';
+    Par.PlotSummary1=1;
+    Par.PlotSummary2=0;
+    Par.PlotFiltersSingle=0;
+    Par.PlotFiltersSummary=0;
+    Par.PlotFiltersBehavior=0;
+    Par.CueTimeReset=[0 1];
+    Par.OutcomeTimeReset=[0 2];
+    Par.NidaqBaseline=[1 5];
+    Par.ReshapedTime=[-20 100];   
 else
     Par.Behavior=LP.D.Behavior;
 	Par.StateOfCue=LP.D.StateOfCue;
 	Par.StateOfOutcome=LP.D.StateOfOutcome; 
     Par.CueTimeReset=LP.D.CueTimeReset;
-    Par.CueTimeReset=LP.D.CueTimeReset;
+    Par.OutcomeTimeReset=LP.D.OutcomeTimeReset;
     Par.NidaqBaseline=LP.D.NidaqBaseline;
     if isempty(Par.StateOfCue) || isempty(Par.StateOfOutcome) || isempty(Par.CueTimeReset) || isempty(Par.CueTimeReset) || isempty(Par.NidaqBaseline)
         disp('State names for cue and outcome delivery (or other type of states)...') ;

@@ -53,7 +53,7 @@ elseif isfield(SessionData.RawEvents.Trial{1, 1}.Events,'Port2In')
 else
     Par.LickPort=LP.D.LickPort; %Default
 end
-Par.LickEdges=LP.P.PlotX;
+% Par.LickEdges=LP.P.PlotX;
 Par.Bin=0.25;
 
 %% DAQ parameters and plotting
@@ -66,6 +66,10 @@ end
 Par.NidaqDecimateFactor=ceil(Par.NidaqSamplingRate/Par.NidaqDecimatedSR);
 %% Photometry
 Par=AP_Parameters_Photometry(Par,SessionData,LP);
+if isfield(SessionData,'DecimatedSampRate') % Already demodulated
+	Par.Modulation=0;
+end
+
 %% Wheel 
 Par.Wheel=0;
 Par.WheelCounterNbits=32;

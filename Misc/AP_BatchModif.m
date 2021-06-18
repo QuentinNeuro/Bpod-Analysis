@@ -53,12 +53,12 @@ switch ModifType
     end
 
     case 'AddPupFields'
-        if ~isfield(Analysis.Raw,'Parameters')
-%             Analysis.Raw.Pup=cell(1,Analysis.Raw.nTrials);
-%             Analysis.Raw.PupSmooth=cell(1,Analysis.Raw.nTrials);
-%             Analysis.Raw.PupBlink=cell(1,Analysis.Raw.nTrials);
-              Analysis.Raw.Parameters.pupFrameRate=[];
-              Analysis.Raw.Parameters.pupNFrames=[];
+        if ~isfield(Analysis.Core,'Parameters')
+            Analysis.Core.Pup=cell(1,Analysis.Core.nTrials);
+            Analysis.Core.PupSmooth=cell(1,Analysis.Core.nTrials);
+            Analysis.Core.PupBlink=cell(1,Analysis.Core.nTrials);
+            Analysis.Core.Parameters.pupFrameRate=[];
+            Analysis.Core.Parameters.pupNFrames=[];
         end
         
     case 'NewFilter'

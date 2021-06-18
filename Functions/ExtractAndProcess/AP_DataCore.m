@@ -30,11 +30,11 @@ try
 catch
     Analysis.Filters.ignoredTrials(i)=false;
 end
-%     switch Analysis.Parameters.Behavior
-%     case 'Oddball'
-%     Analysis.Core.Oddball_StateSeq{i}=SessionData.TrialSettings(thisTrial).StateSequence;
-%     Analysis.Core.Oddball_SoundSeq{i}=SessionData.TrialSettings(thisTrial).SoundSequence;
-%     Analysis.Parameters.Oddball_SoundITI=SessionData.TrialSettings(1).GUI.ITI;
-%     end
+    switch Analysis.Parameters.Behavior
+    case 'Oddball'
+    Analysis.Core.Oddball_StateSeq{i}=SessionData.TrialSettings(thisTrial).StateSequence;
+    Analysis.Core.Oddball_SoundSeq{i}=SessionData.TrialSettings(thisTrial).SoundSequence;
+    Analysis.Parameters.Oddball_SoundITI=SessionData.TrialSettings(1).GUI.ITI;
+    end
 end  
 end

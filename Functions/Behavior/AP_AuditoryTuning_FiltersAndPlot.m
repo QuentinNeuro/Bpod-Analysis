@@ -1,5 +1,6 @@
 function AP_AuditoryTuning_FiltersAndPlot(Analysis)
-
+global TuningYMAX;
+if Analysis.Parameters.Photometry
 %% Filters
 WNtypes=A_NameToTrialNumber(Analysis,'White');
 ChirpTypes=A_NameToTrialNumber(Analysis,'to');
@@ -28,7 +29,7 @@ color4plot={'-k';'-b';'-r';'-g';'-c';'-m';'-y'};
 transparency=Analysis.Parameters.Transparency;
 PlotY_photo=Analysis.Parameters.PlotY_photo;
 
-for thisCh=1:length(Analysis.Parameters.PhotoCh)
+for thisCh=1:1%length(Analysis.Parameters.PhotoCh)
     thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
     FigTitle=['Auditory Tuning Curve' char(Analysis.Parameters.PhotoCh{thisCh})];
     
@@ -51,9 +52,9 @@ if isnan(WNtypes)==false
         hp(counter)=hs.mainLine;
         thislegend{counter}=Analysis.(thistype).Name;
         counter=counter+1;
-        TuningYAVG(i)=Analysis.(thistype).(thisChStruct).CueAVG;
-        TuningYMAX(i)=Analysis.(thistype).(thisChStruct).CueMax;
-        TuningYSEM(i)=Analysis.(thistype).(thisChStruct).CueSEM;
+        TuningYAVG(i)=Analysis.(thistype).(thisChStruct).CueAVG_AVG;
+        TuningYMAX(i)=Analysis.(thistype).(thisChStruct).CueAVGZ_AVG; %AVG_MAXZ %AVGZ_AVG
+        TuningYSEM(i)=Analysis.(thistype).(thisChStruct).CueAVG_SEM;
     end
     legend(hp,thislegend,'Location','northwest','FontSize',8);
     legend('boxoff');
@@ -82,9 +83,9 @@ if isnan(ChirpTypes)==false
         hp(counter)=hs.mainLine;
         thislegend{counter}=Analysis.(thistype).Name;
         counter=counter+1;
-        TuningYAVG(i)=Analysis.(thistype).(thisChStruct).CueAVG;
-        TuningYMAX(i)=Analysis.(thistype).(thisChStruct).CueMax;
-        TuningYSEM(i)=Analysis.(thistype).(thisChStruct).CueSEM;
+        TuningYAVG(i)=Analysis.(thistype).(thisChStruct).CueAVG_AVG;
+        TuningYMAX(i)=Analysis.(thistype).(thisChStruct).CueMAX_AVG;
+        TuningYSEM(i)=Analysis.(thistype).(thisChStruct).CueAVG_SEM;
     end
 	legend(hp,thislegend,'Location','northwest','FontSize',8);
     legend('boxoff');
@@ -113,9 +114,9 @@ if isnan(ToneTypes)==false
         hp(counter)=hs.mainLine;
         thislegend{counter}=Analysis.(thistype).Name;
         counter=counter+1;
-        TuningYAVG(i)=Analysis.(thistype).(thisChStruct).CueAVG;
-        TuningYMAX(i)=Analysis.(thistype).(thisChStruct).CueMax;
-        TuningYSEM(i)=Analysis.(thistype).(thisChStruct).CueSEM;
+        TuningYAVG(i)=Analysis.(thistype).(thisChStruct).CueAVG_AVG;
+        TuningYMAX(i)=Analysis.(thistype).(thisChStruct).CueMAX_AVG;
+        TuningYSEM(i)=Analysis.(thistype).(thisChStruct).CueAVG_SEM;
     end
 	legend(hp,thislegend,'Location','northwest','FontSize',8);
     legend('boxoff');
@@ -151,5 +152,9 @@ if Analysis.Parameters.Illustrator
 saveas(gcf,[DAnalysis.Parameters.DirFig Analysis.Parameters.Name '_AudTun' char(Analysis.Parameters.PhotoCh{thisCh})],'epsc');
 end
 
+end
+end
+if Analysis.Parameters.SpikesAnalysis
+    Analysis=Analysis_Spikes(Analysis,'Figure');
 end
 end

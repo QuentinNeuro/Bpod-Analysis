@@ -2,7 +2,9 @@ function Par=AP_Parameters_Update(Par,LP)
 %% Update Analysis Parameters using Launcher Parameters
 FieldsLP_P=fieldnames(LP.P);
 for thisField=1:size(FieldsLP_P,1)
+    if ~isempty(LP.P.(FieldsLP_P{thisField}))
     Par.(FieldsLP_P{thisField})=LP.P.(FieldsLP_P{thisField});
+    end
 end
 %
 Par.StateToZero=Par.(LP.P.StateToZero);

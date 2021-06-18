@@ -43,7 +43,7 @@ if Analysis.(thistype).nTrials>0
 % Average
     Analysis.(thistype).Licks.AVG                       =mean(Analysis.(thistype).Licks.Rate,1);
     Analysis.(thistype).Licks.SEM                       =std(Analysis.(thistype).Licks.Rate,0,1)/sqrt(Analysis.(thistype).nTrials);
-    Analysis.(thistype).Licks.Bin                       =Analysis.Parameters.LickEdges(1)+Analysis.Parameters.Bin:Analysis.Parameters.Bin:Analysis.Parameters.LickEdges(2);
+    Analysis.(thistype).Licks.Bin                       =Analysis.Parameters.ReshapedTime(1)+Analysis.Parameters.Bin:Analysis.Parameters.Bin:Analysis.Parameters.ReshapedTime(2);
     Analysis.(thistype).Licks.CueAVG                    =mean(Analysis.(thistype).Licks.Cue);
     Analysis.(thistype).Licks.OutcomeAVG                =mean(Analysis.(thistype).Licks.Outcome);
 % Photometry    
@@ -53,22 +53,25 @@ if Analysis.(thistype).nTrials>0
     % Average
         Analysis.(thistype).(thisChStruct).DFFAVG       =nanmean(Analysis.(thistype).(thisChStruct).DFF,1); 
         Analysis.(thistype).(thisChStruct).DFFSEM       =nanstd(Analysis.(thistype).(thisChStruct).DFF,0,1)/sqrt(Analysis.(thistype).nTrials);
+        %Analysis.(thistype).(thisChStruct).DFFAVG_CueZ   =nanmean(Analysis.(thistype).(thisChStruct).DFF-Analysis.(thistype).(thisChStruct).Z4Cue',1); 
+        %Analysis.(thistype).(thisChStruct).DFFAVG_OutZ   =nanmean(Analysis.(thistype).(thisChStruct).DFF-Analysis.(thistype).(thisChStruct).Z4Outcome',1); 
+
         % Cue
         Analysis.(thistype).(thisChStruct).CueAVG_AVG   =nanmean(Analysis.(thistype).(thisChStruct).CueAVG,2);
+        Analysis.(thistype).(thisChStruct).CueAVGZ_AVG  =nanmean(Analysis.(thistype).(thisChStruct).CueAVGZ,2);
         Analysis.(thistype).(thisChStruct).CueAVG_SEM   =nanstd(Analysis.(thistype).(thisChStruct).CueAVG,0,2)/sqrt(Analysis.(thistype).nTrials);
         Analysis.(thistype).(thisChStruct).CueAVG_MAX   =max(Analysis.(thistype).(thisChStruct).DFFAVG(Time>CueTime(1) & Time<CueTime(2)));
+        Analysis.(thistype).(thisChStruct).CueAVG_MAXZ  =Analysis.(thistype).(thisChStruct).CueAVG_MAX-nanmean(Analysis.(thistype).(thisChStruct).DFFAVG(Time>CueTime(1)-0.2 & Time<CueTime(1)-0.01)); 
         Analysis.(thistype).(thisChStruct).CueMAX_AVG   =nanmean(Analysis.(thistype).(thisChStruct).CueMAX,2);
+        Analysis.(thistype).(thisChStruct).CueMAXZ_AVG  =nanmean(Analysis.(thistype).(thisChStruct).CueMAXZ,2);
         Analysis.(thistype).(thisChStruct).CueMAX_SEM   =nanstd(Analysis.(thistype).(thisChStruct).CueMAX,0,2)/sqrt(Analysis.(thistype).nTrials);     
         % Outcome
         Analysis.(thistype).(thisChStruct).OutcomeAVG_AVG   =nanmean(Analysis.(thistype).(thisChStruct).OutcomeAVG,2);
         Analysis.(thistype).(thisChStruct).OutcomeAVG_SEM   =nanstd(Analysis.(thistype).(thisChStruct).OutcomeAVG,0,2)/sqrt(Analysis.(thistype).nTrials);
         Analysis.(thistype).(thisChStruct).OutcomeAVG_MAX   =max(Analysis.(thistype).(thisChStruct).DFFAVG(Time>OutcomeTime(1) & Time<OutcomeTime(2))); 
         Analysis.(thistype).(thisChStruct).OutcomeAVG_MAXZ  =Analysis.(thistype).(thisChStruct).OutcomeAVG_MAX-nanmean(Analysis.(thistype).(thisChStruct).DFFAVG(Time>OutcomeTime(1)-0.2 & Time<OutcomeTime(1)-0.01)); 
-
-        
         Analysis.(thistype).(thisChStruct).OutcomeAVGZ_AVG  =nanmean(Analysis.(thistype).(thisChStruct).OutcomeAVGZ,2);
         Analysis.(thistype).(thisChStruct).OutcomeAVGZ_SEM  =nanstd(Analysis.(thistype).(thisChStruct).OutcomeAVGZ,0,2)/sqrt(Analysis.(thistype).nTrials);
-        
         Analysis.(thistype).(thisChStruct).OutcomeMAXZ_AVG  =nanmean(Analysis.(thistype).(thisChStruct).OutcomeMAXZ,2);
         Analysis.(thistype).(thisChStruct).OutcomeMAXZ_SEM  =nanstd(Analysis.(thistype).(thisChStruct).OutcomeMAXZ,0,2)/sqrt(Analysis.(thistype).nTrials);
     % Fit

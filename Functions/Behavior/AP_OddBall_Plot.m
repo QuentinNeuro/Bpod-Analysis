@@ -11,8 +11,8 @@ labely='DF/F(%)';
 
 xEdges=[-0.1 1];
 xEdges2=[-0.1 10];
-yEdges=Analysis.Parameters.NidaqRange;
-yEdges2=Analysis.Parameters.NidaqRange;
+yEdges=[-5 5];
+yEdges2=[-5 5];
 indexplot=0;
 color4plot={'-k';'-b';'-r';'-g';'-c';'-c';'-k'};
 transparency=Analysis.Parameters.Transparency;
@@ -31,7 +31,7 @@ titlePlot1=sprintf('Early to Late - %s',thistype);
 subplot(2,7,1+indexplot:3+indexplot); hold on;
 title(titlePlot1)
 xlabel(labelx); ylabel(labely);
-set(gca,'XLim',xEdges2,'YLim',yEdges);
+set(gca,'XLim',xEdges2);%'YLim',yEdges
 plot(Analysis.(thistype).Oddball.(thisChStruct).TimeEarlyToLate,Analysis.(thistype).Oddball.(thisChStruct).PhotoEarlyToLate,'-k');
 p=plot(Analysis.(thistype).Oddball.(thisChStruct).TimeEarlyToLate,Analysis.(thistype).Oddball.(thisChStruct).PhotoEarlyToLateAVG,'-r');
 p.LineWidth=2;
@@ -41,7 +41,7 @@ plot([0:1:xEdges2(2)],(ones(xEdges(2),1).*yEdges(2)),'v','MarkerSize',5,'MarkerF
 %% Early
 subplot(2,7,4+indexplot); hold on;
 xlabel(labelx); ylabel(labely);
-set(gca,'XLim',xEdges,'XTick',[0 0.5 1],'YLim',yEdges);
+set(gca,'XLim',xEdges,'XTick',[0 0.5 1]);%,'YLim',yEdges
 title('Early Sound');
 plot(Analysis.(thistype).Oddball.(thisChStruct).TimeEarly,Analysis.(thistype).Oddball.(thisChStruct).PhotoEarly,'-k');
 p=plot(Analysis.(thistype).Oddball.(thisChStruct).TimeEarly,Analysis.(thistype).Oddball.(thisChStruct).PhotoEarlyAVG,'-b');
@@ -50,7 +50,7 @@ p.LineWidth=2;
 %% Late
 subplot(2,7,5+indexplot); hold on;
 xlabel(labelx);
-set(gca,'XLim',xEdges,'XTick',[0 0.5 1],'YLim',yEdges);
+set(gca,'XLim',xEdges,'XTick',[0 0.5 1]);%,'YLim',yEdges
 title('Late Sound');
 plot(Analysis.(thistype).Oddball.(thisChStruct).TimeLate,Analysis.(thistype).Oddball.(thisChStruct).PhotoLate,'-k');
 p=plot(Analysis.(thistype).Oddball.(thisChStruct).TimeLate,Analysis.(thistype).Oddball.(thisChStruct).PhotoLateAVG,'-g');
@@ -59,7 +59,7 @@ p.LineWidth=2;
 %% Odd
 subplot(2,7,6+indexplot);
 xlabel(labelx);
-set(gca,'XLim',xEdges,'XTick',[0 0.5 1],'YLim',yEdges);
+set(gca,'XLim',xEdges,'XTick',[0 0.5 1]);%,'YLim',yEdges
 title('Odd Sound'); hold on;
 plot(Analysis.(thistype).Oddball.(thisChStruct).TimeOdd,Analysis.(thistype).Oddball.(thisChStruct).PhotoOdd,'-k');
 p=plot(Analysis.(thistype).Oddball.(thisChStruct).TimeOdd,Analysis.(thistype).Oddball.(thisChStruct).PhotoOddAVG,'-r');
@@ -68,7 +68,7 @@ p.LineWidth=2;
 %% Overlay
 subplot(2,7,7+indexplot);
 xlabel(labelx);
-set(gca,'XLim',xEdges,'XTick',[0 0.5 1],'YLim',yEdges2);
+set(gca,'XLim',xEdges,'XTick',[0 0.5 1]);,%'YLim',yEdges2
 title('Overlay'); hold on;
 hs=shadedErrorBar(Analysis.(thistype).Oddball.(thisChStruct).TimeEarly,Analysis.(thistype).Oddball.(thisChStruct).PhotoEarlyAVG,Analysis.(thistype).Oddball.(thisChStruct).PhotoEarlySEM,'b',transparency);
 hp(1)=hs.mainLine;

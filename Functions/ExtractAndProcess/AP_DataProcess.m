@@ -13,7 +13,14 @@ Analysis.AllData.Session=Analysis.Core.Session;
 Analysis.AllData.TrialNumbers=Analysis.Core.TrialNumbers;
 Analysis.AllData.TrialTypes=Analysis.Core.TrialTypes;
 Analysis.Filters.FirstLick=true(Analysis.AllData.nTrials,1);
+%% Oddball & Auditory Tuning % should I do that for all of it ?
+switch Analysis.Parameters.Behavior
+    case 'Oddball'
+    maxITI=max(diff(Analysis.Core.TrialStartTS));
+    Analysis.Parameters.ReshapedTime=[0 ceil(maxITI)+1];
+end
 
+%% Trial processing
 for thisTrial=1:Analysis.AllData.nTrials
 	% Timing - some of these values could be modified by process% functions
     thisStates=Analysis.Core.States{1,thisTrial};

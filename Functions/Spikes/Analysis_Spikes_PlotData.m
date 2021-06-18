@@ -5,10 +5,10 @@ isPunish=0;
 if contains(Analysis.Parameters.Phase,'Punish')
     isPunish=1;
 end
-CueType={'Cue_A','NoAnticipLick_CueB'};%,'NoCue'};
-CueColors=['-k';'-b';'-g'];
+CueType={'Cue_A','Cue_B'};%,'NoCue'};
+CueColors=['-k';'-r';'-b'];
 RewardType={'AnticipLick_CueA_Reward','Uncued_Reward'};%'NoAnticipLick_CueA_Reward',
-RewardColors=['-k';'-g';'-g'];
+RewardColors=['-k';'-r';'-g'];
 PunishType={'NoAnticipLick_CueB_Punish','Uncued_Punish'};
 PunishColors=['-k';'-r'];
 
@@ -21,7 +21,7 @@ yLabelSpikeAll='Spikes';
 ySpikeAll=[-0.1 0.1];
 % Subplot Tagging Raster
 xLabelTag='Time from Laser (s)';
-xTimeTag=[-0.02 0.05];
+xTimeTag=[-0.1 0.2];
 yTrialsTag1=[0 100];
 yTrialsTag2=[100 200];
 % Subplot Licks
@@ -164,6 +164,7 @@ end
 %% Spike Rasters
 % Cue
 for i=1:length(CueType)
+    if Analysis.(CueType{i}).nTrials>0
     thisBehav_Events=Analysis.(CueType{i}).Spikes.Behavior.(thisTT).Events;
     thisBehav_Trials=Analysis.(CueType{i}).Spikes.Behavior.(thisTT).Trials;
     subplot(6,3,7+i*3); hold on;
@@ -173,10 +174,12 @@ for i=1:length(CueType)
     plot(Analysis.(CueType{1}).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
     set(gca,'XLim',xTimeSpikes,'YDir','reverse');
     ylabel(yLabelSpikeRaster)
+    end
 end
 xlabel(xLabelBehav);
 % Reward
 for i=1:length(RewardType)
+    if Analysis.(CueType{i}).nTrials>0
     thisBehav_Events=Analysis.(RewardType{i}).Spikes.Behavior.(thisTT).Events;
     thisBehav_Trials=Analysis.(RewardType{i}).Spikes.Behavior.(thisTT).Trials;
     subplot(6,3,8+i*3); hold on;
@@ -184,7 +187,8 @@ for i=1:length(RewardType)
     plot(thisBehav_Events,thisBehav_Trials,'sk','MarkerSize',2,'MarkerFaceColor','k');
     plot([0 0],[0 max(thisBehav_Events)],'-b');
     plot(Analysis.(RewardType{1}).Time.Cue(1,:),[0 0],'-b','LineWidth',2);
-    set(gca,'XLim',xTimeSpikes,'YDir','reverse');   
+    set(gca,'XLim',xTimeSpikes,'YDir','reverse'); 
+    end
 end
 xlabel(xLabelBehav);
 % Punish
