@@ -1,7 +1,10 @@
 %% Use Analysis_Photometry_Launcher to keep it up to date with the pipeline
 % postrec specific code can be find at the end of this script
 % QC 2021
-function AP_Launcher_PostRec(BpodSystem,ChannelNames)
+function AP_Launcher_PostRec(BpodSystem,ChannelNames,PlotSumOW)
+if nargin<=2
+    PlotSumOW=0;
+end
 %% Analysis type Single/Group etc
 LP.Analysis_type='Single';
 LP.Save=0; % 1: Core Data only     // 2: Analysis Structure
@@ -17,7 +20,7 @@ LP.OW.OutcomeTimeReset=[]; %AOD [0 1]
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
 % Figures
-LP.P.PlotSummary1=0;
+LP.P.PlotSummary1=PlotSumOW;
 LP.P.PlotSummary2=0;
 LP.P.PlotFiltersSingle=0;               % AP_####_GroupToPlot Output 1
 LP.P.PlotFiltersSummary=0;
