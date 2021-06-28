@@ -35,7 +35,7 @@ end
 %% Compute decision variable
 Decision=sum(testIO)==length(testIO)
 else
-Decision=NaN;
+Decision=NaN
 testIO=NaN;
 end
 %% Save in Analysis Structure

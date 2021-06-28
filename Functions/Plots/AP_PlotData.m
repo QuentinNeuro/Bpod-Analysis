@@ -54,7 +54,10 @@ end
 PlotY_photo=Analysis.Parameters.PlotY_photo;
 
 %% Plot
-figure('Name',FigTitle,'Position', [200 100 1200 700], 'numbertitle','off');
+ScrSze=get(0,'ScreenSize');
+FigSze=[ScrSze(3)*1/10 ScrSze(4)*1/10 ScrSze(3)*8/10 ScrSze(4)*8/10];
+figure('Name',FigTitle,'Position', FigSze, 'numbertitle','off');
+
 Legend=uicontrol('style','text');
 set(Legend,'String',Analysis.Parameters.Legend,'Position',[10,5,500,20]); 
 

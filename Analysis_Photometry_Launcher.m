@@ -14,7 +14,7 @@ DB_Group=[];
 LP.Analysis_type='Single';
 LP.Save=0; % 1: Core Data only     // 2: Analysis Structure
 LP.SaveTag=[]; % string to be added to the saved analysis file name
-LP.Load=0; % 1: Load and reprocess
+LP.Load=1; % 1: Load and reprocess
 % Electrophysiology
 LP.P.TE4CellBase=0;
 LP.P.SpikesAnalysis=0;
