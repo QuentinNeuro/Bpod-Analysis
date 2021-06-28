@@ -3,7 +3,7 @@ function thisfig=AP_Sensor_OnlineSummaryPlot(Analysis)
 %% To use with the Bpod Analysis pipeline
 %% Design by QC 2018
 
-water = 5*sum(Analysis.Filters.LicksOutcome.*Analysis.Filters.Rewrad);
+water = 5*sum(Analysis.Filters.LicksOutcome.*Analysis.Filters.Reward);
 %% Check whether performance data exists and generate title
 if isfield(Analysis,'Performance')
     Decision=int8(Analysis.Performance.Decision);

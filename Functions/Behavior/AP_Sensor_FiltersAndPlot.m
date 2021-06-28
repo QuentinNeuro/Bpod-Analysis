@@ -28,7 +28,7 @@ Analysis=A_FilterPupilNaNCheck(Analysis,'PupilNaN',25);
 if ~isempty(Group_Perf)
 Analysis=AP_Performance(Analysis,Group_Perf);
 end
-AP_Sensor_OnlineSummaryPlot(Analysis,0);
+AP_Sensor_OnlineSummaryPlot(Analysis);
 saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name 'Online.png']);
 
 %% Sort and Plot Filtered Trials specified in AP_Filter_GroupToPlot.
