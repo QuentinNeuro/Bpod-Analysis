@@ -1,8 +1,7 @@
 %% Use Analysis_Photometry_Launcher to keep it up to date with the pipeline
 % postrec specific code can be find at the end of this script
 % QC 2021
-function AP_Launcher_PostRec(BpodSystem,ChannelNames,water)
-global water
+function AP_Launcher_PostRec(BpodSystem,ChannelNames)
 %% Analysis type Single/Group etc
 LP.Analysis_type='Single';
 LP.Save=0; % 1: Core Data only     // 2: Analysis Structure
