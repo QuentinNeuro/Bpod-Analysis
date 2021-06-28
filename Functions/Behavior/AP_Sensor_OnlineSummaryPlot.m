@@ -1,7 +1,11 @@
-function thisfig=AP_Sensor_OnlineSummaryPlot(Analysis,water)
+function thisfig=AP_Sensor_OnlineSummaryPlot(Analysis)
 %% Summary plot - used for postrecording quick analysis - but can also be used for posthoc
 %% To use with the Bpod Analysis pipeline
 %% Design by QC 2018
+global water
+if isempty(water)
+    water=NaN;
+end
 
 %% Check whether performance data exists and generate title
 if isfield(Analysis,'Performance')

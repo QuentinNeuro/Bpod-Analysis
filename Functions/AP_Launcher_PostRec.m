@@ -1,15 +1,8 @@
-%% Bpod Photometry Launcher
-% Launcher for an analysis pipeline originally designed for photometry
-% using Bpod to control the behavior of the animal.
-% 'Analysis_Photometry' is the core function used to extract, organize and
-% filters the data according to the behavioral task
-% 'Analysis_spike' is an addon that can be used to quickly plot PSTH from 
-% spiking units clustered using MClust (TT.mat) and using TTL sync information
-clear SessionData Analysis LP; %close all;
-%% Database 
-DB_Add=0;
-DB_Group=[];
-% global TuningYMAX;
+%% Use Analysis_Photometry_Launcher to keep it up to date with the pipeline
+% postrec specific code can be find at the end of this script
+% QC 2021
+function AP_Launcher_PostRec(BpodSystem,ChannelNames,water)
+global water
 %% Analysis type Single/Group etc
 LP.Analysis_type='Single';
 LP.Save=0; % 1: Core Data only     // 2: Analysis Structure
@@ -20,13 +13,12 @@ LP.P.TE4CellBase=0;
 LP.P.SpikesAnalysis=0;
 LP.P.SpikesFigure=0; 
 %% Overwritting Parameters
-LP.OW.PhotoChNames={'ACxL' 'ACxR'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 LP.OW.CueTimeReset=[];
 LP.OW.OutcomeTimeReset=[]; %AOD [0 1] 
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
 % Figures
-LP.P.PlotSummary1=1;
+LP.P.PlotSummary1=0;
 LP.P.PlotSummary2=0;
 LP.P.PlotFiltersSingle=0;               % AP_####_GroupToPlot Output 1
 LP.P.PlotFiltersSummary=0;
@@ -36,7 +28,7 @@ LP.P.Transparency=1;
 % Axis
 LP.P.PlotX=[-4 4];
 LP.P.PlotY_photo(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
-LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max]
+LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max] 	
 % States and Timing
 LP.P.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
 LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after state to Zero starts
@@ -79,41 +71,14 @@ LP.D.StateOfOutcome='WaitForLick';
 LP.D.CueTimeReset=[0 1];
 LP.D.OutcomeTimeReset=[0 1];
 LP.D.NidaqBaseline=[1 2];
+
+%% SPECIFIC TO LAUNCHER
+LP.OW.PhotoChNames=ChannelNames; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
+%% File path  from Bpod
+[thisPath,thisName,thisExt]=fileparts(BpodSystem.DataPath);
+LP.FileList=[thisName thisExt];
+LP.PathName=thisPath;
+LP.FileToOpen=cellstr(LP.FileList);
 %% Run Analysis_Photometry
-if ~LP.MEGABATCH
-[LP.FileList,LP.PathName]=uigetfile('*.mat','Select the BPod file(s)','MultiSelect', 'on');
-if iscell(LP.FileList)==0
-    LP.FileToOpen=cellstr(LP.FileList);
-    LP.Analysis_type='Single';
-	Analysis=Analysis_Photometry(LP); 
-else
-switch LP.Analysis_type
-    case 'Single'
-         for i=1:length(LP.FileList)
-%             TuningYMAX=[]; % for auditory tuning
-            LP.FileToOpen=LP.FileList(i);
-            try
-            Analysis=Analysis_Photometry(LP);
-            catch
-            disp([LP.FileToOpen ' NOT ANALYZED']);
-            end 
-            close all;
-            % DataBase
-            if DB_Add
-                if exist('DB_Stat')~=1
-                    DB_Stat=struct();
-                end
-            DB_Stat=DB_Generate(Analysis,DB_Stat,LP.FileToOpen,LP.PathName,DB_Group);
-            disp(Analysis.Parameters.CueTimeReset)
-            end
-%             AllAnimals{i}=Analysis.Parameters.Animal;
-%             AllTuning{i}=TuningYMAX;
-         end    
-	case 'Group'
-        LP.FileToOpen=LP.FileList;
-        Analysis=Analysis_Photometry(LP);
-end
-end
-else
-AP_MEGABATCH(LP)
+Analysis_Photometry(LP); 
 end

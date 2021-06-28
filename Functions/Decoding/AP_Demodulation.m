@@ -19,7 +19,7 @@ processedData_0     = rawData .* refData;
 processedData_90    = rawData .* refData90;
 
 %% Filter
-    lowCutoff = lowCutoff/(sampleRate/2); % normalized CutOff by half SampRate (see doc)
+     lowCutoff = lowCutoff/(sampleRate/2); % normalized CutOff by half SampRate (see doc)
     [b, a] = butter(5, lowCutoff, 'low'); 
     % pad the data to suppress windows effect upon filtering
     pad = 1;
