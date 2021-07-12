@@ -30,7 +30,7 @@ for i=2:length(LP.FileToOpen)
 end
 Analysis.Parameters=AP_Parameters_Update(Analysis.Parameters,LP);
 else
-    
+Analysis.Parameters=struct();    
 %% Loading Bpod file    
 for i=1:length(LP.FileToOpen)
    FileName=LP.FileToOpen{1,i}
@@ -46,7 +46,7 @@ else
 end
 % Parameters, Ignored Trials and Data extraction
 try
-        Analysis.Parameters=AP_Parameters(SessionData,Pupillometry,LP,FileNameNoExt);
+        Analysis.Parameters=AP_Parameters(SessionData,Pupillometry,LP,FileNameNoExt,Analysis.Parameters);
         Analysis=A_FilterIgnoredTrials(Analysis);
         Analysis=A_FilterWheel(Analysis);
         Analysis=A_FilterPupillometry(Analysis);

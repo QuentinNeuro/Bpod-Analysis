@@ -38,7 +38,7 @@ catch
 end
 % File
 if ~isfield(Par,'Files')
-    Par.Files=Name;
+    Par.Files{1}=Name;
 else
     Par.Files{end+1}=Name;
 end

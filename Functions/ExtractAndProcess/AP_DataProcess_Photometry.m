@@ -14,13 +14,13 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
 Data=Analysis.Core.Photometry{thisTrial}{thisCh};
 if Analysis.Parameters.BaselineBefAft==1
     DFFBaseline=AP_Baseline(Analysis,Data,Baseline);
-    DFFSTD=std2(Data(Baseline(1):Baseline(2)));    
+    DFFSTD=std(Data(Baseline(1):Baseline(2)));    
 end
 % Extract desired time window
 [Time,Data]=AP_TimeReshaping(Data,TimeWindow,TimeToZero,SamplingRate);
 if Analysis.Parameters.BaselineBefAft==2
     DFFBaseline=AP_Baseline(Analysis,Data,Baseline);
-    DFFSTD=std2(Data(Baseline(1):Baseline(2)));    
+    DFFSTD=std(Data(Baseline(1):Baseline(2)));    
 end
 % Zscore or DFF
 if Analysis.Parameters.Zscore
