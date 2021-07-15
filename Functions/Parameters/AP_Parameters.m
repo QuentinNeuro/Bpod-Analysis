@@ -68,6 +68,11 @@ Par.NidaqDecimateFactor=ceil(Par.NidaqSamplingRate/Par.NidaqDecimatedSR);
 Par=AP_Parameters_Photometry(Par,SessionData,LP);
 if isfield(SessionData,'DecimatedSampRate') % Already demodulated
 	Par.Modulation=0;
+    if SessionData.DecimatedSampRate<Par.NidaqDecimatedSR
+        Par.NidaqDecimatedSR=SessionData.DecimatedSampRate;
+        disp('Archive SR is lower than requested SR - using archive SR by default')
+    end
+    Par.NidaqDecimateFactor=ceil(SessionData.DecimatedSampRate/Par.NidaqDecimatedSR);
 end
 
 %% Wheel 
