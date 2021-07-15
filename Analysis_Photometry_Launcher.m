@@ -11,7 +11,7 @@ DB_Add=0;
 DB_Group=[];
 % global TuningYMAX;
 %% Analysis type Single/Group etc
-LP.Analysis_type='Group';
+LP.Analysis_type='Single';
 LP.Save=1; % 1: Core Data only     // 2: Analysis Structure
 LP.SaveTag=[]; % string to be added to the saved analysis file name
 LP.Load=0; % 1: Load and reprocess
