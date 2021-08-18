@@ -12,7 +12,7 @@ DB_Group=[];
 % global TuningYMAX;
 %% Analysis type Single/Group etc
 LP.Analysis_type='Single';
-LP.Save=1; % 1: Core Data only     // 2: Analysis Structure
+LP.Save=0; % 1: Core Data only     // 2: Analysis Structure
 LP.SaveTag=[]; % string to be added to the saved analysis file name
 LP.Load=0; % 1: Load and reprocess
 % Electrophysiology
@@ -20,14 +20,14 @@ LP.P.TE4CellBase=0;
 LP.P.SpikesAnalysis=0;
 LP.P.SpikesFigure=0; 
 %% Overwritting Parameters
-LP.OW.PhotoChNames={'ACxL' 'ACxR'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
-LP.OW.CueTimeReset=[];
-LP.OW.OutcomeTimeReset=[]; %AOD [0 1] 
+LP.OW.PhotoChNames={'F1' 'F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
+LP.OW.CueTimeReset=[0 1];
+LP.OW.OutcomeTimeReset=[0 1]; %AOD [0 1] 
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
 % Figures
 LP.P.PlotSummary1=1;
-LP.P.PlotSummary2=1;
+LP.P.PlotSummary2=0;
 LP.P.PlotFiltersSingle=0;               % AP_####_GroupToPlot Output 1
 LP.P.PlotFiltersSummary=0;
 LP.P.PlotFiltersBehavior=0;           	% AP_####_GroupToPlot Oupput 2
@@ -53,12 +53,13 @@ LP.P.TrialToFilterOut=[];
 LP.P.LoadIgnoredTrials=1;
 % Photometry
 LP.P.Zscore=1;
-LP.P.BaselineBefAft=1;                  % Options : 1 or 2 - Before extracting time window
+LP.P.BaselineMov=1;
+LP.P.BaselineBefAft=1;                  % Not working anymore Only before //Options : 1 or 2 - Before extracting time window
 LP.P.BaselineHisto=0;
 LP.P.CueStats='AVG';                    % Options : AVG AVGZ MAX MAXZ
 LP.P.OutcomeStats='AVGZ';                % Options : AVG AVGZ MAX MAXZ
 LP.P.BaselineHistoParam=20;             % percentage of data from the baseline to use
-LP.P.NidaqDecimatedSR=20;               % in Hz
+LP.P.NidaqDecimatedSR=100;               % in Hz
 % Archiving photometry data
 LP.Archive=0; %
 LP.ArchiveOnly=0;

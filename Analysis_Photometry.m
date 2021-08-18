@@ -17,8 +17,7 @@ Analysis=AP_Load(LauncherParam);
 if LauncherParam.Save==1 %&& Analysis.Parameters.Pupillometry
 AP_Save(Analysis,LauncherParam);
 end
-if ~LauncherParam.ArchiveOnly % temporary condition
-%% Process the data
+if ~LauncherParam.ArchiveOnly %
 Analysis=AP_DataProcess(Analysis);
 %% Sorts data by trial types and generates summary plots
 Analysis=AP_TrialTypes_FiltersAndPlot(Analysis,LauncherParam);

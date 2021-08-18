@@ -19,7 +19,10 @@ switch Analysis.Parameters.Behavior
     maxITI=max(diff(Analysis.Core.TrialStartTS));
     Analysis.Parameters.ReshapedTime=[0 ceil(maxITI)+1];
 end
-
+%% Baseline for fiber photometry
+if Analysis.Parameters.Photometry
+    Analysis=AP_Baseline(Analysis);
+end
 %% Trial processing
 for thisTrial=1:Analysis.AllData.nTrials
 	% Timing - some of these values could be modified by process% functions
@@ -51,7 +54,7 @@ end
 %% Bleaching calculation and axis
 for thisCh=1:length(Analysis.Parameters.PhotoCh)
     thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
-    Analysis.AllData.(thisChStruct).Bleach=Analysis.AllData.(thisChStruct).Baseline/mean(Analysis.AllData.(thisChStruct).Baseline(1:2));
+    Analysis.AllData.(thisChStruct).Bleach=Analysis.AllData.(thisChStruct).BaselineAVG/mean(Analysis.AllData.(thisChStruct).BaselineAVG(1:2));
 %     if ischar(Analysis.Parameters.PlotY_photo(thisCh,:))
 %         thisYAxis(thisCh,1)=min(min(Analysis.AllData.(thisChStruct).DFF));
 %         thisYAxis(thisCh,2)=max(max(Analysis.AllData.(thisChStruct).DFF));
