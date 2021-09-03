@@ -11,7 +11,7 @@ DB_Add=0;
 DB_Group=[];
 % global TuningYMAX;
 %% Analysis type Single/Group etc
-LP.Analysis_type='Single';
+LP.Analysis_type='Group';
 LP.Save=0; % 1: Core Data only     // 2: Analysis Structure
 LP.SaveTag=[]; % string to be added to the saved analysis file name
 LP.Load=0; % 1: Load and reprocess
@@ -19,6 +19,8 @@ LP.Load=0; % 1: Load and reprocess
 LP.P.TE4CellBase=0;
 LP.P.SpikesAnalysis=0;
 LP.P.SpikesFigure=0; 
+% Photometry
+LP.P.EventDetection=1;
 %% Overwritting Parameters
 LP.OW.PhotoChNames={'F1' 'F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 LP.OW.CueTimeReset=[0 1];
