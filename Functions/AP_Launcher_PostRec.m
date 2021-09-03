@@ -52,9 +52,9 @@ LP.P.BaselineHisto=0;
 LP.P.CueStats='AVG';                    % Options : AVG AVGZ MAX MAXZ
 LP.P.OutcomeStats='AVGZ';                % Options : AVG AVGZ MAX MAXZ
 LP.P.BaselineHistoParam=20;             % percentage of data from the baseline to use
-LP.P.NidaqDecimatedSR=20;               % in Hz
+LP.P.NidaqDecimatedSR=100;               % in Hz
 % Archiving photometry data
-LP.Archive=0; %
+LP.Archive=1; %
 LP.ArchiveOnly=0;
 LP.ArchiveOW=0;
 LP.MEGABATCH=0;
@@ -79,7 +79,7 @@ LP.OW.PhotoChNames=ChannelNames; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 %% File path  from Bpod
 [thisPath,thisName,thisExt]=fileparts(BpodSystem.DataPath);
 LP.FileList=[thisName thisExt];
-LP.PathName=thisPath;
+LP.PathName=[thisPath filesep];
 LP.FileToOpen=cellstr(LP.FileList);
 %% Run Analysis_Photometry
 Analysis_Photometry(LP); 

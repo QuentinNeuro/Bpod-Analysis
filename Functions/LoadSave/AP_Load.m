@@ -30,9 +30,8 @@ for i=2:length(LP.FileToOpen)
 end
 Analysis.Parameters=AP_Parameters_Update(Analysis.Parameters,LP);
 else
-    
-%% Loading Bpod file
-Analysis.Parameters=struct();
+Analysis.Parameters=struct();    
+%% Loading Bpod file    
 for i=1:length(LP.FileToOpen)
    FileName=LP.FileToOpen{1,i}
    cd(LP.PathName); load(FileName); 

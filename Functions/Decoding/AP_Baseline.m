@@ -1,11 +1,32 @@
-function BaselineValue=AP_Baseline(Analysis,Data,Window)
+function Analysis=AP_Baseline(Analysis)
 
-if Analysis.Parameters.BaselineHisto
-    Cutoff=Analysis.Parameters.BaselineHistoParam/100;
-    BaselineData=sort(Data(Window(1):Window(2)));
-    SizeBaselineData=round(length(BaselineData)*Cutoff);
-    BaselineValue=nanmean(BaselineData(1:SizeBaselineData));
-else    
-BaselineValue=nanmean(Data(Window(1):Window(2)));
+BaselinePts=Analysis.Parameters.NidaqBaselinePoints;
+Cutoff=Analysis.Parameters.BaselineHistoParam/100;
+movBaseParam=5;
+
+for thisCh=1:length(Analysis.Parameters.PhotoCh)
+    thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
+    BaselineAVG=nan(Analysis.AllData.nTrials,1);
+    BaselineSTD=nan(Analysis.AllData.nTrials,1);
+    for thisT=1:Analysis.AllData.nTrials
+        Data=Analysis.Core.Photometry{thisT}{thisCh};
+        DataBaseline=Data(BaselinePts(1):BaselinePts(2));
+        if Analysis.Parameters.BaselineHisto
+            DataBaselineSort=sort(DataBaseline);
+            BaselinePtsHisto=round(length(DataBaseline)*Cutoff);
+            BaselineAVG(thisT)=nanmean(DataBaseline(1:BaselinePtsHisto));
+            BaselineSTD(thisT)=nanstd(DataBaseline(1:BaselinePtsHisto));
+        else
+        BaselineAVG(thisT)=nanmean(DataBaseline);
+        BaselineSTD(thisT)=nanstd(DataBaseline);
+        end
+    end
+    
+    if Analysis.Parameters.BaselineMov
+        BaselineAVG=movmean(BaselineAVG,movBaseParam,'omitnan');
+        BaselineSTD=movmean(BaselineSTD,movBaseParam,'omitnan');
+    end
+    Analysis.AllData.(thisChStruct).BaselineAVG=BaselineAVG;
+    Analysis.AllData.(thisChStruct).BaselineSTD=BaselineSTD;
 end
 end
