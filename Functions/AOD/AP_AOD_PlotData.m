@@ -1,17 +1,19 @@
-AP_AOD_PlotData2(Analysis,S);
+AP_AOD_PlotData2(Analysis,A_AOD);
 
 function AP_AOD_PlotData2(Analysis,A_AOD)
-XTime=timeWindow;
+XTime=[-4 4];
 YLicks=[0 10];
 YFluo=[-1 2];
 
-ScrSze=get(0,'ScreenSize');
-FigSze=[ScrSze(3)*1/10 ScrSze(4)*1/10 ScrSze(3)*8/10 ScrSze(4)*8/10];
-figure('Name',FigTitle,'Position', FigSze, 'numbertitle','off');
+% ScrSze=get(0,'ScreenSize');
+% FigSze=[ScrSze(3)*1/10 ScrSze(4)*1/10 ScrSze(3)*8/10 ScrSze(4)*8/10];
+% figure('Name','AOD','Position', FigSze, 'numbertitle','off');
+
+cellsToPlot=10;
+trialsToPlot={'type_1','type_3','type_4'};
 
 %% Figure
-%type to plot:
-trialsToPlot={'type_1','type_3','type_4'};
+% one cell
 for thisC=cellsToPlot
     figure()
     counter=0;
@@ -41,7 +43,14 @@ for thisC=cellsToPlot
     end
 end
 
+% All cells
 figure()
+for t=1:size(trialsToPlot,2)
+	thisTT=cell2mat(trialsToPlot(t));
+	thisFilter=Analysis.Filters.(thisTT);
+    subplot(3,2,1)
+imagesc(
+subplot(3,2,[4:6])
 for thisTT=1:max(Analysis.Core.TrialTypes)
     thisType=sprintf('type_%.0d',thisTT)
     thisFilter=Analysis.Filters.(thisType);
@@ -51,4 +60,7 @@ for thisTT=1:max(Analysis.Core.TrialTypes)
     hold on
 end
 legend({'CueRew','CueOm','NeuCue','UncRew','UncOm'})
+
+figure()
+for this
 end

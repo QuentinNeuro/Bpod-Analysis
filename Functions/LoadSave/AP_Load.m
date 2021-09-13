@@ -45,7 +45,7 @@ else
     Pupillometry=[];
 end
 % Parameters, Ignored Trials and Data extraction
-try
+% try
         Analysis.Parameters=AP_Parameters(SessionData,Pupillometry,LP,FileNameNoExt,Analysis.Parameters);
         Analysis=A_FilterIgnoredTrials(Analysis);
         Analysis=A_FilterWheel(Analysis);
@@ -58,9 +58,9 @@ try
         if isfield(SessionData,'Modulation')
             Analysis.Parameters.Modulation=SessionData.Modulation;
         end
-catch
-        disp([FileName ' NOT ANALYZED - Error in Parameters extraction or Data organization']);
-end   
+% catch
+%         disp([FileName ' NOT ANALYZED - Error in Parameters extraction or Data organization']);
+% end   
 end
 clear SessionData Pupillometry;
 end
@@ -77,6 +77,7 @@ if sum(Analysis.Filters.Pupillometry>=1)
 else
     Analysis.Parameters.Pupillometry=0;
 end
+
 %% File Name
 if iscell(Analysis.Parameters.Files)
     if length(Analysis.Parameters.Files)>1
@@ -90,4 +91,7 @@ end
 if ~isempty(LP.SaveTag)
     Analysis.Parameters.Legend=[Analysis.Parameters.Legend '_' LP.SaveTag];
 end
+
+%% Figure path
+Analysis.Parameters.DirFig=[LP.PathName Analysis.Parameters.Phase filesep];
 end

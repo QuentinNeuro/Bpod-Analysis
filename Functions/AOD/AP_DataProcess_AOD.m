@@ -1,20 +1,15 @@
-A_AOD=AP_AOD_DataExtraction2(Analysis,D); 
-function Analysis=AP_AOD_DataExtraction2(Analysis,LP) 
+function Analysis=AP_DataProcess_AOD(Analysis)
+
 %% Action 
-dff=1; 
-zsc=1; 
- 
-smoothing=0; 
-timeWindow=[-5 5]; 
-baselinePts=[50 100]; 
-newDFF=0;
-offset=0;
- 
+smoothing=Analysis.Parameters.AOD_smooth; 
+timeWindow=Analysis.Parameters.ReshapedTime; 
+baselinePts=Analysis.Parameters.NidaqBaselinePoints; 
+
 %% Parameters 
 stateStart='AO_WarmUp'; 
-stateOutcome='Outcome'; 
+stateOutcome=Analysis.Parameters.StateOfOutcome;
 % Bpod or Analysis 
-nTrials=AnalysiAnalysis.Core.AOD.Core.nTrials; 
+nTrials=Analysis.Core.nTrials; 
 % AOD Data 
 nData=size(D,2); 
 nCells=nData/nTrials; 
@@ -25,15 +20,22 @@ sampRate=1/(1000*(D(1).x(2)-D(1).x(1)));
 timeZeroIndex=linspace(1,nCells,nData);
 counter=0;
 for thisT=1:nTrials 
-    Analysis.Core.AOD.timeStart(thisT)=AnalysiAnalysis.Core.AOD.Core.States{1,thisT}.(stateStart)(1); 
-    Analysis.Core.AOD.timeOutcome(thisT)=AnalysiAnalysis.Core.AOD.Core.States{1,thisT}.(stateOutcome)(1); 
+    Analysis.Core.AOD.timeStart(thisT)=Analysis.Core.States{1,thisT}.(stateStart)(1); 
+    Analysis.Core.AOD.timeOutcome(thisT)=Analysis.Core.States{1,thisT}.(stateOutcome)(1); 
     timeZero(1+counter:nCells+counter)=Analysis.Core.AOD.timeOutcome(thisT)-Analysis.Core.AOD.timeStart(thisT);
     counter=counter+nCells;
 end 
- 
-if exist('TTL_Outcome') 
-    timeZero=TTL_Outcome(:,1)'; 
-end 
+
+try
+    load(['TTL_outcome_' Analysis.Parameters.Files{1}]);
+    counter=0;
+    for thisT=1:nTrials
+        timeZero(1+counter:nCells+counter)=TTL_Outcome(thisT,1);
+        counter=counter+nCells;
+    end
+catch
+    disp('TTL file absent, using bpod state timing instead');
+end
  
  
 %% AOD Data   -
@@ -57,9 +59,12 @@ for thisCT=1:nData
    if newDFF
    baseAVG=nanmean(thisData(baselinePts(1):baselinePts(2))); 
    baseSTD=nanstd(thisData(baselinePts(1):baselinePts(2))); 
-   thisData=(thisData-baseAVG)/baseSTD; 
+   if Analysis.Parameters.Zscore
+    thisData=(thisData-baseAVG)/baseSTD;
+   else
+       thisData=100*(thisData-baseAVG)/baseAVG;
    end
-   
+   end
    data(:,thisCT)=thisData; 
    time(:,thisCT)=thisTime; 
   
@@ -81,9 +86,12 @@ end
 % Organize data per trials 
 countT=1; 
 for thisT=1:nCells:nData 
-    Analysis.Core.AOD.perTrialAnalysis.Core.AOD.data{countT}=dataW(:,thisT:thisT+nCells-1); 
-    Analysis.Core.AOD.perTrialAnalysis.Core.AOD.dataAVG(:,countT)=nanmean(Analysis.Core.AOD.perTrialAnalysis.Core.AOD.data{1,countT},2); 
+    Analysis.Core.AOD.perTrial.data{countT}=dataW(:,thisT:thisT+nCells-1); 
+    Analysis.Core.AOD.perTrial.dataAVG(:,countT)=nanmean(Analysis.Core.AOD.perTrialAnalysis.Core.AOD.data{1,countT},2); 
     countT=countT+1; 
 end 
  
 end 
+
+
+end

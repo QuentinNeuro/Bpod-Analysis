@@ -2,7 +2,7 @@ function Analysis=AP_Baseline(Analysis)
 
 BaselinePts=Analysis.Parameters.NidaqBaselinePoints;
 Cutoff=Analysis.Parameters.BaselineHistoParam/100;
-movBaseParam=5;
+movBaseParam=Analysis.Parameters.BaselineMov;
 
 for thisCh=1:length(Analysis.Parameters.PhotoCh)
     thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));

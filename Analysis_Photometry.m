@@ -20,7 +20,7 @@ end
 if ~LauncherParam.ArchiveOnly %
 Analysis=AP_DataProcess(Analysis);
 %% Sorts data by trial types and generates summary plots
-Analysis=AP_TrialTypes_FiltersAndPlot(Analysis,LauncherParam);
+Analysis=AP_TrialTypes_FiltersAndPlot(Analysis);
 %% Behavior specific : Sort filtered trials and generates plots
 switch Analysis.Parameters.Behavior
     case 'CuedOutcome'

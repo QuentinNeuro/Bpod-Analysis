@@ -11,6 +11,12 @@ indexc=0;
 
 switch Analysis.Parameters.Phase
 %%
+%           case {'Habituation-Water'}
+% indexp=indexp+1;
+% Group_Plot{indexp,1}='Reward';
+% Group_Plot{indexp,2}={  'Habit_Reward'      {'Uncued','Reward','LicksOutcome','FirstLick'};... 
+%                         'NotColl'           {'Uncued','Reward','LicksOutcomeInv','FirstLick'};...
+%                         'Habit_Omission',   {'Omission'}};
     case 'L1-CuedReward' 
 % Performance - should be 3 trial types, see AP_Sensor_Performance
 Group_Test={'type_1','type_1','type_1','type_2'};

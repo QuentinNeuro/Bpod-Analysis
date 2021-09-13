@@ -37,4 +37,6 @@ end
     Analysis.Parameters.Oddball_SoundITI=SessionData.TrialSettings(1).GUI.ITI;
     end
 end  
+if Analysis.Parameters.AOD
+    Analysis=AP_DataCore_AOD(Analysis);
 end

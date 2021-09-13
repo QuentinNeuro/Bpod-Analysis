@@ -1,4 +1,4 @@
-function Analysis=AP_TrialTypes_FiltersAndPlot(Analysis,LauncherParam)
+function Analysis=AP_TrialTypes_FiltersAndPlot(Analysis)
 %This function sorts the trials based on trial type numbers (A_FilterTrialType and AP_DataSort functions)
 %and generates %two different summary plots (AP_PlotData and AP_PlotSummary)
 %
@@ -12,7 +12,6 @@ for i=1:Analysis.Parameters.nbOfTrialTypes
     Analysis.(thistype).Name=Analysis.Parameters.TrialNames{i};
 end
 % figure folder
-Analysis.Parameters.DirFig=[LauncherParam.PathName Analysis.Parameters.Phase filesep];
 if isdir(Analysis.Parameters.DirFig)==0
     mkdir(Analysis.Parameters.DirFig);
 end
