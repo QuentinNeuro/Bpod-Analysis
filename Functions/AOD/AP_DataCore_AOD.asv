@@ -19,15 +19,12 @@ end
 %% Parameters 
 stateStart='AO_WarmUp'; 
 stateOutcome=Analysis.Parameters.StateOfOutcome;
-nTrials=150; 
+nTrials=Analysis.Core.nTrials; 
 nData=size(D,2); 
-sampRate=1000/(D(1).x(2)-D(1).x(1)); 
-nCells=nData/nTrials; 
+nSamples=length(D(1).y);
 
-%% Save in core structure
-Analysis.Core.AOD.nCells=nCells;
-Analysis.Core.AOD.nSamples=length(D(1).y);
-Analysis.Core.AOD.sampRate=sampRate;
+Analysis.Core.AOD.nCells=nData/nTrials; 
+Analysis.Core.AOD.sampRate=1000/(D(1).x(2)-D(1).x(1)); 
  
 %% Timing from Analysis structure or TTL 
 try
@@ -41,8 +38,9 @@ end
  
  
 %% AOD Data
-Analysis.Core.AOD.Time=D(1).x/1000;
-for thisCT=1:nData
+Analysis.Core.AOD.Time(:,1)=linspace(
+for thisCT=1:nData 
+    Analysis.Core.AOD.Time(:,thisCT)=D(thisCT).x/1000; 
     Analysis.Core.AOD.Data(:,thisCT)=D(thisCT).y; 
 end
 end 

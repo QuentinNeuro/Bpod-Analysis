@@ -22,11 +22,11 @@ LP.P.SpikesFigure=0;
 % AOD
 LP.P.AOD=1;
 LP.P.AOD_raw=1;
-LP.P.AOD_smooth=1;
+LP.P.AOD_smooth=0;
 LP.P.AOD_offset=120;
 %% Overwritting Parameters
 LP.OW.PhotoChNames={'BLA' 'VS'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
-LP.OW.CueTimeReset=[0 0.5];
+LP.OW.CueTimeReset=[0 1];
 LP.OW.OutcomeTimeReset=[0 3]; %AOD [0 1] 
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
@@ -48,7 +48,7 @@ LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after s
 LP.P.ZeroAtZero=0;
 LP.P.WheelState='Baseline';             %Options : 'Baseline','Cue','Outcome'
 LP.P.PupilState='NormBaseline';       	%Options : 'NormBaseline','Cue','Outcome'
-LP.P.ReshapedTime=[-5 4];               % use [0 180] for oddball
+LP.P.ReshapedTime=[-5 5];               % use [0 180] for oddball
 % Filters
 LP.P.PupilThreshold=1;
 LP.P.WheelThreshold=1;                  % Speed cm/s

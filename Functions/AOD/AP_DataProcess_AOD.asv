@@ -29,7 +29,7 @@ Analysis.AllData.AOD.time=timeW;
 %% Data
 for thisC=1:nCells
     thisC_Name=sprintf('cell%.0d',thisC);
-    thisC_Index=thisC:nCells:nCells*nTrials;
+    thisC_Index=1:nCells:nCells*nTrials;
     data=Analysis.Core.AOD.Data(:,thisC_Index);
 
     if Analysis.Parameters.AOD_raw
@@ -61,8 +61,8 @@ for thisC=1:nCells
     
     Analysis.AllData.AOD.(thisC_Name).Data          =dataW;
     if Analysis.Parameters.AOD_raw
-        Analysis.AllData.AOD.(thisC_Name).baselineAVG   =baseAVG;
-        Analysis.AllData.AOD.(thisC_Name).baselineSTD   =baseSTD;
+    Analysis.AllData.AOD.(thisC_Name).baselineAVG   =baseAVG;
+    Analysis.AllData.AOD.(thisC_Name).baselineSTD   =baseSTD;
     end
     Analysis.AllData.AOD.(thisC_Name).CueAVG        =nanmean(dataW(oneTime>CueTime(1) & oneTime<CueTime(2),:),1);
     Analysis.AllData.AOD.(thisC_Name).CueMAX        =max(dataW(oneTime>CueTime(1) & oneTime<CueTime(2),:),[],1);

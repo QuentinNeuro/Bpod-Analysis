@@ -101,5 +101,10 @@ if Analysis.(thistype).nTrials>0
     if Analysis.Parameters.SpikesAnalysis
         Analysis=Analysis_Spikes(Analysis,'Sort',thistype,thisFilter);
     end
+    
+    if Analysis.Parameters.AOD
+        Analysis=AP_DataSort_AOD(Analysis,thistype,thisFilter);
+    end
+    
 end
 end
