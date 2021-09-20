@@ -24,6 +24,8 @@ LP.P.AOD=0;
 LP.P.AOD_raw=1;
 LP.P.AOD_smooth=1;
 LP.P.AOD_offset=120;
+% Photometry
+LP.P.EventDetection=1;
 %% Overwritting Parameters
 LP.OW.PhotoChNames={'F1' 'F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 LP.OW.CueTimeReset=[0 1];
