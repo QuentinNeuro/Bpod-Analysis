@@ -33,9 +33,8 @@ for thisC=1:nCells
     data=Analysis.Core.AOD.Data(:,thisC_Index);
 
     if Analysis.Parameters.AOD_raw
-	    if offset
-            data=data-offset;
-        end
+        data=data-offset;
+        
         baseAVG=nanmean(data(baselinePts(1):baselinePts(2),:),1);
         baseSTD=nanstd(data(baselinePts(1):baselinePts(2),:),[],1);
         if Analysis.Parameters.BaselineMov

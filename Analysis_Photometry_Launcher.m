@@ -11,8 +11,8 @@ DB_Add=0;
 DB_Group=[];
 % global TuningYMAX;
 %% Analysis type Single/Group etc
-LP.Analysis_type='Single';
-LP.Save=2; % 1: Core Data only     // 2: Analysis Structure
+LP.Analysis_type='Group';
+LP.Save=0; % 1: Core Data only     // 2: Analysis Structure
 LP.SaveTag=[]; % string to be added to the saved analysis file name
 LP.Load=0; % 1: Load and reprocess
 % Electrophysiology
@@ -20,12 +20,12 @@ LP.P.TE4CellBase=0;
 LP.P.SpikesAnalysis=0;
 LP.P.SpikesFigure=0; 
 % AOD
-LP.P.AOD=1;
+LP.P.AOD=0;
 LP.P.AOD_raw=1;
-LP.P.AOD_smooth=0;
+LP.P.AOD_smooth=1;
 LP.P.AOD_offset=120;
 %% Overwritting Parameters
-LP.OW.PhotoChNames={'BLA' 'VS'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
+LP.OW.PhotoChNames={'F1' 'F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 LP.OW.CueTimeReset=[0 1];
 LP.OW.OutcomeTimeReset=[0 3]; %AOD [0 1] 
 LP.OW.NidaqBaseline=[]; 
@@ -33,13 +33,13 @@ LP.OW.NidaqBaseline=[];
 % Figures
 LP.P.PlotSummary1=1;
 LP.P.PlotSummary2=0;
-LP.P.PlotFiltersSingle=0;               % AP_####_GroupToPlot Output 1
-LP.P.PlotFiltersSummary=1;
+LP.P.PlotFiltersSingle=1;               % AP_####_GroupToPlot Output 1
+LP.P.PlotFiltersSummary=0;
 LP.P.PlotFiltersBehavior=0;           	% AP_####_GroupToPlot Oupput 2
-LP.P.Illustrator=1;
+LP.P.Illustrator=0;
 LP.P.Transparency=0;
 % Axis
-LP.P.PlotX=[-4 4];
+LP.P.PlotX=[-2 5];
 LP.P.PlotY_photo(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
 LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max]
 % States and Timing

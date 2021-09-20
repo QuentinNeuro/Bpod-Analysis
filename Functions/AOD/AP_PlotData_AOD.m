@@ -1,0 +1,108 @@
+% function Analysis=AP_PlotData_AOD(Analysis,cellNb,groupToPlot)
+
+
+%% test
+cellNb=1;
+cellID=sprintf('cell%.0d',cellNb);
+groupToPlot=Group_Plot{1,2};
+%% Legends
+FigTitle=[Analysis.Parameters.Files{1} '-' cellID];
+labelx='Time (sec)';   
+xTime=Analysis.Parameters.PlotX;
+xtickvalues=linspace(xTime(1),xTime(2),5);
+labely1='Trial Number (licks)';
+labely2='Licks Rate (Hz)';
+if Analysis.Parameters.Zscore
+    labelyFluo='Z-scored Fluo';
+else
+    labelyFluo='DF/Fo (%)';
+end
+
+%% Nb of plots
+nbOfPlotsY=6;
+nbOfPlotsX=size(groupToPlot,1);
+%% Axes
+% Automatic definition of axes
+maxtrial=20; maxrate=10;
+for i=1:nbOfPlotsX
+    thistype=sprintf('type_%.0d',i);
+    if Analysis.(thistype).nTrials~=0
+%Raster plots y axes
+    if Analysis.(thistype).nTrials > maxtrial
+        maxtrial=Analysis.(thistype).nTrials;
+    end
+%Lick AVG y axes
+    if max(Analysis.(thistype).Licks.AVG)>maxrate
+        maxrate=max(Analysis.(thistype).Licks.AVG);
+    end
+    end
+end
+PlotY_photo=Analysis.Parameters.PlotY_photo;
+
+%% Plot
+ScrSze=get(0,'ScreenSize');
+FigSze=[ScrSze(3)*1/10 ScrSze(4)*1/10 ScrSze(3)*8/10 ScrSze(4)*8/10];
+figure('Name',FigTitle,'Position', FigSze, 'numbertitle','off');
+
+Legend=uicontrol('style','text');
+set(Legend,'String',Analysis.Parameters.Legend,'Position',[10,5,500,20]); 
+
+thisplot=1;
+for i=1:nbOfPlotsX
+    thistype=groupToPlot{i,1};
+% Lick Raster
+    subplot(nbOfPlotsY,nbOfPlotsX,[thisplot thisplot+nbOfPlotsX]); hold on;
+    title(Analysis.(thistype).Name);
+    if thisplot==1
+        ylabel(labely1);
+    end
+if Analysis.(thistype).nTrials
+    set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial+1],'YDir','reverse');
+    plot(Analysis.(thistype).Licks.Events,Analysis.(thistype).Licks.Trials,'sk',...
+        'MarkerSize',2,'MarkerFaceColor','k');
+    plot(Analysis.(thistype).Time.Outcome(:,1),1:Analysis.(thistype).nTrials,'.r','MarkerSize',4);
+    plot(Analysis.(thistype).Time.Cue(:,1),1:Analysis.(thistype).nTrials,'.m','MarkerSize',4);  
+% Lick AVG
+    subplot(nbOfPlotsY,nbOfPlotsX,thisplot+(2*nbOfPlotsX)); hold on;
+    if thisplot==1
+        ylabel(labely2);
+    end
+    xlabel(labelx);
+    set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxrate+1]);
+    shadedErrorBar(Analysis.(thistype).Licks.Bin, Analysis.(thistype).Licks.AVG, Analysis.(thistype).Licks.SEM,'-k',0);
+    plot([0 0],[0 maxrate+1],'-r');
+    plot(Analysis.(thistype).Time.Cue(1,:),[maxrate maxrate],'-b','LineWidth',2);
+    
+    counterphotoplot=[3 4 5];
+% Fluo AVG
+    subplot(nbOfPlotsY,nbOfPlotsX,thisplot+(counterphotoplot(3)*nbOfPlotsX)); hold on;
+    plot(Analysis.(thistype).AOD.time(:,1),Analysis.(thistype).AOD.AllCells.Data(:,cellNb),'-k');
+    if thisplot==1
+        ylabel(labelyFluo);
+    end
+    xlabel(labelx);
+    
+% Nidaq Raster
+    subplot(nbOfPlotsY,nbOfPlotsX,[thisplot+(counterphotoplot(1)*nbOfPlotsX) thisplot+(counterphotoplot(2)*nbOfPlotsX)]); hold on;
+    yrasternidaq=1:Analysis.(thistype).nTrials;
+
+    thisTime=Analysis.(thistype).AOD.time(:,1);
+    thisData=Analysis.(thistype).AOD.(cellID).Data;
+    thisData=thisData(thisTime>xTime(1) & thisTime<xTime(2),:);
+    thisTime=thisTime(thisTime>xTime(1) & thisTime<xTime(2));
+    
+    imagesc(thisTime,yrasternidaq,thisData');
+    plot(Analysis.(thistype).Time.Outcome(:,1),1:Analysis.(thistype).nTrials,'.r','MarkerSize',4);
+    plot(Analysis.(thistype).Time.Cue(:,1),1:Analysis.(thistype).nTrials,'.m','MarkerSize',4);
+    if thisplot==nbOfPlotsX
+        pos=get(gca,'pos');
+        c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
+        c.Label.String = labelyFluo;
+    end
+    set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
+    counterphotoplot=counterphotoplot+3;
+ 
+end
+    thisplot=thisplot+1;
+end
+% end
