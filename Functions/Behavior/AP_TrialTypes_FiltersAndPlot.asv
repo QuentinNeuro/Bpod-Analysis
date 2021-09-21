@@ -44,8 +44,8 @@ if Analysis.Parameters.AOD
     mkdir(thisDirFig);
     end
     for thisC=1:Analysis.Core.AOD.nCells
-        AP_PlotData_filter_AOD(Analysis,thisC,'types');
-        thisCName=sprintf('cell%.0d',thisC);
+        AP_PlotData_filter_AOD(Analysis,thisC,'types')
+        thisCName=sprintf('cell%.0d',thisC)
         saveas(gcf,[thisDirFig Analysis.Parameters.Legend '_' thisCName '.png']);
         close gcf
     end

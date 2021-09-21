@@ -36,7 +36,9 @@ Analysis=AP_OddBall_FiltersAndPlot(Analysis);
 Analysis=AP_Sensor_FiltersAndPlot(Analysis);        
 end
 %% Event Detection
+if Analysis.Parameters.EventDetection
 Analysis=AP_Event_Detection(Analysis);
+end
 %% Save Analysis
 if LauncherParam.Save==2
 AP_Save(Analysis,LauncherParam);

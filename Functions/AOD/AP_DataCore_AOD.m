@@ -8,12 +8,17 @@ if Analysis.Parameters.AOD_raw
 else
     load(['dff_calcium_of_' Analysis.Parameters.Files{1}]);
     newDFF=0;
-    Analysis.Parameters.AOD_offset
     offset=0;
 end
 Analysis.Parameters.AOD_offset;
 catch
+    try
+        load(['calcium_of_' Analysis.Parameters.Files{1}]);
+        newDFF=0;
+        offset=0;
+    catch
     disp('could not find corresponding AOD data')
+    end
 end
 
 %% Parameters 
