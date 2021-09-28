@@ -1,8 +1,21 @@
-% function Analysis=AP_PlotData_AOD(Analysis,cellNb,groupToPlot)
+function Analysis=AP_Plot_AOD_cell(Analysis,cellNb,groupToPlot)
+
+switch groupToPlot
+    case 'filter'
+Group_Plot{1,1}='RewardExp';
+Group_Plot{1,2}={       'CueA_Reward',              {'Cue A','Reward','LicksOutcome'};...
+                        'CueB_Omission',            {'Cue B'};...
+                        'Uncued_Reward',            {'Uncued','Reward','LicksOutcome'}};
+    
+	case 'types'
+Group_Plot{1,1}='RewardExp';
+Group_Plot{1,2}={       'type_1',              {'type_1'};...
+                        'type_3',            {'type_3'};...
+                        'type_4',            {'type_4'}};
+end
 
 
 %% test
-cellNb=1;
 cellID=sprintf('cell%.0d',cellNb);
 groupToPlot=Group_Plot{1,2};
 %% Legends

@@ -43,11 +43,15 @@ if Analysis.Parameters.AOD
     if isfolder(thisDirFig)==0
     mkdir(thisDirFig);
     end
+    AP_Plot_AOD(Analysis,'types')
+    saveas(gcf,[thisDirFig Analysis.Parameters.Legend 'types.png']);
+    if Analysis.Parameters.PlotSummary1
     for thisC=1:Analysis.Core.AOD.nCells
-        AP_PlotData_filter_AOD(Analysis,thisC,'types');
+        AP_Plot_AOD_cell(Analysis,thisC,'types');
         thisCName=sprintf('cell%.0d',thisC);
-        saveas(gcf,[thisDirFig Analysis.Parameters.Legend '_' thisCName '.png']);
+        saveas(gcf,[thisDirFig Analysis.Parameters.Legend '_types_' thisCName '.png']);
         close gcf
+    end
     end
 end
 

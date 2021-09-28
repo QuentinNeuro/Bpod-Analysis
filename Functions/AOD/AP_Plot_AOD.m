@@ -1,4 +1,4 @@
-function Analysis=AP_PlotData_filter_AOD(Analysis,cellNb,groupToPlot)
+function Analysis=AP_Plot_AOD(Analysis,groupToPlot)
 
 switch groupToPlot
     case 'filter'
@@ -16,10 +16,9 @@ end
 
 
 %% test
-cellID=sprintf('cell%.0d',cellNb);
 groupToPlot=Group_Plot{1,2};
 %% Legends
-FigTitle=[Analysis.Parameters.Files{1} '-' cellID];
+FigTitle=[Analysis.Parameters.Files{1}];
 labelx='Time (sec)';   
 xTime=Analysis.Parameters.PlotX;
 xtickvalues=linspace(xTime(1),xTime(2),5);
@@ -89,7 +88,7 @@ if Analysis.(thistype).nTrials
     counterphotoplot=[3 4 5];
 % Fluo AVG
     subplot(nbOfPlotsY,nbOfPlotsX,thisplot+(counterphotoplot(3)*nbOfPlotsX)); hold on;
-    plot(Analysis.(thistype).AOD.time(:,1),Analysis.(thistype).AOD.AllCells.Data(:,cellNb),'-k');
+    plot(Analysis.(thistype).AOD.time(:,1),Analysis.(thistype).AOD.AllCells.DataAVG,'-k');
     if thisplot==1
         ylabel(labelyFluo);
     end
@@ -100,7 +99,7 @@ if Analysis.(thistype).nTrials
     yrasternidaq=1:Analysis.(thistype).nTrials;
 
     thisTime=Analysis.(thistype).AOD.time(:,1);
-    thisData=Analysis.(thistype).AOD.(cellID).Data;
+    thisData=Analysis.(thistype).AOD.AllCells.DataTrials;
     thisData=thisData(thisTime>xTime(1) & thisTime<xTime(2),:);
     thisTime=thisTime(thisTime>xTime(1) & thisTime<xTime(2));
     
@@ -118,4 +117,4 @@ if Analysis.(thistype).nTrials
 end
     thisplot=thisplot+1;
 end
-% end
+end

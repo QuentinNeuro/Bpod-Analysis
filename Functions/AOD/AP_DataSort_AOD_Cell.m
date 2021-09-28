@@ -1,10 +1,11 @@
-function    Analysis=AP_DataSort_AOD(Analysis,thistype,thisFilter)
-    
-	Analysis.(thistype).AOD.time=Analysis.AllData.AOD.time(:,thisFilter);
-    Analysis.(thistype).AOD.AllCells.Data=NaN(length(Analysis.AllData.AOD.time(:,1)),Analysis.Core.AOD.nCells);
+function    Analysis=AP_DataSort_AOD_Cell(Analysis,thistype,thisFilter,thisCellFilter)
+
+	nFilterCells=sum(thisCellFilter);
+    Analysis.(thistype).AOD.time=Analysis.AllData.AOD.time(:,thisFilter);
+    Analysis.(thistype).AOD.AllCells.Data=NaN(length(Analysis.AllData.AOD.time(:,1)),nFilterCells);
     Analysis.(thistype).AOD.AllCells.DataTrials=zeros(size(Analysis.AllData.AOD.time(:,thisFilter)));
-    
-    for thisC=1:Analysis.Core.AOD.nCells
+    filterCellIndex=1:Analysis.Core.AOD.nCells.*thisCellFilter;
+    for thisC=1:filterCellIndex
         thisC_Name=sprintf('cell%.0d',thisC);
         Analysis.(thistype).AOD.(thisC_Name).Data=Analysis.AllData.AOD.(thisC_Name).Data(:,thisFilter);
         Analysis.(thistype).AOD.(thisC_Name).CueAVG=Analysis.AllData.AOD.(thisC_Name).CueAVG(thisFilter);
