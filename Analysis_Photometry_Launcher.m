@@ -19,12 +19,17 @@ LP.Load=0; % 1: Load and reprocess
 LP.P.TE4CellBase=0;
 LP.P.SpikesAnalysis=0;
 LP.P.SpikesFigure=0; 
+% AOD
+LP.P.AOD=0;
+LP.P.AOD_raw=0;
+LP.P.AOD_smooth=1;
+LP.P.AOD_offset=100;
 % Photometry
 LP.P.EventDetection=1;
 %% Overwritting Parameters
 LP.OW.PhotoChNames={'F1' 'F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 LP.OW.CueTimeReset=[0 1];
-LP.OW.OutcomeTimeReset=[0 1]; %AOD [0 1] 
+LP.OW.OutcomeTimeReset=[0 2]; %AOD [0 1] 
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
 % Figures
@@ -45,7 +50,7 @@ LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after s
 LP.P.ZeroAtZero=0;
 LP.P.WheelState='Baseline';             %Options : 'Baseline','Cue','Outcome'
 LP.P.PupilState='NormBaseline';       	%Options : 'NormBaseline','Cue','Outcome'
-LP.P.ReshapedTime=[-4 4];               % use [0 180] for oddball
+LP.P.ReshapedTime=[-5 5];               % use [0 180] for oddball
 % Filters
 LP.P.PupilThreshold=1;
 LP.P.WheelThreshold=1;                  % Speed cm/s
@@ -55,8 +60,8 @@ LP.P.TrialToFilterOut=[];
 LP.P.LoadIgnoredTrials=1;
 % Photometry
 LP.P.Zscore=1;
-LP.P.BaselineMov=1;
-LP.P.BaselineBefAft=1;                  % Not working anymore Only before //Options : 1 or 2 - Before extracting time window
+LP.P.BaselineMov=5;                     % 0 to not have moving baseline avg (avg and std)
+LP.P.BaselineBefAft=1;                  % Depricated Not working anymore : Only before
 LP.P.BaselineHisto=0;
 LP.P.CueStats='AVG';                    % Options : AVG AVGZ MAX MAXZ
 LP.P.OutcomeStats='AVGZ';                % Options : AVG AVGZ MAX MAXZ
@@ -86,7 +91,7 @@ LP.D.NidaqBaseline=[1 2];
 if ~LP.MEGABATCH
 [LP.FileList,LP.PathName]=uigetfile('*.mat','Select the BPod file(s)','MultiSelect', 'on');
 if iscell(LP.FileList)==0
-    LP.FileToOpen=cellstr(LP.FileList);
+	LP.FileToOpen=cellstr(LP.FileList);
     LP.Analysis_type='Single';
 	Analysis=Analysis_Photometry(LP); 
 else

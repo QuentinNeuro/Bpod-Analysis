@@ -21,7 +21,7 @@ if ~LauncherParam.ArchiveOnly % temporary condition
 %% Process the data
 Analysis=AP_DataProcess(Analysis);
 %% Sorts data by trial types and generates summary plots
-Analysis=AP_TrialTypes_FiltersAndPlot(Analysis,LauncherParam);
+Analysis=AP_TrialTypes_FiltersAndPlot(Analysis);
 %% Behavior specific : Sort filtered trials and generates plots
 switch Analysis.Parameters.Behavior
     case 'CuedOutcome'
@@ -36,7 +36,9 @@ Analysis=AP_OddBall_FiltersAndPlot(Analysis);
 Analysis=AP_Sensor_FiltersAndPlot(Analysis);        
 end
 %% Event Detection
+if Analysis.Parameters.EventDetection
 Analysis=AP_Event_Detection(Analysis);
+end
 %% Save Analysis
 if LauncherParam.Save==2
 AP_Save(Analysis,LauncherParam);
