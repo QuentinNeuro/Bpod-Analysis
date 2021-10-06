@@ -52,7 +52,7 @@ for i=1:size(Group_Plot,1)
         end
         clear thisFilter
     end
-  %  for thisCh=1:length(Analysis.Parameters.PhotoCh)
+    if Analysis.Parameters.PlotFiltersSummary
         AP_PlotSummary_filter(Analysis,Title,MetaFilterGroup);
         phototitlelabel=[];
         for thisCh=1:length(Analysis.Parameters.PhotoCh)
@@ -62,7 +62,7 @@ for i=1:size(Group_Plot,1)
         if Analysis.Parameters.Illustrator
         saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend Title phototitlelabel],'epsc');
         end
-  %  end
+    end
 end
 end
 %% Correlations
@@ -99,6 +99,26 @@ for i=1:size(Group_Corr,1)
     end
     end
 end
+end
+
+%% AOD
+if Analysis.Parameters.AOD
+    thisDirFig=[Analysis.Parameters.DirFig 'filter' filesep];
+    if isfolder(thisDirFig)==0
+    mkdir(thisDirFig);
+    end
+    if Analysis.Parameters.PlotFiltersSummary
+    AP_Plot_AOD(Analysis,'filter')
+    saveas(gcf,[thisDirFig Analysis.Parameters.Legend '_filter.png']);
+    end
+    if Analysis.Parameters.PlotFiltersSingle
+    for thisC=1:Analysis.Core.AOD.nCells
+        AP_Plot_AOD_cell(Analysis,thisC,'filter');
+        thisCName=sprintf('cell%.0d',thisC);
+        saveas(gcf,[thisDirFig Analysis.Parameters.Legend '_filter_' thisCName '.png']);
+        close gcf
+    end
+    end
 end
 
 %% Spikes Analysis

@@ -1,4 +1,4 @@
-function Analysis=AP_TrialTypes_FiltersAndPlot(Analysis,LauncherParam)
+function Analysis=AP_TrialTypes_FiltersAndPlot(Analysis)
 %This function sorts the trials based on trial type numbers (A_FilterTrialType and AP_DataSort functions)
 %and generates %two different summary plots (AP_PlotData and AP_PlotSummary)
 %
@@ -12,8 +12,7 @@ for i=1:Analysis.Parameters.nbOfTrialTypes
     Analysis.(thistype).Name=Analysis.Parameters.TrialNames{i};
 end
 % figure folder
-Analysis.Parameters.DirFig=[LauncherParam.PathName Analysis.Parameters.Phase filesep];
-if isdir(Analysis.Parameters.DirFig)==0
+if isfolder(Analysis.Parameters.DirFig)==0
     mkdir(Analysis.Parameters.DirFig);
 end
 %% Summary Plot 1
@@ -36,6 +35,23 @@ if Analysis.Parameters.Photometry
         saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend '_Summary' char(Analysis.Parameters.PhotoChNames{thisCh}) ],'epsc');
         end
         end
+    end
+end
+
+if Analysis.Parameters.AOD
+    thisDirFig=[Analysis.Parameters.DirFig 'types' filesep];
+    if isfolder(thisDirFig)==0
+    mkdir(thisDirFig);
+    end
+    AP_Plot_AOD(Analysis,'types')
+    saveas(gcf,[thisDirFig Analysis.Parameters.Legend 'types.png']);
+    if Analysis.Parameters.PlotSummary1
+    for thisC=1:Analysis.Core.AOD.nCells
+        AP_Plot_AOD_cell(Analysis,thisC,'types');
+        thisCName=sprintf('cell%.0d',thisC);
+        saveas(gcf,[thisDirFig Analysis.Parameters.Legend '_types_' thisCName '.png']);
+        close gcf
+    end
     end
 end
 

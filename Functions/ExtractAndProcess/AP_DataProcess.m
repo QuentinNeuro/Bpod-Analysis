@@ -46,9 +46,24 @@ for thisTrial=1:Analysis.AllData.nTrials
     end
 end
 
+%% Event Detection
+% if EventDetection
+%     for thisS=1:nbOfS
+%         SessionFilter
+%         thisData=Analysis.AllData.(thisCh).DFF(SessionFilter,:)
+%         structEvents=EvenDetectionScript(thisData,Parameters); % all events - amp, startTime, peakTime (amp but normalize per sesssion)
+%         structEvents=EventDetectionStat(structEvents); % 
+%         Analysis.AllData.(thisCh).structEvents(
+%     end
+% end
+
 %% Spike Analysis
 if Analysis.Parameters.SpikesAnalysis
     Analysis=Analysis_Spikes(Analysis,'Organize');
+end
+%% AOD
+if Analysis.Parameters.AOD
+    Analysis=AP_DataProcess_AOD(Analysis);
 end
 
 %% Bleaching calculation and axis

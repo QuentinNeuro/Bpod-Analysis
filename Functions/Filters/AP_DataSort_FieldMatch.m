@@ -16,8 +16,8 @@ for i=1:size(Fields_AllData,1)
         Analysis.(thisType).(thisField)=Analysis.AllData.(thisField);
     elseif isstruct(Analysis.AllData.(thisField))
         Fields_Lvl2=fieldnames(Analysis.AllData.(thisField));
-        for i=1:size(Fields_Lvl2,1)
-            thisField2=Fields_Lvl2{i};
+        for j=1:size(Fields_Lvl2,1)
+            thisField2=Fields_Lvl2{j};
             if ischar(Analysis.AllData.(thisField).(thisField2))
                 Analysis.(thisType).(thisField).(thisField2)=Analysis.AllData.(thisField).(thisField2);
             else

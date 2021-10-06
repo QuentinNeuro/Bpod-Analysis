@@ -19,7 +19,7 @@ if nargin  < 4
 end
 
 if nargin  < 3
-    minprom = 95;
+    minprom = 90;
 end
 
 if nargin  < 2
@@ -90,6 +90,7 @@ pheights      =nan(size(pks,1),size(pks,2));
 mlocs         =nan(size(pks,1),size(pks,2));
 mtimes        =nan(size(pks,1),size(pks,2));
 pmins         =nan(size(pks,1),size(pks,2));
+%ptrace        =cell(size(pks,1),1);
 
 while ipeak          <=maxPeaks
     cpeak             =pks(:,ipeak);                                        % trial peak heights

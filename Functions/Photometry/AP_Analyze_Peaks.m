@@ -28,6 +28,8 @@ filterContainer('Cue C Reward')    ={'Cue_C','Reward','LicksOutcome'};
 filterContainer('Cue C Omission')  ={'Cue_C','Omission'};
 filterContainer('Uncued Reward')   ={'Uncued','Reward','LicksOutcome'};
 filterContainer('Uncued Omission') ={'Uncued','Omission'};
+filterContainer('Reward')          ={'Reward','LicksOutcome'};
+filterContainer('Habituation')     ={'type_2'};
 
 for tt              =1:length(trialTypes)
     trialType       =trialTypes{tt};
@@ -56,7 +58,9 @@ for tt                          =1:length(trialTypes)
     trialType                   =trialTypes{tt};
     filter                      =filterContainer(trialType);
     ptimes                      =thisData.ptimes(filter,:);                 % peak time matrix for all trials of trial type
-    normpproms                  =thisData.pproms(filter,:);                 % peak time matrix for all trials of trial type    
+    normpproms                  =thisData.pproms(filter,:);                 % peak prom matrix for all trials of trial type  
+    %%%%%%%%%% normpproms       =thisData.normproms(filter,:);
+    if contains(trialType,'Reward')
     ptimesPostRew               =find(ptimes>=0);                           % linear indices of peaks after reward
     [rowRew,colRew]             =ind2sub(size(ptimes),ptimesPostRew);       % convert linear indices to (row,column) matrix coordinates
     [uniqRew,idxRew]            =unique(rowRew);                            % first occurrence of each row (trial) + index of occurrence
@@ -72,6 +76,8 @@ for tt                          =1:length(trialTypes)
     thisData.firstPtime.Rew(uniqTrialsRew)=firstPtimeRew;
     thisData.firstPprom.Rew(uniqTrialsRew)=firstPpromRew;
     thisData.firstJitter.Rew(tt)=jitterRew;
+    end
+    if contains(trialType,'Cue')
     ptimesPostCue               =find((ptimes>=thisCue) & (ptimes<0));      % linear indices of peaks after cue
     [rowCue,colCue]             =ind2sub(size(ptimes),ptimesPostCue);       % convert linear indices to (row,column) matrix coordinates
     [uniqCue,idxCue]            =unique(rowCue);                            % first occurrence of each row (trial) + index of occurrence
@@ -82,22 +88,27 @@ for tt                          =1:length(trialTypes)
                                         colCue(idxCue(i))),             ...
                                        (1:length(uniqCue)).');
     jitterCue                   =std(firstPtimeCue);                        % jitter defined as std of timing
+    trialsFilt                  =find(filter);                              % indices of trials matching filter 
     uniqTrialsCue               =trialsFilt(uniqCue);                       % indices of trials matching filter with peaks in desired region
     thisData.firstPtime.Cue(uniqTrialsCue)=firstPtimeCue;
     thisData.firstPprom.Cue(uniqTrialsCue)=firstPpromCue;
     thisData.firstJitter.Cue(tt)=jitterCue;
-    spontPeriod                 =[(thisData.Time(1,1)+0.5),(thisCue-0.5)];
-    ptimesSpont                 =find((ptimes>=spontPeriod(1)) &        ...
-                                      (ptimes<=spontPeriod(2)));            % linear indices of spontaneous peaks
-    [rowSpont,colSpont]         =ind2sub(size(ptimes),ptimesSpont);         % convert linear indices to (row,column) matrix coordinates
-    [uniqSpont,idxSpont]        =unique(rowSpont);                          % first occurrence of each row (trial) + index of occurrence
-    firstPtimeSpont             =arrayfun(@(i) ptimes(uniqSpont(i),     ... % utilize first (row, col) coordinate to find first peak times for each trial
-                                        colSpont(idxSpont(i))),         ...
-                                       (1:length(uniqSpont)).');
-    firstPpromSpont             =arrayfun(@(i) normpproms(uniqSpont(i), ... % utilize first (row, col) coordinate to find first peak proms (normalized) for each trial
-                                        colSpont(idxSpont(i))),         ...
-                                       (1:length(uniqSpont)).');
-    uniqTrialsSpont             =trialsFilt(uniqSpont);                     % indices of trials matching filter with peaks in desired region
-    thisData.firstPtime.Spont(uniqTrialsSpont)=firstPtimeSpont;
-    thisData.firstPprom.Spont(uniqTrialsSpont)=firstPpromSpont;
+    end
 end
+
+ptimes                      =thisData.ptimes;                               % peak time matrix for all trials of trial type
+normpproms                  =thisData.pproms;                               % peak prom matrix for all trials of trial type  
+%%%%%%%%%% normpproms       =thisData.normproms;
+spontPeriod                 =[(thisData.Time(1,1)+0.25),(thisCue-0.25)];
+ptimesSpont                 =find((ptimes>=spontPeriod(1)) &            ...
+                                  (ptimes<=spontPeriod(2)));                % linear indices of spontaneous peaks
+[rowSpont,colSpont]         =ind2sub(size(ptimes),ptimesSpont);             % convert linear indices to (row,column) matrix coordinates
+[uniqSpont,idxSpont]        =unique(rowSpont);                              % first occurrence of each row (trial) + index of occurrence
+firstPtimeSpont             =arrayfun(@(i) ptimes(uniqSpont(i),         ... % utilize first (row, col) coordinate to find first peak times for each trial
+                                    colSpont(idxSpont(i))),             ...
+                                   (1:length(uniqSpont)).');
+firstPpromSpont             =arrayfun(@(i) normpproms(uniqSpont(i),     ... % utilize first (row, col) coordinate to find first peak proms (normalized) for each trial
+                                    colSpont(idxSpont(i))),             ...
+                                   (1:length(uniqSpont)).');
+thisData.firstPtime.Spont(uniqSpont)=firstPtimeSpont;
+thisData.firstPprom.Spont(uniqSpont)=firstPpromSpont;

@@ -149,7 +149,7 @@ plot(Analysis.AllData.(thisChStruct).Bleach);
 %% Save
 saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_AudTun' char(Analysis.Parameters.PhotoCh{thisCh}) '.png']);
 if Analysis.Parameters.Illustrator
-saveas(gcf,[DAnalysis.Parameters.DirFig Analysis.Parameters.Name '_AudTun' char(Analysis.Parameters.PhotoCh{thisCh})],'epsc');
+saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_AudTun' char(Analysis.Parameters.PhotoCh{thisCh})],'epsc');
 end
 
 end
