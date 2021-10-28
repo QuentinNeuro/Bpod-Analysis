@@ -58,10 +58,10 @@ end
         if isfield(SessionData,'Modulation')
             Analysis.Parameters.Modulation=SessionData.Modulation;
         end
-% catch
-%         disp([FileName ' NOT ANALYZED - Error in Parameters extraction or Data organization']);
-% end   
-% end
+catch
+        disp([FileName ' NOT ANALYZED - Error in Parameters extraction or Data organization']);
+end   
+end
 clear SessionData Pupillometry;
 end
 

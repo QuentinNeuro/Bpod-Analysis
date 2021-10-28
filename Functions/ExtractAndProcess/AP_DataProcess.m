@@ -66,6 +66,10 @@ end
 if Analysis.Parameters.AOD.AOD
     Analysis=AP_DataProcess_AOD(Analysis);
 end
+%% AOD
+if Analysis.Parameters.AOD
+    Analysis=AP_DataProcess_AOD(Analysis);
+end
 
 %% Bleaching calculation and axis
 for thisCh=1:length(Analysis.Parameters.PhotoCh)
