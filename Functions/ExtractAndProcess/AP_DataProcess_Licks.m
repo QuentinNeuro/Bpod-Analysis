@@ -11,7 +11,7 @@ thisLicks=Analysis.Core.Licks{thisTrial}-TimeToZero;
 %% ZeroFirstLick
 newZero=0;
 if ZeroFirstLick
-    LicksDuringZeroState=thisLicks(thisLicks> 0 & thisLicks < 1);
+    LicksDuringZeroState=thisLicks(thisLicks> 0 & thisLicks < 4);
     if ~isempty(LicksDuringZeroState)
         newZero=LicksDuringZeroState(1);
         thisLicks=thisLicks-newZero;

@@ -12,6 +12,12 @@ Group_Plot{1,1}='RewardExp';
 Group_Plot{1,2}={       'type_1',              {'type_1'};...
                         'type_3',            {'type_3'};...
                         'type_4',            {'type_4'}};
+                    
+	case 'cells'
+Group_Plot{1,1}='RewardExp';
+Group_Plot{1,2}={       'CueA_Reward_posRew',              {'Cue A','Reward','LicksOutcome'};...
+                        'CueB_Omission_posRew',            {'Cue B'};...
+                        'Uncued_Reward_posRew',            {'Uncued','Reward','LicksOutcome'}};
 end
 
 
@@ -89,7 +95,7 @@ if Analysis.(thistype).nTrials
     counterphotoplot=[3 4 5];
 % Fluo AVG
     subplot(nbOfPlotsY,nbOfPlotsX,thisplot+(counterphotoplot(3)*nbOfPlotsX)); hold on;
-    plot(Analysis.(thistype).AOD.time(:,1),Analysis.(thistype).AOD.AllCells.Data(:,cellNb),'-k');
+    plot(Analysis.(thistype).AOD.Time(:,1),Analysis.(thistype).AOD.(cellID).DataAVG,'-k');
     if thisplot==1
         ylabel(labelyFluo);
     end
@@ -99,7 +105,7 @@ if Analysis.(thistype).nTrials
     subplot(nbOfPlotsY,nbOfPlotsX,[thisplot+(counterphotoplot(1)*nbOfPlotsX) thisplot+(counterphotoplot(2)*nbOfPlotsX)]); hold on;
     yrasternidaq=1:Analysis.(thistype).nTrials;
 
-    thisTime=Analysis.(thistype).AOD.time(:,1);
+    thisTime=Analysis.(thistype).AOD.Time(:,1);
     thisData=Analysis.(thistype).AOD.(cellID).Data;
     thisData=thisData(thisTime>xTime(1) & thisTime<xTime(2),:);
     thisTime=thisTime(thisTime>xTime(1) & thisTime<xTime(2));

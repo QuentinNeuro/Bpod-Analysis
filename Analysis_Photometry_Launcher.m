@@ -11,7 +11,7 @@ DB_Add=0;
 DB_Group=[];
 % global TuningYMAX;
 %% Analysis type Single/Group etc
-LP.Analysis_type='Group';
+LP.Analysis_type='Single';
 LP.Save=0; % 1: Core Data only     // 2: Analysis Structure
 LP.SaveTag=[]; % string to be added to the saved analysis file name
 LP.Load=0; % 1: Load and reprocess
@@ -20,37 +20,35 @@ LP.P.TE4CellBase=0;
 LP.P.SpikesAnalysis=0;
 LP.P.SpikesFigure=0; 
 % AOD
-LP.P.AOD=1;
-LP.P.AOD_raw=1;
-LP.P.AOD_smooth=1;
-LP.P.AOD_offset=100;
-% Photometry
+LP.P.AOD.AOD=1;
+LP.P.AOD.raw=1;
+% Event Detection
 LP.P.EventDetection=0;
 %% Overwritting Parameters
 LP.OW.PhotoChNames={'F1' 'F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
-LP.OW.CueTimeReset=[0 1];
-LP.OW.OutcomeTimeReset=[0 2]; %AOD [0 1] 
+LP.OW.CueTimeReset=[0 2];
+LP.OW.OutcomeTimeReset=[0 3]; %AOD [0 1] 
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
 % Figures
-LP.P.PlotSummary1=0;
+LP.P.PlotSummary1=1;
 LP.P.PlotSummary2=0;
 LP.P.PlotFiltersSingle=0;               % AP_####_GroupToPlot Output 1
 LP.P.PlotFiltersSummary=1;
 LP.P.PlotFiltersBehavior=0;           	% AP_####_GroupToPlot Oupput 2
 LP.P.Illustrator=0;
-LP.P.Transparency=1;
+LP.P.Transparency=0;
 % Axis
-LP.P.PlotX=[-5 5];
+LP.P.PlotX=[-5 4];
 LP.P.PlotY_photo(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
 LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max]
 % States and Timing
 LP.P.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
 LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after state to Zero starts
-LP.P.ZeroAtZero=0;
+LP.P.ZeroAtZero=1;
 LP.P.WheelState='Baseline';             %Options : 'Baseline','Cue','Outcome'
 LP.P.PupilState='NormBaseline';       	%Options : 'NormBaseline','Cue','Outcome'
-LP.P.ReshapedTime=[-5 5];               % use [0 180] for oddball
+LP.P.ReshapedTime=[-6 6];               % use [0 180] for oddball
 % Filters
 LP.P.PupilThreshold=1;
 LP.P.WheelThreshold=1;                  % Speed cm/s
@@ -58,8 +56,8 @@ LP.P.LicksCue=1;
 LP.P.LicksOutcome=2;
 LP.P.TrialToFilterOut=[];
 LP.P.LoadIgnoredTrials=1;
-% Photometry
-LP.P.Zscore=1;
+% Fluorescence
+LP.P.Zscore=0;
 LP.P.BaselineMov=5;                     % 0 to not have moving baseline avg (avg and std)
 LP.P.BaselineBefAft=1;                  % Depricated Not working anymore : Only before
 LP.P.BaselineHisto=0;
@@ -67,6 +65,16 @@ LP.P.CueStats='AVG';                    % Options : AVG AVGZ MAX MAXZ
 LP.P.OutcomeStats='AVGZ';                % Options : AVG AVGZ MAX MAXZ
 LP.P.BaselineHistoParam=20;             % percentage of data from the baseline to use
 LP.P.NidaqDecimatedSR=100;               % in Hz
+% AOD
+LP.P.AOD.smoothing=0;                  % smoothing and decimate happen upon loading
+LP.P.AOD.decimateSR=0;                 % 0 to not decimate
+LP.P.AOD.offset='auto';                % 'auto' = minimum-1 vs integer ~120 according to Z
+LP.P.AOD.rewT=0.5;
+% Spikes
+LP.P.Spikes.BinSize=0.1;
+LP.P.Spikes.tagging_timeW=[-0.2 0.3];
+LP.P.Spikes.tagging_TTL=2;
+LP.P.Spikes.TTLTS_spikeTS_Factor=10000;
 % Archiving photometry data
 LP.Archive=0; %
 LP.ArchiveOnly=0;

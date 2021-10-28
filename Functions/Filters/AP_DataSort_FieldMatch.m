@@ -1,7 +1,7 @@
 function Analysis=AP_DataSort_FieldMatch(Analysis,FilterName,thisFilter)
 % Function used in AP_DataSort to filter fields found in Analysis.AllData
 % according to the filter specified as an input.
-%
+% should make it recursive
 % QC 2020
 
 %% Filter check

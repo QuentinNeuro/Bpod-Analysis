@@ -23,8 +23,10 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     end
     
     if Analysis.Parameters.BaselineMov
-        BaselineAVG=movmean(BaselineAVG,movBaseParam,'omitnan');
-        BaselineSTD=movmean(BaselineSTD,movBaseParam,'omitnan');
+    for thisS=1:max(Analysis.Core.Session)  
+        BaselineAVG(Analysis.Core.Session==thisS)=movmean(BaselineAVG(Analysis.Core.Session==thisS),movBaseParam,'omitnan');
+        BaselineSTD(Analysis.Core.Session==thisS)=movmean(BaselineSTD(Analysis.Core.Session==thisS),movBaseParam,'omitnan');
+    end
     end
     Analysis.AllData.(thisChStruct).BaselineAVG=BaselineAVG;
     Analysis.AllData.(thisChStruct).BaselineSTD=BaselineSTD;

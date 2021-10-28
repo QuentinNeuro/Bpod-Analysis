@@ -38,21 +38,21 @@ if Analysis.Parameters.Photometry
     end
 end
 
-if Analysis.Parameters.AOD
-    thisDirFig=[Analysis.Parameters.DirFig 'types' filesep];
-    if isfolder(thisDirFig)==0
-    mkdir(thisDirFig);
-    end
-    AP_Plot_AOD(Analysis,'types')
-    saveas(gcf,[thisDirFig Analysis.Parameters.Legend 'types.png']);
-    if Analysis.Parameters.PlotSummary1
-    for thisC=1:Analysis.Core.AOD.nCells
-        AP_Plot_AOD_cell(Analysis,thisC,'types');
-        thisCName=sprintf('cell%.0d',thisC);
-        saveas(gcf,[thisDirFig Analysis.Parameters.Legend '_types_' thisCName '.png']);
-        close gcf
-    end
-    end
-end
+% if Analysis.Parameters.AOD.AOD
+%     thisDirFig=[Analysis.Parameters.DirFig 'types' filesep];
+%     if isfolder(thisDirFig)==0
+%     mkdir(thisDirFig);
+%     end
+%     AP_Plot_AOD(Analysis,'types')
+%     saveas(gcf,[thisDirFig Analysis.Parameters.Legend 'types.png']);
+%     if Analysis.Parameters.PlotSummary1
+%     for thisC=1:Analysis.Parameters.AOD.nCells
+%         AP_Plot_AOD_cell(Analysis,thisC,'types');
+%         thisCName=sprintf('cell%.0d',thisC);
+%         saveas(gcf,[thisDirFig Analysis.Parameters.Legend '_types_' thisCName '.png']);
+%         close gcf
+%     end
+%     end
+% end
 
 end

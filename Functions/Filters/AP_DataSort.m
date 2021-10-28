@@ -29,7 +29,6 @@ thisFilter=logical(thisFilter.*ignoredTrialFilter);
     Analysis.(thistype).IgnoredTrials               =Analysis.AllData.nTrials-Analysis.(thistype).nTrials;
 if Analysis.(thistype).nTrials>0
     Analysis=AP_DataSort_FieldMatch(Analysis,FilterName,thisFilter);
-    
 % Timing for average    
     CueTime=Analysis.(thistype).Time.Cue(1,:)+Analysis.Parameters.CueTimeReset;
     OutcomeTime=Analysis.(thistype).Time.Outcome(1,:)+Analysis.Parameters.OutcomeTimeReset;
@@ -100,10 +99,11 @@ if Analysis.(thistype).nTrials>0
  %% Spikes
     if Analysis.Parameters.SpikesAnalysis
         Analysis=Analysis_Spikes(Analysis,'Sort',thistype,thisFilter);
+%         Analysis=AP_DataSort_Spikes(Analysis,FilterName,thisFilter);
     end
-    
-    if Analysis.Parameters.AOD
-        Analysis=AP_DataSort_AOD(Analysis,thistype,thisFilter);
+%% AOD    
+    if Analysis.Parameters.AOD.AOD
+         Analysis=AP_DataSort_AOD(Analysis,FilterName,thisFilter);
     end
     
 end

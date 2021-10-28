@@ -61,7 +61,7 @@ end
 % catch
 %         disp([FileName ' NOT ANALYZED - Error in Parameters extraction or Data organization']);
 % end   
-end
+% end
 clear SessionData Pupillometry;
 end
 

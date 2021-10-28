@@ -102,23 +102,8 @@ end
 end
 
 %% AOD
-if Analysis.Parameters.AOD
-    thisDirFig=[Analysis.Parameters.DirFig 'filter' filesep];
-    if isfolder(thisDirFig)==0
-    mkdir(thisDirFig);
-    end
-    if Analysis.Parameters.PlotFiltersSummary
-    AP_Plot_AOD(Analysis,'filter')
-    saveas(gcf,[thisDirFig Analysis.Parameters.Legend '_filter.png']);
-    end
-    if Analysis.Parameters.PlotFiltersSingle
-    for thisC=1:Analysis.Core.AOD.nCells
-        AP_Plot_AOD_cell(Analysis,thisC,'filter');
-        thisCName=sprintf('cell%.0d',thisC);
-        saveas(gcf,[thisDirFig Analysis.Parameters.Legend '_filter_' thisCName '.png']);
-        close gcf
-    end
-    end
+if Analysis.Parameters.AOD.AOD
+    Analysis=AP_CuedOutcome_FiltersAndPlot_AOD(Analysis) 
 end
 
 %% Spikes Analysis
