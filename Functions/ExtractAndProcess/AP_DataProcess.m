@@ -67,7 +67,7 @@ if Analysis.Parameters.AOD.AOD
     Analysis=AP_DataProcess_AOD(Analysis);
 end
 %% AOD
-if Analysis.Parameters.AOD
+if Analysis.Parameters.AOD.AOD
     Analysis=AP_DataProcess_AOD(Analysis);
 end
 

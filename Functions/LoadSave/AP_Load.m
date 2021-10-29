@@ -45,7 +45,7 @@ else
     Pupillometry=[];
 end
 % Parameters, Ignored Trials and Data extraction
-% try
+try
         Analysis.Parameters=AP_Parameters(SessionData,Pupillometry,LP,FileNameNoExt,Analysis.Parameters);
         Analysis=A_FilterIgnoredTrials(Analysis);
         Analysis=A_FilterWheel(Analysis);

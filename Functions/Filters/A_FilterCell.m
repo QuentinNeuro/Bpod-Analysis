@@ -1,14 +1,20 @@
-function Analysis=A_FilterCell(Analysis,filterName,filterMetric,filterThreshold,filterType)
+function Analysis=A_FilterCell(Analysis,filterName,filterMetric,filterThreshold,thisType)
 
+if ischar(filterThreshold)
+    switch filterThreshold
+        case 'mean'
+            filterThreshold=mean(Analysis.(thisType).AOD.AllCells.(filterMetric),'omitnan');
+        case 'median'
+            filterThreshold=median(Analysis.(thisType).AOD.AllCells.(filterMetric),'omitnan');
+    end
+end
+   
 nCells=Analysis.Parameters.AOD.nCells;
 thisFilter=false(1,nCells);
-thisMetric=nan(1,nCells);
 
-for thisC=1:nCells
-    thisCName=sprintf('cell%.0d',thisC);
-    thisMetric(thisC)=nanmean(Analysis.(filterType).AOD.(thisCName).(filterMetric));
-end
-    thisFilter(thisMetric>filterThreshold)=true;
+thisMetric=Analysis.(thisType).AOD.AllCells.(filterMetric);
+thisFilter(thisMetric>filterThreshold)=true;
 
-    Analysis.Filters.(filterName)=thisFilter;
+Analysis.Filters.(filterName)=thisFilter;
+
 end

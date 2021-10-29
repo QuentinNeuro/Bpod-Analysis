@@ -29,13 +29,13 @@ thisFilter=logical(thisFilter.*ignoredTrialFilter);
         thisCIndex=find(Analysis.Filters.(thisCellFilterName));
         thistype=[thistype '_' thisCellFilterName];
     end
-
+nCells=length(thisCIndex);
 %% initialize the new trial type structure based on previous one
     Analysis.(thistype)=Analysis.(thisOGType);
     Analysis.(thistype).AOD=struct();
 
 	Analysis.(thistype).AOD.Time=Analysis.AllData.AOD.Time(:,thisFilter);
-    Analysis.(thistype).AOD.AllCells.Data=NaN(length(Analysis.AllData.AOD.Time(:,1)),Analysis.Parameters.AOD.nCells);
+    Analysis.(thistype).AOD.AllCells.Data=NaN(length(Analysis.AllData.AOD.Time(:,1)),nCells);
     Analysis.(thistype).AOD.AllCells.DataTrials=zeros(size(Analysis.AllData.AOD.Time(:,thisFilter)));
     
     cellCounter=1;
@@ -43,7 +43,7 @@ thisFilter=logical(thisFilter.*ignoredTrialFilter);
         thisC_Name=sprintf('cell%.0d',thisC);
         Analysis.(thistype).AOD.CellName{cellCounter}=thisC_Name;
         Analysis.(thistype).AOD.(thisC_Name).Data=Analysis.AllData.AOD.(thisC_Name).Data(:,thisFilter);
-        Analysis.(thistype).AOD.(thisC_Name).DataAVG=nanmean(Analysis.(thistype).AOD.(thisC_Name).Data,2);
+        Analysis.(thistype).AOD.(thisC_Name).DataAVG=mean(Analysis.(thistype).AOD.(thisC_Name).Data,2,'omitnan');
         Analysis.(thistype).AOD.(thisC_Name).CueAVG=Analysis.AllData.AOD.(thisC_Name).CueAVG(thisFilter);
         Analysis.(thistype).AOD.(thisC_Name).CueMAX=Analysis.AllData.AOD.(thisC_Name).CueMAX(thisFilter);
         Analysis.(thistype).AOD.(thisC_Name).OutcomeAVG=Analysis.AllData.AOD.(thisC_Name).OutcomeAVG(thisFilter);
@@ -51,12 +51,12 @@ thisFilter=logical(thisFilter.*ignoredTrialFilter);
         
         Analysis.(thistype).AOD.AllCells.Data(:,cellCounter)=Analysis.(thistype).AOD.(thisC_Name).DataAVG;
         Analysis.(thistype).AOD.AllCells.DataTrials=Analysis.(thistype).AOD.AllCells.DataTrials + Analysis.(thistype).AOD.(thisC_Name).Data;
-        Analysis.(thistype).AOD.AllCells.CueAVG(cellCounter)=nanmean(Analysis.(thistype).AOD.(thisC_Name).CueAVG);
-        Analysis.(thistype).AOD.AllCells.CueMAX(cellCounter)=nanmean(Analysis.(thistype).AOD.(thisC_Name).CueMAX);
-        Analysis.(thistype).AOD.AllCells.OutcomeAVG(cellCounter)=nanmean(Analysis.(thistype).AOD.(thisC_Name).OutcomeAVG);
-        Analysis.(thistype).AOD.AllCells.OutcomeMAX(cellCounter)=nanmean(Analysis.(thistype).AOD.(thisC_Name).OutcomeMAX);
+        Analysis.(thistype).AOD.AllCells.CueAVG(cellCounter)=mean(Analysis.(thistype).AOD.(thisC_Name).CueAVG,'omitnan');
+        Analysis.(thistype).AOD.AllCells.CueMAX(cellCounter)=mean(Analysis.(thistype).AOD.(thisC_Name).CueMAX,'omitnan');
+        Analysis.(thistype).AOD.AllCells.OutcomeAVG(cellCounter)=mean(Analysis.(thistype).AOD.(thisC_Name).OutcomeAVG,'omitnan');
+        Analysis.(thistype).AOD.AllCells.OutcomeMAX(cellCounter)=mean(Analysis.(thistype).AOD.(thisC_Name).OutcomeMAX,'omitnan');
         cellCounter=cellCounter+1;
     end
         Analysis.(thistype).AOD.AllCells.DataTrials=Analysis.(thistype).AOD.AllCells.DataTrials/Analysis.Parameters.AOD.nCells;
-        Analysis.(thistype).AOD.AllCells.DataAVG=nanmean(Analysis.(thistype).AOD.AllCells.Data,2);
+        Analysis.(thistype).AOD.AllCells.DataAVG=mean(Analysis.(thistype).AOD.AllCells.Data,2,'omitnan');
 end

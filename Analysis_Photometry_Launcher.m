@@ -5,7 +5,7 @@
 % filters the data according to the behavioral task
 % 'Analysis_spike' is an addon that can be used to quickly plot PSTH from 
 % spiking units clustered using MClust (TT.mat) and using TTL sync information
-clear SessionData Analysis LP; %close all;
+clear SessionData Analysis LP; close all;
 %% Database 
 DB_Add=0;
 DB_Group=[];
@@ -21,7 +21,6 @@ LP.P.SpikesAnalysis=0;
 LP.P.SpikesFigure=0; 
 % AOD
 LP.P.AOD.AOD=1;
-LP.P.AOD.raw=1;
 % Event Detection
 LP.P.EventDetection=0;
 %% Overwritting Parameters
@@ -33,7 +32,7 @@ LP.OW.NidaqBaseline=[];
 % Figures
 LP.P.PlotSummary1=1;
 LP.P.PlotSummary2=0;
-LP.P.PlotFiltersSingle=0;               % AP_####_GroupToPlot Output 1
+LP.P.PlotFiltersSingle=1;               % AP_####_GroupToPlot Output 1
 LP.P.PlotFiltersSummary=1;
 LP.P.PlotFiltersBehavior=0;           	% AP_####_GroupToPlot Oupput 2
 LP.P.Illustrator=0;
@@ -48,7 +47,7 @@ LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after s
 LP.P.ZeroAtZero=1;
 LP.P.WheelState='Baseline';             %Options : 'Baseline','Cue','Outcome'
 LP.P.PupilState='NormBaseline';       	%Options : 'NormBaseline','Cue','Outcome'
-LP.P.ReshapedTime=[-6 6];               % use [0 180] for oddball
+LP.P.ReshapedTime=[-5 5];               % use [0 180] for oddball
 % Filters
 LP.P.PupilThreshold=1;
 LP.P.WheelThreshold=1;                  % Speed cm/s
@@ -66,10 +65,11 @@ LP.P.OutcomeStats='AVGZ';                % Options : AVG AVGZ MAX MAXZ
 LP.P.BaselineHistoParam=20;             % percentage of data from the baseline to use
 LP.P.NidaqDecimatedSR=100;               % in Hz
 % AOD
-LP.P.AOD.smoothing=0;                  % smoothing and decimate happen upon loading
+LP.P.AOD.raw=1;                        % load raw vs dff data
+LP.P.AOD.smoothing=1;                  % smoothing and decimate happen upon loading
 LP.P.AOD.decimateSR=0;                 % 0 to not decimate
 LP.P.AOD.offset='auto';                % 'auto' = minimum-1 vs integer ~120 according to Z
-LP.P.AOD.rewT=0.5;
+LP.P.AOD.rewT='mean';
 % Spikes
 LP.P.Spikes.BinSize=0.1;
 LP.P.Spikes.tagging_timeW=[-0.2 0.3];
