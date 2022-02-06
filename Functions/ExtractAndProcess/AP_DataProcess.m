@@ -58,13 +58,9 @@ end
 % end
 
 %% Spike Analysis
-if Analysis.Parameters.SpikesAnalysis
+if Analysis.Parameters.Spikes.Spikes
     Analysis=Analysis_Spikes(Analysis,'Organize');
     %Analysis=Analysis_DataProcess_Spikes(Analysis);
-end
-%% AOD
-if Analysis.Parameters.AOD.AOD
-    Analysis=AP_DataProcess_AOD(Analysis);
 end
 %% AOD
 if Analysis.Parameters.AOD.AOD

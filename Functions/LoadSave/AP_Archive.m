@@ -15,7 +15,7 @@ DirFile=[DirArchive Analysis.Parameters.Name '.mat'];
 if isfield(SessionData,'DecimatedSampRate')
    disp('SessionData file already archived')
 else
-try
+% try
     if isfield(SessionData,PhotoField)
     for thisTrial=1:SessionData.nTrials
         SessionData.(PhotoField){1,thisTrial}=Analysis.Core.Photometry{1,thisTrial}{1, 1};  
@@ -26,7 +26,7 @@ try
     if size(Analysis.Parameters.PhotoCh,2)>1
         if Analysis.Parameters.PhotoCh{2}{:}(3)=='5'
         for thisTrial=1:SessionData.nTrials
-            SessionData.(PhotoField){1,thisTrial}(:,2)=Analysis.Core.Photometry{1,thisTrial}{2, 1};  
+            SessionData.(PhotoField){1,thisTrial}(:,2)=Analysis.Core.Photometry{1,thisTrial}{2, 1}(1:length(SessionData.(PhotoField){1,thisTrial}(:,1)));  
         end 
         end
     end
@@ -45,8 +45,8 @@ try
     end
     
     save(DirFile,'SessionData');  
-catch
-    disp('Could not archive this SessionData')
-end
+% catch
+%     disp('Could not archive this SessionData')
+% end
 end
 end

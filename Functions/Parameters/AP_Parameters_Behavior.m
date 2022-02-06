@@ -49,7 +49,7 @@ elseif contains(Name,'GoNogo','IgnoreCase',true)
 	Par.StateOfCue='CueDelivery';
     Par.StateOfOutcome='PostOutcome';
     Par.CueTimeReset=[-0.1 0];
-    Par.OutcomeTimeReset=[0 -3];
+    Par.OutcomeTimeReset=[0 -5];
     Par.NidaqBaseline=[0.2 1.2];
 %     Par.TimeReshaping=1;
 elseif contains(Name,'AuditoryTuning','IgnoreCase',true)
@@ -78,6 +78,9 @@ elseif contains(Name,'Oddball','IgnoreCase',true)
     Par.OutcomeTimeReset=[0 2];
     Par.NidaqBaseline=[0 1];
     Par.ReshapedTime=[0 180];
+    if isfield(SessionData.TrialSettings(1).Names,'Sound')
+        Par.TypeOfCue=SessionData.TrialSettings(1).Names.Sound{SessionData.TrialSettings(1).GUI.SoundType};
+    end
 elseif contains(Name,'Sensor','IgnoreCase',true)
     Par.Behavior='Sensor';
     Par.StateOfCue='CueDelivery';

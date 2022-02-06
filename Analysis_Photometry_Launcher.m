@@ -16,35 +16,33 @@ LP.Save=0; % 1: Core Data only     // 2: Analysis Structure
 LP.SaveTag=[]; % string to be added to the saved analysis file name
 LP.Load=0; % 1: Load and reprocess
 % Electrophysiology
-LP.P.TE4CellBase=0;
-LP.P.SpikesAnalysis=0;
-LP.P.SpikesFigure=0; 
+LP.P.Spikes.Spikes=0; % does not work anymore
 % AOD
-LP.P.AOD.AOD=1;
+LP.P.AOD.AOD=0;
 % Event Detection
 LP.P.EventDetection=0;
 %% Overwritting Parameters
 LP.OW.PhotoChNames={'F1' 'F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
-LP.OW.CueTimeReset=[0 2];
-LP.OW.OutcomeTimeReset=[0 3]; %AOD [0 1] 
+LP.OW.CueTimeReset=[0 1];
+LP.OW.OutcomeTimeReset=[0 2]; %AOD [0 1] 
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
 % Figures
 LP.P.PlotSummary1=1;
 LP.P.PlotSummary2=0;
-LP.P.PlotFiltersSingle=1;               % AP_####_GroupToPlot Output 1
-LP.P.PlotFiltersSummary=1;
+LP.P.PlotFiltersSingle=0;               % AP_####_GroupToPlot Output 1
+LP.P.PlotFiltersSummary=0;
 LP.P.PlotFiltersBehavior=0;           	% AP_####_GroupToPlot Oupput 2
 LP.P.Illustrator=0;
 LP.P.Transparency=0;
 % Axis
-LP.P.PlotX=[-5 4];
-LP.P.PlotY_photo(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
-LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max]
+LP.P.PlotX=[-4 4];
+LP.P.PlotY_photo(1,:)=[-5 5];     	% Tight axis if [NaN NaN] / TBD [min max]
+LP.P.PlotY_photo(2,:)=[-5 5];        % Tight axis if [NaN NaN] / TBD [min max]
 % States and Timing
 LP.P.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
 LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after state to Zero starts
-LP.P.ZeroAtZero=1;
+LP.P.ZeroAtZero=0;                      % 
 LP.P.WheelState='Baseline';             %Options : 'Baseline','Cue','Outcome'
 LP.P.PupilState='NormBaseline';       	%Options : 'NormBaseline','Cue','Outcome'
 LP.P.ReshapedTime=[-5 5];               % use [0 180] for oddball
@@ -56,21 +54,22 @@ LP.P.LicksOutcome=2;
 LP.P.TrialToFilterOut=[];
 LP.P.LoadIgnoredTrials=1;
 % Fluorescence
-LP.P.Zscore=0;
+LP.P.Zscore=1;
 LP.P.BaselineMov=5;                     % 0 to not have moving baseline avg (avg and std)
 LP.P.BaselineBefAft=1;                  % Depricated Not working anymore : Only before
 LP.P.BaselineHisto=0;
 LP.P.CueStats='AVG';                    % Options : AVG AVGZ MAX MAXZ
-LP.P.OutcomeStats='AVGZ';                % Options : AVG AVGZ MAX MAXZ
+LP.P.OutcomeStats='AVGZ';               % Options : AVG AVGZ MAX MAXZ
 LP.P.BaselineHistoParam=20;             % percentage of data from the baseline to use
-LP.P.NidaqDecimatedSR=100;               % in Hz
+LP.P.NidaqDecimatedSR=100;              % in Hz
 % AOD
-LP.P.AOD.raw=1;                        % load raw vs dff data
+LP.P.AOD.raw=1;                        % load raw vs dff data - does not really work upon Analysis loading
 LP.P.AOD.smoothing=1;                  % smoothing and decimate happen upon loading
 LP.P.AOD.decimateSR=0;                 % 0 to not decimate
 LP.P.AOD.offset='auto';                % 'auto' = minimum-1 vs integer ~120 according to Z
-LP.P.AOD.rewT='mean';
+LP.P.AOD.rewT='meanPos';               % integer vs 'mean' 'median' 'meanPos'
 % Spikes
+LP.P.TE4CellBase=0;
 LP.P.Spikes.BinSize=0.1;
 LP.P.Spikes.tagging_timeW=[-0.2 0.3];
 LP.P.Spikes.tagging_TTL=2;

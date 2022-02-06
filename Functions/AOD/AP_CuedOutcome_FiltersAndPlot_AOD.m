@@ -10,7 +10,7 @@ function Analysis=AP_CuedOutcome_FiltersAndPlot_AOD(Analysis)
     end
     if Analysis.Parameters.PlotFiltersSingle
     for thisC=1:Analysis.Parameters.AOD.nCells
-        AP_Plot_AOD_cell(Analysis,thisC,'filter');
+        AP_Plot_AOD(Analysis,'filter',thisC);
         thisCName=sprintf('cell%.0d',thisC);
         saveas(gcf,[thisDirFig Analysis.Parameters.Legend '_filter_' thisCName '.png']);
         close gcf
@@ -33,7 +33,7 @@ function Analysis=AP_CuedOutcome_FiltersAndPlot_AOD(Analysis)
     if Analysis.Parameters.PlotFiltersSingle
     thisCIndex=find(Analysis.Filters.posRew);
     for thisC=thisCIndex
-        AP_Plot_AOD_cell(Analysis,thisC,'cells');
+        AP_Plot_AOD(Analysis,'cells',thisC);
         thisCName=sprintf('cell%.0d',thisC);
         saveas(gcf,[thisDirFig Analysis.Parameters.Legend '_filter_posR_' thisCName '.png']);
         close gcf

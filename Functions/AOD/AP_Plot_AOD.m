@@ -1,5 +1,16 @@
-function Analysis=AP_Plot_AOD(Analysis,groupToPlot)
+function Analysis=AP_Plot_AOD(Analysis,groupToPlot,cellID)
 
+%% Argument check
+% cell check
+if nargin==3
+    if ~ischar(cellID)
+        cellID=Analysis.AllData.AOD.CellName{cellID};
+    end
+else
+    cellID=0;
+end
+
+% Groups
 switch groupToPlot
     case 'filter'
 Group_Plot{1,1}='RewardExp';
@@ -19,9 +30,6 @@ Group_Plot{1,2}={       'CueA_Reward_posRew',              {'Cue A','Reward','Li
                         'CueB_Omission_posRew',            {'Cue B'};...
                         'Uncued_Reward_posRew',            {'Uncued','Reward','LicksOutcome'}};
 end
-
-
-%% test
 groupToPlot=Group_Plot{1,2};
 %% Legends
 FigTitle=[Analysis.Parameters.Files{1}];
@@ -92,20 +100,18 @@ if Analysis.(thistype).nTrials
     plot(Analysis.(thistype).Time.Cue(1,:),[maxrate maxrate],'-b','LineWidth',2);
     
     counterphotoplot=[3 4 5];
-% Fluo AVG
-    subplot(nbOfPlotsY,nbOfPlotsX,thisplot+(counterphotoplot(3)*nbOfPlotsX)); hold on;
-    plot(Analysis.(thistype).AOD.Time(:,1),Analysis.(thistype).AOD.AllCells.DataAVG,'-k');
-    if thisplot==1
-        ylabel(labelyFluo);
-    end
-    xlabel(labelx);
-    
+       
 % Nidaq Raster
     subplot(nbOfPlotsY,nbOfPlotsX,[thisplot+(counterphotoplot(1)*nbOfPlotsX) thisplot+(counterphotoplot(2)*nbOfPlotsX)]); hold on;
     yrasternidaq=1:Analysis.(thistype).nTrials;
 
     thisTime=Analysis.(thistype).AOD.Time(:,1);
-    thisData=Analysis.(thistype).AOD.AllCells.DataTrials;
+    if cellID
+        thisData=Analysis.(thistype).AOD.(cellID).Data;
+    else
+        thisData=Analysis.(thistype).AOD.AllCells.DataTrials;
+    end
+    
     thisData=thisData(thisTime>xTime(1) & thisTime<xTime(2),:);
     thisTime=thisTime(thisTime>xTime(1) & thisTime<xTime(2));
     
@@ -118,6 +124,21 @@ if Analysis.(thistype).nTrials
         c.Label.String = labelyFluo;
     end
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
+    
+% Fluo AVG
+    subplot(nbOfPlotsY,nbOfPlotsX,thisplot+(counterphotoplot(3)*nbOfPlotsX)); hold on;
+    thisTime=Analysis.(thistype).AOD.Time(:,1);
+    if cellID
+        thisData=Analysis.(thistype).AOD.(cellID).DataAVG;
+    else
+        thisData=Analysis.(thistype).AOD.AllCells.DataAVG;
+    end
+    plot(thisTime,thisData,'-k');
+    if thisplot==1
+        ylabel(labelyFluo);
+    end
+    xlim(xTime);
+    xlabel(labelx);        
     counterphotoplot=counterphotoplot+3;
  
 end

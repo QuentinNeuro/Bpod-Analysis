@@ -29,7 +29,7 @@ color4plot={'-k';'-b';'-r';'-g';'-c';'-m';'-y'};
 transparency=Analysis.Parameters.Transparency;
 PlotY_photo=Analysis.Parameters.PlotY_photo;
 
-for thisCh=1:1%length(Analysis.Parameters.PhotoCh)
+for thisCh=1:length(Analysis.Parameters.PhotoCh)
     thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
     FigTitle=['Auditory Tuning Curve' char(Analysis.Parameters.PhotoCh{thisCh})];
     

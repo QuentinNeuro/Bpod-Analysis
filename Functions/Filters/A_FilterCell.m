@@ -6,6 +6,8 @@ if ischar(filterThreshold)
             filterThreshold=mean(Analysis.(thisType).AOD.AllCells.(filterMetric),'omitnan');
         case 'median'
             filterThreshold=median(Analysis.(thisType).AOD.AllCells.(filterMetric),'omitnan');
+        case 'meanPos'
+            filterThreshold=mean(Analysis.(thisType).AOD.AllCells.(filterMetric)>0,'omitnan');
     end
 end
    

@@ -28,6 +28,8 @@ try
 Analysis=AP_Performance(Analysis,Group_Perf);
 catch
     disp('Something is wrong with the performance index')
+    Analysis.Performance.Decision=NaN;
+    Analysis.Performance.testIO=NaN;
 end
 if Analysis.Parameters.PlotFiltersSummary || Analysis.Parameters.PlotFiltersSingle
 for i=1:size(Group_Plot,1)
@@ -103,18 +105,18 @@ end
 
 %% AOD
 if Analysis.Parameters.AOD.AOD
-    Analysis=AP_CuedOutcome_FiltersAndPlot_AOD(Analysis) 
+    Analysis=AP_CuedOutcome_FiltersAndPlot_AOD(Analysis);
 end
 
 %% Spikes Analysis
 % TrialEvents
-if Analysis.Parameters.TE4CellBase
-    CuedEvents=A_makeTrialEvents_CuedOutcome(Analysis);
-    save('CuedEvents','CuedEvents');
-end
-
-% Figures
-if Analysis.Parameters.SpikesFigure
-    Analysis=Analysis_Spikes(Analysis,'Figure');
-end
+% if Analysis.Parameters.TE4CellBase
+%     CuedEvents=A_makeTrialEvents_CuedOutcome(Analysis);
+%     save('CuedEvents','CuedEvents');
+% end
+% 
+% % Figures
+% % if Analysis.Parameters.SpikesFigure
+% %     Analysis=Analysis_Spikes(Analysis,'Figure');
+% % end
 end

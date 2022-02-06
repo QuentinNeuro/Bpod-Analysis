@@ -14,6 +14,7 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     Data=Analysis.Core.Photometry{thisTrial}{thisCh};
     BaselineAVG=Analysis.AllData.(thisChStruct).BaselineAVG(thisTrial);
     BaselineSTD=Analysis.AllData.(thisChStruct).BaselineSTD(thisTrial);
+        
     % Extract desired time window
     [Time,Data]=AP_TimeReshaping(Data,TimeWindow,TimeToZero,SamplingRate);
     Data=Data-BaselineAVG;
@@ -32,13 +33,13 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     Analysis.AllData.(thisChStruct).DFF(thisTrial,:)                    =Data;
 %     Analysis.AllData.(thisChStruct).Baseline(thisTrial)                 =DFFBaseline;
     % AVG/MAX
-    Analysis.AllData.(thisChStruct).CueAVG(thisTrial)      =nanmean(Data(Time>CueTime(1) & Time<CueTime(2)));
+    Analysis.AllData.(thisChStruct).CueAVG(thisTrial)      =mean(Data(Time>CueTime(1) & Time<CueTime(2)),'omitnan');
     Analysis.AllData.(thisChStruct).CueMAX(thisTrial)      =max(Data(Time>CueTime(1) & Time<CueTime(2)));
-    Analysis.AllData.(thisChStruct).OutcomeAVG(thisTrial)  =nanmean(Data(Time>OutcomeTime(1) & Time<OutcomeTime(2)));
+    Analysis.AllData.(thisChStruct).OutcomeAVG(thisTrial)  =mean(Data(Time>OutcomeTime(1) & Time<OutcomeTime(2)),'omitnan');
     Analysis.AllData.(thisChStruct).OutcomeMAX(thisTrial)  =max(Data(Time>OutcomeTime(1) & Time<OutcomeTime(2)));    
     % Zero
-    Analysis.AllData.(thisChStruct).Z4Cue(thisTrial)        =nanmean(Data(Time>CueTime(1)-0.2 & Time<CueTime(1)-0.01));
-    Analysis.AllData.(thisChStruct).Z4Outcome(thisTrial)    =nanmean(Data(Time>OutcomeTime(1)-0.2 & Time<OutcomeTime(1)-0.01));
+    Analysis.AllData.(thisChStruct).Z4Cue(thisTrial)        =mean(Data(Time>CueTime(1)-0.2 & Time<CueTime(1)-0.01),'omitnan');
+    Analysis.AllData.(thisChStruct).Z4Outcome(thisTrial)    =mean(Data(Time>OutcomeTime(1)-0.2 & Time<OutcomeTime(1)-0.01),'omitnan');
     Analysis.AllData.(thisChStruct).CueAVGZ(thisTrial)                     =Analysis.AllData.(thisChStruct).CueAVG(thisTrial)...
                                                          - Analysis.AllData.(thisChStruct).Z4Cue(thisTrial);
     Analysis.AllData.(thisChStruct).CueMAXZ(thisTrial)                     =Analysis.AllData.(thisChStruct).CueMAX(thisTrial)...
