@@ -1,9 +1,10 @@
-function Analysis=AP_DataProcess_Photometry(Analysis,thisTrial)
+ function Analysis=AP_DataProcess_Photometry(Analysis,thisTrial)
 
 %% Timing
 TimeToZero=Analysis.AllData.Time.Zero(thisTrial);
 CueTime=Analysis.AllData.Time.Cue(thisTrial,:)+Analysis.Parameters.CueTimeReset;
 OutcomeTime=Analysis.AllData.Time.Outcome(thisTrial,:)+Analysis.Parameters.OutcomeTimeReset;
+BaselinePts=Analysis.Parameters.NidaqBaselinePoints;
 
 TimeWindow=Analysis.Parameters.ReshapedTime;
 SamplingRate=Analysis.Parameters.NidaqDecimatedSR;
@@ -12,19 +13,30 @@ SamplingRate=Analysis.Parameters.NidaqDecimatedSR;
 for thisCh=1:length(Analysis.Parameters.PhotoCh)
     thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
     Data=Analysis.Core.Photometry{thisTrial}{thisCh};
-    BaselineAVG=Analysis.AllData.(thisChStruct).BaselineAVG(thisTrial);
-    BaselineSTD=Analysis.AllData.(thisChStruct).BaselineSTD(thisTrial);
         
     % Extract desired time window
     [Time,Data]=AP_TimeReshaping(Data,TimeWindow,TimeToZero,SamplingRate);
+    
+    if Analysis.Parameters.BaselineBefAft==2
+        Analysis.AllData.(thisChStruct).BaselineAVG(thisTrial)=mean(Data(BaselinePts(1):BaselinePts(2)),'omitnan');
+        Analysis.AllData.(thisChStruct).BaselineSTD(thisTrial)=std(Data(BaselinePts(1):BaselinePts(2)),'omitnan');
+    end
+    
+    BaselineAVG=Analysis.AllData.(thisChStruct).BaselineAVG(thisTrial);
+    BaselineSTD=Analysis.AllData.(thisChStruct).BaselineSTD(thisTrial);
+    
+    
     Data=Data-BaselineAVG;
     if Analysis.Parameters.Zscore
         Data=Data/BaselineSTD;
     else
         Data=100*Data/BaselineAVG;
     end
-    if Analysis.Parameters.ZeroAtZero
-        Data=Data-mean(Data(Time>-0.1 & Time<=0));
+    switch Analysis.Parameters.ZeroAt
+        case 'Zero'
+            Data=Data-mean(Data(Time>-0.1 & Time<=0),'omitnan');
+        case 'Start'
+            Data=Data-mean(Data(BaselinePts(1):BaselinePts(2)),'omitnan');
     end  
 
 %% Statistics for Analysis Structure

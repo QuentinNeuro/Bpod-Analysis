@@ -27,13 +27,16 @@ for thisTrial=1:Analysis.AllData.nTrials
         if SequenceNb(i)==StandValue && testFirst==1
             thisState=SequenceNames{i};
             timeEarly(counterOdd,:)=SequenceState.(thisState)-TimeToZero;
+            timeEarly(counterOdd,:)=timeEarly(counterOdd,:)-[TimeOffset -1];
             testFirst=0;
         end
         if SequenceNb(i)==OddValue && testFirst==0
             thisState=SequenceNames{i};
             prevState=SequenceNames{i-1};
             timeLate(counterOdd,:)=SequenceState.(prevState)-TimeToZero;
+            timeLate(counterOdd,:)=timeLate(counterOdd,:)-[TimeOffset -1];
             timeOdd(counterOdd,:)=SequenceState.(thisState)-TimeToZero;
+            timeOdd(counterOdd,:)=timeOdd(counterOdd,:)-[TimeOffset -1];
             testFirst=1;
             counterOdd=counterOdd+1;
         end
@@ -70,29 +73,29 @@ for i=1:Analysis.Parameters.nbOfTrialTypes
             for j=1:length(Odd)
                 counter=counter+1;
                 %Early
-                thisPhoto=Photo(Time>(Early(j,1)-TimeOffset) & Time<Early(j,2))-mean(Photo(Time>(Early(j,1)-TimeOffset) & Time<Early(j,1)));
-                thisTime=Time(Time>(Early(j,1)-TimeOffset) & Time<Early(j,2))-Early(j,1);
+                thisPhoto=Photo(Time>Early(j,1) & Time<Early(j,2))-mean(Photo(Time>(Early(j,1)-TimeOffset) & Time<Early(j,1)));
+                thisTime=Time(Time>(Early(j,1)) & Time<Early(j,2))-Early(j,1)-TimeOffset;
                 PhotoEarly(counter,1:length(thisPhoto))=thisPhoto;
                 if length(thisTime)>length(TimeEarly)
                     TimeEarly=thisTime;
                 end
                 %Late
-                thisPhoto=Photo(Time>(Late(j,1)-TimeOffset) & Time<Late(j,2))-mean(Photo(Time>(Late(j,1)-TimeOffset) & Time<Late(j,1)));
-                thisTime=Time(Time>(Late(j,1)-TimeOffset) & Time<Late(j,2))-Late(j,1);
+                thisPhoto=Photo(Time>Late(j,1) & Time<Late(j,2))-mean(Photo(Time>(Late(j,1)-TimeOffset) & Time<Late(j,1)));
+                thisTime=Time(Time>Late(j,1) & Time<Late(j,2))-Late(j,1)-TimeOffset;
                 PhotoLate(counter,1:length(thisPhoto))=thisPhoto;
                 if length(thisTime)>length(TimeLate)
                     TimeLate=thisTime;
                 end
                 %Odd
-                thisPhoto=Photo(Time>(Odd(j,1)-TimeOffset) & Time<Odd(j,2))-mean(Photo(Time>(Odd(j,1)-TimeOffset) & Time<Odd(j,1)));
-                thisTime=Time(Time>(Odd(j,1)-TimeOffset) & Time<Odd(j,2))-Odd(j,1);
+                thisPhoto=Photo(Time>Odd(j,1) & Time<Odd(j,2))-mean(Photo(Time>(Odd(j,1)-TimeOffset) & Time<Odd(j,1)));
+                thisTime=Time(Time>Odd(j,1) & Time<Odd(j,2))-Odd(j,1)-TimeOffset;
                 PhotoOdd(counter,1:length(thisPhoto))=thisPhoto;
                 if length(thisTime)>length(TimeOdd)
                     TimeOdd=thisTime;
                 end
                 %EarlyToLate
-                thisPhoto=Photo(Time>(Early(j,1)-TimeOffset) & Time<Late(j,2))-mean(Photo(Time>(Early(j,1)-TimeOffset) & Time<Early(j,1)));
-                thisTime=Time(Time>(Early(j,1)-TimeOffset) & Time<Late(j,2))-Early(j,1);
+                thisPhoto=Photo(Time>(Early(j,1)) & Time<Late(j,2))-mean(Photo(Time>(Early(j,1)-TimeOffset) & Time<Early(j,2)));
+                thisTime=Time(Time>(Early(j,1)) & Time<Late(j,2))-Early(j,1);
                 PhotoEarlyToLate(counter,1:length(thisPhoto))=thisPhoto;
                 if length(thisTime)>length(TimeEarlyToLate)
                     TimeEarlyToLate=thisTime;

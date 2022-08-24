@@ -1,10 +1,14 @@
 function Analysis=AP_DataCore_Spikes(Analysis)
-%% DOES NOT WORK YET ##
+FileList=ls('*.mat');
 
-FileList=ls;
 %% Parameters
-TTLTS_SpikeTS_Factor=Analysis.Parameters.Spikes.TTLTS_spikeTS_Factor;
 TTL_Tagging=Analysis.Parameters.Spikes.tagging_TTL;
+switch Analysis.Parameters.Spikes.Clustering
+    case 'Kilosort'
+    TTLTS_SpikeTS_Factor=1;
+    case 'MClust'
+    TTLTS_SpikeTS_Factor=Analysis.Parameters.Spikes.TTLTS_spikeTS_Factor;
+end
 
 % Behavior specific
 switch Analysis.Parameters.Behavior
@@ -38,15 +42,16 @@ end
 %% Load All Spikes
 counterTT=0;
 for i=1:size(FileList,1)
-    if contains(FileList(i,:),'TT') && contains(FileList(i,:),'mat')'
+    if contains(FileList(i,:),'TT')
         counterTT=counterTT+1;
-        thisC_Name=FileList(i,:);
-        thisC_Name=thisTT_Name(1:strfind(thisTT_Name,'.mat')-1);
-        load(thisC_Name);
+        load(FileList(i,:));
+        thisC_Name=strtrim(FileList(i,:));
+        thisC_Name=thisC_Name(1:end-4)
         thisTT_TS=TS/TTLTS_SpikeTS_Factor;
         Analysis.Core.Spikes.CellNames{counterTT}=thisC_Name;
-        Analysis.Core.Spikes.(thisTT_Name).Events_TS=thisTT_TS;
+        Analysis.Core.Spikes.SpikeTS{counterTT}=thisTT_TS;
     end
 end
+
 Analysis.Parameters.Spikes.nCells=counterTT;
 end

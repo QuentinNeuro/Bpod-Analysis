@@ -1,7 +1,6 @@
 function Analysis=AP_Baseline(Analysis)
 
 BaselinePts=Analysis.Parameters.NidaqBaselinePoints;
-Cutoff=Analysis.Parameters.BaselineHistoParam/100;
 movBaseParam=Analysis.Parameters.BaselineMov;
 
 for thisCh=1:length(Analysis.Parameters.PhotoCh)
@@ -12,6 +11,7 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
         Data=Analysis.Core.Photometry{thisT}{thisCh};
         DataBaseline=Data(BaselinePts(1):BaselinePts(2));
         if Analysis.Parameters.BaselineHisto
+            Cutoff=Analysis.Parameters.BaselineHisto/100;
             DataBaselineSort=sort(DataBaseline);
             BaselinePtsHisto=round(length(DataBaseline)*Cutoff);
             BaselineAVG(thisT)=nanmean(DataBaseline(1:BaselinePtsHisto));

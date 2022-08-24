@@ -17,30 +17,24 @@ xTime=Analysis.Parameters.PlotX;
 xtickvalues=linspace(xTime(1),xTime(2),5);
 labely1='Trial Number (licks)';
 labely2='Licks Rate (Hz)';
-if Analysis.Parameters.Zscore
-    labelyFluo='Z-scored Fluo';
-else
-    labelyFluo='DF/Fo (%)';
-end
 
 %% Nb of plots
-nbOfPlotsY=6;
-for thisCh=2:length(Analysis.Parameters.PhotoCh)
-    nbOfPlotsY=nbOfPlotsY+3;
-end
-    
 nbOfTrialTypes=Analysis.Parameters.nbOfTrialTypes;
 if nbOfTrialTypes>6
     nbOfPlotsX=nbOfTrialTypes;
 else
     nbOfPlotsX=6;
 end
+nbOfPlotsY=3;
+
 %% Axes
 % Automatic definition of axes
 maxtrial=20; maxrate=10;
 for i=1:nbOfTrialTypes
     thistype=sprintf('type_%.0d',i);
-    if Analysis.(thistype).nTrials~=0
+    if Analysis.(thistype).nTrials
+    [timeAVG,dataAVG,semAVG,labelYData]=AP_PlotData_SelectorAVG(Analysis,thistype);
+    nbOfPlotsY=3+3*size(dataAVG,2);
 %Raster plots y axes
     if Analysis.(thistype).nTrials > maxtrial
         maxtrial=Analysis.(thistype).nTrials;
@@ -64,6 +58,7 @@ set(Legend,'String',Analysis.Parameters.Legend,'Position',[10,5,500,20]);
 thisplot=1;
 for i=1:nbOfTrialTypes
     thistype=sprintf('type_%.0d',i);
+%% Licking data
 % Lick Raster
     subplot(nbOfPlotsY,nbOfPlotsX,[thisplot thisplot+nbOfPlotsX]); hold on;
     title(Analysis.(thistype).Name);
@@ -88,11 +83,19 @@ if Analysis.(thistype).nTrials
     plot(Analysis.(thistype).Time.Cue(1,:),[maxrate maxrate],'-b','LineWidth',2);
     
     counterphotoplot=[3 4 5];
-for thisCh=1:length(Analysis.Parameters.PhotoCh)
-    thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
-% Nidaq AVG
-    subplot(nbOfPlotsY,nbOfPlotsX,thisplot+(counterphotoplot(3)*nbOfPlotsX)); hold on;
-    shadedErrorBar(Analysis.(thistype).(thisChStruct).Time(1,:),Analysis.(thistype).(thisChStruct).DFFAVG,Analysis.(thistype).(thisChStruct).DFFSEM,'-k',0);
+
+%% Neuronal Data
+[timeAVG,dataAVG,semAVG,labelYData]=AP_PlotData_SelectorAVG(Analysis,thistype);
+[timeRaster,trialRaster,dataRaster,labelYRaster]=AP_PlotData_SelectorRaster(Analysis,thistype);
+
+if ~isempty(dataAVG)
+    if ~Analysis.Parameters.Photometry
+        maxtrial=max(trialRaster{1});
+    end
+    for thisCh=1:size(dataAVG,2)
+% Average
+	subplot(nbOfPlotsY,nbOfPlotsX,thisplot+(counterphotoplot(3)*nbOfPlotsX)); hold on;
+    shadedErrorBar(timeAVG{thisCh},dataAVG{thisCh},semAVG{thisCh},'-k',0);
     if isnan(PlotY_photo(thisCh,:))
         axis tight;
         thisPlotY_photo(thisCh,:)=get(gca,'YLim');
@@ -102,28 +105,34 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     plot([0 0],thisPlotY_photo(thisCh,:),'-r');
     plot(Analysis.(thistype).Time.Cue(1,:),[thisPlotY_photo(thisCh,2) thisPlotY_photo(thisCh,2)],'-b','LineWidth',2);  
     if thisplot==1
-        ylabel(labelyFluo);
+        ylabel(labelYData{thisCh});
     end
     xlabel(labelx);
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',thisPlotY_photo(thisCh,:));
     
-% Nidaq Raster
+% Raster
     subplot(nbOfPlotsY,nbOfPlotsX,[thisplot+(counterphotoplot(1)*nbOfPlotsX) thisplot+(counterphotoplot(2)*nbOfPlotsX)]); hold on;
     if thisplot==1
-                ylabel(char(Analysis.Parameters.PhotoChNames{thisCh}));
+                ylabel(labelYRaster{thisCh});
     end
-    yrasternidaq=1:Analysis.(thistype).nTrials;
-    imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,thisPlotY_photo(thisCh,:));
-    plot(Analysis.(thistype).Time.Outcome(:,1),1:Analysis.(thistype).nTrials,'.r','MarkerSize',4);
-    plot(Analysis.(thistype).Time.Cue(:,1),1:Analysis.(thistype).nTrials,'.m','MarkerSize',4);
+    imagesc(timeRaster{thisCh},trialRaster{thisCh},dataRaster{thisCh},thisPlotY_photo(thisCh,:));
+    if Analysis.Parameters.Photometry
+    plot(Analysis.(thistype).Time.Outcome(:,1),trialRaster{thisCh},'.r','MarkerSize',4);
+    plot(Analysis.(thistype).Time.Cue(:,1),trialRaster{thisCh},'.m','MarkerSize',4);
+    else
+    plot(Analysis.(thistype).Time.Outcome(1,1)*ones(size(trialRaster{thisCh})),trialRaster{thisCh},'.r','MarkerSize',4);
+    plot(Analysis.(thistype).Time.Cue(1,1)*ones(size(trialRaster{thisCh})),trialRaster{thisCh},'.m','MarkerSize',4);
+    end   
     if thisplot==nbOfTrialTypes
         pos=get(gca,'pos');
         c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
-        c.Label.String = labelyFluo;
+        c.Label.String = labelYData{thisCh};
     end
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
     counterphotoplot=counterphotoplot+3;
-end  
+    
+    end
+end 
 end
     thisplot=thisplot+1;
 end

@@ -61,7 +61,11 @@ subplot(2,7,6+indexplot);
 xlabel(labelx);
 set(gca,'XLim',xEdges,'XTick',[0 0.5 1]);%,'YLim',yEdges
 title('Odd Sound'); hold on;
+try
 plot(Analysis.(thistype).Oddball.(thisChStruct).TimeOdd,Analysis.(thistype).Oddball.(thisChStruct).PhotoOdd,'-k');
+catch
+plot(Analysis.(thistype).Oddball.(thisChStruct).TimeEarly,Analysis.(thistype).Oddball.(thisChStruct).PhotoOdd,'-k');
+end
 p=plot(Analysis.(thistype).Oddball.(thisChStruct).TimeOdd,Analysis.(thistype).Oddball.(thisChStruct).PhotoOddAVG,'-r');
 p.LineWidth=2;
 
@@ -74,7 +78,11 @@ hs=shadedErrorBar(Analysis.(thistype).Oddball.(thisChStruct).TimeEarly,Analysis.
 hp(1)=hs.mainLine;
 hs=shadedErrorBar(Analysis.(thistype).Oddball.(thisChStruct).TimeLate,Analysis.(thistype).Oddball.(thisChStruct).PhotoLateAVG,Analysis.(thistype).Oddball.(thisChStruct).PhotoLateSEM,'g',transparency);
 hp(2)=hs.mainLine;
+try
 hs=shadedErrorBar(Analysis.(thistype).Oddball.(thisChStruct).TimeOdd,Analysis.(thistype).Oddball.(thisChStruct).PhotoOddAVG,Analysis.(thistype).Oddball.(thisChStruct).PhotoOddSEM,'r',transparency);
+catch
+    hs=shadedErrorBar(Analysis.(thistype).Oddball.(thisChStruct).TimeEarly,Analysis.(thistype).Oddball.(thisChStruct).PhotoOddAVG,Analysis.(thistype).Oddball.(thisChStruct).PhotoOddSEM,'r',transparency);
+end
 hp(3)=hs.mainLine;
 legend(hp,Leg,'Location','northwest','FontSize',8);
 legend('boxoff');

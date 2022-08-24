@@ -47,20 +47,13 @@ for thisTrial=1:Analysis.AllData.nTrials
 end
 
 %% Event Detection
-% if EventDetection
-%     for thisS=1:nbOfS
-%         SessionFilter
-%         thisData=Analysis.AllData.(thisCh).DFF(SessionFilter,:)
-%         structEvents=EvenDetectionScript(thisData,Parameters); % all events - amp, startTime, peakTime (amp but normalize per sesssion)
-%         structEvents=EventDetectionStat(structEvents); % 
-%         Analysis.AllData.(thisCh).structEvents(
-%     end
-% end
+if Analysis.Parameters.EventDetection
+    Analysis=AP_DataProcess_FindPeaks(Analysis);
+end
 
 %% Spike Analysis
 if Analysis.Parameters.Spikes.Spikes
-    Analysis=Analysis_Spikes(Analysis,'Organize');
-    %Analysis=Analysis_DataProcess_Spikes(Analysis);
+    Analysis=AP_DataProcess_Spikes(Analysis);
 end
 %% AOD
 if Analysis.Parameters.AOD.AOD

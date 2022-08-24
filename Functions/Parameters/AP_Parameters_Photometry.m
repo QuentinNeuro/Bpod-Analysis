@@ -19,8 +19,6 @@ end
 if isfield(SessionData.TrialSettings(1).GUI,'PhotometryVersion')
     if SessionData.TrialSettings(1).GUI.Photometry
 % General parameters        
-    Par.SpikesAnalysis=0;
-    Par.SpikesFigure=0;
     Par.Photometry=1;
     Par.Modulation=SessionData.TrialSettings(1).GUI.Modulation;
     if size(SessionData.(Par.PhotometryField){1,1},2)>1

@@ -28,9 +28,9 @@ end
 Analysis.AllData.Wheel.Time(thisTrial,:)          	=Time;
 Analysis.AllData.Wheel.Deg(thisTrial,:)          	=Data;
 Analysis.AllData.Wheel.Distance(thisTrial,:)       	=DataDistance;
-Analysis.AllData.Wheel.Baseline(thisTrial)        	=sumabs(diff(DataDistance(Baseline(1):Baseline(2))));
-Analysis.AllData.Wheel.Cue(thisTrial)             	=sumabs(diff(DataDistance(Time(1,:)>CueTime(1) & Time<CueTime(2))))/(CueTime(2)-CueTime(1));
-Analysis.AllData.Wheel.Outcome(thisTrial)           =sumabs(diff(DataDistance(Time(1,:)>OutcomeTime(1) & Time<OutcomeTime(2))))/(OutcomeTime(2)-OutcomeTime(1));
+Analysis.AllData.Wheel.Baseline(thisTrial)        	=nanmean(DataDistance(Baseline(1):Baseline(2)));
+Analysis.AllData.Wheel.Cue(thisTrial)             	=nanmean(DataDistance(Time(1,:)>CueTime(1) & Time<CueTime(2)));
+Analysis.AllData.Wheel.Outcome(thisTrial)           =nanmean(DataDistance(Time(1,:)>OutcomeTime(1) & Time<OutcomeTime(2)));
 else
     if isfield(Analysis.AllData,'Wheel')
 Analysis.AllData.Wheel.Time(thisTrial,:)          	=NaN(1,size(Analysis.AllData.Wheel.Time,2));

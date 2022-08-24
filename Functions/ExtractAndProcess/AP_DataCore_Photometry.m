@@ -33,7 +33,7 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
         if ~isfield(SessionData,'DecimatedSampRate')
         thisData=decimate(SessionData.(thisNidaqField){1,thisTrial}(:,1),DecimateFactor);
         else % Archived file
-            thisData=SessionData.(thisNidaqField){1,thisTrial}(:,Analysis.Parameters.PhotoModulData(thisCh)-1);
+            thisData=decimate(SessionData.(thisNidaqField){1,thisTrial}(:,Analysis.Parameters.PhotoModulData(thisCh)-1),DecimateFactor);
         end
     end
 

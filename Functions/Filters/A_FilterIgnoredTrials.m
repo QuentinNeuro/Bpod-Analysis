@@ -41,7 +41,7 @@ else
 end
 
 %% Saves the filter in a file
-if isempty(IT)==0
+if ~isempty(IT)
     Analysis.Parameters.ignoredTrials=IT;
     save(ITFile,'IT');
 end

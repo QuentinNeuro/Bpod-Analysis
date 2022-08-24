@@ -8,8 +8,9 @@ function  Analysis=AP_GoNogo_FiltersAndPlot(Analysis)
 %% Generates filters
 % Trial types
 Analysis=A_FilterState(Analysis,'Go','Nogo');
+Analysis=A_FilterLick(Analysis,'LicksOutcome','Outcome',Analysis.Parameters.LicksOutcome);
 % Wheel
-Analysis=A_FilterWheel(Analysis,'Run',Analysis.Parameters.WheelState,Analysis.Parameters.WheelThreshold);
+Analysis=A_FilterRunning(Analysis,'Run',Analysis.Parameters.WheelState,Analysis.Parameters.WheelThreshold);
 % Pupil
 Analysis=A_FilterPupil(Analysis,'Pupil',Analysis.Parameters.PupilState,Analysis.Parameters.PupilThreshold);
 Analysis=A_FilterPupilNaNCheck(Analysis,'PupilNaN',25);

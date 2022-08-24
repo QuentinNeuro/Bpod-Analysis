@@ -9,13 +9,6 @@ indexp=0;
 Group_Corr={};
 indexc=0;
 
-% indexp=indexp+1;
-% Group_Plot{indexp,1}='Gloups';
-% Group_Plot{indexp,2}={  'Reward_Coll',         {'Reward','LicksOutcome','FirstLick'};...
-%                         'Reward_NOTColl',      {'Reward','LicksOutcomeInv','FirstLick'};...
-%                         'Uncued_Reward_Coll',       {'Uncued','Reward','LicksOutcome','FirstLick'};...
-%                         'Uncued_Reward_NOTColl',   	{'Uncued','Reward','LicksOutcomeInv','FirstLick'}}; 
-
 %% Groups
 switch Analysis.Parameters.Phase
           case {'Habituation'}
@@ -24,9 +17,22 @@ Group_Plot{indexp,1}='Reward';
 Group_Plot{indexp,2}={  'Habit_Reward'      {'Uncued','Reward','LicksOutcome','FirstLick'};... 
                         'NotColl'           {'Uncued','Reward','LicksOutcomeInv','FirstLick'};...
                         'Habit_Omission',   {'Omission'}};
-              
-          case {'RewardA','Training','RewardA_woOmi'} 
-Group_Test={'type_1','type_1','type_1','type_3'};
+% if Analysis.Parameters.Wheel
+%     indexp=indexp+1;
+% Group_Plot{indexp,1}='Running';
+% Group_Plot{indexp,2}={'Habit_Reward_Run'          {'Uncued','Reward','LicksOutcome','FirstLick','Run'};...
+%                       'Habit_Reward_noRun'          {'Uncued','Reward','LicksOutcome','FirstLick','RunInv'}};
+% 
+% end
+          case {'RewardA','Training','RewardA_woOmi','RewardA_Large'} 
+% Group_Test={'type_1','type_1','type_1','type_3'};
+% indexp=indexp+1;
+% Group_Plot{indexp,1}='Reward';
+% Group_Plot{indexp,2}={  'Habit_Reward'      {'Uncued','Reward','LicksOutcome','FirstLick'};... 
+%                         'NotColl'           {'Uncued','Reward','LicksOutcomeInv','FirstLick'};...
+%                         'Habit_Omission',   {'Uncued','Omission'}};
+
+
 indexp=indexp+1;
 Group_Plot{indexp,1}='RewardExpectation';
 Group_Plot{indexp,2}={  'AnticipLick_CueA_Reward',        {'Cue A','LicksCue','Reward','LicksOutcome','FirstLick'};...
@@ -44,7 +50,7 @@ Group_Plot{indexp,2}={  'AnticipLick_CueA',      	{'Cue A','LicksCue'};...
                         'AnticipLick_CueB',         {'Cue B','LicksCue'};...
                         'NoAnticipLick_CueB',       {'Cue B','LicksCueInv'}};
 indexp=indexp+1;
-Group_Plot{indexp,1}='RewardExp2';
+Group_Plot{indexp,1}='RewardExp';
 Group_Plot{indexp,2}={  'CueA_Reward',              {'Cue A','Reward','LicksOutcome'};...
                         'CueB_Omission',            {'Cue B'};...
                         'Uncued_Reward',            {'Uncued','Reward','LicksOutcome'}};
@@ -52,6 +58,11 @@ Group_Plot{indexp,2}={  'CueA_Reward',              {'Cue A','Reward','LicksOutc
 % Arousal
 % if Analysis.Parameters.Wheel
 %     indexp=indexp+1;
+%     
+% Group_Plot{indexp,1}='Running';
+% Group_Plot{indexp,2}={'Uncued_Reward_Run'          {'Uncued','Reward','LicksOutcome','FirstLick','Run'};...
+%                       'Uncued_Reward_noRun'          {'Uncued','Reward','LicksOutcome','FirstLick','RunInv'}};
+
 % Group_Plot{indexp,1}='Running';
 % Group_Plot{indexp,2}={'Cue_A_Reward_Run',         {'Cue A','Reward','LicksOutcome','Run'};...
 %                       'Cue_A_Reward_noRun',       {'Cue A','Reward','LicksOutcome','RunInv'};...
@@ -75,12 +86,12 @@ Group_Plot{indexp,2}={  'CueA_Reward',              {'Cue A','Reward','LicksOutc
 %                     'Uncued_Reward',                 {'Uncued','Reward'}};
 % end              
 % Correlation
-indexc=indexc+1;
-Group_Corr{indexc,1}='ExpectationCorrelation';
-Group_Corr{indexc,2}={  'CueA_Reward',              {'Cue A','Reward','LicksOutcome'};...
-                        'CueB_Omission',            {'Cue B'};...
-                        'Uncued_Reward',            {'Uncued','Reward','LicksOutcome'}};      
- 
+% indexc=indexc+1;
+% Group_Corr{indexc,1}='ExpectationCorrelation';
+% Group_Corr{indexc,2}={  'CueA_Reward',              {'Cue A','Reward','LicksOutcome'};...
+%                         'CueB_Omission',            {'Cue B'};...
+%                         'Uncued_Reward',            {'Uncued','Reward','LicksOutcome'}};      
+%  
 %%        
     case {'RewardB','RewardB_noUncued'}
 Group_Test={'type_3','type_3','type_3','type_1'};
@@ -89,23 +100,23 @@ Group_Plot{indexp,1}='RewardExpectation';
 Group_Plot{indexp,2}={'AnticipLick_CueB_Reward',      {'Cue B','LicksCue','Reward','LicksOutcome','FirstLick'};...
                     'NoAnticipLick_CueB_Reward',      {'Cue B','LicksCueInv','Reward','LicksOutcome','FirstLick'};...
                     'Uncued_Reward',                  {'Uncued','Reward','LicksOutcome','FirstLick'}};
-indexp=indexp+1;
-Group_Plot{indexp,1}='Cues';
-Group_Plot{indexp,2}={'Cue_A',                          {'Cue A'};...
-                    'Cue_B',                          {'Cue B'};...
-                    'NoCue',                          {'Uncued'}};
-indexp=indexp+1;
-Group_Plot{indexp,1}='Cues_Licks';
-Group_Plot{indexp,2}={'AnticipLick_CueA',               {'Cue A','LicksCue'};...
-                    'NoAnticipLick_CueA',             {'Cue A','LicksCueInv'};...
-                    'AnticipLick_CueB',               {'Cue B','LicksCue'};...
-                    'NoAnticipLick_CueB',             {'Cue B','LicksCueInv'}};
-                indexp=indexp+1;
-                
-Group_Plot{indexp,1}='RewardExp2';
-Group_Plot{indexp,2}={  'CueB_Reward',              {'Cue B','Reward','LicksOutcome'};...
-                        'CueA_Omission',            {'Cue A'};...
-                        'Uncued_Reward',            {'Uncued','Reward','LicksOutcome'}};
+% indexp=indexp+1;
+% Group_Plot{indexp,1}='Cues';
+% Group_Plot{indexp,2}={'Cue_A',                          {'Cue A'};...
+%                     'Cue_B',                          {'Cue B'};...
+%                     'NoCue',                          {'Uncued'}};
+% indexp=indexp+1;
+% Group_Plot{indexp,1}='Cues_Licks';
+% Group_Plot{indexp,2}={'AnticipLick_CueA',               {'Cue A','LicksCue'};...
+%                     'NoAnticipLick_CueA',             {'Cue A','LicksCueInv'};...
+%                     'AnticipLick_CueB',               {'Cue B','LicksCue'};...
+%                     'NoAnticipLick_CueB',             {'Cue B','LicksCueInv'}};
+%                 indexp=indexp+1;
+%                 
+% Group_Plot{indexp,1}='RewardExp2';
+% Group_Plot{indexp,2}={  'CueB_Reward',              {'Cue B','Reward','LicksOutcome'};...
+%                         'CueA_Omission',            {'Cue A'};...
+%                         'Uncued_Reward',            {'Uncued','Reward','LicksOutcome'}};
 % Arousal
 % if Analysis.Parameters.Wheel
 %     indexp=indexp+1;
@@ -174,32 +185,32 @@ Group_Corr{indexc,2}={  'CueA_Reward',              {'Cue A','Reward','LicksOutc
 %%                  
     case 'RewardBPunishAValues'
 Group_Test={'type_4','type_4','type_4','type_1'};
-% indexp=indexp+1;
-% Group_Plot{indexp,1}='RewardExpectation';        
-% Group_Plot{indexp,2}={'AnticipLick_CueB_Reward',        {'Cue B','LicksCue','Reward','LicksOutcome','FirstLick'};...
-%                       'NoAnticipLick_CueA_Reward',      {'Cue A','LicksCueInv','Reward','LicksOutcome','FirstLick'};...
-%                       'Uncued_Reward',                  {'Uncued','Reward','LicksOutcome','FirstLick'}};
-% indexp=indexp+1;
-% Group_Plot{indexp,1}='PunExp';        
-% Group_Plot{indexp,2}={'AnticipLick_CueB_Punish',        {'Cue B','LicksCue','Punish'};...
-%                       'NoAnticipLick_CueA_Punish',      {'Cue A','LicksCueInv','Punish'};...
-% 	                  'Uncued_Punish',                  {'Uncued','Punish'}};
+indexp=indexp+1;
+Group_Plot{indexp,1}='RewardExpectation';        
+Group_Plot{indexp,2}={'AnticipLick_CueB_Reward',        {'Cue B','LicksCue','Reward','LicksOutcome','FirstLick'};...
+                      'NoAnticipLick_CueA_Reward',      {'Cue A','LicksCueInv','Reward','LicksOutcome','FirstLick'};...
+                      'Uncued_Reward',                  {'Uncued','Reward','LicksOutcome','FirstLick'}};
+indexp=indexp+1;
+Group_Plot{indexp,1}='PunExp';        
+Group_Plot{indexp,2}={'AnticipLick_CueB_Punish',        {'Cue B','LicksCue','Punish'};...
+                      'NoAnticipLick_CueA_Punish',      {'Cue A','LicksCueInv','Punish'};...
+	                  'Uncued_Punish',                  {'Uncued','Punish'}};
 indexp=indexp+1;
 Group_Plot{indexp,1}='Cues';
 Group_Plot{indexp,2}={'Cue_A',                          {'Cue A'};...
                       'Cue_B',                          {'Cue B'};...
                       'NoCue',                          {'Uncued'}};
-%                   
-% indexp=indexp+1;
-% Group_Plot{indexp,1}='RewardExpectation';        
-% Group_Plot{indexp,2}={'CueA_Reward',      {'Cue A','Reward','LicksOutcome','FirstLick'};...
-%                       'CueB_Reward',      {'Cue B','Reward','LicksOutcome','FirstLick'};...
-%                       'Uncued_Reward',    {'Uncued','Reward','LicksOutcome','FirstLick'}};
-% indexp=indexp+1;
-% Group_Plot{indexp,1}='PunExp';        
-% Group_Plot{indexp,2}={'CueA_Punish',        {'Cue A','Punish'};...
-%                       'CueB_Punish',        {'Cue B','Punish'};...
-% 	                  'Uncued_Punish',      {'Uncued','Punish'}};  
+                  
+indexp=indexp+1;
+Group_Plot{indexp,1}='RewardExpectation2';        
+Group_Plot{indexp,2}={'CueA_Reward',      {'Cue A','Reward','LicksOutcome','FirstLick'};...
+                      'CueB_Reward',      {'Cue B','Reward','LicksOutcome','FirstLick'};...
+                      'Uncued_Reward',    {'Uncued','Reward','LicksOutcome','FirstLick'}};
+indexp=indexp+1;
+Group_Plot{indexp,1}='PunExp';        
+Group_Plot{indexp,2}={'CueA_Punish',        {'Cue A','Punish'};...
+                      'CueB_Punish',        {'Cue B','Punish'};...
+	                  'Uncued_Punish',      {'Uncued','Punish'}};  
 % Correlation
 indexc=indexc+1;
 Group_Corr{indexc,1}='ExpectationCorrelation';
@@ -268,14 +279,44 @@ Group_Corr{indexc,2}={  'CueA_Reward',              {'Cue A','Reward','LicksOutc
                         'Uncued_Reward',            {'Uncued','Reward','LicksOutcome','FirstLick'}};
 %%
     case {'RewardACBValues','RewardBACValues'}
-Group_Plot{1,1}='Cues';
-Group_Plot{1,2}={'CueA',                    {'Cue A'};...
+indexp=indexp+1;
+Group_Plot{indexp,1}='Cues';
+Group_Plot{indexp,2}={'CueA',                    {'Cue A'};...
           'CueB',                           {'Cue B'};...
           'CueC',                           {'Cue C'}}; 
-Group_Plot{2,1}='Rewards';
-Group_Plot{2,2}={'CueA_Rew',                {'Cue A','Reward','LicksOutcome'};...
+indexp=indexp+1;
+Group_Plot{indexp,1}='Rewards';
+Group_Plot{indexp,2}={'CueA_Rew',                {'Cue A','Reward','LicksOutcome'};...
           'CueB_Rew',                       {'Cue B','Reward','LicksOutcome'};...
-          'CueC_Rew',                       {'Cue C','Reward','LicksOutcome'}};        
+          'CueC_Rew',                       {'Cue C','Reward','LicksOutcome'}}; 
+%       
+      % Correlation
+indexc=indexc+1;
+Group_Corr{indexc,1}='BehaviorCorrelation';
+Group_Corr{indexc,2}={'CueA_Rew',           {'Cue A','Reward','LicksOutcome'};...
+          'CueB_Rew',                       {'Cue B','Reward','LicksOutcome'};...
+          'CueC_Rew',                       {'Cue C','Reward','LicksOutcome'}}; 
+      
+% Arousal
+% if Analysis.Parameters.Wheel
+%     indexp=indexp+1;
+% Group_Plot{indexp,1}='Running';
+% Group_Plot{indexp,2}={'Cue_A_Reward_Run',         {'Cue A','Reward','LicksOutcome','Run'};...
+%                       'Cue_A_Reward_noRun',       {'Cue A','Reward','LicksOutcome','RunInv'}};                                  
+% end
+
+if Analysis.Parameters.Pupillometry
+indexp=indexp+1;
+Group_Plot{indexp,1}='CueAPupil';
+Group_Plot{indexp,2}={'Cue_A_Reward_Pupil',      {'Cue A','Reward','LicksOutcome','Pupil','PupilNaN'};...
+                    'Cue_A_Reward_noPupil',       {'Cue A','Reward','LicksOutcome','PupilInv','PupilNaN'}};
+%                 indexp=indexp+1;
+% Group_Plot{indexp,1}='CueCPupil';
+% Group_Plot{indexp,2}={'Cue_C_Reward_Pupil',      {'Cue C','Reward','LicksOutcome','Pupil','PupilNaN'};...
+%                     'Cue_C_Reward_noPupil',       {'Cue C','Reward','LicksOutcome','PupilInv','PupilNaN'}};
+end
+      
+      
 
 end
 end

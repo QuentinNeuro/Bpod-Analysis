@@ -13,7 +13,7 @@ Analysis.Parameters.AOD.offset=offset;
 % sampling rate
 sampRateRec=Analysis.Parameters.AOD.sampRateRec;
 dsampRate=Analysis.Parameters.AOD.decimateSR;
-if dsampRate
+if dsampRate 
     decimateFactor=floor(sampRateRec/dsampRate);
     sampRate=dsampRate;
 else
@@ -52,7 +52,7 @@ timeWindow=Analysis.Parameters.ReshapedTime;
 CueTime=Analysis.AllData.Time.Cue+Analysis.Parameters.CueTimeReset;
 OutcomeTime=Analysis.AllData.Time.Outcome+Analysis.Parameters.OutcomeTimeReset;
 
-time=time.*ones(nSamples,nTrials);
+time=time.*ones(length(time),nTrials);
 timeZ=time-Analysis.Core.AOD.Zero-Analysis.AllData.Time.Outcome(:,1)';
 timeZ_IO=false(size(timeZ));
 timeW=NaN(diff(timeWindow)*ceil(sampRate)+2,nTrials);
@@ -93,27 +93,33 @@ for thisC=1:nCells
       
     for thisT=1:nTrials
         dataW(1:sum(timeZ_IO(:,thisT)),thisT)=thisData(timeZ_IO(:,thisT),thisT);
-        preCueAVG(thisT)    = mean(dataW(timeW(:,thisT)>CueTime(thisT,1)-2 & timeW(:,thisT)<CueTime(thisT,1)-1,thisT),1,'omitnan');
-        cueAVG(thisT)       = mean(dataW(timeW(:,thisT)>CueTime(thisT,1) & timeW(:,thisT)<CueTime(thisT,2),thisT),1,'omitnan');
-        cueMAX(thisT)       = max(dataW(timeW(:,thisT)>CueTime(thisT,1) & timeW(:,thisT)<CueTime(thisT,2),thisT),[],1);
-        outcomeAVG(thisT)   = mean(dataW(timeW(:,thisT)>OutcomeTime(thisT,1) & timeW(:,thisT)<OutcomeTime(thisT,2),thisT),1,'omitnan');
-        outcomeMAX(thisT)   = max(dataW(timeW(:,thisT)>OutcomeTime(thisT,1) & timeW(:,thisT)<OutcomeTime(thisT,2),thisT),[],1);
     end
-   
-    if Analysis.Parameters.ZeroAtZero
-        dataW=dataW-preCueAVG;
-    end
+
+    switch Analysis.Parameters.ZeroAt
+        case 'Zero'
+            dataW=dataW-mean(dataW(timeW>-0.1 & Time<=0,:));
+        case 'Start'
+            dataW=dataW-mean(dataW(baselinePts(1):baselinePts(2),:));
+    end 
     
 %% Save in structure
     Analysis.AllData.AOD.CellName{thisC}=thisC_Name;
     Analysis.AllData.AOD.(thisC_Name).Data          =dataW;
     Analysis.AllData.AOD.(thisC_Name).baselineAVG   =baseAVG;
     Analysis.AllData.AOD.(thisC_Name).baselineSTD   =baseSTD;
-    Analysis.AllData.AOD.(thisC_Name).preCueAVG     =preCueAVG;
-    Analysis.AllData.AOD.(thisC_Name).CueAVG        =cueAVG;
-    Analysis.AllData.AOD.(thisC_Name).CueMAX        =cueMAX;
-    Analysis.AllData.AOD.(thisC_Name).OutcomeAVG	=outcomeAVG;
-    Analysis.AllData.AOD.(thisC_Name).OutcomeMAX	=outcomeMAX;
+    Analysis.AllData.AOD.(thisC_Name).preCueAVG     =mean(dataW(timeW(:,thisT)>CueTime(thisT,1)-2 & timeW(:,thisT)<CueTime(thisT,1)-1,:),1,'omitnan');
+    Analysis.AllData.AOD.(thisC_Name).CueAVG        =mean(dataW(timeW(:,thisT)>CueTime(thisT,1) & timeW(:,thisT)<CueTime(thisT,2),:),1,'omitnan');
+    Analysis.AllData.AOD.(thisC_Name).CueMAX        =max(dataW(timeW(:,thisT)>CueTime(thisT,1) & timeW(:,thisT)<CueTime(thisT,2),:),[],1);
+    Analysis.AllData.AOD.(thisC_Name).OutcomeAVG	=mean(dataW(timeW(:,thisT)>OutcomeTime(thisT,1) & timeW(:,thisT)<OutcomeTime(thisT,2),:),1,'omitnan');
+    Analysis.AllData.AOD.(thisC_Name).OutcomeMAX	=max(dataW(timeW(:,thisT)>OutcomeTime(thisT,1) & timeW(:,thisT)<OutcomeTime(thisT,2),:),[],1);
     
 end
+%% remove trials with too many missing points
+    nanCount=sum(isnan(Analysis.AllData.AOD.cell1.Data))<sampRate*2;
+    Analysis.Filters.ignoredTrials=Analysis.Filters.ignoredTrials.*nanCount;
+
+    switch Analysis.Parameters.Behavior
+        case 'AOD_AudPav'
+            Analysis.Parameters.Behavior='CuedOutcome';
+    end
 end

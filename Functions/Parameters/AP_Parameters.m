@@ -60,11 +60,11 @@ Par.Bin=0.25;
 % Processing
 if isfield(SessionData,'DecimatedSampRate')
     Par.NidaqSamplingRate=SessionData.DecimatedSampRate;
-    Par.NidaqDecimatedSR=SessionData.DecimatedSampRate;
-% 	if SessionData.DecimatedSampRate<Par.NidaqDecimatedSR
-%         Par.NidaqDecimatedSR=SessionData.DecimatedSampRate;
-%         disp('Archive SR is lower than requested SR - using archive SR by default')
-%     end
+%     Par.NidaqDecimatedSR=SessionData.DecimatedSampRate;
+	if SessionData.DecimatedSampRate<Par.NidaqDecimatedSR
+        Par.NidaqDecimatedSR=SessionData.DecimatedSampRate;
+        disp('Archive SR is lower than requested SR - using archive SR by default')
+    end
 else
     if isfield(SessionData.TrialSettings(1).GUI,'NidaqSamplingRate')
         Par.NidaqSamplingRate=SessionData.TrialSettings(1).GUI.NidaqSamplingRate;

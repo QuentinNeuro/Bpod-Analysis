@@ -19,7 +19,7 @@ catch
 end
 %% Behavior specific
 Par.TypeOfCue='nc';
-if contains(Name,'Cued','IgnoreCase',true) && ~contains(Name,'Sensor','IgnoreCase',true)
+if contains(Name,'Cued','IgnoreCase',true) && ~contains(Name,'Sensor','IgnoreCase',true)  && ~contains(Name,'AudCuedPavl','IgnoreCase',true)
     Par.Behavior='CuedOutcome';
     Par.TypeOfCue='Chirp';
     if isfield(SessionData.RawEvents.Trial{1,1}.States,'SoundDelivery')
@@ -49,7 +49,7 @@ elseif contains(Name,'GoNogo','IgnoreCase',true)
 	Par.StateOfCue='CueDelivery';
     Par.StateOfOutcome='PostOutcome';
     Par.CueTimeReset=[-0.1 0];
-    Par.OutcomeTimeReset=[0 -5];
+    Par.OutcomeTimeReset=[0 -3];
     Par.NidaqBaseline=[0.2 1.2];
 %     Par.TimeReshaping=1;
 elseif contains(Name,'AuditoryTuning','IgnoreCase',true)

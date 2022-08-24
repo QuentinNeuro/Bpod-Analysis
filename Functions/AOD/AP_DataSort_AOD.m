@@ -59,4 +59,6 @@ nCells=length(thisCIndex);
     end
         Analysis.(thistype).AOD.AllCells.DataTrials=Analysis.(thistype).AOD.AllCells.DataTrials/Analysis.Parameters.AOD.nCells;
         Analysis.(thistype).AOD.AllCells.DataAVG=mean(Analysis.(thistype).AOD.AllCells.Data,2,'omitnan');
+        Analysis.(thistype).AOD.AllCells.DataSEM=std(Analysis.(thistype).AOD.AllCells.Data,[],2,'omitnan')/sqrt(Analysis.Parameters.AOD.nCells);
+
 end

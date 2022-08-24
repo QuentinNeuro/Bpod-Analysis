@@ -100,8 +100,7 @@ if Analysis.(thistype).nTrials>0
     
  %% Spikes
     if Analysis.Parameters.Spikes.Spikes
-        Analysis=Analysis_Spikes(Analysis,'Sort',thistype,thisFilter);
-%         Analysis=AP_DataSort_Spikes(Analysis,FilterName,thisFilter);
+        Analysis=AP_DataSort_Spikes(Analysis,FilterName,thisFilter);
     end
 %% AOD    
     if Analysis.Parameters.AOD.AOD

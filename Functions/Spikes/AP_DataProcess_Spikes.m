@@ -1,45 +1,47 @@
 function Analysis=AP_DataProcess_Spikes(Analysis)
-%% DOES NOT WORK YET ##
 
 %% Parameters
+binSize=Analysis.Parameters.Spikes.BinSize;
+timeW_tag=Analysis.Parameters.Spikes.tagging_timeW;
+timeW_beh=Analysis.Parameters.ReshapedTime;
+binTag=timeW_tag(1):binSize:timeW_tag(2);
+binBeh=timeW_beh(1):binSize:timeW_beh(2);
 nCells=Analysis.Parameters.Spikes.nCells;
-Time_Tagging=Analysis.Parameters.Spikes.tagging_timeW;
-Time_Behav=Analysis.Parameters.PlotX;
-BinSize=Analysis.Parameters.Spikes.BinSize;
-BinTtime=Time_Behav(1):BinSize:Time_Behav(2);
+%% Timestamps
+tagTS=Analysis.Core.Spikes.TaggingTS;
+behTS=Analysis.Core.Spikes.BehaviorTS;
 
-% TTL timestamps
-BehaviorTS=Analysis.Core.Spikes.BehaviorTS;
-TaggingTS=Analysis.Core.Spikes.TaggingTS;
-        
-for thisC=1:nCells
-    thisC_Name=Analysis.Core.Spikes.CellNames{thisC};
-    thisTT_TS=Analysis.Core.Spikes.(thisC_Name).Data;
-%% Extract PhotoStim
-    for thisT=1:length(TaggingTS)
-        thisEvents_Window=Time_Tagging+TaggingTS(thisT);
-        thisTT_Events{thisT}=thisTT_TS(thisTT_TS>=thisEvents_Window(1) & thisTT_TS<=thisEvents_Window(2))...
-                                    -TaggingTS(thisT);
-        thisTT_Trials{thisT}=ones(1,length(thisTT_Events{thisT})).*thisT;
+%% Main loop
+for c=1:nCells
+    thisC_Name=Analysis.Core.Spikes.CellNames{c};
+    thisTS=Analysis.Core.Spikes.SpikeTS{c};
+    Analysis.AllData.Spikes.CellNames{c}=thisC_Name;
+%% Align photostim
+    for thisTrial=1:length(tagTS)
+        thisWindow=timeW_tag+tagTS(thisTrial);
+        thisTS_align{thisTrial}=thisTS(thisTS>=thisWindow(1) & thisTS<=thisWindow(2))...
+                                    -tagTS(thisTrial);
+        thisTS_trials{thisTrial}=ones(1,length(thisTS_align{thisTrial})).*thisTrial;
+        thisRate(thisTrial,:)    = histcounts(thisTS_align{thisTrial},binBeh)/binSize;
+        thisBin(thisTrial,:)     = binBeh;
     end
-    Analysis.Tagging.Spikes.(thisC_Name).Events_TS=thisTT_Events;
-    Analysis.Tagging.Spikes.(thisC_Name).Trials=thisTT_Trials;
-    clear thisEvents_Window thisTT_Events thisTT_Trials
-%% Extract Behav
-    for thisT=1:length(BehaviorTS)
-        thisEvents_Window=Time_Behav+BehaviorTS(thisT);
-        thisTT_Events{thisT}=thisTT_TS(thisTT_TS>=thisEvents_Window(1) & thisTT_TS<=thisEvents_Window(2))...
-                                    -BehaviorTS(thisT);
-        thisTT_Trials{thisT}=ones(1,length(thisTT_Events{thisT})).*thisT;
-        thisTT_Rate(thisT,:)    = histcounts(thisTT_Events{thisT},BinTtime)/BinSize;
-        thisTT_Bin(thisT,:)     = BinTtime;
+    Analysis.AllData.Spikes.(thisC_Name).Tagging.SpikeTS=thisTS_align;
+    Analysis.AllData.Spikes.(thisC_Name).Tagging.Trials=thisTS_trials;
+    Analysis.AllData.Spikes.(thisC_Name).Tagging.Rate=thisRate;
+    Analysis.AllData.Spikes.(thisC_Name).Tagging.Bin=thisBin(:,1:end-1);
+    clear thisWindow thisTS_align thisTS_trials thisRate thisBin
+%% Align behavior
+    for thisTrial=1:length(behTS)
+        thisWindow=timeW_beh+behTS(thisTrial);
+        thisTS_align{thisTrial}=thisTS(thisTS>=thisWindow(1) & thisTS<=thisWindow(2))...
+                                    -behTS(thisTrial);
+        thisTS_trials{thisTrial}=ones(1,length(thisTS_align{thisTrial})).*thisTrial;
+        thisRate(thisTrial,:)    = histcounts(thisTS_align{thisTrial},binBeh)/binSize;
+        thisBin(thisTrial,:)     = binBeh;
     end
-
-    Analysis.AllData.Spikes.(thisC_Name).Time=thisTT_Bin;
-    Analysis.AllData.Spikes.(thisC_Name).Data=thisTT_Rate;
-    Analysis.AllData.Spikes.(thisC_Name).Events_TS=thisTT_Events;
-    Analysis.AllData.Spikes.(thisC_Name).Trials=thisTT_Trials;
-        
-    clear thisEvents_Window thisTT_Events thisTT_Trials thisTT_Rate
+    Analysis.AllData.Spikes.(thisC_Name).SpikeTS=thisTS_align;
+    Analysis.AllData.Spikes.(thisC_Name).Trials=thisTS_trials;
+    Analysis.AllData.Spikes.(thisC_Name).Rate=thisRate;
+    Analysis.AllData.Spikes.(thisC_Name).Bin=thisBin(:,1:end-1);
 end
 end

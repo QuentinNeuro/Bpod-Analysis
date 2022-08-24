@@ -13,8 +13,9 @@ function Analysis=AP_Load(LP)
 %   trials to ignore + trials with recorded wheel or pupillometry
 %
 % function designed by QuentinC 2020
-%% Automatically test whether it is a bpodfile or an analysis file
-% TBD
+
+%% Automatically test whether it is a bpodfile or an analysis file, AOD, spikes or photometry etc
+LP=AP_AutoLoad(LP);
 %% Loading pre existing analysis file(s)
 if LP.Load==1
    FileName=LP.FileToOpen{1,1}
@@ -45,7 +46,7 @@ else
     Pupillometry=[];
 end
 % Parameters, Ignored Trials and Data extraction
-% try
+try
         Analysis.Parameters=AP_Parameters(SessionData,Pupillometry,LP,FileNameNoExt,Analysis.Parameters);
         Analysis=A_FilterIgnoredTrials(Analysis);
         Analysis=A_FilterWheel(Analysis);
@@ -58,9 +59,9 @@ end
         if isfield(SessionData,'Modulation')
             Analysis.Parameters.Modulation=SessionData.Modulation;
         end
-% catch
-%         disp([FileName ' NOT ANALYZED - Error in Parameters extraction or Data organization']);
-% end   
+catch
+        disp([FileName ' NOT ANALYZED - Error in Parameters extraction or Data organization']);
+end   
 end
 clear SessionData Pupillometry;
 end

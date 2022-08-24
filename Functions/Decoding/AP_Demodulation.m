@@ -19,7 +19,7 @@ processedData_0     = rawData .* refData;
 processedData_90    = rawData .* refData90;
 
 %% Filter
-     lowCutoff = lowCutoff/(sampleRate/2); % normalized CutOff by half SampRate (see doc)
+    lowCutoff = lowCutoff/(sampleRate/2); % normalized CutOff by half SampRate (see doc)
     [b, a] = butter(5, lowCutoff, 'low'); 
     % pad the data to suppress windows effect upon filtering
     pad = 1;
@@ -38,6 +38,6 @@ processedData_90    = rawData .* refData90;
 demodData = (processedData_0 .^2 + processedData_90 .^2) .^(1/2);
 
 %% Correct for amplitude of reference
-demodData=demodData*2/modAmp;
+demodData=demodData*2;
 
 end

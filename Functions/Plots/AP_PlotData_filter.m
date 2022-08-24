@@ -1,4 +1,4 @@
-function Analysis=AP_PlotData_filter(Analysis,thistype,channelnb)
+function Analysis=AP_PlotData_filter(Analysis,thistype)
 %AP_PlotData_filter generates a figure from the licks and the photometry
 %data of 'channelnb' contained in the structure 'Analysis.(thistype)'. 
 %The figure shows, for the sorted trial types specified by 'thistype' :
@@ -11,16 +11,16 @@ function Analysis=AP_PlotData_filter(Analysis,thistype,channelnb)
 %
 %function designed by Quentin 2017 for Analysis_Photometry
 
-if nargin==2
-    channelnb=1;
-end
-thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{channelnb}));
-FigTitle=sprintf('Analysis-PlotSingle %s',char(Analysis.Parameters.PhotoChNames{channelnb}));
+FigTitle=['Filter ' thistype];
 
 %% Close figures
 try
     close FigTitle;
 end
+
+%% Data
+[timeAVG,dataAVG,semAVG,labelYData]=AP_PlotData_SelectorAVG(Analysis,thistype);
+[timeRaster,trialRaster,dataRaster,labelYRaster]=AP_PlotData_SelectorRaster(Analysis,thistype);
 
 %% Plot Parameters
 Title=sprintf('%s (%.0d)',strrep(Analysis.(thistype).Name,'_',' '),Analysis.(thistype).nTrials);
@@ -29,14 +29,6 @@ xTime=Analysis.Parameters.PlotX;
 xtickvalues=linspace(xTime(1),xTime(2),5);
 labely1='Trial Number (licks)';
 labely2='Licks Rate (Hz)';
-
-if Analysis.Parameters.Zscore
-    labelyFluoRaster='Trial Number (z-score)';
-    labelyFluo='Z-scored Fluo';
-else
-    labelyFluoRaster='Trial Number (DF/Fo)';
-    labelyFluo='DF/Fo (%)';
-end
 transparency=0;
 % Automatic definition of axes
 maxtrial=Analysis.(thistype).nTrials;
@@ -50,7 +42,10 @@ maxrate=max(Analysis.(thistype).Licks.AVG);
 if maxrate<10
     maxrate=10;
 end
-PlotY_photo=Analysis.Parameters.PlotY_photo;
+thisPlotY=Analysis.Parameters.PlotY_photo;
+
+nbOfPlotsY=3+3*size(dataAVG,2);
+nbOfPlotsX=1;
 
 %% Plot
 scrsz = get(groot,'ScreenSize');
@@ -58,48 +53,61 @@ figure('Name',FigTitle,'Position', [25 25 scrsz(3)/4 scrsz(4)-150], 'numbertitle
 Legend=uicontrol('style','text');
 set(Legend,'String',Analysis.Parameters.Legend,'Position',[10,5,500,20]); 
 
-% Lick Raster
-subplot(6,1,[1 2]); hold on;
+%% Licking Data
+subplot(nbOfPlotsY,nbOfPlotsX,[1 2]); hold on;
 title(Title);
+% Raster
 plot(Analysis.(thistype).Licks.Events,Analysis.(thistype).Licks.Trials,'sk',...
     'MarkerSize',2,'MarkerFaceColor','k');
 plot(Analysis.(thistype).Time.Outcome(:,1),1:Analysis.(thistype).nTrials,'.r','MarkerSize',4);
 plot(Analysis.(thistype).Time.Cue(:,1),1:Analysis.(thistype).nTrials,'.m','MarkerSize',4);  
 ylabel(labely1);
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial+1],'YDir','reverse');
-% Lick AVG
-subplot(6,1,3); hold on;
+% Average
+subplot(nbOfPlotsY,nbOfPlotsX,3); hold on;
 shadedErrorBar(Analysis.(thistype).Licks.Bin, Analysis.(thistype).Licks.AVG, Analysis.(thistype).Licks.SEM,'-k',transparency);
 plot([0 0],[0 maxrate+1],'-r');
 plot(Analysis.(thistype).Time.Cue(1,:),[maxrate maxrate],'-b','LineWidth',2);
 ylabel(labely2); xlabel(labelx);
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxrate+1]);
 
-%% Photometry
-% Avg
-if Analysis.Parameters.Photometry==1
-subplot(6,1,6); hold on;
-shadedErrorBar(Analysis.(thistype).(thisChStruct).Time(1,:),Analysis.(thistype).(thisChStruct).DFFAVG,Analysis.(thistype).(thisChStruct).DFFSEM,'-k',transparency);
-if isnan(PlotY_photo(channelnb,:))
-    axis tight;
-    PlotY_photo(channelnb,:)=get(gca,'YLim');
-end
-plot([0 0],PlotY_photo,'-r');
-plot(Analysis.(thistype).Time.Cue(1,:),[PlotY_photo(channelnb,2) PlotY_photo(channelnb,2)],'-b','LineWidth',2);
-ylabel(labelyFluo); xlabel(labelx);
-set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',PlotY_photo(channelnb,:));
+%% Neuronal Data
+if ~isempty(dataAVG)
+    if ~Analysis.Parameters.Photometry
+        maxtrial=max(trialRaster{1});
+    end
+    counter=0;
+    for thisC=1:size(dataAVG,2)
+% Average
+        thisSubPlot=6+counter;
+        subplot(nbOfPlotsY,nbOfPlotsX,thisSubPlot); hold on;
+        shadedErrorBar(timeAVG{thisC},dataAVG{thisC},semAVG{thisC},'-k',transparency);
+        if isnan(thisPlotY(thisC,:))
+            axis tight;
+            thisPlotY(thisC,:)=get(gca,'YLim');
+        end
+        plot([0 0],thisPlotY,'-r');
+        plot(Analysis.(thistype).Time.Cue(1,:),[thisPlotY(thisC,2) thisPlotY(thisC,2)],'-b','LineWidth',2);
+        ylabel(labelYData); xlabel(labelx);
+        set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',thisPlotY(thisC,:));
     
-% Nidaq Raster
-subplot(6,1,[4 5]); hold on;
-yrasternidaq=1:Analysis.(thistype).nTrials;
-imagesc(Analysis.(thistype).(thisChStruct).Time(1,:),yrasternidaq,Analysis.(thistype).(thisChStruct).DFF,PlotY_photo(channelnb,:));
-plot(Analysis.(thistype).Time.Outcome(:,1),1:Analysis.(thistype).nTrials,'.r','MarkerSize',4);
-plot(Analysis.(thistype).Time.Cue(:,1),1:Analysis.(thistype).nTrials,'.m','MarkerSize',4);  
-pos=get(gca,'pos');
-c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
-c.Label.String = labelyFluo;
-ylabel(labelyFluoRaster);
-set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
-
+% Raster
+        thisSubPlot=[4 5]+counter;
+        subplot(nbOfPlotsY,nbOfPlotsX,thisSubPlot); hold on;
+        imagesc(timeRaster{thisC},trialRaster{thisC},dataRaster{thisC},thisPlotY(thisC,:));
+        if Analysis.Parameters.Photometry
+            plot(Analysis.(thistype).Time.Outcome(:,1),trialRaster{thisC},'.r','MarkerSize',4);
+            plot(Analysis.(thistype).Time.Cue(:,1),trialRaster{thisC},'.m','MarkerSize',4);
+        else
+            plot(Analysis.(thistype).Time.Outcome(1,1)*ones(size(trialRaster{thisC})),trialRaster{thisC},'.r','MarkerSize',4);
+            plot(Analysis.(thistype).Time.Cue(1,1)*ones(size(trialRaster{thisC})),trialRaster{thisC},'.m','MarkerSize',4);
+        end  
+        pos=get(gca,'pos');
+        c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
+        c.Label.String = labelYRaster;
+        ylabel(labelYRaster);
+        set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
+        counter=counter+3;
+    end
 end    
 end

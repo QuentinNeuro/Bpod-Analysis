@@ -22,8 +22,9 @@ Analysis=A_FilterPupilNaNCheck(Analysis,'PupilNaN',25);
 % Sequence
 Analysis=A_FilterAfollowsB(Analysis,'Reward_After_Punish','Reward','Punish');
 
-%% Sort and Plot Filtered Trials specified in AP_Filter_GroupToPlot.
+%% Definitions of meta filters
 [Group_Plot,Group_Corr,Group_Perf]=AP_CuedOutcome_GroupToPlot(Analysis);
+%% Performance calculation
 try
 Analysis=AP_Performance(Analysis,Group_Perf);
 catch
@@ -31,7 +32,9 @@ catch
     Analysis.Performance.Decision=NaN;
     Analysis.Performance.testIO=NaN;
 end
-if Analysis.Parameters.PlotFiltersSummary || Analysis.Parameters.PlotFiltersSingle
+
+%% Sort and plot Filter
+if Analysis.Parameters.SortFilters
 for i=1:size(Group_Plot,1)
     Title=Group_Plot{i,1};
     MetaFilterGroup=cell(size(Group_Plot{i,2},1),1);
@@ -41,16 +44,12 @@ for i=1:size(Group_Plot,1)
         MetaFilterGroup{j}=MetaFilter;
         [Analysis,thisFilter]=A_FilterMeta(Analysis,MetaFilter,Filters);
         Analysis=AP_DataSort(Analysis,MetaFilter,thisFilter);
-        if Analysis.Parameters.Photometry
         if Analysis.Parameters.PlotFiltersSingle && Analysis.(MetaFilter).nTrials>0
-            for thisCh=1:length(Analysis.Parameters.PhotoCh)
-                AP_PlotData_filter(Analysis,MetaFilter,thisCh);
-                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend MetaFilter char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
+                AP_PlotData_filter(Analysis,MetaFilter);
+                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend MetaFilter '.png']);
                 if Analysis.Parameters.Illustrator
-                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend MetaFilter char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
+                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend MetaFilter],'epsc');
                 end
-            end
-        end
         end
         clear thisFilter
     end
@@ -78,8 +77,7 @@ for i=1:size(Group_Corr,1)
         MetaFilterGroup{j}=MetaFilter;
         [Analysis,thisFilter]=A_FilterMeta(Analysis,MetaFilter,Filters);
         Analysis=AP_DataSort(Analysis,MetaFilter,thisFilter);
-        if Analysis.Parameters.Photometry
-        if Analysis.(MetaFilter).nTrials
+        if Analysis.(MetaFilter).nTrials && Analysis.Parameters.Photometry
             for thisCh=1:length(Analysis.Parameters.PhotoCh)
                 AP_PlotData_Filter_corrDFF(Analysis,MetaFilter,thisCh);
                 saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend MetaFilter char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
@@ -87,7 +85,6 @@ for i=1:size(Group_Corr,1)
                 saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend MetaFilter char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
                 end
             end
-        end
         end
         clear thisFilter
     end
@@ -115,8 +112,9 @@ end
 %     save('CuedEvents','CuedEvents');
 % end
 % 
-% % Figures
-% % if Analysis.Parameters.SpikesFigure
-% %     Analysis=Analysis_Spikes(Analysis,'Figure');
-% % end
+% Figures
+if Analysis.Parameters.Spikes.Spikes && Analysis.Parameters.Spikes.Figure
+    for c=1:Analysis.Parameters.Spikes.nCells
+        AP_CuedOutcome_FiltersAndPlot_Spikes(Analysis,c);
+    end
 end

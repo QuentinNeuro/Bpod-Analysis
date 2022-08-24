@@ -11,16 +11,11 @@ xtickvalues=linspace(xTime(1),xTime(2),5);
 transparency=Analysis.Parameters.Transparency;
 labely1='Licks Rate (Hz)';
 maxrate=10;
-nbofsubplots=1;
-for thisCh=1:length(Analysis.Parameters.PhotoCh)
-    nbofsubplots=nbofsubplots+1;
-if Analysis.Parameters.Zscore
-    labelyFluo{thisCh}=sprintf('Z-scored Fluo - %s',Analysis.Parameters.PhotoChNames{thisCh});
-else
-    labelyFluo{thisCh}=sprintf('DF/Fo - %s',Analysis.Parameters.PhotoChNames{thisCh});
-end
-end
 PlotY_photo=Analysis.Parameters.PlotY_photo;
+
+[timeAVG,dataAVG,semAVG,labelYData]=AP_PlotData_SelectorAVG(Analysis,Group{1});
+nbOfPlotsY=1+size(dataAVG,2);
+nbOfPlotsX=1;
 
 %% Figure
 phototitlelabel=[];
@@ -40,19 +35,23 @@ for i=1:nboftypes
 	thistype=Group{i};
 if Analysis.(thistype).nTrials~=0
     handle.title{k}=sprintf('%s (%.0d)',Analysis.(thistype).Name,Analysis.(thistype).nTrials);
-    subplot(nbofsubplots,1,1); hold on;
+% Licks
+    subplot(nbOfPlotsY,nbOfPlotsX,1); hold on;
     hs=shadedErrorBar(Analysis.(thistype).Licks.Bin, Analysis.(thistype).Licks.AVG, Analysis.(thistype).Licks.SEM,color4plot{k},transparency); 
     hp(k)=hs.mainLine;
-    for thisCh=1:length(Analysis.Parameters.PhotoCh)
-        thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
-        subplot(nbofsubplots,1,thisCh+1); hold on;
-        shadedErrorBar(Analysis.(thistype).(thisChStruct).Time(1,:),Analysis.(thistype).(thisChStruct).DFFAVG,Analysis.(thistype).(thisChStruct).DFFSEM,color4plot{k},transparency);
+% Neuronal Data
+    if ~isempty(dataAVG)
+        [timeAVG,dataAVG,semAVG,labelYData]=AP_PlotData_SelectorAVG(Analysis,thistype);
+        for thisCh=1:size(dataAVG,2)
+            subplot(nbOfPlotsY,nbOfPlotsX,1+thisCh); hold on;
+            shadedErrorBar(timeAVG{thisCh},dataAVG{thisCh},semAVG{thisCh},color4plot{k},transparency);
+        end
     end
     k=k+1;
 end
 end
 % Makes Plot pretty
-    subplot(nbofsubplots,1,1); hold on;
+    subplot(nbOfPlotsY,nbOfPlotsX,1); hold on;
 	ylabel(labely1);
     plot([0 0],[0 maxrate],'-r');
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxrate]);
@@ -61,16 +60,18 @@ end
     legend('boxoff');
     clear hp hs;
     
-    for thisCh=1:length(Analysis.Parameters.PhotoCh)
-        subplot(nbofsubplots,1,thisCh+1); hold on;
-        ylabel(labelyFluo{thisCh});
-        xlabel(labelx);
-        if isnan(PlotY_photo(thisCh,:))
-            axis tight
-            PlotY_photo(thisCh,:)=get(gca,'YLim');
+    if ~isempty(dataAVG)
+        for thisCh=1:size(dataAVG,2)
+            subplot(nbOfPlotsY,nbOfPlotsX,1+thisCh); hold on;
+            ylabel(labelYData{thisCh});
+            xlabel(labelx);
+            if isnan(PlotY_photo(thisCh,:))
+                axis tight
+                PlotY_photo(thisCh,:)=get(gca,'YLim');
+            end
+            plot([0 0],PlotY_photo(thisCh,:),'-r');
+            plot(Analysis.AllData.Time.Cue(1,:),[PlotY_photo(thisCh,2) PlotY_photo(thisCh,2)],'-b','LineWidth',2);
+            set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',PlotY_photo(thisCh,:));
         end
-        plot([0 0],PlotY_photo(thisCh,:),'-r');
-        plot(Analysis.AllData.Time.Cue(1,:),[PlotY_photo(thisCh,2) PlotY_photo(thisCh,2)],'-b','LineWidth',2);
-        set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',PlotY_photo(thisCh,:));
     end 
 end

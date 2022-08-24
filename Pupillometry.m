@@ -14,9 +14,8 @@
 % to the bpod data using 'Analysis_Photometry_Launcher'
 %
 % Designed by Quentin 2017
-
 %% Parameters
-Batch=0;
+Batch=1;
 
 %% Folder management and run the script
 warning('off','all')
@@ -165,8 +164,10 @@ Pupillometry.PupilSmooth=PupilSmooth;
 %% Save
 switch testSave
 case 'Save'
-cd(FoldDir)
-FileName=[Name(1:USindex(2)-1) '_Pupil'];
+cd ..
+thisPath=cd(FoldDir);
+thisPathPart = split(thisPath,filesep);
+FileName=[thisPathPart{end} '_Pupil'];
 save(FileName,'Pupillometry');
 end
 end

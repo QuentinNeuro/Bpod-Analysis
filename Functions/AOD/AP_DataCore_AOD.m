@@ -14,17 +14,27 @@ catch
         Analysis.Parameters.AOD.raw=0;
         Analysis.Parameters.AOD.offset=0;
     catch
+        try
+            load(['dff_' Analysis.Parameters.Files{1}]);
+                    Analysis.Parameters.AOD.raw=0;
+        Analysis.Parameters.AOD.offset=0;
+        catch
     disp('could not find corresponding AOD data')
+        end
     end
 end
 %% Parameters 
-stateStart='AO_WarmUp'; 
+fieldStates=fieldnames(Analysis.Core.States{1,1});
+stateStart=fieldStates{2}; 
 stateOutcome=Analysis.Parameters.StateOfOutcome;
-nTrials=Analysis.Parameters.nTrials; 
+nTrials=Analysis.Parameters.nTrials;
 nData=size(D,2); 
-Analysis.Parameters.AOD.nCells=nData/nTrials;
-Analysis.Parameters.AOD.sampRateRec=1000/mean(diff(D(1).x));
+nCells=nData/nTrials;
+Analysis.Parameters.AOD.nCells=nCells;
 Analysis.Parameters.AOD.nSamples=length(D(1).x);
+
+% Analysis.Parameters.Photometry=1;
+Analysis.Parameters.AOD.sampRateRec=1000/mean(diff(D(1).x));
 
 %% Timing from Analysis structure or TTL 
 try
@@ -40,4 +50,10 @@ Analysis.Core.AOD.time=D(1).x/1000;
 for thisCT=1:nData
     Analysis.Core.AOD.Data(:,thisCT)=D(thisCT).y;
 end
+
+for thisT=0:nTrials-1
+    indexTrial=thisT*nCells+1:(thisT+1)*nCells;
+    Analysis.Core.AOD.DataTrialAVG{thisT+1}=mean(Analysis.Core.AOD.Data(:,indexTrial),2);
+end
+
 end 
