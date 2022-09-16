@@ -58,7 +58,7 @@ set(Legend,'String',FigureLegend,'Position',[10,5,500,20]);
 
 %% TT Timing
 subplot(6,3,1); hold on;
-title(thisC_Name);
+title([thisC_Name Analysis.Core.Spikes.Label{c}]);
 plot(thisSpikes_All,0,'sk',...
         'MarkerSize',2,'MarkerFaceColor','k');
 set(gca,'XLim',xTimeAll,'YLim',ySpikeAll);

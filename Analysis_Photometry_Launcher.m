@@ -21,7 +21,7 @@ LP.OW.CueTimeReset=[];
 LP.OW.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
-LP.P.SortFilters=0;
+LP.P.SortFilters=1;
 LP.P.EventDetection=0;
 % Figures
 LP.P.PlotSummary1=1;
@@ -68,7 +68,7 @@ LP.P.TE4CellBase=0;
 LP.P.Spikes.Figure=1;
 LP.P.Spikes.Clustering='Kilosort'; %Kilosort MClust
 LP.P.Spikes.BinSize=0.1;
-LP.P.Spikes.tagging_timeW=[-0.1 0.2];
+LP.P.Spikes.tagging_timeW=[-0.05 0.1];
 LP.P.Spikes.tagging_TTL=2;
 LP.P.Spikes.TTLTS_spikeTS_Factor=10000; % for MClust clustered spikes
 %% Archiving photometry data

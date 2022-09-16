@@ -6,6 +6,7 @@ TTL_Tagging=Analysis.Parameters.Spikes.tagging_TTL;
 switch Analysis.Parameters.Spikes.Clustering
     case 'Kilosort'
     TTLTS_SpikeTS_Factor=1;
+    label=tdfread('cluster_KSLabel.tsv');
     case 'MClust'
     TTLTS_SpikeTS_Factor=Analysis.Parameters.Spikes.TTLTS_spikeTS_Factor;
 end
@@ -50,6 +51,11 @@ for i=1:size(FileList,1)
         thisTT_TS=TS/TTLTS_SpikeTS_Factor;
         Analysis.Core.Spikes.CellNames{counterTT}=thisC_Name;
         Analysis.Core.Spikes.SpikeTS{counterTT}=thisTT_TS;
+        if exist('label','var')
+            Analysis.Core.Spikes.Label{counterTT}=label.KSLabel(counterTT,:);
+        else
+            Analysis.Core.Spikes.Label{counterTT}='unknown';
+        end
     end
 end
 
