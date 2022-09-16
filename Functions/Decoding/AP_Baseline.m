@@ -14,11 +14,11 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
             Cutoff=Analysis.Parameters.BaselineHisto/100;
             DataBaselineSort=sort(DataBaseline);
             BaselinePtsHisto=round(length(DataBaseline)*Cutoff);
-            BaselineAVG(thisT)=nanmean(DataBaseline(1:BaselinePtsHisto));
-            BaselineSTD(thisT)=nanstd(DataBaseline(1:BaselinePtsHisto));
+            BaselineAVG(thisT)=mean(DataBaseline(1:BaselinePtsHisto),'omitnan');
+            BaselineSTD(thisT)=std(DataBaseline(1:BaselinePtsHisto),'omitnan');
         else
-        BaselineAVG(thisT)=nanmean(DataBaseline);
-        BaselineSTD(thisT)=nanstd(DataBaseline);
+        BaselineAVG(thisT)=mean(DataBaseline,'omitnan');
+        BaselineSTD(thisT)=std(DataBaseline,'omitnan');
         end
     end
     

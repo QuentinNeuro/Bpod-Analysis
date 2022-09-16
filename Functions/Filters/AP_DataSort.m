@@ -52,8 +52,6 @@ if Analysis.(thistype).nTrials>0
     % Average
         Analysis.(thistype).(thisChStruct).DFFAVG       =mean(Analysis.(thistype).(thisChStruct).DFF,1,'omitnan'); 
         Analysis.(thistype).(thisChStruct).DFFSEM       =std(Analysis.(thistype).(thisChStruct).DFF,0,1,'omitnan')/sqrt(Analysis.(thistype).nTrials);
-        %Analysis.(thistype).(thisChStruct).DFFAVG_CueZ   =nanmean(Analysis.(thistype).(thisChStruct).DFF-Analysis.(thistype).(thisChStruct).Z4Cue',1); 
-        %Analysis.(thistype).(thisChStruct).DFFAVG_OutZ   =nanmean(Analysis.(thistype).(thisChStruct).DFF-Analysis.(thistype).(thisChStruct).Z4Outcome',1); 
 
         % Cue
         Analysis.(thistype).(thisChStruct).CueAVG_AVG   =mean(Analysis.(thistype).(thisChStruct).CueAVG,2,'omitnan');

@@ -65,6 +65,8 @@ elseif contains(Name,'AuditoryTuning','IgnoreCase',true)
     Par.CueTimeReset=[0 1];
     Par.OutcomeTimeReset=[0 2];
     Par.NidaqBaseline=[0.2 1.2];
+    Par.ZeroAt=0;
+    Par.BaselineBefAft=1;
 elseif contains(Name,'Oddball','IgnoreCase',true)
     Par.Behavior='Oddball';
 	Par.StateOfCue='PreState';

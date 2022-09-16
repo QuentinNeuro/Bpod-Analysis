@@ -154,7 +154,7 @@ end
 
 end
 end
-if Analysis.Parameters.SpikesAnalysis
+if Analysis.Parameters.Spikes.Spikes
     Analysis=Analysis_Spikes(Analysis,'Figure');
 end
 end

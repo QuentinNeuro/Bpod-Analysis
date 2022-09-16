@@ -11,14 +11,18 @@ clear SessionData Analysis LP; close all;
 LP.Analysis_type='Single';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
+%% Database 
+DB_Add=0;
+DB_Group=[];
+% global TuningYMAX;
 %% Overwritting Parameters
-LP.OW.PhotoChNames={'BLA' 'VS'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
+LP.OW.PhotoChNames={'VIP' '405'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 LP.OW.CueTimeReset=[];
 LP.OW.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
-LP.P.SortFilters=1;
-LP.P.EventDetection=1;
+LP.P.SortFilters=0;
+LP.P.EventDetection=0;
 % Figures
 LP.P.PlotSummary1=1;
 LP.P.PlotSummary2=0;
@@ -52,7 +56,7 @@ LP.P.BaselineBefAft=2;                  % After not working with mov baseline
 LP.P.BaselineHisto=0;                   % percentage of data from the baseline to use
 LP.P.CueStats='MAXZ';                   % Options : AVG AVGZ MAX MAXZ
 LP.P.OutcomeStats='MAXZ';               % Options : AVG AVGZ MAX MAXZ
-LP.P.NidaqDecimatedSR=100;              % in Hz
+LP.P.NidaqDecimatedSR=20;               % in Hz
 %% AOD
 LP.P.AOD.raw=1;                        % load raw vs dff data - does not really work upon Analysis loading
 LP.P.AOD.smoothing=1;                  % smoothing and decimate happen upon loading
@@ -67,10 +71,6 @@ LP.P.Spikes.BinSize=0.1;
 LP.P.Spikes.tagging_timeW=[-0.1 0.2];
 LP.P.Spikes.tagging_TTL=2;
 LP.P.Spikes.TTLTS_spikeTS_Factor=10000; % for MClust clustered spikes
-%% Database 
-DB_Add=0;
-DB_Group=[];
-% global TuningYMAX;
 %% Archiving photometry data
 LP.Archive=0; %
 LP.ArchiveOnly=0;
@@ -123,6 +123,7 @@ switch LP.Analysis_type
                     DB_Stat=struct();
                 end
             DB_Stat=DB_Generate(Analysis,DB_Stat,LP.FileToOpen,LP.PathName,DB_Group);
+            DB_Stat.LP=LP;
             disp(Analysis.Parameters.CueTimeReset)
             end
 %             AllAnimals{i}=Analysis.Parameters.Animal;
