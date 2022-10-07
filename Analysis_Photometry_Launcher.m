@@ -7,16 +7,14 @@
 % spiking units clustered using MClust (TT.mat) and using TTL sync information
 clear SessionData Analysis LP; close all;
 
-%% Analysis type Single/Group etc
-LP.Analysis_type='Single';
+%% Analysis type Single/Group/Batch etc
+LP.Analysis_type='Batch';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
-%% Database 
-DB_Add=0;
-DB_Group=[];
+DB.DataBase=0;
 % global TuningYMAX;
 %% Overwritting Parameters
-LP.OW.PhotoChNames={'VIP' '405'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
+LP.OW.PhotoChNames={'VIP' 'mPFC'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 LP.OW.CueTimeReset=[];
 LP.OW.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
@@ -68,14 +66,14 @@ LP.P.TE4CellBase=0;
 LP.P.Spikes.Figure=1;
 LP.P.Spikes.Clustering='Kilosort'; %Kilosort MClust
 LP.P.Spikes.BinSize=0.1;
-LP.P.Spikes.tagging_timeW=[-0.05 0.1];
+LP.P.Spikes.tagging_timeW=[-0.3 0.3];
 LP.P.Spikes.tagging_TTL=2;
+LP.P.Spikes.pThreshold=[0.01 0.05]; %Latency / FR;
 LP.P.Spikes.TTLTS_spikeTS_Factor=10000; % for MClust clustered spikes
 %% Archiving photometry data
 LP.Archive=0; %
 LP.ArchiveOnly=0;
 LP.ArchiveOW=0;
-LP.MEGABATCH=0;
 %% Default Parameters [Used if not found in Bpod file]
 LP.D.Name='AOD_ACh';        %'AOD_ACh' - VIP-GCaMP
 LP.D.Rig='AOD';             %'AOD' 'NA'
@@ -97,43 +95,57 @@ LP.D.Load=0;
 LP.D.Photometry=0;
 LP.D.Spikes.Spikes=0;
 LP.D.AOD.AOD=0;
+%% Database
+DB.Group=[];
+if ~exist('DB_Stat','var')
+    DB_Stat=struct();
+end
 
-%% Run Analysis_Photometry
-if ~LP.MEGABATCH
-[LP.FileList,LP.PathName]=uigetfile('*.mat','Select the BPod file(s)','MultiSelect', 'on');
-if iscell(LP.FileList)==0
-	LP.FileToOpen=cellstr(LP.FileList);
-    LP.Analysis_type='Single';
-	Analysis=Analysis_Photometry(LP); 
-else
+%% File selection and Analysis Photometry Run
 switch LP.Analysis_type
-    case 'Single'
-         for i=1:length(LP.FileList)
-%             TuningYMAX=[]; % for auditory tuning
-            LP.FileToOpen=LP.FileList(i);
-            try
-            Analysis=Analysis_Photometry(LP);
-            catch
-            disp([LP.FileToOpen ' NOT ANALYZED']);
-            end 
-            close all;
-            % DataBase
-            if DB_Add
-                if exist('DB_Stat')~=1
-                    DB_Stat=struct();
-                end
-            DB_Stat=DB_Generate(Analysis,DB_Stat,LP.FileToOpen,LP.PathName,DB_Group);
-            DB_Stat.LP=LP;
-            disp(Analysis.Parameters.CueTimeReset)
-            end
-%             AllAnimals{i}=Analysis.Parameters.Animal;
-%             AllTuning{i}=TuningYMAX;
-         end    
-	case 'Group'
-        LP.FileToOpen=LP.FileList;
-        Analysis=Analysis_Photometry(LP);
+    case 'Batch'
+        errorFile=AP_FileBatch(LP);
+    case 'Online'
+        AP_FileOnline(LP);
+    otherwise
+        [Analysis,DB_Stat]=AP_FileManual(LP,DB,DB_Stat);
 end
-end
-else
-AP_MEGABATCH(LP)
-end
+
+% if ~LP.MEGABATCH
+% [LP.FileList,LP.PathName]=uigetfile('*.mat','Select the BPod file(s)','MultiSelect', 'on');
+% if iscell(LP.FileList)==0
+% 	LP.FileToOpen=cellstr(LP.FileList);
+%     LP.Analysis_type='Single';
+% 	Analysis=Analysis_Photometry(LP); 
+% else
+% switch LP.Analysis_type
+%     case 'Single'
+%          for i=1:length(LP.FileList)
+% %             TuningYMAX=[]; % for auditory tuning
+%             LP.FileToOpen=LP.FileList(i);
+%             try
+%             Analysis=Analysis_Photometry(LP);
+%             catch
+%             disp([LP.FileToOpen ' NOT ANALYZED']);
+%             end 
+%             close all;
+%             % DataBase
+%             if DB_Add
+%                 if ~exist('DB_Stat','var')
+%                     DB_Stat=struct();
+%                 end
+%             DB_Stat=DB_Generate(Analysis,DB_Stat,LP.FileToOpen,LP.PathName,DB_Group);
+%             DB_Stat.LP=LP;
+%             disp(Analysis.Parameters.CueTimeReset)
+%             end
+% %             AllAnimals{i}=Analysis.Parameters.Animal;
+% %             AllTuning{i}=TuningYMAX;
+%          end    
+% 	case 'Group'
+%         LP.FileToOpen=LP.FileList;
+%         Analysis=Analysis_Photometry(LP);
+% end
+% end
+% else
+% AP_MEGABATCH(LP)
+% end

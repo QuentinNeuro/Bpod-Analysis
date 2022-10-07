@@ -217,8 +217,15 @@ xlabel(xLabelBehav);
 end
 
 %% Save
-FileName=[Analysis.Parameters.Name thisC_Name];
-DirEvents=[pwd filesep 'Figure_Spikes' filesep];
+if isfield(Analysis.AllData.Spikes,'TagStat')
+    tagStatus=find(Analysis.AllData.Spikes.TagStat.Decision(c,:));
+    if ~isempty(tagStatus)
+        tagName=['-' Analysis.AllData.Spikes.TagStat.TagNames{tagStatus}];
+    else tagName=[];
+    end
+end
+FileName=[Analysis.Parameters.Name '-' thisC_Name tagName]
+DirEvents=[pwd filesep ['Figure_Spikes' tagName] filesep];
 if isfolder(DirEvents)==0
     mkdir(DirEvents);
 end

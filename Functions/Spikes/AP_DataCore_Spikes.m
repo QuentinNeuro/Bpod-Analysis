@@ -47,7 +47,7 @@ for i=1:size(FileList,1)
         counterTT=counterTT+1;
         load(FileList(i,:));
         thisC_Name=strtrim(FileList(i,:));
-        thisC_Name=thisC_Name(1:end-4)
+        thisC_Name=thisC_Name(1:end-4);
         thisTT_TS=TS/TTLTS_SpikeTS_Factor;
         Analysis.Core.Spikes.CellNames{counterTT}=thisC_Name;
         Analysis.Core.Spikes.SpikeTS{counterTT}=thisTT_TS;

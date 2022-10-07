@@ -18,6 +18,9 @@ for c=1:nCells
 
     Analysis.(thisType).Spikes.(thisC_Name).RateAVG=mean(Analysis.(thisType).Spikes.(thisC_Name).Rate,1);
     Analysis.(thisType).Spikes.(thisC_Name).RateSEM=std(Analysis.(thisType).Spikes.(thisC_Name).Rate,1)/sqrt(nTrials); 
+
+    Analysis.(thisType).Spikes.(thisC_Name).Tagging.RateAVG=mean(Analysis.(thisType).Spikes.(thisC_Name).Tagging.Rate,1);
+    Analysis.(thisType).Spikes.(thisC_Name).Tagging.RateSEM=std(Analysis.(thisType).Spikes.(thisC_Name).Tagging.Rate,1)/sqrt(nTrials); 
     
     Analysis.(thisType).Spikes.AllCells.Bin(c,:)=Analysis.AllData.Spikes.(thisC_Name).Bin(1,:);
     Analysis.(thisType).Spikes.AllCells.Rate(c,:)=Analysis.(thisType).Spikes.(thisC_Name).RateAVG;
