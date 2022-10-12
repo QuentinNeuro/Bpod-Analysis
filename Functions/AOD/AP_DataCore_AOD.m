@@ -1,4 +1,10 @@
 function Analysis=AP_DataCore_AOD(Analysis) 
+%% Adjust for old behavior
+switch Analysis.Parameters.StateOfOutcome
+    case 'WaitForLick'
+        Analysis.Parameters.StateToZero=Analysis.Parameters.StateOfCue;
+end
+
 %% loading AOD files 
 try
 if Analysis.Parameters.AOD.raw
@@ -18,7 +24,7 @@ catch
             load(['dff_' Analysis.Parameters.Files{1}]);
                     Analysis.Parameters.AOD.raw=0;
         Analysis.Parameters.AOD.offset=0;
-        catch
+        catch 
     disp('could not find corresponding AOD data')
         end
     end
@@ -32,6 +38,11 @@ nData=size(D,2);
 nCells=nData/nTrials;
 Analysis.Parameters.AOD.nCells=nCells;
 Analysis.Parameters.AOD.nSamples=length(D(1).x);
+
+if mod(nCells,1)
+    disp('Error guessing the number of cells for AOD recording')
+    Analysis.Parameters.AOD.AOD=0;
+end
 
 % Analysis.Parameters.Photometry=1;
 Analysis.Parameters.AOD.sampRateRec=1000/mean(diff(D(1).x));

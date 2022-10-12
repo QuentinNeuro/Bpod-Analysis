@@ -58,7 +58,7 @@ try
         disp('Nb of trials after merging is not consistent')
     end
 catch
-    disp('BREAK Problem in core data merging')
+    disp('BREAK Problem in AP_DataCore_Merge')
 end
 
 end

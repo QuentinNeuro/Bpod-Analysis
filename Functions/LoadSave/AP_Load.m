@@ -60,7 +60,7 @@ try
             Analysis.Parameters.Modulation=SessionData.Modulation;
         end
 catch
-        disp([FileName ' NOT ANALYZED - Error in Parameters extraction or Data organization']);
+        disp([FileName ' NOT ANALYZED - Error in AP_Load']);
 end   
 end
 clear SessionData Pupillometry;

@@ -101,7 +101,7 @@ end
 end
 
 %% AOD
-if Analysis.Parameters.AOD.AOD
+if Analysis.Parameters.AOD.AOD && Analysis.Parameters.AOD.Figure
     Analysis=AP_CuedOutcome_FiltersAndPlot_AOD(Analysis);
 end
 
