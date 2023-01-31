@@ -28,7 +28,7 @@ thisBaseline=nanmean(thisPupSmooth(Baseline(1):Baseline(2)));
 
 % DPP
 thisPupDPP=100*(thisPupSmoothTW-thisBaseline)/thisBaseline;
-if Analysis.Parameters.ZeroAtZero
+if Analysis.Parameters.ZeroAt
     thisPupDPP=thisPupDPP-mean(thisPupDPP(thisTime>-0.01 & thisTime<0.01));
 end
 

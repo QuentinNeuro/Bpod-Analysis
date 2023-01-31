@@ -1,4 +1,5 @@
 function [x,y]=cumulative(data)
+    data=data(~isnan(data));
     datasize=length(data);
     step=1/datasize;
     x=sort(data);   

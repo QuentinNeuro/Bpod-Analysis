@@ -12,6 +12,7 @@ function Analysis=AP_PlotData_filter(Analysis,thistype)
 %function designed by Quentin 2017 for Analysis_Photometry
 
 FigTitle=['Filter ' thistype];
+illustrationTest=Analysis.Parameters.Illustration(2);
 
 %% Close figures
 try
@@ -32,10 +33,12 @@ labely2='Licks Rate (Hz)';
 transparency=0;
 % Automatic definition of axes
 maxtrial=Analysis.(thistype).nTrials;
+if ~illustrationTest
 if maxtrial<20
     maxtrial=20;
 else
-    maxtrial=40;
+    maxtrial=20;
+end
 end
 %Lick AVG y axes
 maxrate=max(Analysis.(thistype).Licks.AVG);

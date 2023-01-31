@@ -1,4 +1,4 @@
-function Analysis=AP_DataProcess_AOD(Analysis)
+function Analysis=AP_DataProcess_AOD2(Analysis)
 
 %% Parameters
 nCells=Analysis.Parameters.AOD.nCells;
@@ -10,52 +10,42 @@ if ischar(offset)
     offset=floor(min(min(Analysis.Core.AOD.Data)))-1;
 end
 Analysis.Parameters.AOD.offset=offset;
+timeWindow=Analysis.Parameters.ReshapedTime; 
 % sampling rate
 sampRateRec=Analysis.Parameters.AOD.sampRateRec;
 dsampRate=Analysis.Parameters.AOD.decimateSR;
+timeWLength=diff(timeWindow)*ceil(sampRateRec)+2;
+
 if dsampRate 
-    decimateFactor=floor(sampRateRec/dsampRate);
     sampRate=dsampRate;
+    timeWLengthResample=diff(timeWindow)*dsampRate;
 else
     sampRate=sampRateRec;
 end
 Analysis.Parameters.AOD.sampRate=sampRate;
-baselinePts=ceil(Analysis.Parameters.NidaqBaseline*sampRate); 
+baselinePts=ceil(Analysis.Parameters.NidaqBaseline*sampRateRec); 
 
 %% Preprocessing
-coreTime=Analysis.Core.AOD.time;
-if dsampRate
-    time=decimate(coreTime,decimateFactor);
-else
-    time=coreTime;
-end
-coreData=Analysis.Core.AOD.Data;
-if Analysis.Parameters.AOD.smoothing || dsampRate
-    data=nan(length(time),size(coreData,2));
-    for thisCT=1:size(coreData,2)
-        thisData=coreData(:,thisCT);
-        if Analysis.Parameters.AOD.smoothing
-            thisData=smooth(thisData);
-        end
-        if dsampRate
-            thisData=decimate(thisData,decimateFactor);
-        end
-        data(:,thisCT)=thisData;
+time=Analysis.Core.AOD.time;
+data=Analysis.Core.AOD.Data;
+
+if Analysis.Parameters.AOD.smoothing
+    for thisCT=1:size(data,2)
+        data(:,thisCT)=smooth(data(:,thisCT));
     end
-else
-    data=coreData;
 end
+
 %% Timing
 % assumes cue and outcome always arrive at the same time once data have
 % been zero-ed
-timeWindow=Analysis.Parameters.ReshapedTime; 
+
 CueTime=Analysis.AllData.Time.Cue+Analysis.Parameters.CueTimeReset;
 OutcomeTime=Analysis.AllData.Time.Outcome+Analysis.Parameters.OutcomeTimeReset;
 
 time=time.*ones(length(time),nTrials);
 timeZ=time-Analysis.Core.AOD.Zero-Analysis.AllData.Time.Outcome(:,1)';
 timeZ_IO=false(size(timeZ));
-timeW=NaN(diff(timeWindow)*ceil(sampRate)+2,nTrials);
+timeW=NaN(timeWLength,nTrials);
 for thisT=1:nTrials
     timeZ_IO(timeZ(:,thisT)>=timeWindow(1) & timeZ(:,thisT)<=timeWindow(2),thisT)=true;
 end
@@ -63,6 +53,13 @@ mTlength=max(sum(timeZ_IO));
 timeW=NaN(mTlength,nTrials);
 for thisT=1:nTrials
     timeW(1:sum(timeZ_IO(:,thisT)),thisT)=timeZ(timeZ_IO(:,thisT),thisT);
+end
+
+if dsampRate
+    for thisT=1:nTrials
+        timeRS(:,thisT)=resample(timeW(:,thisT),timeWLengthResample,timeWLength);
+    end
+    timeW=timeRS;
 end
 Analysis.AllData.AOD.Time=timeW;
 
@@ -96,6 +93,12 @@ for thisC=1:nCells
         dataW(1:sum(timeZ_IO(:,thisT)),thisT)=thisData(timeZ_IO(:,thisT),thisT);
     end
 
+    if dsampRate
+        for thisT=1:nTrials
+            dataRS(:,thisT)=resample(dataW(:,thisT),timeWLengthResample,timeWLength);
+        end
+        dataW=dataRS;
+    end
     switch Analysis.Parameters.ZeroAt
         case 'Zero'
             dataW=dataW-mean(dataW(timeW>-0.1 & Time<=0,:));

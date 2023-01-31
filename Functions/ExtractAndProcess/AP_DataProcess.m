@@ -48,7 +48,7 @@ end
 
 %% Event Detection
 if Analysis.Parameters.EventDetection
-    Analysis=AP_DataProcess_FindPeaks(Analysis);
+    Analysis=AP_DataProcess_Events(Analysis);
 end
 
 %% Spike Analysis

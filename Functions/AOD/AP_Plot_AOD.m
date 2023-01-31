@@ -20,15 +20,19 @@ Group_Plot{1,2}={       'CueA_Reward',              {'Cue A','Reward','LicksOutc
     
 	case 'types'
 Group_Plot{1,1}='RewardExp';
-Group_Plot{1,2}={       'type_1',              {'type_1'};...
-                        'type_3',            {'type_3'};...
-                        'type_4',            {'type_4'}};
+Group_Plot{1,2}={       'type_1',            {'type_1'};...
+                        'type_3',            {'type_6'};...
+                        'type_7',            {'type_7'}};
                     
     case 'cells'
+% Group_Plot{1,1}='RewardExp';
+% Group_Plot{1,2}={       'CueA_Reward_posRew',              {'Cue A','Reward','LicksOutcome'};...
+%                         'CueB_Omission_posRew',            {'Cue B'};...
+%                         'Uncued_Reward_posRew',            {'Uncued','Reward','LicksOutcome'}};
 Group_Plot{1,1}='RewardExp';
-Group_Plot{1,2}={       'CueA_Reward_posRew',              {'Cue A','Reward','LicksOutcome'};...
-                        'CueB_Omission_posRew',            {'Cue B'};...
-                        'Uncued_Reward_posRew',            {'Uncued','Reward','LicksOutcome'}};
+Group_Plot{1,2}={       'type_1',            {'type_1'};...
+                        'type_3',            {'type_6'};...
+                        'type_4',            {'type_4'}};
 end
 groupToPlot=Group_Plot{1,2};
 %% Legends
@@ -63,7 +67,8 @@ for i=1:nbOfPlotsX
     end
     end
 end
-PlotY_photo=Analysis.Parameters.PlotY_photo;
+PlotY_photo=Analysis.Parameters.PlotY_photo(1,:);
+% maxtrial=10;
 
 %% Plot
 ScrSze=get(0,'ScreenSize');
@@ -101,6 +106,28 @@ if Analysis.(thistype).nTrials
     
     counterphotoplot=[3 4 5];
        
+% Fluo AVG
+    subplot(nbOfPlotsY,nbOfPlotsX,thisplot+(counterphotoplot(3)*nbOfPlotsX)); hold on;
+    thisTime=Analysis.(thistype).AOD.Time(:,1);
+    if cellID
+        thisData=Analysis.(thistype).AOD.(cellID).DataAVG;
+    else
+        thisData=Analysis.(thistype).AOD.AllCells.DataAVG;
+    end
+    plot(thisTime,thisData,'-k');
+    if thisplot==1
+        ylabel(labelyFluo);
+    end
+    if isnan(PlotY_photo)
+        axis tight;
+        thisPlotY_photo=get(gca,'YLim');
+    else
+        thisPlotY_photo=PlotY_photo;
+        ylim(thisPlotY_photo);
+    end
+    xlim(xTime);
+    xlabel(labelx);   
+    
 % Nidaq Raster
     subplot(nbOfPlotsY,nbOfPlotsX,[thisplot+(counterphotoplot(1)*nbOfPlotsX) thisplot+(counterphotoplot(2)*nbOfPlotsX)]); hold on;
     yrasternidaq=1:Analysis.(thistype).nTrials;
@@ -115,7 +142,7 @@ if Analysis.(thistype).nTrials
     thisData=thisData(thisTime>xTime(1) & thisTime<xTime(2),:);
     thisTime=thisTime(thisTime>xTime(1) & thisTime<xTime(2));
     
-    imagesc(thisTime,yrasternidaq,thisData');
+    imagesc(thisTime,yrasternidaq,thisData',thisPlotY_photo);
     plot(Analysis.(thistype).Time.Outcome(:,1),1:Analysis.(thistype).nTrials,'.r','MarkerSize',4);
     plot(Analysis.(thistype).Time.Cue(:,1),1:Analysis.(thistype).nTrials,'.m','MarkerSize',4);
     if thisplot==nbOfPlotsX
@@ -123,22 +150,9 @@ if Analysis.(thistype).nTrials
         c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
         c.Label.String = labelyFluo;
     end
-    set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
+    set(gca,'XLim',xTime,'XTick',xtickvalues,'YDir','reverse');
     
-% Fluo AVG
-    subplot(nbOfPlotsY,nbOfPlotsX,thisplot+(counterphotoplot(3)*nbOfPlotsX)); hold on;
-    thisTime=Analysis.(thistype).AOD.Time(:,1);
-    if cellID
-        thisData=Analysis.(thistype).AOD.(cellID).DataAVG;
-    else
-        thisData=Analysis.(thistype).AOD.AllCells.DataAVG;
-    end
-    plot(thisTime,thisData,'-k');
-    if thisplot==1
-        ylabel(labelyFluo);
-    end
-    xlim(xTime);
-    xlabel(labelx);        
+     
     counterphotoplot=counterphotoplot+3;
  
 end

@@ -84,6 +84,9 @@ if Analysis.(thistype).nTrials>0
          Analysis.(thistype).(thisChStruct).Cumul.CueSort=sort(Analysis.(thistype).(thisChStruct).CueStat);
          Analysis.(thistype).(thisChStruct).Cumul.OutcomeSort=sort(Analysis.(thistype).(thisChStruct).OutcomeStat);    
     end
+    if Analysis.Parameters.EventDetection
+        Analysis=AP_DataSort_Events(Analysis,thistype);
+    end
     end
 %% Wheel
     if Analysis.Parameters.Wheel

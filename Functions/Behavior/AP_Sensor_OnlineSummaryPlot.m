@@ -18,7 +18,7 @@ nbOfTrialTypes=Analysis.Parameters.nbOfTrialTypes;
 labely={'Licks',Analysis.Parameters.PhotoChNames{1},Analysis.Parameters.PhotoChNames{2},'Wheel'};
 labelx='Time (s)'; 
 color4plot={'-k';'-b';'-r';'-g';'-c';'-c';'-k'};
-transparency=1;
+transparency=Analysis.Parameters.Transparency;
 % Automatic definition of axes
 maxtrial=0; maxrate=10;
 for i=1:nbOfTrialTypes
@@ -149,6 +149,9 @@ clear hp hs;
 % Photometry
 for j=1:size(Analysis.Parameters.PhotoField,2)
     subplot(SubplotDimensions(1),SubplotDimensions(2),summaryplots+(j*SubplotDimensions(2))); hold on;
+    if ~isnan(PlotY_photo(j,:))
+        ylim(PlotY_photo(j,:))
+    end
     thisYLim=get(gca,'YLim');
     plot([0 0],thisYLim,'-r');
     plot(Analysis.(thistype).Time.Cue(1,:),[thisYLim(2) thisYLim(2)],'-b','LineWidth',2);

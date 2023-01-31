@@ -22,8 +22,8 @@ catch
     catch
         try
             load(['dff_' Analysis.Parameters.Files{1}]);
-                    Analysis.Parameters.AOD.raw=0;
-        Analysis.Parameters.AOD.offset=0;
+            Analysis.Parameters.AOD.raw=0;
+            Analysis.Parameters.AOD.offset=0;
         catch 
     disp('could not find corresponding AOD data')
         end
