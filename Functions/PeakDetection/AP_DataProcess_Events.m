@@ -24,6 +24,7 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
             Analysis.AllData.(thisPeakStruct)=thisPeaks;
         else
             thisPeaks.trials=thisPeaks.trials+max(Analysis.AllData.(thisPeakStruct).trials);
+            thisPeaks.session=thisPeaks.session+max(Analysis.AllData.(thisPeakStruct).session);
             peakFields=fieldnames(thisPeaks);
             for thisF=1:size(peakFields,1)
                 thisField=peakFields{thisF};

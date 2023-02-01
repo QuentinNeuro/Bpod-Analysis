@@ -1,10 +1,11 @@
-function peakStats=AP_Events(time,data,testMin,peakT,minT,minTW,wv,show)
+function peakStats=AP_Events(time,data,testMin,peakT,minT,minTW,wvTW,show)
 % Function based on matlab findpeaks function. Uses a different way to
 % calculate the prominence value by searching the minimum left of the
 % detected peak. 
 % time and data : should be trials x sample.
 % testMin : methods to find minimum. I am using 'miniLocal' by default
 % peakT and minT : works fine with peakT between std(data) and std(data)/2 and peakT/2;
+% wv : is the duration of the desired waveform (in sample points)
 % show : shows a trial example
 
 %% test block
@@ -23,8 +24,8 @@ nTrials=size(data,1);
 % debugging variables
 countLMerror=0;
 countLMIdx=[];
-wvStart=-floor(0.5*wv);
-
+% waveform time window;
+wvStart=-floor(0.5*wvTW);
 % initialize % check if peakTrials exists
 peakStats.trials=[];
 peakStats.noPeaks=[];
@@ -80,28 +81,27 @@ for t=1:nTrials
     else
         FWHMIdx(:,p)=[leftFWHM rightFWHM];
         promFWHM(p)=diff(FWHMIdx(:,p));
-        AUCFWHMProm(p)=trapz(thisData(FWHMIdx(1,p):FWHMIdx(2,p)))-(thisMinIdx(p)+halfProm(p))*diff(FWHMIdx(:,p));   % cap AUC ;
-%     AUCProm{t}(p)=trapz(thisData(FWHMIdx{t}(p,1):FWHMIdx{t}(p,2)))-minVal{t}(p)*diff(FWHMIdx{t}(p,:));                  % relative AUC ;
-%     AUCProm{t}(p)=trapz(thisData(FWHMIdx{t}(p,1):FWHMIdx{t}(p,2)));                                                     % absolute AUC ;
+%        AUCFWHMProm(p)=trapz(thisData(FWHMIdx(1,p):FWHMIdx(2,p)))-(thisMinAmp(p)+halfProm(p))*diff(FWHMIdx(:,p));   % cap AUC ;
+       AUCFWHMProm(p)=trapz(thisData(FWHMIdx(1,p):FWHMIdx(2,p)))-thisMinAmp(p)*diff(FWHMIdx(:,p));                        % relative AUC ;
+%       AUCProm(p)=trapz(thisData(FWHMIdx(p,1):FWHMIdx(p,2)));                                                     % absolute AUC ;
     end
 
 %% Waveforms extraction    
-    if wv
-        thisWV=nan(1,(wv-wvStart));
-        if (thisMinIdx(p)+wvStart)<1
-            lengthWV=length(thisData(1:(thisMinIdx(p)+wv)));
-            thisWV(end-lengthWV+1:end)=thisData(1:(thisMinIdx(p)+wv));
+    thisWV=nan(1,(wvTW-wvStart));
+    if (thisMinIdx(p)+wvStart)<1
+        lengthWV=length(thisData(1:(thisMinIdx(p)+wvTW)));
+        thisWV(end-lengthWV+1:end)=thisData(1:(thisMinIdx(p)+wvTW));
 
-        elseif (thisMinIdx(p)+wv)>length(thisData)
-            lengthWV=length(thisData((thisMinIdx(p)+wvStart):end));
-            thisWV(1:lengthWV)=thisData((thisMinIdx(p)+wvStart):end);
-        else
-            thisWV=thisData((thisMinIdx(p)+wvStart+1):(thisMinIdx(p)+wv));
-        end
-        waveforms(:,p)=thisWV-thisMinAmp(p);
+    elseif (thisMinIdx(p)+wvTW)>length(thisData)
+        lengthWV=length(thisData((thisMinIdx(p)+wvStart):end));
+        thisWV(1:lengthWV)=thisData((thisMinIdx(p)+wvStart):end);
+    else
+        thisWV=thisData((thisMinIdx(p)+wvStart+1):(thisMinIdx(p)+wvTW));
     end
+    waveforms(:,p)=thisWV-thisMinAmp(p);
     end
 %% Save data in structure
+if nbOfPeaks
 startStructIdx=length(peakStats.trials)+1;
 thisStructIdx=startStructIdx:(startStructIdx+nbOfPeaks-1);
 
@@ -117,11 +117,10 @@ peakStats.AUCFWHMProm(thisStructIdx)=AUCFWHMProm;
 peakStats.min(thisStructIdx)=thisMinAmp;
 peakStats.minIdx(thisStructIdx)=thisMinIdx;
 peakStats.waveforms(:,thisStructIdx)=waveforms;
-
-if ~nbOfPeaks % If nothing had been found
-    thisStructIdx=startStructIdx:(startStructIdx+1-1);
-    peakStats.trials(thisStructIdx)=t*ones(1,1);
-    peakStats.noPeaks=[peakStats.noPeaks t];
+else
+thisStructIdx=startStructIdx:(startStructIdx+1-1);
+peakStats.trials(thisStructIdx)=t*ones(1,1);
+peakStats.noPeaks=[peakStats.noPeaks t];
 end
 
 % clear variable
@@ -145,6 +144,11 @@ if ~isempty(peakStats.noPeaks)
     end
     peakStats.trials=trialSave;
 end
+%% Waveform timewindow
+peakStats.waveformTW=time(1,1:size(peakStats.waveforms,1))'-time(1,1);
+peakStats.waveformTW=peakStats.waveformTW-peakStats.waveformTW(abs(wvStart));
+%% Session indexing
+peakStats.session=ones(size(peakStats.trials));
 
 %% show a trial output
 if show

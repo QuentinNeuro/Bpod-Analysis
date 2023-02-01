@@ -21,7 +21,7 @@ for e=1:nEpochs
        thisTrialIO=peakStats.trials==trialNb(t);
        thisEpochTrialIO=and(thisEIO,thisTrialIO);
        if any(thisEpochTrialIO)
-           thisFirstIdx(t)=find(thisTrialIO,1,"first");
+           thisFirstIdx(t)=find(thisEpochTrialIO,1,"first");
            thisJitter(t)=peakTS(thisFirstIdx(t))-epochTW(e,1);
        else
            thisFirstIdx(t)=NaN;

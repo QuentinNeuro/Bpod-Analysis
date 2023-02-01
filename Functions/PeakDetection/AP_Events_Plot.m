@@ -1,27 +1,16 @@
-% function AP_PlotEvents_Epochs(peakStats,time,data,fs,trialName,epochTW,epochNames)
+%function AP_Events_Plot(peakStats,time,data,trialName,epochTW,epochNames)
 
-% test block
-data=Analysis.type_1.Photo_470.DFF;
-time=Analysis.type_1.Photo_470.Time;
-peakStats=Analysis.type_1.Photo_470_peak;
-fs=Analysis.Parameters.NidaqDecimatedSR;
+%% test block
+data=Analysis.type_1.Photo_470b.DFF;
+time=Analysis.type_1.Photo_470b.Time;
+peakStats=Analysis.type_1.Photo_470b_peak;
 trialName='CuedReward';
 epochTW=Analysis.Parameters.EventEpochTW;
 epochNames=Analysis.Parameters.EventEpochNames;
 
 
-%%
-% fig_t=randi(nTrials);
-% fig_tIdx=peakStats.trials==fig_t;
-% % fig_t=78;
-% fig_dy=data(fig_t,:);
-% fig_dy=data(fig_t,:);
-% fig_py=peakStats.amp(fig_tIdx);
-% fig_px=peakStats.peakIdx(fig_tIdx);
-% fig_my=peakStats.min(fig_tIdx);
-% fig_mx=peakStats.minIdx(fig_tIdx);
-
 %% Parameters
+limTime=[-4 4];
 nTrials=size(data,1);
 trialNbs=unique(peakStats.trials);
 nEpochs=size(epochTW,1);
@@ -47,8 +36,6 @@ y=data(aTrial,:);
 xPeaks      =   peakTS;
 yPeaks_max  =   y(peakIdx);
 yPeaks_min  =   yPeaks_max-peakProm;
-% waveform
-timeWF=(1:size(peakStats.waveforms,1))/fs;
 
 %% Figure
 xSP=4;
@@ -70,7 +57,8 @@ end
 for p=1:length(xPeaks)
     plot([xPeaks(p) xPeaks(p)],[yPeaks_min(p) yPeaks_max(p)],'-b');
 end
-
+xlim(limTime);
+legend(epochNames);
 %% Raster
 subplot(ySP,xSP,[5 6 9 10]); hold on;
 x=peakStats.TS;
@@ -81,21 +69,20 @@ for e=1:nEpochs
     thisEpochIdx=peakStats.(epochNames{e}).index;
     x=peakStats.TS(thisEpochIdx);
     y=peakStats.trials(thisEpochIdx);
-    plot(x,y,'s','MarkerSize',2,'MarkerFaceColor',colorEpochs(e,:));
+    plot(x,y,'s','MarkerSize',2,'MarkerFaceColor',colorEpochs(e,:),'MarkerEdgeColor',colorEpochs(e,:));
 end
 ylabel('trials'); set(gca,'Ydir','reverse')
-
-%% Frequency
+xlim(limTime);
+%% 'Firing rate'
+subplot(ySP,xSP,[13 14]); hold on;
 x=binTW(2:end);
 y=histcounts(peakStats.TS,binTW)/nTrials;
-
-subplot(ySP,xSP,[13 14]); hold on;
 plot(x,y,'-k');
 for e=1:nEpochs
     plot(epochTW(e,:),[max(y) max(y)],'color',colorEpochs(e,:));
 end
 ylabel('Frequency (Hz?)'); xlabel('Time from outcome (s)');
-
+xlim(limTime);
 
 %% Histogram
 subplot(ySP,xSP,[15 16]); hold on;
@@ -111,8 +98,9 @@ for e=1:nEpochs
     % Waveform first Peak
     subplot(ySP,xSP,3); hold on;
     xlabel('Time (s)'); ylabel('Fluo');
-    y=mean(peakStats.waveformsNorm(:,thisEFIdx),2,'omitnan');
-    plot(timeWF,y,'color',colorEpochs(e,:));
+    x=peakStats.waveformTW(:,1);
+    y=mean(peakStats.waveforms(:,thisEFIdx),2,'omitnan');
+    plot(x,y,'color',colorEpochs(e,:));
     % jitter
     subplot(ySP,xSP,4); hold on;
     xlabel('Jitter (s)'); ylabel('CD')
@@ -123,7 +111,7 @@ for e=1:nEpochs
     % cumulatives Prominence
     subplot(ySP,xSP,7); hold on;
     xlabel('norm Prominences'); ylabel('CD');
-    [x,y]=cumulative(peakStats.promNorm(:,thisEFIdx));
+    [x,y]=cumulative(peakStats.prom(:,thisEFIdx));
     plot(x,y,'color',colorEpochs(e,:));
     % cumulatives AUC
     subplot(ySP,xSP,8); hold on;
@@ -136,7 +124,7 @@ for e=1:nEpochs
     HistoReliabilityY(e)=thisEStats.Reliability;
 
     subplot(ySP,xSP,[15 16]); hold on;
-    hHandle=histogram(peakStats.promNorm(:,thisEFIdx),'Normalization','pdf');
+    hHandle=histogram(peakStats.prom(:,thisEFIdx));
     hHandle.BinWidth=binSize;
     hHandle.FaceColor=colorEpochs(e,:);
 
@@ -161,47 +149,5 @@ bHandle.FaceColor='flat';
 for e=1:nEpochs
     bHandle.CData(e,:)=colorEpochs(e,:);
 end
-
-
-%     subplot(ySP,xSP,[7 8])
-%     hHandle=histogram(thisE.firstProm);
-%     hHandle.BinWidth=binSize;
-%     hHandle.FaceColor=colorEpochs(e,:);
-%     xlabel('Prominences'); ylabel('Count')
-% 
-% subplot(ySP,xSP,9);hold on;
-% bHandle=bar(1:nEpochs,HistoFreqY);
-% title('Frequency');
-% ylabel('Freq (Hz)');
-% xticks(1:nEpochs); xticklabels(epochNames); xtickangle(45);
-% bHandle.FaceColor='flat';
-% for e=1:nEpochs
-%     bHandle.CData(e,:)=colorPlot(e,:);
-% end
-% 
-% subplot(ySP,xSP,10);hold on;
-% title('Reliability');
-% ylabel('Reliability (%)');
-% bHandle=bar(1:nEpochs,HistoReliabilityY);
-% xticks(1:nEpochs); xticklabels(epochNames); xtickangle(45);
-% bHandle.FaceColor='flat';
-% for e=1:nEpochs
-%     bHandle.CData(e,:)=colorPlot(e,:);
-% end
-% 
-% 
-% %% Make it pretty
-% subplot(ySP,xSP,[4 5]); hold on;
-% xlabel('Peak Prominences');
-% subplot(ySP,xSP,6); 
-% title('Average transient');
-% ylabel('fluorescence'); xlabel('time (s)');
-% legend(nbOfPeaks);
-% subplot(ySP,xSP,7); 
-% title('Prominences');
-% ylabel('Cumul distribution'); xlabel('fluorescence');
-% subplot(ySP,xSP,8); 
-% title('Jitter');
-% ylabel('Cumul distribution'); xlabel('jitter (sec)');
 
 % end

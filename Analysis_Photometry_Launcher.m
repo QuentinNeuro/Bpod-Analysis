@@ -40,7 +40,7 @@ LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after s
 LP.P.ZeroAt='Start';                    % 'Start' or 'Zero' - 0 is no additional zero-ing wanted
 LP.P.WheelState='Baseline';             %Options : 'Baseline','Cue','Outcome'
 LP.P.PupilState='NormBaseline';       	%Options : 'NormBaseline','Cue','Outcome'
-LP.P.ReshapedTime=[-5 5];               % use [0 180] for oddball
+LP.P.ReshapedTime=[-6 5];               % use [0 180] for oddball
 % Filters % default LicksCue=1 LicksOut=2
 LP.P.PupilThreshold=1;
 LP.P.WheelThreshold=2;                  % Speed cm/s
@@ -57,11 +57,11 @@ LP.P.CueStats='MAXZ';                   % Options : AVG AVGZ MAX MAXZ
 LP.P.OutcomeStats='MAXZ';               % Options : AVG AVGZ MAX MAXZ
 LP.P.NidaqDecimatedSR=20;               % in Hz
 % Event detection %AP_DataProcess_Events
-LP.P.EventThreshFactor=1;             % will be applied to the data std to detect events
+LP.P.EventThreshFactor=0.5;             % will be applied to the data std to detect events
 LP.P.EventMinFactor=0.5;                % will be applied to the threshold to restrict local minima
 LP.P.EventMinTW='auto';                 % TW left of the peak to find minimum. 'auto' : use the width of the peak, 0 to use time between two peaks.
 LP.P.EventWV=1;                         % in sec. Time window for waveform event extraction. 0 to ignore.
-LP.P.EventEpochTW=[-4 -3; -1.5 -0.5; 0 1];
+LP.P.EventEpochTW=[-3 -2; -1.5 -0.5; 0 2];
 LP.P.EventEpochNames={'Baseline','Cue','Outcome'};
 
 %% AOD
