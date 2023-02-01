@@ -40,7 +40,7 @@ LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after s
 LP.P.ZeroAt='Start';                    % 'Start' or 'Zero' - 0 is no additional zero-ing wanted
 LP.P.WheelState='Baseline';             %Options : 'Baseline','Cue','Outcome'
 LP.P.PupilState='NormBaseline';       	%Options : 'NormBaseline','Cue','Outcome'
-LP.P.ReshapedTime=[-6 5];               % use [0 180] for oddball
+LP.P.ReshapedTime=[-5 5];               % use [0 180] for oddball
 % Filters % default LicksCue=1 LicksOut=2
 LP.P.PupilThreshold=1;
 LP.P.WheelThreshold=2;                  % Speed cm/s
@@ -49,7 +49,7 @@ LP.P.LicksOutcome=2;                    % default : 2
 LP.P.TrialToFilterOut=[];
 LP.P.LoadIgnoredTrials=1;
 % Fluorescence % default Zsc=1 mov=5 befAft=1 SR=20
-LP.P.Zscore=0;                          % 
+LP.P.Zscore=1;                          % 
 LP.P.BaselineMov=5;                     % 0 to not have moving baseline avg (avg and std)
 LP.P.BaselineBefAft=1;                  % After (2) does not use moving baseline
 LP.P.BaselineHisto=0;                   % percentage of data from the baseline to use
@@ -61,7 +61,7 @@ LP.P.EventThreshFactor=0.5;             % will be applied to the data std to det
 LP.P.EventMinFactor=0.5;                % will be applied to the threshold to restrict local minima
 LP.P.EventMinTW='auto';                 % TW left of the peak to find minimum. 'auto' : use the width of the peak, 0 to use time between two peaks.
 LP.P.EventWV=1;                         % in sec. Time window for waveform event extraction. 0 to ignore.
-LP.P.EventEpochTW=[-3 -2; -1.5 -0.5; 0 2];
+LP.P.EventEpochTW=[-3 -2; -1.5 -0.5; 0 1];
 LP.P.EventEpochNames={'Baseline','Cue','Outcome'};
 
 %% AOD

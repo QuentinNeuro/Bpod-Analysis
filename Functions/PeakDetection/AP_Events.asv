@@ -79,11 +79,10 @@ for t=1:nTrials
         promFWHM(p)=NaN;
         AUCFWHMProm(p)=NaN;
     else
-        FWHMIdx(:,p)=[leftFWHM rightFWHM];
+        FWHMIdx(:,p)=[leftFWHM rightFWHM+thisIdx(p+1)-1];
         promFWHM(p)=diff(FWHMIdx(:,p));
-        AUCFWHMProm(p)=trapz(thisData(FWHMIdx(1,p):FWHMIdx(2,p)))-(thisMinIdx(p)+halfProm(p))*diff(FWHMIdx(:,p));   % cap AUC ;
-%       AUCFWHMProm{t}(p)=trapz(thisData(FWHMIdx(1,p):FWHMIdx(2,p)))-minVal(p)*diff(FWHMIdx(p,:));                        % relative AUC ;
-%       AUCProm{t}(p)=trapz(thisData(FWHMIdx(p,1):FWHMIdx(p,2)));                                                     % absolute AUC ;
+        thisAUCData=thisData(FWHMIdx(1,p):FWHMIdx(2,p))-thisData(FWHMIdx(1,p));
+        AUCFWHMProm(p)=trapz(thisAUCData);
     end
 
 %% Waveforms extraction    
@@ -118,7 +117,7 @@ peakStats.min(thisStructIdx)=thisMinAmp;
 peakStats.minIdx(thisStructIdx)=thisMinIdx;
 peakStats.waveforms(:,thisStructIdx)=waveforms;
 else
-thisStructIdx=startStructIdx:(startStructIdx+1-1);
+thisStructIdx=startStructIdx:(startStructIdx);
 peakStats.trials(thisStructIdx)=t*ones(1,1);
 peakStats.noPeaks=[peakStats.noPeaks t];
 end
@@ -145,8 +144,11 @@ if ~isempty(peakStats.noPeaks)
     peakStats.trials=trialSave;
 end
 %% Waveform timewindow
-peakStats.waveformTW=time(1,1:size(peakStats.waveforms,1))-time(1,1);
+peakStats.waveformTW=time(1,1:size(peakStats.waveforms,1))'-time(1,1);
 peakStats.waveformTW=peakStats.waveformTW-peakStats.waveformTW(abs(wvStart));
+%% Session indexing
+peakStats.session=ones(size(peakStats.trials));
+
 %% show a trial output
 if show
 fig_t=18;randi(nTrials);

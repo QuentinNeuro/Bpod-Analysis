@@ -79,11 +79,10 @@ for t=1:nTrials
         promFWHM(p)=NaN;
         AUCFWHMProm(p)=NaN;
     else
-        FWHMIdx(:,p)=[leftFWHM rightFWHM];
+        FWHMIdx(:,p)=[leftFWHM rightFWHM+thisIdx(p+1)-1];
         promFWHM(p)=diff(FWHMIdx(:,p));
-%        AUCFWHMProm(p)=trapz(thisData(FWHMIdx(1,p):FWHMIdx(2,p)))-(thisMinAmp(p)+halfProm(p))*diff(FWHMIdx(:,p));   % cap AUC ;
-       AUCFWHMProm(p)=trapz(thisData(FWHMIdx(1,p):FWHMIdx(2,p)))-thisMinAmp(p)*diff(FWHMIdx(:,p));                        % relative AUC ;
-%       AUCProm(p)=trapz(thisData(FWHMIdx(p,1):FWHMIdx(p,2)));                                                     % absolute AUC ;
+        thisAUCData=thisData(FWHMIdx(1,p):FWHMIdx(2,p))-thisData(FWHMIdx(1,p));
+        AUCFWHMProm(p)=trapz(thisAUCData);
     end
 
 %% Waveforms extraction    
@@ -101,8 +100,8 @@ for t=1:nTrials
     waveforms(:,p)=thisWV-thisMinAmp(p);
     end
 %% Save data in structure
-if nbOfPeaks
 startStructIdx=length(peakStats.trials)+1;
+if nbOfPeaks
 thisStructIdx=startStructIdx:(startStructIdx+nbOfPeaks-1);
 
 peakStats.trials(thisStructIdx)=t*ones(1,nbOfPeaks);
@@ -118,8 +117,7 @@ peakStats.min(thisStructIdx)=thisMinAmp;
 peakStats.minIdx(thisStructIdx)=thisMinIdx;
 peakStats.waveforms(:,thisStructIdx)=waveforms;
 else
-thisStructIdx=startStructIdx:(startStructIdx+1-1);
-peakStats.trials(thisStructIdx)=t*ones(1,1);
+peakStats.trials(startStructIdx)=t*ones(1,1);
 peakStats.noPeaks=[peakStats.noPeaks t];
 end
 
@@ -177,4 +175,4 @@ subplot(1,3,3)
 plot(peakStats.waveforms(:,fig_tIdx),'-k');
 
 end
-%end
+end

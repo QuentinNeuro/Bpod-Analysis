@@ -33,7 +33,7 @@ for e=1:nEpochs
    % First Peak : Jitter / Reliability / Frequency
    peakStats.(epochNames{e}).FirstIdx=thisFirstIdx;
    peakStats.(epochNames{e}).Jitter=thisJitter;
-   peakStats.(epochNames{e}).Reliability=sum(~isnan(thisFirstIdx));
+   peakStats.(epochNames{e}).Reliability=sum(~isnan(thisFirstIdx))/nTrials;
 end
 end
 

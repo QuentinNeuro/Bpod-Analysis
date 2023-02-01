@@ -1,13 +1,12 @@
-%function AP_Events_Plot(peakStats,time,data,trialName,epochTW,epochNames)
+function AP_Events_Plot(peakStats,time,data,trialName,epochTW,epochNames)
 
 %% test block
-data=Analysis.type_1.Photo_470b.DFF;
-time=Analysis.type_1.Photo_470b.Time;
-peakStats=Analysis.type_1.Photo_470b_peak;
-trialName='CuedReward';
-epochTW=Analysis.Parameters.EventEpochTW;
-epochNames=Analysis.Parameters.EventEpochNames;
-
+% data=Analysis.type_1.Photo_470b.DFF;
+% time=Analysis.type_1.Photo_470b.Time;
+% peakStats=Analysis.type_1.Photo_470b_peak;
+% trialName='CuedReward';
+% epochTW=Analysis.Parameters.EventEpochTW;
+% epochNames=Analysis.Parameters.EventEpochNames;
 
 %% Parameters
 limTime=[-4 4];
@@ -17,6 +16,17 @@ nEpochs=size(epochTW,1);
 binSize=0.5;
 binFreq=0.1;
 binTW=min(time(1,:)):binFreq:max(time(1,:));
+nbOfSession=max(peakStats.session);
+% decide to show normalized data or not
+if nbOfSession>1
+    promStat='promNorm'; waveStat='waveformsNorm';
+    AUCStat='AUCFWHMPromNorm';
+    transTitle='normalized transients';
+else
+    promStat='prom'; waveStat='waveforms';
+    AUCStat='AUCFWHMProm';
+    transTitle='transients';
+end
 
 %% Data preparation
 % trial for illustration
@@ -71,6 +81,14 @@ for e=1:nEpochs
     y=peakStats.trials(thisEpochIdx);
     plot(x,y,'s','MarkerSize',2,'MarkerFaceColor',colorEpochs(e,:),'MarkerEdgeColor',colorEpochs(e,:));
 end
+
+for s=1:nbOfSession
+    colorSession='rg';
+    evenodd=(rem(s,2)==0)+1;
+    y=peakStats.trials(peakStats.session==s);
+    x=limTime(2)*ones(size(y));
+    plot(x,y,'color',colorSession(evenodd))
+end
 ylabel('trials'); set(gca,'Ydir','reverse')
 xlim(limTime);
 %% 'Firing rate'
@@ -81,25 +99,30 @@ plot(x,y,'-k');
 for e=1:nEpochs
     plot(epochTW(e,:),[max(y) max(y)],'color',colorEpochs(e,:));
 end
-ylabel('Frequency (Hz?)'); xlabel('Time from outcome (s)');
+ylabel('Event rate (Hz?)'); xlabel('Time from outcome (s)');
 xlim(limTime);
+yyaxis right
+y=mean(data,1,'omitnan');
+plot(xTime,y);
+ylabel('Fluorescence');
 
-%% Histogram
+%% Histogram prominences
 subplot(ySP,xSP,[15 16]); hold on;
-hHandle=histogram(peakStats.promNorm);
+hHandle=histogram(peakStats.(promStat),'Normalization','probability');
 hHandle.BinWidth=binSize;
-hHandle.FaceColor=[0.6 0.6 0.6];
+hHandle.FaceColor=[0.9 0.9 0.9];
 xlabel('Prominences'); ylabel('Count')
 
 for e=1:nEpochs
     thisEStats=peakStats.(epochNames{e});
     thisEIdx=thisEStats.index;
     thisEFIdx=thisEStats.FirstIdx(~isnan(thisEStats.FirstIdx));
+    nbForLegend{e}=sprintf('%.0d',sum(~isnan(thisEStats.FirstIdx)));
     % Waveform first Peak
     subplot(ySP,xSP,3); hold on;
     xlabel('Time (s)'); ylabel('Fluo');
     x=peakStats.waveformTW(:,1);
-    y=mean(peakStats.waveforms(:,thisEFIdx),2,'omitnan');
+    y=mean(peakStats.(waveStat)(:,thisEFIdx),2,'omitnan');
     plot(x,y,'color',colorEpochs(e,:));
     % jitter
     subplot(ySP,xSP,4); hold on;
@@ -110,13 +133,13 @@ for e=1:nEpochs
     xlHandle.Color=colorEpochs(e,:);
     % cumulatives Prominence
     subplot(ySP,xSP,7); hold on;
-    xlabel('norm Prominences'); ylabel('CD');
-    [x,y]=cumulative(peakStats.prom(:,thisEFIdx));
+    xlabel('Prominences'); ylabel('CD');
+    [x,y]=cumulative(peakStats.(promStat)(:,thisEFIdx));
     plot(x,y,'color',colorEpochs(e,:));
     % cumulatives AUC
     subplot(ySP,xSP,8); hold on;
-    xlabel('norm AUC'); ylabel('CD');
-    [x,y]=cumulative(peakStats.AUCFWHMPromNorm(:,thisEFIdx));
+    xlabel('FWHM AUC'); ylabel('CD');
+    [x,y]=cumulative(peakStats.(AUCStat)(:,thisEFIdx));
     plot(x,y,'color',colorEpochs(e,:));
     % data for barPlot
     nbOfPeaks{e}=sprintf('%.0d',sum(~isnan(x)));
@@ -124,10 +147,9 @@ for e=1:nEpochs
     HistoReliabilityY(e)=thisEStats.Reliability;
 
     subplot(ySP,xSP,[15 16]); hold on;
-    hHandle=histogram(peakStats.prom(:,thisEFIdx));
+    hHandle=histogram(peakStats.prom(:,thisEFIdx),'Normalization','probability');
     hHandle.BinWidth=binSize;
     hHandle.FaceColor=colorEpochs(e,:);
-
 end
 
 subplot(ySP,xSP,11);hold on;
@@ -150,4 +172,7 @@ for e=1:nEpochs
     bHandle.CData(e,:)=colorEpochs(e,:);
 end
 
-% end
+subplot(ySP,xSP,3); hold on
+title(transTitle);
+legend(nbForLegend);
+%end

@@ -1,25 +1,52 @@
 %% Event detection pipeline
-% AP_Events / AP_Events_Epochs / AP_Events_Plot
-% see inside each functions for explanation on the input variables.
+% Functions : AP_Events / AP_Events_Epochs / AP_Events_Plot
+% see inside AP_Events for better explanation on the input variables.
+% load Eventdetection_pipeline_data for example DA recordings
+% L-DA-11 from Jan 28-29-30 / 20 Hz z-sc data, aligned to reward delivery;
+% Parameters for the different functions
+
+%% Parameters
+% Event detection
+testMin='miniLocal';    % for minimum methods
+minTW='auto';           % will look for a local minimum within 1 peak width left of the peak 
+wvTW=20*1;              % for waveform display 20Hz * 1sec
+peakTFactor=0.5;        % for peak detection threshold : usually between 1 and 0.5 of std(data)
+minTFactor=0.5;         % for mimimun detection threshold
+show=0;                 % 1 if you want to see an example detection trace (some will also be displayed in the final plot
+
+% epoch 
+plotName='CuedReward'; %Name of your figure / trial type
+epochTW=[-3 -2; -1.5 -0.5; 0 1];
+epochNames={'Baseline','Cue','Outcome'};
+
 
 %% detect the event :
 % see inside function for explanation on the variables.
-peakStats=AP_Events(time,data,testMin,peakT,minT,minTW,wvTW,show);
-
-% can be looped over multiple sessions with per session normalization :
-% need to update  peakStats.trials and peakStats.session at every session
-newPeaksStats.trials=newPeaksStats.trials+max(oldPeakStats.trials);
-newPeaksStats.session=newPeaksStats.session+max(oldPeakStats.session);
-peakFields=fieldnames(newPeaksStats);
-for thisF=1:size(peakFields,1)
-    thisField=peakFields{thisF};
-    combinedPeaksStats=[oldPeakStats.(thisField) newPeaksStats.(thisField)];
+allData=[];
+allTime=[];
+for s=1:size(data,2)
+    thisData=data{s};
+    thisTime=time{s};
+    peakT=std(thisData(:),'omitnan')*peakTFactor;
+    minT=peakT*minTFactor;
+    newPeakStats=AP_Events(thisTime,thisData,testMin,peakT,minT,minTW,wvTW,show);
+    if s==1
+       peakStats=newPeakStats;
+    else
+        newPeakStats.trials=newPeakStats.trials+max(peakStats.trials);        %% UPDATE TRIAL INDICES FOR COMBINING SESSIONS 
+        newPeakStats.session=newPeakStats.session+max(peakStats.session);     %% UPDATE SESSION INDICES FOR COMBINING SESSIONS 
+        peakFields=fieldnames(peakStats);
+        for thisF=1:size(peakFields,1)
+            thisField=peakFields{thisF};
+            peakStats.(thisField)=[peakStats.(thisField) newPeakStats.(thisField)];
+        end
+    end
+    allData=[allData ; thisData];
+    allTime=[allTime ; thisTime];
 end
 
 %% Analyze peak in specific epochs
-% epochTW=[-4 -3; -1.5 -1; -1 0; -1.5 0; 0 2];
-% epochNames={'Baseline','Cue','Delay','CueAndDelay','Outcome'};
 peakStats=AP_Events_Epochs(peakStats,epochTW,epochNames);
 
 %% Plot function
-AP_Events_Plot(peakStats,time,data,plotName,epochTW,epochNames);
+AP_Events_Plot(peakStats,allTime,allData,plotName,epochTW,epochNames);
