@@ -7,8 +7,6 @@ else
     thisTW=Analysis.Parameters.EventMinTW;
 end
 thisTW_WV=Analysis.Parameters.NidaqDecimatedSR*Analysis.Parameters.EventWV;
-epochTW=Analysis.Parameters.EventEpochTW;
-epochNames=Analysis.Parameters.EventEpochNames;
 
 %% Loop over channels and sessions
 for thisCh=1:length(Analysis.Parameters.PhotoCh)
@@ -20,7 +18,7 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
         thisTime=Analysis.AllData.(thisChStruct).Time(thisSession,:);
         thisThreshold=std(thisData(:),'omitnan')*Analysis.Parameters.EventThreshFactor;
 % Peak detection
-        thisPeaks=AP_Events_V2(thisTime,thisData,'miniLocal',thisThreshold,thisThreshold*Analysis.Parameters.EventMinFactor,thisTW,thisTW_WV,0);
+        thisPeaks=AP_Events(thisTime,thisData,'miniLocal',thisThreshold,thisThreshold*Analysis.Parameters.EventMinFactor,thisTW,thisTW_WV,0);
 
         if thisS==1
             Analysis.AllData.(thisPeakStruct)=thisPeaks;
@@ -33,6 +31,5 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
             end
         end
     end
-    Analysis.AllData.(thisPeakStruct)=AP_Events_Epochs_v2(Analysis.AllData.(thisPeakStruct),epochTW,epochNames);
 end
 end

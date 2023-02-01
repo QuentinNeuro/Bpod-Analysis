@@ -84,10 +84,11 @@ if Analysis.(thistype).nTrials>0
          Analysis.(thistype).(thisChStruct).Cumul.CueSort=sort(Analysis.(thistype).(thisChStruct).CueStat);
          Analysis.(thistype).(thisChStruct).Cumul.OutcomeSort=sort(Analysis.(thistype).(thisChStruct).OutcomeStat);    
     end
-    if Analysis.Parameters.EventDetection
-        Analysis=AP_DataSort_Events(Analysis,thistype);
     end
-    end
+%% Event detection
+if Analysis.Parameters.EventDetection
+    Analysis=AP_DataSort_Events(Analysis,thistype);
+end
 %% Wheel
     if Analysis.Parameters.Wheel
         Analysis.(thistype).Wheel.DistanceAVG            =mean(Analysis.(thistype).Wheel.Distance,1,'omitnan'); 
