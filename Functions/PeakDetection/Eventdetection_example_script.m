@@ -20,8 +20,7 @@ epochTW=[-3 -2; -1.5 -0.5; 0 1];
 epochNames={'Baseline','Cue','Outcome'};
 
 
-%% detect the event :
-% see inside function for explanation on the variables.
+%% detect the events :
 allData=[];
 allTime=[];
 for s=1:size(data,2)
@@ -49,4 +48,4 @@ end
 peakStats=AP_Events_Epochs(peakStats,epochTW,epochNames);
 
 %% Plot function
-AP_Events_Plot(peakStats,allTime,allData,plotName,epochTW,epochNames);
+AP_Events_Plot(peakStats,allTime,allData,plotName);

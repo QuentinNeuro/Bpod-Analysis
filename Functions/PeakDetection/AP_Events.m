@@ -26,7 +26,7 @@ countLMerror=0;
 countLMIdx=[];
 % waveform time window;
 wvStart=-floor(0.5*wvTW);
-% initialize % check if peakTrials exists
+% initialize some variables
 peakStats.trials=[];
 peakStats.noPeaks=[];
 
@@ -117,7 +117,7 @@ peakStats.min(thisStructIdx)=thisMinAmp;
 peakStats.minIdx(thisStructIdx)=thisMinIdx;
 peakStats.waveforms(:,thisStructIdx)=waveforms;
 else
-peakStats.trials(startStructIdx)=t*ones(1,1);
+peakStats.trials(startStructIdx)=t;
 peakStats.noPeaks=[peakStats.noPeaks t];
 end
 

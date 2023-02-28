@@ -1,14 +1,16 @@
-function AP_Events_Plot(peakStats,time,data,trialName,epochTW,epochNames)
-
 %% test block
-% data=Analysis.type_1.Photo_470b.DFF;
-% time=Analysis.type_1.Photo_470b.Time;
-% peakStats=Analysis.type_1.Photo_470b_peak;
-% trialName='CuedReward';
-% epochTW=Analysis.Parameters.EventEpochTW;
-% epochNames=Analysis.Parameters.EventEpochNames;
+data=Analysis.type_1.Photo_470.DFF;
+time=Analysis.type_1.Photo_470.Time;
+peakStats=Analysis.type_1.Photo_470_peak;
+trialName='CuedReward';
+AP_Events_Ploti(peakStats,time,data,trialName);
 
+clear data time peakStats trialName;
+
+function AP_Events_Ploti(peakStats,time,data,trialName)
 %% Parameters
+epochTW=peakStats.epochTW;
+epochNames=peakStats.epochNames;
 limTime=[-4 4];
 nTrials=size(data,1);
 trialNbs=unique(peakStats.trials);
@@ -175,4 +177,15 @@ end
 subplot(ySP,xSP,3); hold on
 title(transTitle);
 legend(nbForLegend);
-%end
+end
+% 
+% function [x,y]=cumulative(data)
+%     datasize=length(data);
+%     step=1/datasize;
+%     x=sort(data);   
+%     y=nan(datasize,1);
+%     y(1)=step;
+%     for i=2:datasize
+%         y(i)=y(i-1)+step;
+%     end
+% end

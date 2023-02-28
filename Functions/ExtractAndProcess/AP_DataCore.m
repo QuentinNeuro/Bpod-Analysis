@@ -20,16 +20,16 @@ for thisTrial=1:SessionData.nTrials
     Analysis.Core.TrialTypes(i)=SessionData.TrialTypes(thisTrial);
 	Analysis.Core.TrialStartTS(i)=SessionData.TrialStartTimestamp(thisTrial); 
     Analysis.Core.States{i}=SessionData.RawEvents.Trial{1,thisTrial}.States;
-try
+% try
     Analysis.Core.Licks{i}           =AP_DataCore_Licks(SessionData,Analysis,thisTrial);
     Analysis.Core.Photometry{i}      =AP_DataCore_Photometry(SessionData,Analysis,thisTrial);
     Analysis.Core.Wheel{i}           =AP_DataCore_Wheel(SessionData,Analysis,thisTrial);
     Analysis.Core.Pup{i}             =AP_DataCore_Pupil(Pup,Analysis,thisTrial,i);
     [~,Analysis.Core.PupSmooth{i}]   =AP_DataCore_Pupil(Pup,Analysis,thisTrial,i);
     [~,~,Analysis.Core.PupBlink{i}]  =AP_DataCore_Pupil(Pup,Analysis,thisTrial,i);
-catch
-    Analysis.Filters.ignoredTrials(i)=false;
-end
+% catch
+%     Analysis.Filters.ignoredTrials(i)=false;
+% end
     switch Analysis.Parameters.Behavior
     case 'Oddball'
     Analysis.Core.Oddball_StateSeq{i}=SessionData.TrialSettings(thisTrial).StateSequence;

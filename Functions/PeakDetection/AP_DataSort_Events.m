@@ -21,6 +21,12 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
         end
     end
 
+    thisPeakStats.trials_OG=thisPeakStats.trials;
+    trialNbs=unique(thisPeakStats.trials);
+    for t=1:length(trialNbs)
+        thisPeakStats.trials(thisPeakStats.trials_OG==trialNbs(t))=t;
+    end
+
     thisPeakStats=AP_Events_Epochs(thisPeakStats,epochTW,epochNames);
 
     Analysis.(thisType).(thisPeakStruct)=thisPeakStats;

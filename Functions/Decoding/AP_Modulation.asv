@@ -1,0 +1,10 @@
+function Modulated_LED=AP_Modulation(amp,freq,samplingRate,duration)
+%Generates a sin wave for LED amplitude modulation.
+
+DeltaT=1/samplingRate;
+Time=0:DeltaT:(duration-DeltaT);
+
+Modulated_LED=amp*(sin(2*pi*freq*time)+1)/2;
+Modulated_LED=Modulated_LED';
+
+end
