@@ -14,7 +14,7 @@ LP.SaveTag=[];  % string to be added to the saved analysis file name
 DB.DataBase=0;
 % global TuningYMAX;
 %% Overwritting Parameters
-LP.OW.PhotoChNames={'SST','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
+LP.OW.PhotoChNames={'F1','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 LP.OW.CueTimeReset=[];
 LP.OW.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
@@ -40,7 +40,7 @@ LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after s
 LP.P.ZeroAtZero=0;                      % 1 or 0, zero the fluorescence data
 LP.P.WheelState='Baseline';             % Options : 'Baseline','Cue','Outcome'
 LP.P.PupilState='NormBaseline';       	% Options : 'NormBaseline','Cue','Outcome'
-LP.P.ReshapedTime=[-5 5];               % use [0 180] for oddball
+LP.P.ReshapedTime=[-4 4];               % use [0 180] for oddball
 % Filters % default LicksCue=1 LicksOut=2
 LP.P.PupilThreshold=1;
 LP.P.WheelThreshold=2;                  % Speed cm/s
@@ -51,11 +51,11 @@ LP.P.LoadIgnoredTrials=1;
 % Fluorescence % default Zsc=1 mov=5 befAft=1 SR=20
 LP.P.Zscore=1;                          % 
 LP.P.BaselineMov=5;                     % 0 to not have moving baseline avg (avg and std)
-LP.P.BaselineBefAft=1;                  % calculate Baseline before or after extracting desired PSTH
+LP.P.BaselineBefAft=2;                  % calculate Baseline before or after extracting desired PSTH
 LP.P.BaselineHisto=0;                   % percentage of data from the baseline to use
 LP.P.CueStats='MAXZ';                   % Options : AVG AVGZ MAX MAXZ
 LP.P.OutcomeStats='MAXZ';               % Options : AVG AVGZ MAX MAXZ
-LP.P.NidaqDecimatedSR=20;               % in Hz
+LP.P.NidaqDecimatedSR=100;               % in Hz
 % Event detection %AP_DataProcess_Events
 LP.P.EventThreshFactor=0.5;             % will be applied to the data std to detect events
 LP.P.EventMinFactor=0.5;                % will be applied to the threshold to restrict local minima
@@ -82,7 +82,7 @@ LP.P.Spikes.tagging_TTL=2;
 LP.P.Spikes.pThreshold=[0.01 0.05]; %Latency / FR;
 LP.P.Spikes.TTLTS_spikeTS_Factor=10000; % for MClust clustered spikes
 %% Archiving photometry data
-LP.Archive=0; %
+LP.Archive=1; %
 LP.ArchiveOnly=0;
 LP.ArchiveOW=0;
 %% Default Parameters [Used if not found in Bpod file]

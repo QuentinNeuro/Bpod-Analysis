@@ -4,6 +4,7 @@ if Analysis.Parameters.Photometry==1
 % Parameters  
 decimateFactor=Analysis.Parameters.NidaqDecimateFactor;
 sampRate=Analysis.Parameters.NidaqSamplingRate;
+duration=SessionData.TrialSettings(1).GUI.NidaqDuration;
 % Data
 Photo=cell(length(Analysis.Parameters.PhotoCh),1);
 for thisCh=1:length(Analysis.Parameters.PhotoCh)
@@ -15,7 +16,7 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
             thisRawData=SessionData.(thisNidaqField){1,thisTrial}(:,1);
             thisData=AP_Demodulation(thisRawData,sampRate,thisFreq,15);
         else    % Amplitude=0 for this channel for this trial
-            thisData=NaN(1,Analysis.Parameters.NidaqDecimatedSR*500);
+            thisData=NaN(1,duration*sampRate);
         end
     else        % no modulation of this channel for this trial
         if ~isfield(SessionData,'DecimatedSampRate')
