@@ -8,7 +8,7 @@
 clear SessionData Analysis LP; %close all;
 
 %% Analysis type Single/Group/Batch etc
-LP.Analysis_type='Group';
+LP.Analysis_type='Single';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
 DB.DataBase=0;
@@ -37,9 +37,9 @@ LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max
 % States and Timing
 LP.P.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
 LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after state to Zero starts
-LP.P.ZeroAt='Start';                    % 'Start' or 'Zero' - 0 is no additional zero-ing wanted
-LP.P.WheelState='Baseline';             %Options : 'Baseline','Cue','Outcome'
-LP.P.PupilState='NormBaseline';       	%Options : 'NormBaseline','Cue','Outcome'
+LP.P.ZeroAtZero=0;                      % 1 or 0, zero the fluorescence data
+LP.P.WheelState='Baseline';             % Options : 'Baseline','Cue','Outcome'
+LP.P.PupilState='NormBaseline';       	% Options : 'NormBaseline','Cue','Outcome'
 LP.P.ReshapedTime=[-5 5];               % use [0 180] for oddball
 % Filters % default LicksCue=1 LicksOut=2
 LP.P.PupilThreshold=1;
@@ -51,11 +51,11 @@ LP.P.LoadIgnoredTrials=1;
 % Fluorescence % default Zsc=1 mov=5 befAft=1 SR=20
 LP.P.Zscore=1;                          % 
 LP.P.BaselineMov=5;                     % 0 to not have moving baseline avg (avg and std)
-LP.P.BaselineBefAft=1;                  % After (2) does not use moving baseline
+LP.P.BaselineBefAft=1;                  % calculate Baseline before or after extracting desired PSTH
 LP.P.BaselineHisto=0;                   % percentage of data from the baseline to use
 LP.P.CueStats='MAXZ';                   % Options : AVG AVGZ MAX MAXZ
 LP.P.OutcomeStats='MAXZ';               % Options : AVG AVGZ MAX MAXZ
-LP.P.NidaqDecimatedSR=20;               % in Hz
+LP.P.NidaqDecimatedSR=100;               % in Hz
 % Event detection %AP_DataProcess_Events
 LP.P.EventThreshFactor=0.5;             % will be applied to the data std to detect events
 LP.P.EventMinFactor=0.5;                % will be applied to the threshold to restrict local minima

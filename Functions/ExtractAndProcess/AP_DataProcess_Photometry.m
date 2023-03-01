@@ -1,57 +1,45 @@
  function Analysis=AP_DataProcess_Photometry(Analysis,thisTrial)
 
 %% Timing
-TimeToZero=Analysis.AllData.Time.Zero(thisTrial);
-CueTime=Analysis.AllData.Time.Cue(thisTrial,:)+Analysis.Parameters.CueTimeReset;
-OutcomeTime=Analysis.AllData.Time.Outcome(thisTrial,:)+Analysis.Parameters.OutcomeTimeReset;
-BaselinePts=Analysis.Parameters.NidaqBaselinePoints;
+timeToZero=Analysis.AllData.Time.Zero(thisTrial);
+cueTime=Analysis.AllData.Time.Cue(thisTrial,:)+Analysis.Parameters.CueTimeReset;
+outcomeTime=Analysis.AllData.Time.Outcome(thisTrial,:)+Analysis.Parameters.OutcomeTimeReset;
 
-TimeWindow=Analysis.Parameters.ReshapedTime;
-SamplingRate=Analysis.Parameters.NidaqDecimatedSR;
+timeWindow=Analysis.Parameters.ReshapedTime;
+sampRate=Analysis.Parameters.NidaqDecimatedSR;
 
 %% Data processing
 for thisCh=1:length(Analysis.Parameters.PhotoCh)
     thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
-    Data=Analysis.Core.Photometry{thisTrial}{thisCh};
-        
+    data=Analysis.Core.Photometry{thisTrial}{thisCh};
+    baselineAVG=Analysis.AllData.(thisChStruct).BaselineAVG(thisTrial);
+    baselineSTD=Analysis.AllData.(thisChStruct).BaselineSTD(thisTrial);    
     % Extract desired time window
-    [Time,Data]=AP_TimeReshaping(Data,TimeWindow,TimeToZero,SamplingRate);
-    
-    if Analysis.Parameters.BaselineBefAft==2
-        Analysis.AllData.(thisChStruct).BaselineAVG(thisTrial)=mean(Data(BaselinePts(1):BaselinePts(2)),'omitnan');
-        Analysis.AllData.(thisChStruct).BaselineSTD(thisTrial)=std(Data(BaselinePts(1):BaselinePts(2)),'omitnan');
-    end
-    
-    BaselineAVG=Analysis.AllData.(thisChStruct).BaselineAVG(thisTrial);
-    BaselineSTD=Analysis.AllData.(thisChStruct).BaselineSTD(thisTrial);
-    
-    
-    Data=Data-BaselineAVG;
+    [time,data]=AP_TimeReshaping(data,timeWindow,timeToZero,sampRate);
+    % DFF / z-scoring
+    data=data-baselineAVG;
     if Analysis.Parameters.Zscore
-        Data=Data/BaselineSTD;
+        data=data/baselineSTD;
     else
-        Data=100*Data/BaselineAVG;
+        data=100*data/baselineAVG;
     end
-    switch Analysis.Parameters.ZeroAt
-        case 'Zero'
-            Data=Data-mean(Data(Time>-0.1 & Time<=0),'omitnan');
-        case 'Start'
-            Data=Data-mean(Data(BaselinePts(1):BaselinePts(2)),'omitnan');
+    if Analysis.Parameters.ZeroAtZero
+        data=data-mean(data(time>-0.1 & time<=0),'omitnan');
     end  
 
 %% Statistics for Analysis Structure
     Analysis.AllData.(thisChStruct).Name                                =Analysis.Parameters.PhotoChNames{thisCh};
-    Analysis.AllData.(thisChStruct).Time(thisTrial,:)                   =Time;          
-    Analysis.AllData.(thisChStruct).DFF(thisTrial,:)                    =Data;
+    Analysis.AllData.(thisChStruct).Time(thisTrial,:)                   =time;          
+    Analysis.AllData.(thisChStruct).DFF(thisTrial,:)                    =data;
 %     Analysis.AllData.(thisChStruct).Baseline(thisTrial)                 =DFFBaseline;
     % AVG/MAX
-    Analysis.AllData.(thisChStruct).CueAVG(thisTrial)      =mean(Data(Time>CueTime(1) & Time<CueTime(2)),'omitnan');
-    Analysis.AllData.(thisChStruct).CueMAX(thisTrial)      =max(Data(Time>CueTime(1) & Time<CueTime(2)));
-    Analysis.AllData.(thisChStruct).OutcomeAVG(thisTrial)  =mean(Data(Time>OutcomeTime(1) & Time<OutcomeTime(2)),'omitnan');
-    Analysis.AllData.(thisChStruct).OutcomeMAX(thisTrial)  =max(Data(Time>OutcomeTime(1) & Time<OutcomeTime(2)));    
+    Analysis.AllData.(thisChStruct).CueAVG(thisTrial)      =mean(data(time>cueTime(1) & time<cueTime(2)),'omitnan');
+    Analysis.AllData.(thisChStruct).CueMAX(thisTrial)      =max(data(time>cueTime(1) & time<cueTime(2)));
+    Analysis.AllData.(thisChStruct).OutcomeAVG(thisTrial)  =mean(data(time>outcomeTime(1) & time<outcomeTime(2)),'omitnan');
+    Analysis.AllData.(thisChStruct).OutcomeMAX(thisTrial)  =max(data(time>outcomeTime(1) & time<outcomeTime(2)));    
     % Zero
-    Analysis.AllData.(thisChStruct).Z4Cue(thisTrial)        =mean(Data(Time>CueTime(1)-0.2 & Time<CueTime(1)-0.01),'omitnan');
-    Analysis.AllData.(thisChStruct).Z4Outcome(thisTrial)    =mean(Data(Time>OutcomeTime(1)-0.2 & Time<OutcomeTime(1)-0.01),'omitnan');
+    Analysis.AllData.(thisChStruct).Z4Cue(thisTrial)        =mean(data(time>cueTime(1)-0.2 & time<cueTime(1)-0.01),'omitnan');
+    Analysis.AllData.(thisChStruct).Z4Outcome(thisTrial)    =mean(data(time>outcomeTime(1)-0.2 & time<outcomeTime(1)-0.01),'omitnan');
     Analysis.AllData.(thisChStruct).CueAVGZ(thisTrial)                     =Analysis.AllData.(thisChStruct).CueAVG(thisTrial)...
                                                          - Analysis.AllData.(thisChStruct).Z4Cue(thisTrial);
     Analysis.AllData.(thisChStruct).CueMAXZ(thisTrial)                     =Analysis.AllData.(thisChStruct).CueMAX(thisTrial)...

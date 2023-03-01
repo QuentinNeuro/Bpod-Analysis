@@ -1,33 +1,31 @@
-function [TimeNew,DataNew]=AP_TimeReshaping(DataOG,TW,TZ,SR)
+function [timeTW,dataTW]=AP_TimeReshaping(data,tw,timeToZero,sampRate)
+%% Parameters
+% Time window
+dt=1/sampRate;
+expectedSizeTW=diff(tw)*sampRate;
+time=[0:1:length(data)-1] * dt; 
+timeZ=time-timeToZero;
+timeTW=linspace(tw(1),tw(2),expectedSizeTW);
 
-%% Initialize expected arrays
-ExpectedSize=diff(TW)*SR+1;
-DataNew=NaN(1,ExpectedSize);
-TimeNew=TW(1):1/SR:TW(2);
-
-if ~isempty(DataOG)
-%% Create Time Array Matching Data
-DataSize=length(DataOG);
-Time=(1/SR:1/SR:(1/SR*DataSize))-TZ;
-Index0=find(~TimeNew);
-%% Reshape the data
-DataBegin=DataOG(Time>=TW(1) & Time<=0);
-DataEnd=DataOG(Time>=0 & Time<=TW(2));
-if (Index0-length(DataBegin))==0
-    IndexBegin=[1 Index0];
-    IndexEnd=[Index0 Index0+length(DataEnd)-1];
-else
-    IndexBegin=[Index0-length(DataBegin) Index0-1];
-    IndexEnd=[Index0 Index0+length(DataEnd)-1];
-end    
-DataNew(IndexBegin(1):IndexBegin(2))=DataBegin;
-DataNew(IndexEnd(1):IndexEnd(2))=DataEnd;
-
-% DataNew(Index0-length(DataBegin):Index0-1)=DataBegin;
-% DataNew(Index0:Index0+length(DataEnd)-1)=DataEnd;
-
-if length(DataNew)>length(TimeNew)
-    DataNew=DataNew(1:length(TimeNew));
-end
+%% timeWindow
+% Finding the time window index
+timeZ_IO=false(size(timeZ));
+timeTW_IO=false(size(timeTW));
+timeZ_IO(timeZ>=tw(1) & timeZ<=tw(2))=true;
+timeZinTW=timeZ(timeZ_IO);
+timeTW_IO(timeTW>=timeZinTW(1) & timeTW<=timeZinTW(end))=true;
+% Extract corresponding data
+dataTW=data(timeZ_IO);
+% padding
+k=find(timeTW_IO);
+padStart=k(1)-1;
+padStop=length(timeTW_IO)-k(end);
+dataTW=[nan(1,padStart) dataTW nan(1,padStop)];
+% adjust length to expected length
+switch length(dataTW)-length(timeTW)
+    case 1
+        dataTW=dataTW(1:end-1);
+    case 2
+        dataTW=dataTW(2:end-1);
 end
 end

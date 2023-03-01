@@ -2,6 +2,10 @@ function Analysis=AP_Baseline(Analysis)
 
 BaselinePts=Analysis.Parameters.NidaqBaselinePoints;
 movBaseParam=Analysis.Parameters.BaselineMov;
+dt=1/Analysis.Parameters.NidaqDecimatedSR;
+stateToZero=Analysis.Parameters.StateToZero;
+tw=Analysis.Parameters.ReshapedTime;
+
 
 for thisCh=1:length(Analysis.Parameters.PhotoCh)
     thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
@@ -9,7 +13,21 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     BaselineSTD=nan(Analysis.AllData.nTrials,1);
     for thisT=1:Analysis.AllData.nTrials
         Data=Analysis.Core.Photometry{thisT}{thisCh};
-        DataBaseline=Data(BaselinePts(1):BaselinePts(2));
+        switch Analysis.Parameters.BaselineBefAft
+            case 1 % Baseline calculated from start of recording
+                DataBaseline=Data(BaselinePts(1):BaselinePts(2));
+            case 2 % Baseline calculated from start of time window
+                time=[0:1:length(Data)-1]*dt;
+                timeZ=time-Analysis.Core.States{1,thisT}.(stateToZero)(1);
+                timeZ_IO=false(size(timeZ));
+                timeZ_IO(timeZ>=tw(1) & timeZ<=tw(2))=true;
+                dataTW=Data(timeZ_IO);
+                DataBaseline=dataTW(BaselinePts(1):BaselinePts(2));
+            if isnan(DataBaseline)
+                nanIdx=~isnan(dataTW);
+                DataBaseline=dataTW(find(nanIdx,diff(BaselinePts)));
+            end
+        end
         if Analysis.Parameters.BaselineHisto
             Cutoff=Analysis.Parameters.BaselineHisto/100;
             DataBaselineSort=sort(DataBaseline);
