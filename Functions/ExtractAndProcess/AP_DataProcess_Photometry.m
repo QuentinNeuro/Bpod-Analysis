@@ -15,7 +15,7 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     baselineAVG=Analysis.AllData.(thisChStruct).BaselineAVG(thisTrial);
     baselineSTD=Analysis.AllData.(thisChStruct).BaselineSTD(thisTrial);    
     % Extract desired time window
-    [time,data]=AP_TimeReshaping(data,timeWindow,timeToZero,sampRate);
+    [time,data]=AP_PSTH(data,timeWindow,timeToZero,sampRate);
     % DFF / z-scoring
     data=data-baselineAVG;
     if Analysis.Parameters.Zscore

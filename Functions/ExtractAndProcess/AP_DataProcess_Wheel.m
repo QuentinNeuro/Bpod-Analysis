@@ -12,7 +12,7 @@ baseline=Analysis.Parameters.NidaqBaselinePoints;
 
 %% Data
 thisDataDeg=Analysis.Core.Wheel{thisTrial};
-[time,data]=AP_TimeReshaping(thisDataDeg',timeWindow,timeToZero,sampRate);
+[time,data]=AP_PSTH(thisDataDeg',timeWindow,timeToZero,sampRate);
 DataDistance=data'.*(Analysis.Parameters.WheelPolarity*Analysis.Parameters.WheelDiameter*pi/360);
 
 %% Statistics for Analysis Structure
