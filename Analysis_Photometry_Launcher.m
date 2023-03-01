@@ -22,7 +22,7 @@ LP.OW.NidaqBaseline=[];
 LP.P.SortFilters=0;
 LP.P.EventDetection=0;
 % Figures
-LP.P.PlotSummary1=1;
+LP.P.PlotSummary1=0;
 LP.P.PlotSummary2=0;
 LP.P.PlotFiltersSingle=0;               % AP_CuedOutcome_GroupToPlot Output 1
 LP.P.PlotFiltersSummary=0;
