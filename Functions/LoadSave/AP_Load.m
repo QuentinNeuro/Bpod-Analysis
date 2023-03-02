@@ -94,5 +94,5 @@ if ~isempty(LP.SaveTag)
 end
 
 %% Figure path
-Analysis.Parameters.DirFig=[LP.PathName Analysis.Parameters.Phase filesep];
+Analysis.Parameters.DirFig=[LP.PathName filesep Analysis.Parameters.Phase filesep];
 end
