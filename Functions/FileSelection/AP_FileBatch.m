@@ -1,5 +1,6 @@
 function errorFile=AP_FileBatch(LP)
-
+errorCount=0;
+errorFile={};
 %% Spikes
 % folders=ls('VIP-*');
 % errorCount=0;
@@ -27,7 +28,7 @@ function errorFile=AP_FileBatch(LP)
 
 
 %% MegaBatch
-Dir_GROUP=ls
+Dir_GROUP=ls;
 for g=3:size(Dir_GROUP,1)
     thisGroup=Dir_GROUP(g,:)
     cd(thisGroup)
@@ -54,7 +55,8 @@ for g=3:size(Dir_GROUP,1)
                         try
                             Analysis_Photometry(LP);
                         catch
-                            disp('Could not analyze this file')
+                            errorCount=errorCount+1;
+                            errorFile{errorCount}=thisFolder;
                         end
                     end
                     catch
