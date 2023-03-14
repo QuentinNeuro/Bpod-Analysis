@@ -12,17 +12,18 @@ LP.Analysis_type='Single';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
 DB.DataBase=0;
+DB.Group=[];
 % global TuningYMAX;
 %% Overwritting Parameters
-LP.OW.PhotoChNames={'F1','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
+LP.OW.PhotoChNames={'VIP','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 LP.OW.CueTimeReset=[];
-LP.OW.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
+LP.OW.OutcomeTimeReset=[]; %AhOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
-LP.P.SortFilters=0;
+LP.P.SortFilters=1;
 LP.P.EventDetection=0;
 % Figures
-LP.P.PlotSummary1=0;
+LP.P.PlotSummary1=1;
 LP.P.PlotSummary2=0;
 LP.P.PlotFiltersSingle=0;               % AP_CuedOutcome_GroupToPlot Output 1
 LP.P.PlotFiltersSummary=0;
@@ -31,16 +32,16 @@ LP.P.Illustrator=0;
 LP.P.Transparency=0;
 LP.P.Illustration=[0 0];                % Kind of hacky for figures - refers to GtP and PlotData_Filter y axis
 % Axis
-LP.P.PlotX=[-4 4];
+LP.P.PlotX=[-3 4];
 LP.P.PlotY_photo(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
 LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max]
 % States and Timing
 LP.P.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
 LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after state to Zero starts
-LP.P.ZeroAtZero=0;                      % 1 or 0, zero the fluorescence data
+LP.P.ZeroAt='none';                     % Will zero fluo for each trial to a time point : 'Zero' '2sBefCue' or a timestamp
 LP.P.WheelState='Baseline';             % Options : 'Baseline','Cue','Outcome'
 LP.P.PupilState='NormBaseline';       	% Options : 'NormBaseline','Cue','Outcome'
-LP.P.ReshapedTime=[-4 4];               % use [0 180] for oddball
+LP.P.ReshapedTime=[-5 5];               % use [0 180] for oddball
 % Filters % default LicksCue=1 LicksOut=2
 LP.P.PupilThreshold=1;
 LP.P.WheelThreshold=2;                  % Speed cm/s
@@ -55,7 +56,7 @@ LP.P.BaselineBefAft=2;                  % calculate Baseline before or after ext
 LP.P.BaselineHisto=0;                   % percentage of data from the baseline to use
 LP.P.CueStats='MAXZ';                   % Options : AVG AVGZ MAX MAXZ
 LP.P.OutcomeStats='MAXZ';               % Options : AVG AVGZ MAX MAXZ
-LP.P.NidaqDecimatedSR=100;               % in Hz
+LP.P.NidaqDecimatedSR=20;               % in Hz
 % Event detection %AP_DataProcess_Events
 LP.P.EventThreshFactor=0.5;             % will be applied to the data std to detect events
 LP.P.EventMinFactor=0.5;                % will be applied to the threshold to restrict local minima
@@ -82,7 +83,7 @@ LP.P.Spikes.tagging_TTL=2;
 LP.P.Spikes.pThreshold=[0.01 0.05]; %Latency / FR;
 LP.P.Spikes.TTLTS_spikeTS_Factor=10000; % for MClust clustered spikes
 %% Archiving photometry data
-LP.Archive=1; %
+LP.Archive=0; %
 LP.ArchiveOnly=0;
 LP.ArchiveOW=0;
 %% Default Parameters [Used if not found in Bpod file]
@@ -107,7 +108,6 @@ LP.D.Photometry=0;
 LP.D.Spikes.Spikes=0;
 LP.D.AOD.AOD=0;
 %% Database
-DB.Group=['ACh_Uncertainty'];
 if ~exist('DB_Stat','var')
     DB_Stat=struct();
 end
@@ -115,7 +115,7 @@ end
 %% File selection and Analysis Photometry Run
 switch LP.Analysis_type
     case 'Batch'
-        errorFile=AP_FileBatch(LP);
+        [errorFile,DB_Stat]=AP_FileBatch(LP,DB,DB_Stat,'DataBase'); % Spikes DataBase MegaBatch
     case 'Online'
         AP_FileOnline(LP);
     case {'Single', 'Group'}

@@ -1,4 +1,7 @@
 function [timeTW,dataTW]=AP_PSTH(data,tw,timeToZero,sampRate)
+if size(data,2)==1
+    data=data';
+end
 %% Parameters
 % Time window
 dt=1/sampRate;

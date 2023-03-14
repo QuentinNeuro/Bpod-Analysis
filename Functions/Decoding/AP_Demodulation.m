@@ -1,10 +1,14 @@
-function demodData=AP_Demodulation(rawData,sampleRate,modFreq,lowCutoff)
+function demodData=AP_Demodulation(rawData,sampleRate,modFreq,lowCutoff,phaseShift)
 % Demodulate an AM-modulated input ('rawData') in quadrature given a
 % reference ('refData'). 'LowCutOff' is a corner frequency for 5-pole
 % butterworth lowpass filter.
 
 if nargin<4
     lowCutoff=15;
+    phaseShift=0;
+end
+if nargin<5
+    phaseShift=0;
 end
 
 if size(rawData,2)==1
@@ -15,8 +19,8 @@ end
 dLength = length(rawData);
 dt      = 1/sampleRate;
 time    = [0:1:dLength-1] * dt;
-refData   = sin(2 * pi * modFreq * time);
-refData90 = cos(2 * pi * modFreq * time);
+refData   = sin(2 * pi * modFreq * time+phaseShift);
+refData90 = cos(2 * pi * modFreq * time+phaseShift);
 
 %% Decoding
 processedData_0     = rawData .* refData;
