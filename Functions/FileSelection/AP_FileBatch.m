@@ -6,6 +6,7 @@ thisOrigin=pwd;
 switch batchType
     %% DataBase
     case 'DataBase'
+    DB.DataBase=1;
     Dir_GROUP=ls;
     for g=3:size(Dir_GROUP,1)
         thisGroup=Dir_GROUP(g,:)
@@ -30,6 +31,7 @@ switch batchType
                 errorFile{errorCount}=thisFile;
             end
             end
+            close all
         end
         cd(thisOrigin)
     end

@@ -12,7 +12,7 @@ minTW='auto';           % will look for a local minimum within 1 peak width left
 wvTW=20*1;              % for waveform display 20Hz * 1sec
 peakTFactor=0.5;        % for peak detection threshold : usually between 1 and 0.5 of std(data)
 minTFactor=0.5;         % for mimimun detection threshold
-show=0;                 % 1 if you want to see an example detection trace (some will also be displayed in the final plot
+show=1;                 % 1 if you want to see an example detection trace (some will also be displayed in the final plot
 
 % epoch 
 plotName='CuedReward'; %Name of your figure / trial type

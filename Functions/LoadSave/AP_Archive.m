@@ -24,7 +24,8 @@ try
     SessionData.Modulation=Analysis.Parameters.Modulation;
     end
     if size(Analysis.Parameters.PhotoCh,2)>1
-        if Analysis.Parameters.PhotoCh{2}{:}(3)=='5'
+        switch Analysis.Parameters.PhotoCh{2}{:}
+            case '405'
         for thisTrial=1:SessionData.nTrials
             SessionData.(PhotoField){1,thisTrial}{2,1}=Analysis.Core.Photometry{1,thisTrial}{2, 1}(1:length(SessionData.(PhotoField){1,thisTrial}{2,1}))';  
         end 

@@ -1,13 +1,13 @@
 %% test block
-data=Analysis.type_1.Photo_470.DFF;
-time=Analysis.type_1.Photo_470.Time;
-peakStats=Analysis.type_1.Photo_470_peak;
-trialName='CuedReward';
-AP_Events_Ploti(peakStats,time,data,trialName);
+% data=Analysis.type_1.Photo_470.DFF;
+% time=Analysis.type_1.Photo_470.Time;
+% peakStats=Analysis.type_1.Photo_470_peak;
+% trialName='CuedReward';
+% AP_Events_Ploti(peakStats,time,data,trialName);
+% 
+% clear data time peakStats trialName;
 
-clear data time peakStats trialName;
-
-function AP_Events_Ploti(peakStats,time,data,trialName)
+function AP_Events_Plot(peakStats,time,data,trialName)
 %% Parameters
 epochTW=peakStats.epochTW;
 epochNames=peakStats.epochNames;
@@ -15,7 +15,6 @@ limTime=[-4 4];
 nTrials=size(data,1);
 trialNbs=unique(peakStats.trials);
 nEpochs=size(epochTW,1);
-binSize=0.5;
 binFreq=0.1;
 binTW=min(time(1,:)):binFreq:max(time(1,:));
 nbOfSession=max(peakStats.session);
@@ -29,6 +28,7 @@ else
     AUCStat='AUCFWHMProm';
     transTitle='transients';
 end
+binSize=median(peakStats.(promStat))/5;
 
 %% Data preparation
 % trial for illustration
@@ -149,7 +149,7 @@ for e=1:nEpochs
     HistoReliabilityY(e)=thisEStats.Reliability;
 
     subplot(ySP,xSP,[15 16]); hold on;
-    hHandle=histogram(peakStats.prom(:,thisEFIdx),'Normalization','probability');
+    hHandle=histogram(peakStats.(promStat)(:,thisEFIdx),'Normalization','probability');
     hHandle.BinWidth=binSize;
     hHandle.FaceColor=colorEpochs(e,:);
 end

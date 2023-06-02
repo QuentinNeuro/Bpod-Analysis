@@ -5,34 +5,34 @@
 % 'Analysis_Photometry' is the core function used to extract, organize and
 % filters the data according to the behavioral task
 
-clear SessionData Analysis LP; %close all;
+clear SessionData Analysis LP; close all;
 
 %% Analysis type Single/Group/Batch etc
 LP.Analysis_type='Single';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
-DB.DataBase=0;
+DB.DataBase=0;  % DB_Generate
 DB.Group=[];
 % global TuningYMAX;
 %% Overwritting Parameters
-LP.OW.PhotoChNames={'VIP','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
+LP.OW.PhotoChNames={'SST','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 LP.OW.CueTimeReset=[];
 LP.OW.OutcomeTimeReset=[]; %AhOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
-%% Analysis Parameters
+%% Analysis Parameters-4
 LP.P.SortFilters=1;
 LP.P.EventDetection=0;
 % Figures
 LP.P.PlotSummary1=1;
 LP.P.PlotSummary2=0;
-LP.P.PlotFiltersSingle=0;               % AP_CuedOutcome_GroupToPlot Output 1
+LP.P.PlotFiltersSingle=1;               % AP_CuedOutcome_GroupToPlot Output 1
 LP.P.PlotFiltersSummary=0;
 LP.P.PlotFiltersBehavior=0;           	% AP_####_GroupToPlot Oupput 2
 LP.P.Illustrator=0;
 LP.P.Transparency=0;
-LP.P.Illustration=[0 0];                % Kind of hacky for figures - refers to GtP and PlotData_Filter y axis
+LP.P.Illustration=[1 0];                % Kind of hacky for figures - refers to GtP and PlotData_Filter y axis
 % Axis
-LP.P.PlotX=[-3 4];
+LP.P.PlotX=[-4 4];
 LP.P.PlotY_photo(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
 LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max]
 % States and Timing
