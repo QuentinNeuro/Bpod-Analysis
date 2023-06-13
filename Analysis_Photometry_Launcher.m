@@ -15,7 +15,7 @@ DB.DataBase=0;  % DB_Generate
 DB.Group=[];
 % global TuningYMAX;
 %% Overwritting Parameters
-LP.OW.PhotoChNames={'SST','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
+LP.OW.PhotoChNames={'F1','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 LP.OW.CueTimeReset=[];
 LP.OW.OutcomeTimeReset=[]; %AhOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
@@ -25,7 +25,7 @@ LP.P.EventDetection=0;
 % Figures
 LP.P.PlotSummary1=1;
 LP.P.PlotSummary2=0;
-LP.P.PlotFiltersSingle=1;               % AP_CuedOutcome_GroupToPlot Output 1
+LP.P.PlotFiltersSingle=0;               % AP_CuedOutcome_GroupToPlot Output 1
 LP.P.PlotFiltersSummary=0;
 LP.P.PlotFiltersBehavior=0;           	% AP_####_GroupToPlot Oupput 2
 LP.P.Illustrator=0;

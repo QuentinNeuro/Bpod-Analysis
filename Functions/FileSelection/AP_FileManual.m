@@ -20,7 +20,7 @@ switch LP.Analysis_type
             close all;
             % DataBase
             if DB.DataBase
-                DB_Stat=DB_Generate(Analysis,DB_Stat,LP.FileToOpen,LP.PathName,DB.Group);
+                DB_Stat=Database_Generate(Analysis,DB_Stat,LP.FileToOpen,LP.PathName,DB.Group);
                 DB_Stat.LP=LP;
                 disp(Analysis.Parameters.CueTimeReset)
             end

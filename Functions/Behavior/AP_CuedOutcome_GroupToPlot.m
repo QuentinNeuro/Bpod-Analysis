@@ -36,7 +36,6 @@ Group_Plot{indexp,2}={  'Habit_Reward'      {'Uncued','Reward','LicksOutcome','F
                         'NotColl'           {'Uncued','Reward','LicksOutcomeInv','FirstLick'};...
                         'Habit_Omission',   {'Uncued','Omission'}};
 
-
 indexp=indexp+1;
 Group_Plot{indexp,1}='RewardExpectation';
 Group_Plot{indexp,2}={  'AnticipLick_CueA_Reward',        {'Cue A','LicksCue','Reward','LicksOutcome','FirstLick'};...
@@ -100,8 +99,9 @@ Group_Plot{indexp,2}={  'CueA_Reward',              {'Cue A','Reward','LicksOutc
 %%        
     case {'RewardB','RewardB_noUncued'}
 Group_Test={'type_3','type_3','type_3','type_1'};
-indexp=indexp+1;
+
 if ~illustrationTest
+indexp=indexp+1;
 Group_Plot{indexp,1}='RewardExpectation';        
 Group_Plot{indexp,2}={'AnticipLick_CueB_Reward',      {'Cue B','LicksCue','Reward','LicksOutcome','FirstLick'};...
                     'NoAnticipLick_CueB_Reward',      {'Cue B','LicksCueInv','Reward','LicksOutcome','FirstLick'};...
@@ -117,12 +117,18 @@ Group_Plot{indexp,2}={'AnticipLick_CueA',               {'Cue A','LicksCue'};...
                     'NoAnticipLick_CueA',             {'Cue A','LicksCueInv'};...
                     'AnticipLick_CueB',               {'Cue B','LicksCue'};...
                     'NoAnticipLick_CueB',             {'Cue B','LicksCueInv'}};
+end
+
 indexp=indexp+1;
-end                
 Group_Plot{indexp,1}='RewardExp2';
 Group_Plot{indexp,2}={  'CueB_Reward',              {'Cue B','Reward','LicksOutcome'};...
                         'CueA_Omission',            {'Cue A'};...
                         'Uncued_Reward',            {'Uncued','Reward','LicksOutcome'}};
+indexp=indexp+1;
+Group_Plot{indexp,1}='Reward';
+Group_Plot{indexp,2}={  'Habit_Reward'      {'Uncued','Reward','LicksOutcome','FirstLick'};... 
+                        'NotColl'           {'Uncued','Reward','LicksOutcomeInv','FirstLick'};...
+                        'Habit_Omission',   {'Uncued','Omission'}};
 % Arousal
 % if Analysis.Parameters.Wheel
 %     indexp=indexp+1;

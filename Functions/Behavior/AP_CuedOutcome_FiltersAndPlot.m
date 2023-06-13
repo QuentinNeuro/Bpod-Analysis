@@ -10,6 +10,8 @@ FilterNames={'Cue A','Cue B','Uncued','Reward','Punish','Omission','Cue C'};
 for i=1:length(FilterNames)
     Analysis=A_FilterTrialName(Analysis,FilterNames{i});
 end
+% CS/NS matching
+Analysis=A_FilterCNSMatch(Analysis);
 % Licks
 Analysis=A_FilterLick(Analysis,'LicksCue','Cue',Analysis.Parameters.LicksCue);
 Analysis=A_FilterLick(Analysis,'LicksOutcome','Outcome',Analysis.Parameters.LicksOutcome);
@@ -23,7 +25,7 @@ Analysis=A_FilterPupilNaNCheck(Analysis,'PupilNaN',25);
 Analysis=A_FilterAfollowsB(Analysis,'Reward_After_Punish','Reward','Punish');
 
 %% Definitions of meta filters
-[Group_Plot,Group_Corr,Group_Perf]=AP_CuedOutcome_GroupToPlot(Analysis);
+[Group_Plot,Group_Corr,Group_Perf]=AP_CuedOutcome_FilterGroups(Analysis);
 %% Performance calculation
 try
 Analysis=AP_Performance(Analysis,Group_Perf);
