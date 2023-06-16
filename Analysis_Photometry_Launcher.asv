@@ -8,22 +8,22 @@
 clear SessionData Analysis LP; close all;
 
 %% Analysis type Single/Group/Batch etc
-LP.Analysis_type='Single';
+LP.Analysis_type='Batch';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
-DB.DataBase=0;  % DB_Generate
+DB.DataBase=1;  % DB_Generate
 DB.Group=[];
 % global TuningYMAX;
 %% Overwritting Parameters
-LP.OW.PhotoChNames={'VIP','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
-LP.OW.CueTimeReset=[];
+LP.OW.PhotoChNames={'F1','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
+LP.OW.CueTimeReset=[0.5 1];
 LP.OW.OutcomeTimeReset=[]; %AhOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters-4
-LP.P.SortFilters=0;
+LP.P.SortFilters=1;
 LP.P.EventDetection=0;
 % Figures
-LP.P.PlotSummary1=1;
+LP.P.PlotSummary1=0;
 LP.P.PlotSummary2=0;
 LP.P.PlotFiltersSingle=0;               % AP_CuedOutcome_GroupToPlot Output 1
 LP.P.PlotFiltersSummary=0;
@@ -56,7 +56,7 @@ LP.P.BaselineBefAft=2;                  % calculate Baseline before or after ext
 LP.P.BaselineHisto=0;                   % percentage of data from the baseline to use
 LP.P.CueStats='MAXZ';                   % Options : AVG AVGZ MAX MAXZ
 LP.P.OutcomeStats='MAXZ';               % Options : AVG AVGZ MAX MAXZ
-LP.P.NidaqDecimatedSR=100;               % in Hz
+LP.P.NidaqDecimatedSR=20;               % in Hz
 % Event detection %AP_DataProcess_Events
 LP.P.EventThreshFactor=0.5;             % will be applied to the data std to detect events
 LP.P.EventMinFactor=0.5;                % will be applied to the threshold to restrict local minima
@@ -83,7 +83,7 @@ LP.P.Spikes.tagging_TTL=2;
 LP.P.Spikes.pThreshold=[0.01 0.05]; %Latency / FR;
 LP.P.Spikes.TTLTS_spikeTS_Factor=10000; % for MClust clustered spikes
 %% Archiving photometry data
-LP.Archive=1; %
+LP.Archive=0; %
 LP.ArchiveOnly=0;
 LP.ArchiveOW=0;
 %% Default Parameters [Used if not found in Bpod file]

@@ -27,7 +27,7 @@ try
         switch Analysis.Parameters.PhotoCh{2}{:}
             case '405'
         for thisTrial=1:SessionData.nTrials
-            SessionData.(PhotoField){1,thisTrial}(:,2)=Analysis.Core.Photometry{1,thisTrial}{2,1}';  
+            SessionData.(PhotoField){1,thisTrial}{2,1}=Analysis.Core.Photometry{1,thisTrial}{2, 1}(1:length(SessionData.(PhotoField){1,thisTrial}{2,1}))';  
         end 
         end
     end
