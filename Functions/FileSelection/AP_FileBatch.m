@@ -7,6 +7,8 @@ switch batchType
     %% DataBase
     case 'DataBase'
     DB.DataBase=1;
+    LP.P.SortFilters=1;
+    LP.P.Illustration=[0 0]; 
     Dir_GROUP=ls;
     for g=3:size(Dir_GROUP,1)
         thisGroup=Dir_GROUP(g,:)

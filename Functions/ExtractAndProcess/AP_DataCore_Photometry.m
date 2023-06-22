@@ -16,16 +16,21 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
             thisRawData=SessionData.(thisNidaqField){1,thisTrial}(:,1);
             thisData=AP_Demodulation(thisRawData,sampRate,thisFreq,15);
         else    % Amplitude=0 for this channel for this trial
-            thisData=NaN(1,duration*sampRate);
+            thisData=NaN(1,duration*sampRate/decimateFactor);
         end
     else        % no modulation of this channel for this trial
         if ~isfield(SessionData,'DecimatedSampRate')
             thisData=SessionData.(thisNidaqField){1,thisTrial}(:,1);
         else % Archived file
             thisData=SessionData.(thisNidaqField){1,thisTrial}(:,Analysis.Parameters.PhotoModulData(thisCh)-1)';
+            if size(thisData,2)==1
+                thisData=SessionData.(thisNidaqField){1,thisTrial}(Analysis.Parameters.PhotoModulData(thisCh)-1,:);
+            end
         end
     end
+    if ~isnan(thisData)
     thisData=decimate(thisData,decimateFactor);
+    end
 % Output    
     Photo{thisCh}=thisData;
 end  

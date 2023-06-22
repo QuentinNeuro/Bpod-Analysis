@@ -44,5 +44,4 @@ processedData_90    = rawData .* refData90;
     end
     
 demodData = (processedData_0 .^2 + processedData_90 .^2) .^(1/2);
-
 end

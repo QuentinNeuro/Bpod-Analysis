@@ -15,7 +15,7 @@ DB.DataBase=0;  % DB_Generate
 DB.Group=[];
 % global TuningYMAX;
 %% Overwritting Parameters
-LP.OW.PhotoChNames={'VIP','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
+LP.OW.PhotoChNames={'VIP','405'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 LP.OW.CueTimeReset=[];
 LP.OW.OutcomeTimeReset=[]; %AhOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
@@ -70,7 +70,7 @@ LP.P.EventEpochNames={'Baseline','Cue','Outcome'};
 LP.P.AOD.Figure=1;                     % Generate single cell figures
 LP.P.AOD.raw=1;                        % load raw vs dff data (new Analysis only)
 LP.P.AOD.smoothing=1;                  % smoothing (new Analysis only)
-LP.P.AOD.decimateSR=100;                % 0 to not decimate (new Analysis only)
+LP.P.AOD.decimateSR=50;                % 0 to not decimate (new Analysis only)
 LP.P.AOD.offset='auto';                % 'auto' = minimum-1 vs integer ~120 according to Z (new Analysis only)
 LP.P.AOD.rewT='meanPos';               % integer vs 'mean' 'median' 'meanPos'
 %% Spikes
@@ -83,7 +83,7 @@ LP.P.Spikes.tagging_TTL=2;
 LP.P.Spikes.pThreshold=[0.01 0.05]; %Latency / FR;
 LP.P.Spikes.TTLTS_spikeTS_Factor=10000; % for MClust clustered spikes
 %% Archiving photometry data
-LP.Archive=1; %
+LP.Archive=0; %
 LP.ArchiveOnly=0;
 LP.ArchiveOW=0;
 %% Default Parameters [Used if not found in Bpod file]
