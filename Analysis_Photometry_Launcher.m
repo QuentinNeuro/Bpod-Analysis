@@ -8,29 +8,29 @@
 clear SessionData Analysis LP; close all;
 
 %% Analysis type Single/Group/Batch etc
-LP.Analysis_type='Single';
+LP.Analysis_type='Batch';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
 DB.DataBase=0;  % DB_Generate
 DB.Group=[];
 % global TuningYMAX;
 %% Overwritting Parameters
-LP.OW.PhotoChNames={'VIP','405'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
+LP.OW.PhotoChNames={'F1','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 LP.OW.CueTimeReset=[];
 LP.OW.OutcomeTimeReset=[]; %AhOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
-%% Analysis Parameters-4
+%% Analysis Parameters
 LP.P.SortFilters=0;
 LP.P.EventDetection=0;
 % Figures
-LP.P.PlotSummary1=1;
+LP.P.PlotSummary1=0;
 LP.P.PlotSummary2=0;
 LP.P.PlotFiltersSingle=0;               % AP_CuedOutcome_GroupToPlot Output 1
 LP.P.PlotFiltersSummary=0;
 LP.P.PlotFiltersBehavior=0;           	% AP_####_GroupToPlot Oupput 2
 LP.P.Illustrator=0;
 LP.P.Transparency=0;
-LP.P.Illustration=[1 0];                % Kind of hacky for figures - refers to GtP and PlotData_Filter y axis
+LP.P.Illustration=[0 0];                % Kind of hacky for figures - refers to GtP and PlotData_Filter y axis
 % Axis
 LP.P.PlotX=[-4 4];
 LP.P.PlotY_photo(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
@@ -83,8 +83,8 @@ LP.P.Spikes.tagging_TTL=2;
 LP.P.Spikes.pThreshold=[0.01 0.05]; %Latency / FR;
 LP.P.Spikes.TTLTS_spikeTS_Factor=10000; % for MClust clustered spikes
 %% Archiving photometry data
-LP.Archive=0; %
-LP.ArchiveOnly=0;
+LP.Archive=1; %
+LP.ArchiveOnly=1;
 LP.ArchiveOW=0;
 %% Default Parameters [Used if not found in Bpod file]
 LP.D.Name='AOD_ACh';        %'AOD_ACh' - VIP-GCaMP
@@ -115,7 +115,7 @@ end
 %% File selection and Analysis Photometry Run
 switch LP.Analysis_type
     case 'Batch'
-        [errorFile,DB_Stat]=AP_FileBatch(LP,DB,DB_Stat,'DataBase'); % Spikes DataBase MegaBatch
+        [errorFile,DB_Stat]=AP_FileBatch(LP,DB,DB_Stat,'MegaBatch'); % Spikes DataBase MegaBatch
     case 'Online'
         AP_FileOnline(LP);
     case {'Single', 'Group'}
