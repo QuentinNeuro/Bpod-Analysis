@@ -10,7 +10,7 @@ function Analysis=Analysis_Photometry(LauncherParam)
 %   specifics to behavior
 %
 % function designed by QuentinC 2020
-
+close all
 %% Load Bpod or preexisting Analysis files
 Analysis=AP_Load(LauncherParam);
 %% Save core data

@@ -9,9 +9,9 @@ switch batchType
     DB.DataBase=1;
     LP.P.SortFilters=1;
     LP.P.Illustration=[0 0]; 
-    Dir_GROUP=ls;
-    for g=3:size(Dir_GROUP,1)
-        thisGroup=Dir_GROUP(g,:)
+    listGroup=ls;
+    for g=3:size(listGroup,1)
+        thisGroup=listGroup(g,:)
         cd(thisGroup)
         fileList=ls('*CuedOutcome*');
         LP.FileList=fileList;
@@ -62,33 +62,40 @@ end
 
 %% MegaBatch
     case 'MegaBatch'
-Dir_GROUP=ls;
-for g=3:size(Dir_GROUP,1)
-    thisGroup=Dir_GROUP(g,:)
+listGroup=ls;
+for g=3:size(listGroup,1)
+    cd(thisOrigin)
+    thisGroup=listGroup(g,:)
     cd(thisGroup)
-    Dir_ANIMAL=ls;
-    for a=3:size(Dir_ANIMAL,1)
+    pwdGroup=pwd;
+    listAnimal=ls;
+    for a=3:size(listAnimal,1)
+        cd(pwdGroup)
         try
-        thisAnimal=Dir_ANIMAL(a,:)
+        thisAnimal=listAnimal(a,:)
         if isempty(strfind(thisAnimal,'Bonsai')) && isempty(strfind(thisAnimal,'Histology'))
             cd(thisAnimal)
-            Dir_BEHAVIOR=ls;
-            for k=3:size(Dir_BEHAVIOR,1)
+            pwdAnimal=pwd;
+            listBehavior=ls;
+            for k=3:size(listBehavior,1)
+                cd(pwdAnimal)
                 try
-                    thisBehavior=Dir_BEHAVIOR(k,:)
+                    thisBehavior=listBehavior(k,:)
                     cd(thisBehavior)
                     cd 'Session Data'
-                    LP.PathName=pwd;
+                    pwdBehavior=pwd;
+                    LP.PathName=pwdBehavior;
                     fileList=ls('*.mat');
                     LP.FileList=fileList;
                 for f=1:size(fileList)
+                    cd(pwdBehavior)
                     try
                         thisFile=fileList(f,:)
                         LP.FileToOpen{1}=thisFile;
                         Analysis_Photometry(LP);
                     catch
                         errorCount=errorCount+1;
-                        errorFile{errorCount}=thisFolder;
+                        errorFile{errorCount}=thisFile;
                     end
                 end
                 catch
