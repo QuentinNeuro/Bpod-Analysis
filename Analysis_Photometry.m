@@ -36,12 +36,9 @@ Analysis=AP_OddBall_FiltersAndPlot(Analysis);
 Analysis=AP_Sensor_FiltersAndPlot(Analysis); 
     case 'Continuous'
 %Analysis=AP_Continuous_FiltersAndPlot(Analysis);
-    case 'DetectionConfidence'
+    case 'CuedOutcome_AC'
+Analysis=AP_CuedOutcome_AC_FiltersAndPlot(Analysis); 
 end
-%% Event Detection
-% if Analysis.Parameters.EventDetection
-% Analysis=AP_Event_Detection(Analysis);
-% end
 %% Save Analysis
 if LauncherParam.Save==2
 AP_Save(Analysis,LauncherParam);

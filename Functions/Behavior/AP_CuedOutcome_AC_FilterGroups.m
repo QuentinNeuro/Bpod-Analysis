@@ -12,7 +12,7 @@ if length(Analysis.Parameters.Illustration)==2
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
-GroupTest=AP_CuedOutcome_FilterGroups_Test(Analysis);
+GroupTest=AP_CuedOutcome_AC_FilterGroups_Test(Analysis);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 switch Analysis.Parameters.Phase
         case {'Habituation'}
@@ -25,7 +25,7 @@ GroupCorr{1,1}='Reward_Correlation';
 GroupCorr{1,2}={        'Uncued_Reward',            {'Uncued','Reward','LicksOutcome','FirstLick'}};
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
-    case {'Habituation'}
+    case {'Hab-RewardSize'}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%         
 case {'Train3C'}
@@ -52,7 +52,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
 
 if Analysis.Parameters.Illustration(3)
-GroupPlot=AP_CuedOutcome_FilterGroups_Arousal(GroupPlot,indexp,Analysis);
+GroupPlot=AP_CuedOutcome_AC_FilterGroups_Arousal(GroupPlot,indexp,Analysis);
 end
 
 end

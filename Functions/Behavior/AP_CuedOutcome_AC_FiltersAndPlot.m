@@ -1,4 +1,4 @@
-function Analysis=AP_CuedOutcome_FiltersAndPlot(Analysis)
+function Analysis=AP_CuedOutcome_AC_FiltersAndPlot(Analysis)
 %This function can be used to generates filters based on behavior or states
 %and to plot single and summary figures.
 %
@@ -25,7 +25,7 @@ Analysis=A_FilterPupilNaNCheck(Analysis,'PupilNaN',25);
 Analysis=A_FilterAfollowsB(Analysis,'Reward_After_Punish','Reward','Punish');
 
 %% Definitions of meta filters
-[Group_Plot,Group_Corr,Group_Perf]=AP_CuedOutcome_FilterGroups(Analysis);
+[Group_Plot,Group_Corr,Group_Perf]=AP_CuedOutcome_AC_FilterGroups(Analysis);
 %% Performance calculation
 try
 Analysis=AP_Performance(Analysis,Group_Perf);

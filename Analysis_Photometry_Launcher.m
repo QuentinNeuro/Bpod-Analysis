@@ -7,8 +7,8 @@
 
 clear SessionData Analysis LP; close all;
 
-%% Analysis type Single/Group/Batch etc
-LP.Analysis_type='Group';
+%% Analysis type Single/Group/Batch/Online etc
+LP.Analysis_type='Online';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
 DB.DataBase=0;  % DB_Generate
@@ -23,7 +23,7 @@ LP.OW.NidaqBaseline=[];
 LP.P.SortFilters=0;
 LP.P.EventDetection=0;
 % Figures
-LP.P.PlotSummary1=0;
+LP.P.PlotSummary1=1;
 LP.P.PlotSummary2=0;
 LP.P.PlotFiltersSingle=0;               % AP_CuedOutcome_FilterGroups
 LP.P.PlotFiltersSummary=0;
@@ -83,8 +83,8 @@ LP.P.Spikes.tagging_TTL=2;
 LP.P.Spikes.pThreshold=[0.01 0.05]; %Latency / FR;
 LP.P.Spikes.TTLTS_spikeTS_Factor=10000; % for MClust clustered spikes
 %% Archiving photometry data
-LP.Archive=1; %
-LP.ArchiveOnly=1;
+LP.Archive=0; %
+LP.ArchiveOnly=0;
 LP.ArchiveOW=0;
 %% Default Parameters [Used if not found in Bpod file]
 LP.D.Name='AOD_ACh';        %'AOD_ACh' - VIP-GCaMP
