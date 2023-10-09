@@ -13,4 +13,6 @@ GroupTest={'type_1','type_1','type_1','type_4'};
 
     case 'RewardBPunishAValues'
 GroupTest={'type_4','type_4','type_4','type_1'};
+    case {'Train3C','Test3C-RewardSize'}
+GroupTest={'type_2','type_2','type_1','type_2'};
 end

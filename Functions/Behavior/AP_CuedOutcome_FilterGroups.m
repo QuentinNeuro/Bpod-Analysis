@@ -4,11 +4,12 @@ function [GroupPlot,GroupCorr,GroupTest]=AP_CuedOutcome_FilterGroups(Analysis)
 % GroupTest   : Group for testing performance using A_Performance
 %function designed by Quentin 2017
 
-arousal=0; % Function at the end - not working yet
-
 GroupPlot={};
 GroupCorr={};
 indexp=0;
+if length(Analysis.Parameters.Illustration)==2
+    Analysis.Parameters.Illustration(3)=0;
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 GroupTest=AP_CuedOutcome_FilterGroups_Test(Analysis);
@@ -20,6 +21,9 @@ GroupPlot{indexp,1}='Reward';
 GroupPlot{indexp,2}={   'Uncued_Reward'             {'Uncued','Reward','LicksOutcome','FirstLick'};... 
                         'Uncued_Reward_NotColl'     {'Uncued','Reward','LicksOutcomeInv','FirstLick'};...
                         'Uncued_Omission',          {'Omission'}};
+GroupCorr{1,1}='Reward_Correlation';
+GroupCorr{1,2}={        'Uncued_Reward',            {'Uncued','Reward','LicksOutcome','FirstLick'}};
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
           case {'RewardA','Training','RewardA_woOmi','RewardA_Large','RewardB','RewardB_noUncued'} 
 indexp=indexp+1;
@@ -28,9 +32,6 @@ GroupPlot{indexp,2}={   'CS_Reward',                {'CS','Reward','LicksOutcome
                         'NS',                       {'NS'};...
                         'Uncued_Reward',            {'Uncued','Reward','LicksOutcome','FirstLick'};...
                         'CS_Omission',              {'CS','Omission'}};
-
-GroupCorr{1,1}=GroupPlot{indexp,1};
-GroupCorr{1,2}=GroupPlot{indexp,2};
 
 if ~Analysis.Parameters.Illustration(1)
 indexp=indexp+1;
@@ -55,6 +56,11 @@ GroupPlot{indexp,2}={   'Uncued_Reward'             {'Uncued','Reward','LicksOut
                         'Uncued_Reward_NotColl'     {'Uncued','Reward','LicksOutcomeInv','FirstLick'};...
                         'Uncued_Omission',          {'Omission'}};
 end
+
+GroupCorr{1,1}='RewardExp_Correlation';
+GroupCorr{1,2}={        'CS_Reward',                {'CS','Reward','LicksOutcome','FirstLick'};...
+                        'Uncued_Reward',            {'Uncued','Reward','LicksOutcome','FirstLick'}};
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                           
     case {'PunishA','{PunishB'}
 indexp=indexp+1;
@@ -131,11 +137,32 @@ GroupPlot{indexp,1}='Rewards';
 GroupPlot{indexp,2}={'HVS_Reward',                  {'HVS','Reward','LicksOutcome'};...
                      'MVS_Reward',                  {'MVS','Reward','LicksOutcome'};...
                      'LVS_Reward',                  {'LVS','Reward','LicksOutcome'}};     
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%         
+case {'Train3C'}
+    indexp=indexp+1;
+GroupPlot{indexp,1}='RewardExpectation';
+GroupPlot{indexp,2}={'HighValue',                   {'HVS','Reward','LicksOutcome'};...
+                     'LowValue',                    {'LVS','Reward','LicksOutcome'}}; 
+case {'Test3C-RewardSize'}
+    indexp=indexp+1;
+GroupPlot{indexp,1}='LowValueError';
+GroupPlot{indexp,2}={'LV_Predicted',           	{'type_1','LicksOutcome'};...
+                     'LV_Bigger',               {'type_2','LicksOutcome'};...
+                     'LV_Omitted',              {'type_3'}};
+    indexp=indexp+1;
+GroupPlot{indexp,1}='HighValueError';
+GroupPlot{indexp,2}={'HV_Predicted',           	{'type_4','LicksOutcome'};...
+                     'HV_Smaller',              {'type_5','LicksOutcome'};...
+                     'HV_Omitted',              {'type_6'}};
+    indexp=indexp+1;
+GroupPlot{indexp,1}='NoValueError';
+GroupPlot{indexp,2}={'NV_Predicted',           	{'type_7','LicksOutcome'};...
+                     'NV_Bigger',               {'type_8','LicksOutcome'}};
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
-if arousal
-GroupPlot=AP_CuedOutcome_FilterGroups_Arousal(GroupPlot,indexp,Analysis)
+
+if Analysis.Parameters.Illustration(3)
+GroupPlot=AP_CuedOutcome_FilterGroups_Arousal(GroupPlot,indexp,Analysis);
 end
 
 end

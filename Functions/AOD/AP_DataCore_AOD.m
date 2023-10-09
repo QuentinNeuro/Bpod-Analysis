@@ -46,12 +46,17 @@ end
 
 % Analysis.Parameters.Photometry=1;
 Analysis.Parameters.AOD.sampRateRec=1000/mean(diff(D(1).x));
+if Analysis.Parameters.AOD.decimateSR>Analysis.Parameters.AOD.sampRateRec || Analysis.Parameters.AOD.decimateSR==0
+    Analysis.Parameters.AOD.decimateSR=Analysis.Parameters.AOD.sampRateRec;
+end
+Analysis.Parameters.AOD.sampRate=Analysis.Parameters.AOD.decimateSR;
 
 %% Timing from Analysis structure or TTL 
 try
     load(['TTL_outcome_' Analysis.Parameters.Files{1}]);
     Analysis.Core.AOD.Zero=TTL_Outcome(:,1)';
 catch
+    disp('Cannof find the TTL file for outcome info')
     for thisT=1:nTrials 
         Analysis.Core.AOD.Zero(thisT)=Analysis.Core.States{1,thisT}.(stateOutcome)(1)-Analysis.Core.States{1,thisT}.(stateStart)(1);
     end

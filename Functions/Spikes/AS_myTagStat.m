@@ -1,5 +1,8 @@
 function [p, data]=AS_myTagStat(preTag,postTag,dt,tw_dur,pT)
 
+%preTag:vector with 
+
+
 %% Options
 whatToDoWithNoSpikes='max'; %'max'
 testWitLat_nnz=1;
@@ -61,7 +64,11 @@ else
     preFR=sum(thisPre,2)/(twL_pts*dt);
 end
 
+if size(thisPost,2)>=endDur
 thisPost=postTag(:,1:endDur);
+else
+    thisPost=postTag;
+end
 postFR=sum(thisPost,2)/tw_dur;
 
 % sign test - variable are dependent ?

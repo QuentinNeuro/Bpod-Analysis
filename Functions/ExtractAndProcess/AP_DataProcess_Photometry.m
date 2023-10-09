@@ -8,6 +8,8 @@ outcomeTime=Analysis.AllData.Time.Outcome(thisTrial,:)+Analysis.Parameters.Outco
 timeWindow=Analysis.Parameters.ReshapedTime;
 sampRate=Analysis.Parameters.NidaqDecimatedSR;
 
+fitTest=Analysis.Parameters.Fit_470405;
+
 %% Data processing
 for thisCh=1:length(Analysis.Parameters.PhotoCh)
     thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
@@ -17,11 +19,22 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     % Extract desired time window
     [time,data]=AP_PSTH(data,timeWindow,timeToZero,sampRate);
     % DFF / z-scoring
+    if fitTest && thisCh==1
+        try
+        [time,data405]=AP_PSTH(Analysis.Core.Photometry{thisTrial}{2},timeWindow,timeToZero,sampRate);
+        p=Analysis.Parameters.PhotometryFit;
+        data405=data405*p(1)+p(2);
+        data=100*(data-data405)./data405;
+        catch
+            data=100*(data-baselineAVG)/baselineAVG;
+        end
+    else
     data=data-baselineAVG;
     if Analysis.Parameters.Zscore
         data=data/baselineSTD;
     else
         data=100*data/baselineAVG;
+    end
     end
     switch Analysis.Parameters.ZeroAt
         case 'Zero'

@@ -13,7 +13,8 @@ labely1='Licks Rate (Hz)';
 maxrate=10;
 PlotY_photo=Analysis.Parameters.PlotY_photo;
 
-[timeAVG,dataAVG,semAVG,labelYData]=AP_PlotData_SelectorAVG(Analysis,'type_1');
+thistypecheck=sprintf('type_%.0d',min(Analysis.Core.TrialTypes));
+[timeAVG,dataAVG,semAVG,labelYData]=AP_PlotData_SelectorAVG(Analysis,thistypecheck);
 nbOfPlotsY=1+size(dataAVG,2);
 nbOfPlotsX=1;
 

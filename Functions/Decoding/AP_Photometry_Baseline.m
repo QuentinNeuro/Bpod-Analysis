@@ -1,4 +1,4 @@
-function Analysis=AP_Baseline(Analysis)
+function Analysis=AP_Photometry_Baseline(Analysis)
 
 BaselinePts=Analysis.Parameters.NidaqBaselinePoints;
 movBaseParam=Analysis.Parameters.BaselineMov;

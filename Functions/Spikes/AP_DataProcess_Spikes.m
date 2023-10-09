@@ -50,7 +50,7 @@ for c=1:nCells
         Analysis.AllData.Spikes.TagStat.postFR(c,w)=data.postFR_avg;
         Analysis.AllData.Spikes.TagStat.preLat(c,w)=data.preLat_avg;
         Analysis.AllData.Spikes.TagStat.postLat(c,w)=data.postLat_avg;
-        Analysis.AllData.Spikes.TagStat.preRel(c,w)=data.preLat_avg;
+        Analysis.AllData.Spikes.TagStat.preRel(c,w)=data.preRel_pct;
         Analysis.AllData.Spikes.TagStat.postRel(c,w)=data.postRel_pct;
     end
 

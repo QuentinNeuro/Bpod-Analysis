@@ -14,9 +14,9 @@ end
 switch groupToPlot
     case 'filter'
 Group_Plot{1,1}='RewardExp';
-Group_Plot{1,2}={       'CueA_Reward',              {'Cue A','Reward','LicksOutcome'};...
-                        'CueB_Omission',            {'Cue B'};...
-                        'Uncued_Reward',            {'Uncued','Reward','LicksOutcome'}};
+Group_Plot{1,2}={       'CS_Reward',              {'Cue A','Reward','LicksOutcome'};...
+                        'NS',                     {'Cue B'};...
+                        'Uncued_Reward',          {'Uncued','Reward','LicksOutcome'}};
     
 	case 'types'
 Group_Plot{1,1}='RewardExp';
@@ -30,9 +30,11 @@ Group_Plot{1,2}={       'type_1',            {'type_1'};...
 %                         'CueB_Omission_posRew',            {'Cue B'};...
 %                         'Uncued_Reward_posRew',            {'Uncued','Reward','LicksOutcome'}};
 Group_Plot{1,1}='RewardExp';
-Group_Plot{1,2}={       'type_1',            {'type_1'};...
-                        'type_3',            {'type_6'};...
-                        'type_4',            {'type_4'}};
+Group_Plot{1,2}={       'CS_Reward',            {'type_1'};...
+                        'NS',            {'type_6'};...
+                        'Uncued_Reward',            {'type_4'}};
+% Group_Plot{1,1}='RewardExp';
+% Group_Plot{1,2}={'type_7',            {'type_7'}};
 end
 groupToPlot=Group_Plot{1,2};
 %% Legends
@@ -68,7 +70,7 @@ for i=1:nbOfPlotsX
     end
 end
 PlotY_photo=Analysis.Parameters.PlotY_photo(1,:);
-% maxtrial=10;
+maxtrial=10;
 
 %% Plot
 ScrSze=get(0,'ScreenSize');
@@ -151,7 +153,7 @@ if Analysis.(thistype).nTrials
         c.Label.String = labelyFluo;
     end
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YDir','reverse');
-    
+     ylim([0 maxtrial+1])
      
     counterphotoplot=counterphotoplot+3;
  

@@ -21,4 +21,8 @@ function Analysis=A_FilterCNSMatch(Analysis)
             Analysis.Filters.HVS=Analysis.Filters.Cue_B;
             Analysis.Filters.MVS=Analysis.Filters.Cue_A;
             Analysis.Filters.LVS=Analysis.Filters.Cue_C;
+        case {'Train3C','Test3C-RewardSize'} % Amy's task
+            Analysis.Filters.HVS=Analysis.Filters.Cue_B;
+            Analysis.Filters.LVS=Analysis.Filters.Cue_A;
+            Analysis.Filters.NVS=Analysis.Filters.Cue_C;
     end

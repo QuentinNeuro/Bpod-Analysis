@@ -12,34 +12,22 @@ end
 Analysis.Parameters.AOD.offset=offset;
 % sampling rate
 sampRateRec=Analysis.Parameters.AOD.sampRateRec;
-dsampRate=Analysis.Parameters.AOD.decimateSR;
-if dsampRate 
-    decimateFactor=floor(sampRateRec/dsampRate);
-    sampRate=dsampRate;
-else
-    sampRate=sampRateRec;
-end
-Analysis.Parameters.AOD.sampRate=sampRate;
+sampRate=Analysis.Parameters.AOD.decimateSR;
+decimateFactor=floor(sampRateRec/sampRate);
 baselinePts=ceil(Analysis.Parameters.NidaqBaseline*sampRate); 
 
 %% Preprocessing
 coreTime=Analysis.Core.AOD.time;
-if dsampRate
-    time=decimate(coreTime,decimateFactor);
-else
-    time=coreTime;
-end
+time=decimate(coreTime,decimateFactor);
 coreData=Analysis.Core.AOD.Data;
-if Analysis.Parameters.AOD.smoothing || dsampRate
+if Analysis.Parameters.AOD.smoothing || sampRate
     data=nan(length(time),size(coreData,2));
     for thisCT=1:size(coreData,2)
         thisData=coreData(:,thisCT);
         if Analysis.Parameters.AOD.smoothing
             thisData=smooth(thisData);
         end
-        if dsampRate
-            thisData=decimate(thisData,decimateFactor);
-        end
+        thisData=decimate(thisData,decimateFactor);
         data(:,thisCT)=thisData;
     end
 else

@@ -21,7 +21,10 @@ switch Analysis.Parameters.Behavior
 end
 %% Baseline for fiber photometry
 if Analysis.Parameters.Photometry
-    Analysis=AP_Baseline(Analysis);
+    Analysis=AP_Photometry_Baseline(Analysis);
+    if Analysis.Parameters.Fit_470405
+    Analysis=AP_Photometry_2ChFit(Analysis);
+    end
 end
 %% Trial processing
 for thisTrial=1:Analysis.AllData.nTrials
