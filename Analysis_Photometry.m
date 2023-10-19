@@ -17,7 +17,7 @@ Analysis=AP_Load(LauncherParam);
 if LauncherParam.Save==1 %&& Analysis.Parameters.Pupillometry
 AP_Save(Analysis,LauncherParam);
 end
-if ~LauncherParam.ArchiveOnly % temporary condition
+if ~LauncherParam.ArchiveOnly
 %% Process the data
 Analysis=AP_DataProcess(Analysis);
 %% Sorts data by trial types and generates summary plots
@@ -35,7 +35,7 @@ Analysis=AP_OddBall_FiltersAndPlot(Analysis);
     case 'Sensor'
 Analysis=AP_Sensor_FiltersAndPlot(Analysis); 
     case 'Continuous'
-AP_Continuous_FiltersAndPlot2(Analysis)
+AP_Continuous_FiltersAndPlot(Analysis)
     case 'CuedOutcome_AC'
 Analysis=AP_CuedOutcome_AC_FiltersAndPlot(Analysis); 
 end

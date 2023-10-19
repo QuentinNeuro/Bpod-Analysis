@@ -22,7 +22,8 @@ GroupPlot{indexp,2}={   'Uncued_Reward'             {'Uncued','Reward','LicksOut
                         'Uncued_Reward_NotColl'     {'Uncued','Reward','LicksOutcomeInv','FirstLick'};...
                         'Uncued_Omission',          {'Omission'}};
 GroupCorr{1,1}='Reward_Correlation';
-GroupCorr{1,2}={        'Uncued_Reward',            {'Uncued','Reward','LicksOutcome','FirstLick'}};
+GroupCorr{1,2}={        'Uncued_Reward',            {'Uncued','Reward','LicksOutcome','FirstLick'};....
+                        'Uncued_Omission',          {'Omission'}};
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
           case {'RewardA','Training','RewardA_woOmi','RewardA_Large','RewardB','RewardB_noUncued'} 
@@ -54,7 +55,7 @@ indexp=indexp+1;
 GroupPlot{indexp,1}='Reward';
 GroupPlot{indexp,2}={   'Uncued_Reward'             {'Uncued','Reward','LicksOutcome','FirstLick'};... 
                         'Uncued_Reward_NotColl'     {'Uncued','Reward','LicksOutcomeInv','FirstLick'};...
-                        'Uncued_Omission',          {'Omission'}};
+                        'Uncued_Omission',          {'Uncued','Omission'}};
 end
 
 GroupCorr{1,1}='RewardExp_Correlation';

@@ -1,4 +1,4 @@
-function Analysis=A_FilterLick(Analysis,FilterName,Time,Number)
+function Analysis=A_FilterLick(Analysis,FilterName,Time,Threshold)
 % Function to filter trials according to the number of Lick in a defined
 % time window. Generates an additional inverted filter.
 %
@@ -28,7 +28,7 @@ end
             counter = counter + 1;
         end
     end
-    if counter > Number
+    if counter > Threshold
         Logicals(i)=true;
     end
 end

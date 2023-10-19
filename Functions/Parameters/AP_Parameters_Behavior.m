@@ -95,7 +95,7 @@ elseif contains(Name,'Continuous','IgnoreCase',true)
     Par.Behavior='Continuous';
 	Par.StateOfCue='PreState';
     Par.StateOfOutcome='Outcome';
-    Par.PlotSummary1=1;
+    Par.PlotSummary1=0;
     Par.PlotSummary2=0;
     Par.PlotFiltersSingle=0;
     Par.PlotFiltersSummary=0;
@@ -103,7 +103,7 @@ elseif contains(Name,'Continuous','IgnoreCase',true)
     Par.CueTimeReset=[0 1];
     Par.OutcomeTimeReset=[0 2];
     Par.NidaqBaseline=[1 5];
-    Par.ReshapedTime=[-20 100];   
+    Par.ReshapedTime=[-20 150];   
 else
     Par.Behavior=LP.D.Behavior;
 	Par.StateOfCue=LP.D.StateOfCue;

@@ -8,7 +8,7 @@
 clear SessionData Analysis LP; close all;
 
 %% Analysis type Single/Group/Batch/Online etc
-LP.Analysis_type='Online';
+LP.Analysis_type='Single';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
 DB.DataBase=0;  % DB_Generate
@@ -20,10 +20,10 @@ LP.OW.CueTimeReset=[];
 LP.OW.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
-LP.P.SortFilters=0;
+LP.P.SortFilters=1;
 LP.P.EventDetection=0;
 % Figures
-LP.P.PlotSummary1=1;
+LP.P.PlotSummary1=0;
 LP.P.PlotSummary2=0;
 LP.P.PlotFiltersSingle=0;               % AP_CuedOutcome_FilterGroups
 LP.P.PlotFiltersSummary=0;
@@ -115,7 +115,7 @@ end
 %% File selection and Analysis Photometry Run
 switch LP.Analysis_type
     case 'Batch'
-        [errorFile,DB_Stat]=AP_FileBatch(LP,DB,DB_Stat,'MegaBatch'); % Spikes DataBase MegaBatch
+        [errorFile,DB_Stat]=AP_FileBatch(LP,DB,DB_Stat,'DataBase'); % Spikes DataBase MegaBatch
     case 'Online'
         AP_FileOnline(LP);
     case {'Single', 'Group'}
