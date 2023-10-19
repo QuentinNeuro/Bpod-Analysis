@@ -35,7 +35,7 @@ Analysis=AP_OddBall_FiltersAndPlot(Analysis);
     case 'Sensor'
 Analysis=AP_Sensor_FiltersAndPlot(Analysis); 
     case 'Continuous'
-%Analysis=AP_Continuous_FiltersAndPlot(Analysis);
+AP_Continuous_FiltersAndPlot2(Analysis)
     case 'CuedOutcome_AC'
 Analysis=AP_CuedOutcome_AC_FiltersAndPlot(Analysis); 
 end
