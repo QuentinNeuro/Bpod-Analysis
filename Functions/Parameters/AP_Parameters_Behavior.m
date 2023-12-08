@@ -19,6 +19,8 @@ catch
 end
 %% Behavior specific
 Par.TypeOfCue='nc';
+Par.NidaqBaseline=[0.2 1.2];
+
 if contains(Name,'Cued','IgnoreCase',true) && ~contains(Name,'Sensor','IgnoreCase',true)  && ~contains(Name,'AudCuedPavl','IgnoreCase',true)
     Par.Behavior='CuedOutcome';
     Par.TypeOfCue='Chirp';
@@ -43,15 +45,12 @@ if contains(Name,'Cued','IgnoreCase',true) && ~contains(Name,'Sensor','IgnoreCas
         Par.CueTimeReset=[0 1];
     end
     Par.OutcomeTimeReset=[0 2];
-    Par.NidaqBaseline=[0.2 1.2];
 elseif contains(Name,'GoNogo','IgnoreCase',true)
     Par.Behavior='GoNogo';
 	Par.StateOfCue='CueDelivery';
     Par.StateOfOutcome='PostOutcome';
     Par.CueTimeReset=[-0.1 0];
     Par.OutcomeTimeReset=[0 -3];
-    Par.NidaqBaseline=[0.2 1.2];
-%     Par.TimeReshaping=1;
 elseif contains(Name,'AuditoryTuning','IgnoreCase',true)
     Par.Behavior='AuditoryTuning';
 	Par.StateOfCue='CueDelivery';
@@ -64,7 +63,6 @@ elseif contains(Name,'AuditoryTuning','IgnoreCase',true)
     Par.PlotFiltersBehavior=0;
     Par.CueTimeReset=[0 1];
     Par.OutcomeTimeReset=[0 2];
-    Par.NidaqBaseline=[0.2 1.2];
     Par.ZeroAt=0;
     Par.BaselineBefAft=1;
 elseif contains(Name,'Oddball','IgnoreCase',true)
@@ -78,7 +76,6 @@ elseif contains(Name,'Oddball','IgnoreCase',true)
     Par.PlotFiltersBehavior=0;
     Par.CueTimeReset=[0 1];
     Par.OutcomeTimeReset=[0 2];
-    Par.NidaqBaseline=[0 1];
     Par.ReshapedTime=[0 180];
     if isfield(SessionData.TrialSettings(1).Names,'Sound')
         Par.TypeOfCue=SessionData.TrialSettings(1).Names.Sound{SessionData.TrialSettings(1).GUI.SoundType};
@@ -89,8 +86,6 @@ elseif contains(Name,'Sensor','IgnoreCase',true)
     Par.StateOfOutcome='Outcome';
     Par.CueTimeReset=[0 1];
     Par.OutcomeTimeReset=[0 2];
-    Par.NidaqBaseline=[0.2 1.2];
-%     Par.TimeReshaping=1;
 elseif contains(Name,'Continuous','IgnoreCase',true)
     Par.Behavior='Continuous';
 	Par.StateOfCue='PreState';
@@ -102,8 +97,21 @@ elseif contains(Name,'Continuous','IgnoreCase',true)
     Par.PlotFiltersBehavior=0;
     Par.CueTimeReset=[0 1];
     Par.OutcomeTimeReset=[0 2];
-    Par.NidaqBaseline=[1 5];
     Par.ReshapedTime=[-20 150];   
+elseif contains(Name,'AudCuedPavl','IgnoreCase',true)
+    Par.Name='AOD_ACh';        %'AOD_ACh' - VIP-GCaMP
+    Par.Rig='AOD';             %'AOD' 'NA'
+    Par.Behavior='CuedOutcome'; %CuedReward
+    Par.Phase='RewardA';
+    Par.CueType='Chirp';
+    Par.TrialNames={'Cue A Reward','T2','T3','T4','Cue A Omission','Cue B Omission','Uncued Reward','T8','T9','T10'};
+    Par.LickPort='Port1In';
+    Par.StateOfCue='DeliverStimulus'; %DeliverStimulus
+    Par.StateOfOutcome='DeliverStimulus';
+%     Par.StateToZero='StateOfCue';
+    Par.CueTimeReset=[0 2];
+    Par.OutcomeTimeReset=[2 4];
+    Par.ReshapedTime=[-6 6]; 
 else
     Par.Behavior=LP.D.Behavior;
 	Par.StateOfCue=LP.D.StateOfCue;

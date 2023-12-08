@@ -21,12 +21,18 @@ if Analysis.Parameters.Photometry
     end
 end
 
-if Analysis.Parameters.AOD.AOD
-    x{1}=Analysis.(thistype).AOD.Time(:,1);
-    y{1}=Analysis.(thistype).AOD.AllCells.DataAVG;
-    sem{1}=Analysis.(thistype).AOD.AllCells.DataSEM;
+if Analysis.Parameters.nCells
+    x{1}=Analysis.(thistype).AllCells.Time(1,:);
+    y{1}=Analysis.(thistype).AllCells.DataAVG;
+    sem{1}=Analysis.(thistype).AllCells.DataSEM;
     labelY{1}=[Analysis.Parameters.PhotoChNames{1} fluoType];
+    x{2}=Analysis.(thistype).AllCells.Time(1,:);
+    y{2}=Analysis.(thistype).AllCells.DataAVG;
+    sem{2}=Analysis.(thistype).AllCells.DataSEM;
+    labelY{2}=[Analysis.Parameters.PhotoChNames{1} fluoType];
+
 end
+
 if Analysis.Parameters.Spikes.Spikes
     x{1}=Analysis.(thistype).Spikes.AllCells.Bin(1,:);
     y{1}=Analysis.(thistype).Spikes.AllCells.RateAVG;

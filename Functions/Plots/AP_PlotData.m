@@ -129,6 +129,12 @@ if ~isempty(dataAVG)
         c.Label.String = labelYData{thisCh};
     end
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
+    if trialRaster{thisCh}(end)<maxtrial
+        thisYLim=[0 maxtrial];
+    else
+        thisYLim=[0 trialRaster{thisCh}(end)];
+    end
+    ylim(thisYLim);
     counterphotoplot=counterphotoplot+3;
     
     end

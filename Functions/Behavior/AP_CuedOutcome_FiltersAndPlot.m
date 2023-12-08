@@ -102,21 +102,21 @@ for i=1:size(Group_Corr,1)
 end
 end
 
-%% AOD
-if Analysis.Parameters.AOD.AOD && Analysis.Parameters.AOD.Figure
-    Analysis=AP_CuedOutcome_FiltersAndPlot_AOD(Analysis);
+%% SingleCells
+if Analysis.Parameters.nCells>0 && Analysis.Parameters.PlotCells
+    Analysis=AP_CuedOutcome_FiltersAndPlot_Cells(Analysis);
 end
 
 %% Spikes Analysis
-% TrialEvents
-% if Analysis.Parameters.TE4CellBase
-%     CuedEvents=A_makeTrialEvents_CuedOutcome(Analysis);
-%     save('CuedEvents','CuedEvents');
-% end
-% 
-% Figures
-if Analysis.Parameters.Spikes.Spikes && Analysis.Parameters.Spikes.Figure
-    for c=1:Analysis.Parameters.Spikes.nCells
-        AP_CuedOutcome_FiltersAndPlot_Spikes(Analysis,c);
-    end
+% % TrialEvents
+% % if Analysis.Parameters.TE4CellBase
+% %     CuedEvents=A_makeTrialEvents_CuedOutcome(Analysis);
+% %     save('CuedEvents','CuedEvents');
+% % end
+% % 
+% % Figures
+% if Analysis.Parameters.Spikes.Spikes && Analysis.Parameters.Spikes.Figure
+%     for c=1:Analysis.Parameters.Spikes.nCells
+%         AP_CuedOutcome_FiltersAndPlot_Spikes(Analysis,c);
+%     end
 end

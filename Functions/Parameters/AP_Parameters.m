@@ -44,7 +44,7 @@ else
 end
 %% Behavior specific : Plots, States and Timing
 Par=AP_Parameters_Behavior(Par,SessionData,LP,Name);
-Par.StateToZero     =Par.(LP.P.StateToZero);
+Par.StateToZero     =Par.(Par.StateToZero);
 %% Licks
 if isfield(SessionData.RawEvents.Trial{1, 1}.Events,'Port1In')
     Par.LickPort='Port1In';
@@ -75,6 +75,7 @@ end
 Par.NidaqDecimateFactor=ceil(Par.NidaqSamplingRate/Par.NidaqDecimatedSR);
 %% Photometry
 Par=AP_Parameters_Photometry(Par,SessionData,LP);
+Par.nCells=0;
 if isfield(SessionData,'DecimatedSampRate') % Already demodulated
 	Par.Modulation=0;
 end

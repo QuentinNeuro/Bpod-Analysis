@@ -34,11 +34,7 @@ transparency=0;
 % Automatic definition of axes
 maxtrial=Analysis.(thistype).nTrials;
 if ~illustrationTest
-if maxtrial<20
-    maxtrial=20;
-else
-    maxtrial=20;
-end
+    maxTrial=20;
 end
 %Lick AVG y axes
 maxrate=max(Analysis.(thistype).Licks.AVG);
@@ -91,7 +87,7 @@ if ~isempty(dataAVG)
         end
         plot([0 0],thisPlotY,'-r');
         plot(Analysis.(thistype).Time.Cue(1,:),[thisPlotY(thisC,2) thisPlotY(thisC,2)],'-b','LineWidth',2);
-        ylabel(labelYData); xlabel(labelx);
+        ylabel(labelYData{thisC}); xlabel(labelx);
         set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',thisPlotY(thisC,:));
     
 % Raster
@@ -107,9 +103,9 @@ if ~isempty(dataAVG)
         end  
         pos=get(gca,'pos');
         c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
-        c.Label.String = labelYRaster;
-        ylabel(labelYRaster);
-        set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial],'YDir','reverse');
+        c.Label.String = labelYRaster{thisC};
+        ylabel(labelYRaster{thisC});
+        set(gca,'XLim',xTime,'XTick',xtickvalues,'YDir','reverse'); %'YLim',[0 maxtrial]
         counter=counter+3;
     end
 end    

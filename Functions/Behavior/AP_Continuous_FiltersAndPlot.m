@@ -1,4 +1,4 @@
-function AP_Continuous_FiltersAndPlot2(Analysis)
+function AP_Continuous_FiltersAndPlot(Analysis)
 
 %% Parameters
 trialType='AllData';

@@ -4,6 +4,7 @@ function LP=AP_AutoLoad(LP)
 LP.P.Photometry=LP.D.Photometry;
 LP.P.Spikes.Spikes=LP.D.Spikes.Spikes;
 LP.P.AOD.AOD=LP.D.AOD.AOD;
+LP.P.Miniscope.Miniscope=LP.D.Miniscope.Miniscope;
 LP.Load=LP.D.Load;
 
 if LP.AutoLoad
@@ -18,6 +19,9 @@ if exist('SessionData','var')
     end
     if ~isempty(ls('dff_*')) || ~isempty(ls('raw_*')) || ~isempty(ls('calcium_*'))
         LP.P.AOD.AOD=1;
+    end
+    if ~isempty(ls('rec_extract*'))
+        LP.P.Miniscope.Miniscope=1;
     end
     if ~isempty(ls('TT_*'))
         LP.P.Spikes.Spikes=1;

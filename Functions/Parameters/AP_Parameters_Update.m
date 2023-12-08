@@ -29,4 +29,7 @@ Par.NidaqBaselinePoints=Par.NidaqBaseline*Par.NidaqDecimatedSR;
 if Par.NidaqBaselinePoints(1)==0
     Par.NidaqBaselinePoints(1)=1;
 end
+if ~isfield(Par,'nCells')
+    Par.nCells=0;
+end
 end

@@ -15,21 +15,24 @@ if Analysis.Parameters.Photometry
     end
 end
 
-if Analysis.Parameters.AOD.AOD
-    x{1}=Analysis.(thistype).AOD.Time(:,1);
-    if isnan(x{1,1}(end))
-        x{1,1}(end)=x{1,1}(end-1)+x{1,1}(end-1)-x{1,1}(end-2);
-    end
-    y{1}=1:size(Analysis.(thistype).AOD.CellName,2);
-    dataTp=Analysis.(thistype).AOD.AllCells.Data';
-    dataTp(dataTp==NaN)=0;
-    data{1}=dataTp;
-    labelY{1}=['Cells ' Analysis.Parameters.PhotoChNames{1}];
+if Analysis.Parameters.nCells
+    nCells=size(Analysis.(thistype).AllCells.CellName,2);
+    x{1}=Analysis.(thistype).AllCells.Time(1,:);
+    y{1}=1:Analysis.(thistype).nTrials;
+    data{1}=Analysis.(thistype).AllCells.Data;
+    labelY{1}='Trials';
+    x{2}=x{1};
+    y{2}=1:nCells;
+    data{2}=Analysis.(thistype).AllCells.dataAVG_Cell;
+    labelY{2}='Cells';
 end
+
+
 if Analysis.Parameters.Spikes.Spikes
     x{1}=Analysis.(thistype).Spikes.AllCells.Bin(1,:);
     y{1}=1:Analysis.Parameters.Spikes.nCells;
     data{1}=Analysis.(thistype).Spikes.AllCells.Rate;
     labelY{1}=['Cells ' Analysis.Parameters.PhotoChNames{1}];
 end
+
 end
