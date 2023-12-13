@@ -74,6 +74,7 @@ end
 %% Save in Analysis structure
 Analysis.Parameters.nCells=nCells;
 Analysis.Parameters.AOD.sampRate=SR;
+Analysis.Parameters.AOD.min=min(nData);
 Analysis.Core.AOD_TS=zeroTS;
 Analysis.Core.AOD=dataTrial;
 end
