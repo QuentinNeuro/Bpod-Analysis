@@ -103,7 +103,7 @@ end
 end
 
 %% SingleCells
-if Analysis.Parameters.nCells>0 && Analysis.Parameters.PlotCells
+if Analysis.Parameters.nCells>0 && Analysis.Parameters.SortCells
     Analysis=AP_CuedOutcome_FiltersAndPlot_Cells(Analysis);
 end
 

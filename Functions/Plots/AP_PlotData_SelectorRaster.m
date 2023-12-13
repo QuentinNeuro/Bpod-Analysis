@@ -23,7 +23,7 @@ if Analysis.Parameters.nCells
     labelY{1}='Trials';
     x{2}=x{1};
     y{2}=1:nCells;
-    data{2}=Analysis.(thistype).AllCells.dataAVG_Cell;
+    data{2}=Analysis.(thistype).AllCells.Data_Cell;
     labelY{2}='Cells';
 end
 

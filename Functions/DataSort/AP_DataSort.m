@@ -93,12 +93,6 @@ if Analysis.(thistype).nTrials>0
         Analysis.(thistype).(cellNames{c}).DataAVG=mean(Analysis.(thistype).(cellNames{c}).Data,1,'omitnan');
         Analysis.(thistype).(cellNames{c}).DataSEM=std(Analysis.(thistype).(cellNames{c}).Data,1,'omitnan')/sqrt(Analysis.(thistype).nTrials);
         Analysis.(thistype).AllCells.Data_Cell(c,:)=Analysis.(thistype).(cellNames{c}).DataAVG;
-      
-        % Analysis.(thistype).AllCells.preCueAVG_Cell(c)=mean(Analysis.(thistype).(cellNames{c}).CueAVG,'omitnan');
-        % Analysis.(thistype).AllCells.CueAVG_Cell(c)=mean(Analysis.(thistype).(cellNames{c}).CueAVG,'omitnan');
-        % Analysis.(thistype).AllCells.CueMAX_Cell(c)=mean(Analysis.(thistype).(cellNames{c}).CueMAX,'omitnan');
-        % Analysis.(thistype).AllCells.OutcomeAVG_Cell(c)=mean(Analysis.(thistype).(cellNames{c}).OutcomeAVG,'omitnan');
-        % Analysis.(thistype).AllCells.OutcomeMAX_Cell(c)=mean(Analysis.(thistype).(cellNames{c}).OutcomeMAX,'omitnan');
     end  
         Analysis.(thistype).AllCells.DataAVG=mean(Analysis.(thistype).AllCells.Data,1,'omitnan');
         Analysis.(thistype).AllCells.DataSEM=std(Analysis.(thistype).AllCells.Data,1,'omitnan')/sqrt(Analysis.Parameters.nCells);
@@ -118,14 +112,5 @@ end
         Analysis.(thistype).Pupil.PupilAVG          =mean(Analysis.(thistype).Pupil.PupilDPP,1,'omitnan'); 
         Analysis.(thistype).Pupil.PupilSEM          =std(Analysis.(thistype).Pupil.PupilDPP,0,1,'omitnan')/sqrt(Analysis.(thistype).nTrials);
     end
-    
- %% Spikes
-    if Analysis.Parameters.Spikes.Spikes
-        Analysis=AP_DataSort_Spikes(Analysis,FilterName,thisFilter);
-    end
-%% AOD    
-    % if Analysis.Parameters.AOD.AOD
-    %      Analysis=AP_DataSort_AOD(Analysis,FilterName,thisFilter);
-    % end
 end
 end

@@ -4,8 +4,8 @@ thisType={'CS_Reward','CS_Reward','NS','Uncued_Reward'};
 thisCellFilter={'posRew','posRewInv','posRew','posRew'};
 
 %% FilterCells
-    Analysis=A_FilterCell(Analysis,'posRew','OutcomeAVG_Cell',Analysis.Parameters.AOD.rewT,'Uncued_Reward');
-    Analysis=A_FilterCell(Analysis,'posCue','CueMAX_Cell','mean','CS');
+    Analysis=A_FilterCell(Analysis,'posRew','OutcomeMAX','preCue','Uncued_Reward');
+    Analysis=A_FilterCell(Analysis,'posCue','CueMAX','preCue','CS');
     for tc=1:size(thisType,2)
         Analysis=AP_DataSort_SingleCells(Analysis,thisType{tc},thisCellFilter{tc});
     end

@@ -21,7 +21,7 @@ LP.OW.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
 LP.P.SortFilters=1;
-LP.P.SortCells=1;
+LP.P.SortCells=0;
 LP.P.EventDetection=0;
 % Figures
 LP.P.PlotSummary1=1;
@@ -34,9 +34,9 @@ LP.P.Illustrator=0;
 LP.P.Transparency=0;
 LP.P.Illustration=[0 0 0];                % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
 % Axis
-LP.P.PlotX=[-2 4];
-LP.P.PlotY_photo(1,:)=[-5 20];     	% Tight axis if [NaN NaN] / TBD [min max]
-LP.P.PlotY_photo(2,:)=[-5 20];        % Tight axis if [NaN NaN] / TBD [min max]
+LP.P.PlotX=[-5 4];
+LP.P.PlotY_photo(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
+LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max]
 % States and Timing
 LP.P.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
 LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after state to Zero starts
@@ -70,7 +70,7 @@ LP.P.EventEpochNames={'Baseline','Cue','Outcome'};
 %% AOD
 % AP_DataCore_AOD AP_DataProcess_AOD AP_DataSort_AOD AP_CuedOutcome_FiltersAndPlot_AOD
 LP.P.AOD.raw=1;                        % load raw vs dff data (new Analysis only)
-LP.P.AOD.timing='TTL';                % Bpod, TTL
+LP.P.AOD.timing='Bpod';                % Bpod, TTL
 LP.P.AOD.smoothing=1;                  % smoothing
 LP.P.AOD.decimateSR=0;                 % 0 to not decimate
 LP.P.AOD.offset='auto';                % 'auto' = minimum-1 vs integer ~120 according to Z

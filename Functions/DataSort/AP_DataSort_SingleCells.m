@@ -26,47 +26,28 @@ else
 % initialize the new trial type structure based on previous one
 Analysis.(thisType)=Analysis.(FilterName);
 Analysis.(thisType).Name=thisType;
-% Generate new average AllCells data and remove cells from structure
-dataCells={};
-cCounter=0;
-for c=1:nCells
-    thisCell=cellName{c};
-    if thisFilter(c)
-        cCounter=cCounter+1;
-        cellList{cCounter}=thisCell;
-        dataCells{cCounter}     =Analysis.(thisType).(thisCell).Data;
-        dataAVG_Cell(cCounter,:)=Analysis.(thisType).(thisCell).DataAVG;
-        preCueAVG(:,cCounter)   =Analysis.(thisType).(thisCell).preCueAVG;
-        CueAVG(:,cCounter)      =Analysis.(thisType).(thisCell).CueAVG;
-        CueMAX(:,cCounter)      =Analysis.(thisType).(thisCell).CueMAX;
-        OutcomeAVG(:,cCounter)  =Analysis.(thisType).(thisCell).OutcomeAVG;
-        OutcomeMAX(:,cCounter)  =Analysis.(thisType).(thisCell).OutcomeMAX;
-    else
-        Analysis.(thisType)=rmfield(Analysis.(thisType),thisCell);
+Analysis.(thisType)=rmfield(Analysis.(thisType),cellName(~thisFilter));
+
+fields=fieldnames(Analysis.(thisType).AllCells);
+for f=1:size(fields,1)
+    thisF=Analysis.(thisType).AllCells.(fields{f});
+    if size(thisF)==[nCells nTrials]
+        Analysis.(thisType).AllCells.(fields{f})=thisF(thisFilter,:);
     end
 end
+Analysis.(thisType).AllCells.CellName=cellName(thisFilter);
+Analysis.(thisType).AllCells.Data_Cell=Analysis.(thisType).AllCells.Data_Cell(thisFilter,:);
+Analysis.(thisType).AllCells.DataAVG=mean(Analysis.(thisType).AllCells.Data_Cell,1,'omitnan');
+Analysis.(thisType).AllCells.DataSEM=std(Analysis.(thisType).AllCells.Data_Cell,1,'omitnan')/sqrt(nCellsF);
+
+% this is dumb but hopefully works
+Analysis.(thisType).AllCells.Data=[];
 for t=1:nTrials
-    for c=1:nCellsF
-        dataThisTrial(c,:)=dataCells{c}(t,:);
-    end
-    dataTrialAVG(t,:)=mean(dataThisTrial,1,'omitnan');
+for c=1:nCellsF
+    thisCell=Analysis.(thisType).AllCells.CellName{c};
+    dataTrial(c,:)=Analysis.(thisType).(thisCell).Data(t,:);
 end
-
-% Save new average AllCells data
-Analysis.(thisType).AllCells.CellName       =cellList;
-Analysis.(thisType).AllCells.Data           =dataTrialAVG;
-Analysis.(thisType).AllCells.DataAVG        =mean(dataTrialAVG,1,'omitnan');
-Analysis.(thisType).AllCells.DataSEM        =std(dataTrialAVG,1,'omitnan')/sqrt(nTrials);
-Analysis.(thisType).AllCells.preCueAVG      =mean(preCueAVG,2,'omitnan');
-Analysis.(thisType).AllCells.CueAVG         =mean(CueAVG,2,'omitnan');
-Analysis.(thisType).AllCells.CueMAX         =mean(CueMAX,2,'omitnan');
-Analysis.(thisType).AllCells.OutcomeAVG	    =mean(OutcomeAVG,2,'omitnan');
-Analysis.(thisType).AllCells.OutcomeMAX	    =mean(OutcomeMAX,2,'omitnan');
-Analysis.(thisType).AllCells.dataAVG_Cell   =dataAVG_Cell;
-
-Analysis.(thisType).AllCells.CueAVG_Cell    =mean(CueAVG,1,'omitnan');
-Analysis.(thisType).AllCells.CueMAX_Cell    =mean(CueMAX,1,'omitnan');
-Analysis.(thisType).AllCells.OutcomeAVG_Cell=mean(OutcomeAVG,1,'omitnan');
-Analysis.(thisType).AllCells.OutcomeMAX_Cell=mean(OutcomeMAX,1,'omitnan');
+Analysis.(thisType).AllCells.Data(t,:)=mean(dataTrial,1,'omitnan');
+end
 end
 end
