@@ -21,7 +21,7 @@ LP.OW.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
 LP.P.SortFilters=1;
-LP.P.SortCells=1;
+LP.P.SortCells=0;
 LP.P.EventDetection=0;
 % Figures
 LP.P.PlotSummary1=1;
@@ -29,14 +29,14 @@ LP.P.PlotSummary2=0;
 LP.P.PlotFiltersSingle=0;               % AP_CuedOutcome_FilterGroups
 LP.P.PlotFiltersSummary=0;
 LP.P.PlotFiltersBehavior=0;           	% AP_####_GroupToPlot Oupput 2
-LP.P.PlotCells=1;                       % Generate single cell figures
+LP.P.PlotCells=0;                       % Generate single cell figures
 LP.P.Illustrator=0;
 LP.P.Transparency=0;
 LP.P.Illustration=[0 0 0];                % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
 % Axis
-LP.P.PlotX=[-2 4];
-LP.P.PlotY_photo(1,:)=[-5 20];     	% Tight axis if [NaN NaN] / TBD [min max]
-LP.P.PlotY_photo(2,:)=[-5 20];        % Tight axis if [NaN NaN] / TBD [min max]
+LP.P.PlotX=[-4 4];
+LP.P.PlotY_photo(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
+LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max]
 % States and Timing
 LP.P.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
 LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after state to Zero starts
@@ -52,7 +52,7 @@ LP.P.LicksOutcome=2;                    % default : 2
 LP.P.TrialToFilterOut=[];
 LP.P.LoadIgnoredTrials=1;
 % Fluorescence % default Zsc=1 mov=5 befAft=1 SR=20
-LP.P.Zscore=0;                          % 
+LP.P.Zscore=1;                          % 
 LP.P.BaselineMov=1;                     % 0 to not have moving baseline avg (avg and std)
 LP.P.BaselineBefAft=2;                  % calculate Baseline before or after extracting desired PSTH
 LP.P.BaselineHisto=0;                   % percentage of data from the baseline to use
@@ -70,9 +70,9 @@ LP.P.EventEpochNames={'Baseline','Cue','Outcome'};
 %% AOD
 % AP_DataCore_AOD AP_DataProcess_AOD AP_DataSort_AOD AP_CuedOutcome_FiltersAndPlot_AOD
 LP.P.AOD.raw=1;                        % load raw vs dff data (new Analysis only)
-LP.P.AOD.timing='TTL';                % Bpod, TTL
-LP.P.AOD.smoothing=1;                  % smoothing
-LP.P.AOD.decimateSR=0;                 % 0 to not decimate
+LP.P.AOD.timing='TTL';                 % Bpod, TTL
+LP.P.AOD.smoothing=1;                  % smoothing 
+LP.P.AOD.decimateSR=0;                 % does not work :/
 LP.P.AOD.offset='auto';                % 'auto' = minimum-1 vs integer ~120 according to Z
 LP.P.AOD.rewT='meanPos';               % integer vs 'mean' 'median' 'meanPos'
 %% Spikes
@@ -85,7 +85,7 @@ LP.P.Spikes.pThreshold=[0.01 0.05]; %Latency / FR;
 LP.P.Spikes.TTLTS_spikeTS_Factor=10000; % for MClust clustered spikes
 %% Miniscope
 LP.P.Miniscope.SR=10;
-LP.P.Miniscope.raw=0;
+LP.P.Miniscope.raw=1;
 %% Archiving photometry data
 LP.Archive=0; %
 LP.ArchiveOnly=0;

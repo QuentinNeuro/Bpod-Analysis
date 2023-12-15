@@ -67,8 +67,11 @@ for c=1:nCells
     Analysis.AllData.AllCells.preCueSTD(c,:)  =std(thisCData(:,timeTrial(t,:)>CueTime(t,1)-2 & timeTrial(t,:)<CueTime(t,1)-1),[],2,'omitnan');
     Analysis.AllData.AllCells.CueAVG(c,:)     =mean(thisCData(:,timeTrial(t,:)>CueTime(t,1) & timeTrial(t,:)<CueTime(t,2)),2,'omitnan');
     Analysis.AllData.AllCells.CueMAX(c,:)     =max(thisCData(:,timeTrial(t,:)>CueTime(t,1) & timeTrial(t,:)<CueTime(t,2)),[],2,'omitnan');
+    preOutcome=mean(thisCData(:,timeTrial(t,:)>OutcomeTime(t,1)-1 & timeTrial(t,:)<OutcomeTime(t,1)-0.1),2,'omitnan');
     Analysis.AllData.AllCells.OutcomeAVG(c,:) =mean(thisCData(:,timeTrial(t,:)>OutcomeTime(t,1) & timeTrial(t,:)<OutcomeTime(t,2)),2,'omitnan');
     Analysis.AllData.AllCells.OutcomeMAX(c,:) =max(thisCData(:,timeTrial(t,:)>OutcomeTime(t,1) & timeTrial(t,:)<OutcomeTime(t,2)),[],2,'omitnan');
+    Analysis.AllData.AllCells.OutcomeZAVG(c,:) =Analysis.AllData.AllCells.OutcomeAVG(c,:)-preOutcome';
+    Analysis.AllData.AllCells.OutcomeZMAX(c,:) =Analysis.AllData.AllCells.OutcomeMAX(c,:)-preOutcome';
 
     Analysis.AllData.(thisC_Name).Time          =timeTrial;
     Analysis.AllData.(thisC_Name).Data          =dataCells{c};
@@ -80,37 +83,9 @@ for c=1:nCells
     Analysis.AllData.(thisC_Name).CueMAX        =Analysis.AllData.AllCells.CueMAX(c,:);
     Analysis.AllData.(thisC_Name).OutcomeAVG    =Analysis.AllData.AllCells.OutcomeAVG(c,:);
     Analysis.AllData.(thisC_Name).OutcomeMAX    =Analysis.AllData.AllCells.OutcomeMAX(c,:);
+    Analysis.AllData.(thisC_Name).OutcomeZAVG   =Analysis.AllData.AllCells.OutcomeZAVG(c,:);
+    Analysis.AllData.(thisC_Name).OutcomeZMAX   =Analysis.AllData.AllCells.OutcomeZMAX(c,:);
     Analysis.AllData.(thisC_Name).baselineAVG   =baseAVG(c,:);
     Analysis.AllData.(thisC_Name).baselineSTD   =baseSTD(c,:);
 end    
-%% Generate some metrics and save in structure
-% % Per trial
-% for t=1:nTrials
-%     Analysis.AllData.AllCells.Time=timeTrial;
-%     Analysis.AllData.AllCells.Data(t,:)=mean(dataTrial{t},1,'omitnan');
-% end
-%     dataTrialAVG=Analysis.AllData.AllCells.Data;
-%     Analysis.AllData.AllCells.preCueAVG       =mean(dataTrialAVG(:,timeTrial(t,:)>CueTime(t,1)-2 & timeTrial(t,:)<CueTime(t,1)-1),2,'omitnan');
-%     Analysis.AllData.AllCells.CueAVG          =mean(dataTrialAVG(:,timeTrial(t,:)>CueTime(t,1) & timeTrial(t,:)<CueTime(t,2)),2,'omitnan');
-%     Analysis.AllData.AllCells.CueMAX          =max(dataTrialAVG(:,timeTrial(t,:)>CueTime(t,1) & timeTrial(t,:)<CueTime(t,2)),[],2,'omitnan');
-%     Analysis.AllData.AllCells.OutcomeAVG	  =mean(dataTrialAVG(:,timeTrial(t,:)>OutcomeTime(t,1) & timeTrial(t,:)<OutcomeTime(t,2)),2,'omitnan');
-%     Analysis.AllData.AllCells.OutcomeMAX	  =max(dataTrialAVG(:,timeTrial(t,:)>OutcomeTime(t,1) & timeTrial(t,:)<OutcomeTime(t,2)),[],2,'omitnan');
-% 
-% % Per cell
-% for c=1:nCells
-%     thisC_Name=sprintf('cell%.0d',c);
-%     Analysis.AllData.AllCells.CellName{c}       =thisC_Name;
-%     Analysis.AllData.(thisC_Name).Time          =timeTrial;
-%     Analysis.AllData.(thisC_Name).Data          =dataCells{c};
-%     Analysis.AllData.(thisC_Name).baselineAVG   =baseAVG(:,c);
-%     Analysis.AllData.(thisC_Name).baselineSTD   =baseSTD(:,c);
-% 
-%     for t=1:nTrials
-%         Analysis.AllData.(thisC_Name).preCueAVG      =mean(dataCells{c}(:,timeTrial(t,:)>CueTime(t,1)-2 & timeTrial(t,:)<CueTime(t,1)-1),2,'omitnan');
-%         Analysis.AllData.(thisC_Name).CueAVG         =mean(dataCells{c}(:,timeTrial(t,:)>CueTime(t,1) & timeTrial(t,:)<CueTime(t,2)),2,'omitnan');
-%         Analysis.AllData.(thisC_Name).CueMAX         =max(dataCells{c}(:,timeTrial(t,:)>CueTime(t,1) & timeTrial(t,:)<CueTime(t,2)),[],2,'omitnan');
-%         Analysis.AllData.(thisC_Name).OutcomeAVG	  =mean(dataCells{c}(:,timeTrial(t,:)>OutcomeTime(t,1) & timeTrial(t,:)<OutcomeTime(t,2)),2,'omitnan');
-%         Analysis.AllData.(thisC_Name).OutcomeMAX	  =max(dataCells{c}(:,timeTrial(t,:)>OutcomeTime(t,1) & timeTrial(t,:)<OutcomeTime(t,2)),[],2,'omitnan');
-%    end
-% end
 end

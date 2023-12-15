@@ -1,9 +1,9 @@
 function Analysis=AP_CuedOutcome_FiltersAndPlot_Cells(Analysis) 
 
-% thisType={'CS_Reward','CS_Reward','NS','Uncued_Reward','Uncued_Reward'};
-% thisCellFilter={'posRew','posRewInv','posRew','posRew','posRewInv'};
-thisType={'Uncued_Reward','Uncued_Reward'};
-thisCellFilter={'posRew','posRewInv'};
+thisType={'AnticipLick_CS_Reward','AnticipLick_CS_Reward','NoAnticipLick_NS','Uncued_Reward','Uncued_Reward'};
+thisCellFilter={'posRew','posRewInv','posRew','posRew','posRewInv'};
+% thisType={'Uncued_Reward','Uncued_Reward'};
+% thisCellFilter={'posRew','posRewInv'};
 
 %% FilterCells
     Analysis=A_FilterCell(Analysis,'posRew','OutcomeMAX','preSTD','Uncued_Reward');
