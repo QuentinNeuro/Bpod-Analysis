@@ -15,8 +15,8 @@ function Analysis=A_FilterCNSMatch(Analysis)
             Analysis.Filters.LVS=Analysis.Filters.Cue_A;
         case {'RewardACBValues'}
             Analysis.Filters.HVS=Analysis.Filters.Cue_A;
-            Analysis.Filters.MVS=Analysis.Filters.Cue_C;
-            Analysis.Filters.LVS=Analysis.Filters.Cue_B;
+            Analysis.Filters.MVS=Analysis.Filters.Cue_B;
+            Analysis.Filters.LVS=Analysis.Filters.Cue_C;
         case {'RewardBACValues'}
             Analysis.Filters.HVS=Analysis.Filters.Cue_B;
             Analysis.Filters.MVS=Analysis.Filters.Cue_A;

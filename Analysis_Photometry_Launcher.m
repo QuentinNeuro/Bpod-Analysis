@@ -15,7 +15,7 @@ DB.DataBase=0;  % DB_Generate
 DB.Group=[];
 % global TuningYMAX;
 %% Overwritting Parameters
-LP.OW.PhotoChNames={'VIP','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
+LP.OW.PhotoChNames={'VIP','F1'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 LP.OW.CueTimeReset=[];
 LP.OW.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
@@ -27,23 +27,23 @@ LP.P.EventDetection=0;
 LP.P.PlotSummary1=1;
 LP.P.PlotSummary2=0;
 LP.P.PlotFiltersSingle=0;               % AP_CuedOutcome_FilterGroups
-LP.P.PlotFiltersSummary=0;
+LP.P.PlotFiltersSummary=1;
 LP.P.PlotFiltersBehavior=0;           	% AP_####_GroupToPlot Oupput 2
 LP.P.PlotCells=0;                       % Generate single cell figures
 LP.P.Illustrator=0;
 LP.P.Transparency=0;
-LP.P.Illustration=[0 0 0];                % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
+LP.P.Illustration=[1 0 0];                % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
 % Axis
-LP.P.PlotX=[-4 4];
+LP.P.PlotX=[-4 6];
 LP.P.PlotY_photo(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
 LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max]
 % States and Timing
-LP.P.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
-LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after state to Zero starts
+LP.P.StateToZero='StateOfCue';    	%'StateOfCue' 'StateOfOutcome'
+LP.P.ZeroFirstLick=1;                   % Will look for licks 0 to 2 sec after state to Zero starts
 LP.P.ZeroAt='none';                     % Will zero fluo for each trial to a time point : 'Zero' '2sBefCue' or a timestamp
 LP.P.WheelState='Baseline';             % Options : 'Baseline','Cue','Outcome'
 LP.P.PupilState='NormBaseline';       	% Options : 'NormBaseline','Cue','Outcome'
-LP.P.ReshapedTime=[-5 5];               % PSTH - use [0 180] for oddball
+LP.P.ReshapedTime=[-6 6];               % PSTH - use [0 180] for oddball
 % Filters % default LicksCue=1 LicksOut=2
 LP.P.PupilThreshold=1;
 LP.P.WheelThreshold=2;                  % Speed cm/s
@@ -53,7 +53,7 @@ LP.P.TrialToFilterOut=[];
 LP.P.LoadIgnoredTrials=1;
 % Fluorescence % default Zsc=1 mov=5 befAft=1 SR=20
 LP.P.Zscore=1;                          % 
-LP.P.BaselineMov=1;                     % 0 to not have moving baseline avg (avg and std)
+LP.P.BaselineMov=5;                     % 0 to not have moving baseline avg (avg and std)
 LP.P.BaselineBefAft=2;                  % calculate Baseline before or after extracting desired PSTH
 LP.P.BaselineHisto=0;                   % percentage of data from the baseline to use
 LP.P.CueStats='MAXZ';                   % Options : AVG AVGZ MAX MAXZ
@@ -71,7 +71,7 @@ LP.P.EventEpochNames={'Baseline','Cue','Outcome'};
 % AP_DataCore_AOD AP_DataProcess_AOD AP_DataSort_AOD AP_CuedOutcome_FiltersAndPlot_AOD
 LP.P.AOD.raw=1;                        % load raw vs dff data (new Analysis only)
 LP.P.AOD.timing='TTL';                 % Bpod, TTL
-LP.P.AOD.smoothing=1;                  % smoothing 
+LP.P.AOD.smoothing=10;                 % smoothing 'Gaussian parameters' / used 20 for VIP_AOD data
 LP.P.AOD.decimateSR=0;                 % does not work :/
 LP.P.AOD.offset='auto';                % 'auto' = minimum-1 vs integer ~120 according to Z
 LP.P.AOD.rewT='meanPos';               % integer vs 'mean' 'median' 'meanPos'

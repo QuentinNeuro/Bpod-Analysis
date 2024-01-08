@@ -1,4 +1,4 @@
-function Analysis=AP_PlotData_filter(Analysis,thistype)
+function Analysis=AP_PlotData_filter(Analysis,thistype,thiscell)
 %AP_PlotData_filter generates a figure from the licks and the photometry
 %data of 'channelnb' contained in the structure 'Analysis.(thistype)'. 
 %The figure shows, for the sorted trial types specified by 'thistype' :
@@ -13,15 +13,21 @@ function Analysis=AP_PlotData_filter(Analysis,thistype)
 
 FigTitle=['Filter ' thistype];
 illustrationTest=Analysis.Parameters.Illustration(2);
-
+if nargin==3
+    if ~ischar(thiscell)
+        thiscell=Analysis.(thistype).AllCells.CellName{thiscell};
+    end
+else
+    thiscell=[];
+end
 %% Close figures
 try
     close FigTitle;
 end
 
 %% Data
-[timeAVG,dataAVG,semAVG,labelYData]=AP_PlotData_SelectorAVG(Analysis,thistype);
-[timeRaster,trialRaster,dataRaster,labelYRaster]=AP_PlotData_SelectorRaster(Analysis,thistype);
+[timeAVG,dataAVG,semAVG,labelYData]=AP_PlotData_SelectorAVG(Analysis,thistype,thiscell);
+[timeRaster,trialRaster,dataRaster,labelYRaster,cmap]=AP_PlotData_SelectorRaster(Analysis,thistype,thiscell);
 
 %% Plot Parameters
 Title=sprintf('%s (%.0d)',strrep(Analysis.(thistype).Name,'_',' '),Analysis.(thistype).nTrials);
@@ -94,6 +100,7 @@ if ~isempty(dataAVG)
         thisSubPlot=[4 5]+counter;
         subplot(nbOfPlotsY,nbOfPlotsX,thisSubPlot); hold on;
         imagesc(timeRaster{thisC},trialRaster{thisC},dataRaster{thisC},thisPlotY(thisC,:));
+        colormap(cmap)
         if Analysis.Parameters.Photometry
             plot(Analysis.(thistype).Time.Outcome(:,1),trialRaster{thisC},'.r','MarkerSize',4);
             plot(Analysis.(thistype).Time.Cue(:,1),trialRaster{thisC},'.m','MarkerSize',4);

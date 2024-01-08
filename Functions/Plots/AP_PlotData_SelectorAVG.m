@@ -1,9 +1,13 @@
-function [x,y,sem,labelY]=AP_PlotData_SelectorAVG(Analysis,thistype)
+function [x,y,sem,labelY]=AP_PlotData_SelectorAVG(Analysis,thistype,thiscell)
 
 x=[];
 y=[];
 sem=[];
 labelY=[];
+
+if nargin<3
+    thiscell=[];
+end
 
 if Analysis.Parameters.Zscore
 fluoType=' Z-sc';
@@ -22,6 +26,7 @@ if Analysis.Parameters.Photometry
 end
 
 if Analysis.Parameters.nCells
+    if isempty(thiscell)
     x{1}=Analysis.(thistype).AllCells.Time(1,:);
     y{1}=Analysis.(thistype).AllCells.DataAVG;
     sem{1}=Analysis.(thistype).AllCells.DataSEM;
@@ -30,7 +35,12 @@ if Analysis.Parameters.nCells
     y{2}=Analysis.(thistype).AllCells.DataAVG;
     sem{2}=Analysis.(thistype).AllCells.DataSEM;
     labelY{2}=[Analysis.Parameters.PhotoChNames{1} fluoType];
-
+    else
+    x{1}=Analysis.(thistype).(thiscell).Time(1,:);
+    y{1}=Analysis.(thistype).(thiscell).DataAVG;
+    sem{1}=Analysis.(thistype).(thiscell).DataSEM;
+    labelY{1}=[Analysis.Parameters.PhotoChNames{1} fluoType];
+    end
 end
 
 if Analysis.Parameters.Spikes.Spikes

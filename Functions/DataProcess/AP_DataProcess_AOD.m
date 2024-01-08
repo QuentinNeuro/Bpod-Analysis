@@ -36,7 +36,7 @@ if offset>0
 end
 % smoothing
 if Analysis.Parameters.AOD.smoothing
-    data = cellfun(@(x) smoothdata(x,2),data,'UniformOutput',false);
+    data = cellfun(@(x) smoothdata(x,2,"gaussian",Analysis.Parameters.AOD.smoothing),data,'UniformOutput',false);
 end
 % decimate
 if decimateFactor>1
