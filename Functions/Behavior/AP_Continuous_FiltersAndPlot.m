@@ -115,6 +115,7 @@ end
 
 %% Figure
 figure('Name','Continuous_Analysis')
+if ~isempty(timeRewF)
 subplot(ySP,xSP,2);
 shadedErrorBar(timeRewF(1,:),dataRewF_AVG,dataRewF_SEM,'-k',0);
 ylabel('Fluo'); xlabel('Time from reward (s)');
@@ -123,7 +124,7 @@ if wheelTest
     shadedErrorBar(timeRewW(1,:),dataRewW_AVG,dataRewW_SEM,'-b',0);
     ylabel('Running');
 end
-
+end
 counterSPcc=1;
 cpinterSPlc=3;
 if wheelTest && ~isempty(lagsRW)
