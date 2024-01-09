@@ -79,7 +79,6 @@ elseif contains(Name,'VisualTuning','IgnoreCase',true)
     Par.OutcomeTimeReset=[0 2];
     Par.ZeroAt=0;
     Par.BaselineBefAft=1;
-
 elseif contains(Name,'Oddball','IgnoreCase',true)
     Par.Behavior='Oddball';
 	Par.StateOfCue='PreState';

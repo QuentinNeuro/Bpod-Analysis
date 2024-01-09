@@ -8,14 +8,14 @@
 clear SessionData Analysis LP; close all;
 
 %% Analysis type Single/Group/Batch/Online etc
-LP.Analysis_type='Single';
+LP.Analysis_type='Online';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
 DB.DataBase=0;  % DB_Generate
 DB.Group=[];
 % global TuningYMAX;
 %% Overwritting Parameters
-LP.OW.PhotoChNames={'VIP','F1'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
+LP.OW.PhotoChNames={'F1','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 LP.OW.CueTimeReset=[];
 LP.OW.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
@@ -27,19 +27,19 @@ LP.P.EventDetection=0;
 LP.P.PlotSummary1=1;
 LP.P.PlotSummary2=0;
 LP.P.PlotFiltersSingle=0;               % AP_CuedOutcome_FilterGroups
-LP.P.PlotFiltersSummary=1;
+LP.P.PlotFiltersSummary=0;
 LP.P.PlotFiltersBehavior=0;           	% AP_####_GroupToPlot Oupput 2
 LP.P.PlotCells=0;                       % Generate single cell figures
 LP.P.Illustrator=0;
 LP.P.Transparency=0;
-LP.P.Illustration=[1 0 0];                % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
+LP.P.Illustration=[0 0 0];                % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
 % Axis
-LP.P.PlotX=[-4 6];
+LP.P.PlotX=[-4 4];
 LP.P.PlotY_photo(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
 LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max]
 % States and Timing
-LP.P.StateToZero='StateOfCue';    	%'StateOfCue' 'StateOfOutcome'
-LP.P.ZeroFirstLick=1;                   % Will look for licks 0 to 2 sec after state to Zero starts
+LP.P.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
+LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after state to Zero starts
 LP.P.ZeroAt='none';                     % Will zero fluo for each trial to a time point : 'Zero' '2sBefCue' or a timestamp
 LP.P.WheelState='Baseline';             % Options : 'Baseline','Cue','Outcome'
 LP.P.PupilState='NormBaseline';       	% Options : 'NormBaseline','Cue','Outcome'
