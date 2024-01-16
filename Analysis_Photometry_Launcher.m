@@ -8,15 +8,15 @@
 clear SessionData Analysis LP; close all;
 
 %% Analysis type Single/Group/Batch/Online etc
-LP.Analysis_type='Single';
+LP.Analysis_type='Online';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
-DB.DataBase=1;  % DB_Generate
+DB.DataBase=0;  % DB_Generate
 DB.Group=[];
 % global TuningYMAX;
 %% Overwritting Parameters
 LP.OW.PhotoChNames={'F1','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
-LP.OW.CueTimeReset=[0 0.5];
+LP.OW.CueTimeReset=[];
 LP.OW.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
