@@ -16,7 +16,7 @@ DB.Group=[];
 % global TuningYMAX;
 %% Overwritting Parameters
 LP.OW.PhotoChNames={'F1','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
-LP.OW.CueTimeReset=[0 0.5];
+LP.OW.CueTimeReset=[];
 LP.OW.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
@@ -24,7 +24,7 @@ LP.P.SortFilters=1;
 LP.P.SortCells=0;
 LP.P.EventDetection=0;
 % Figures
-LP.P.PlotSummary1=0;
+LP.P.PlotSummary1=1;
 LP.P.PlotSummary2=0;
 LP.P.PlotFiltersSingle=0;               % AP_CuedOutcome_FilterGroups
 LP.P.PlotFiltersSummary=0;
@@ -41,7 +41,6 @@ LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max
 LP.P.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
 LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after state to Zero starts
 LP.P.ZeroAt='none';                     % Will zero fluo for each trial to a time point : 'Zero' '2sBefCue' or a timestamp
-LP.P.CueTimeLick=[1 2];                 % Use a different window to calculate lickrate at cue;
 LP.P.WheelState='Baseline';             % Options : 'Baseline','Cue','Outcome'
 LP.P.PupilState='NormBaseline';       	% Options : 'NormBaseline','Cue','Outcome'
 LP.P.ReshapedTime=[-6 6];               % PSTH - use [0 180] for oddball

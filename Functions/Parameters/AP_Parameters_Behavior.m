@@ -79,6 +79,20 @@ elseif contains(Name,'VisualTuning','IgnoreCase',true)
     Par.OutcomeTimeReset=[0 2];
     Par.ZeroAt=0;
     Par.BaselineBefAft=1;
+elseif contains(Name,'OptoTuning','IgnoreCase',true)
+    Par.Behavior='OptoTuning';
+	Par.StateOfCue='CueDelivery';
+    Par.StateOfOutcome='CueDelivery';
+    Par.Phase='OptoTuning';
+    Par.PlotSummary1=1;
+    Par.PlotSummary2=0;
+    Par.PlotFiltersSingle=0;
+    Par.PlotFiltersSummary=0; 
+    Par.PlotFiltersBehavior=0;
+    Par.CueTimeReset=[0 1];
+    Par.OutcomeTimeReset=[0 2];
+    Par.ZeroAt=0;
+    Par.BaselineBefAft=1;
 elseif contains(Name,'Oddball','IgnoreCase',true)
     Par.Behavior='Oddball';
 	Par.StateOfCue='PreState';

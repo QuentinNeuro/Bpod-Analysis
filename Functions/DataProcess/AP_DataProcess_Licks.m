@@ -29,7 +29,11 @@ if newZero
 end
 
 %% Statistics for Analysis Structure
-CueTime=Analysis.AllData.Time.Cue(thisTrial,:)+Analysis.Parameters.CueTimeReset;
+if isempty(Analysis.Parameters.CueTimeLick)
+    CueTime=Analysis.AllData.Time.Cue(thisTrial,:)+Analysis.Parameters.CueTimeReset;
+else
+    CueTime=Analysis.AllData.Time.Cue(thisTrial,:)+Analysis.Parameters.CueTimeLick;
+end
 OutcomeTime=Analysis.AllData.Time.Outcome(thisTrial,:)+Analysis.Parameters.OutcomeTimeReset;
 BaselineTime=[CueTime(1)-1.5 CueTime(1)-0.5];
 
