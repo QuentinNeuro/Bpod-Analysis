@@ -81,8 +81,13 @@ elseif contains(Name,'VisualTuning','IgnoreCase',true)
     Par.BaselineBefAft=1;
 elseif contains(Name,'OptoTuning','IgnoreCase',true)
     Par.Behavior='OptoTuning';
-	Par.StateOfCue='CueDelivery';
-    Par.StateOfOutcome='CueDelivery';
+    if isfield(SessionData.RawEvents.Trial{1, 1}.States,'CueDelivery')
+	    Par.StateOfCue='CueDelivery';
+        Par.StateOfOutcome='CueDelivery';
+    else
+        Par.StateOfCue='StimDelivery';
+        Par.StateOfOutcome='StimDelivery';
+    end
     Par.Phase='OptoTuning';
     Par.PlotSummary1=1;
     Par.PlotSummary2=0;
