@@ -12,6 +12,7 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     BaselineAVG=nan(Analysis.AllData.nTrials,1);
     BaselineSTD=nan(Analysis.AllData.nTrials,1);
     for thisT=1:Analysis.AllData.nTrials
+        try
         Data=Analysis.Core.Photometry{thisT}{thisCh};
         switch Analysis.Parameters.BaselineBefAft
             case 1 % Baseline calculated from start of recording
@@ -38,6 +39,8 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
         BaselineAVG(thisT)=mean(DataBaseline,'omitnan');
         BaselineSTD(thisT)=std(DataBaseline,'omitnan');
         end
+    catch
+    end
     end
     
     if Analysis.Parameters.BaselineMov

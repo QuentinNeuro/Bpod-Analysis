@@ -8,7 +8,7 @@
 clear SessionData Analysis LP; close all;
 
 %% Analysis type Single/Group/Batch/Online etc
-LP.Analysis_type='Online';
+LP.Analysis_type='Group';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
 DB.DataBase=0;  % DB_Generate
@@ -16,15 +16,15 @@ DB.Group=[];
 % global TuningYMAX;
 %% Overwritting Parameters
 LP.OW.PhotoChNames={'F1','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
-LP.OW.CueTimeReset=[];
+LP.OW.CueTimeReset=[0 0.5]; % Uncertainty : 0 0.5
 LP.OW.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
 LP.P.SortFilters=1;
 LP.P.SortCells=0;
-LP.P.EventDetection=0;
+LP.P.EventDetection=1;
 % Figures
-LP.P.PlotSummary1=0;
+LP.P.PlotSummary1=1;
 LP.P.PlotSummary2=0;
 LP.P.PlotFiltersSingle=0;               % AP_CuedOutcome_FilterGroups
 LP.P.PlotFiltersSummary=0;
@@ -35,16 +35,16 @@ LP.P.Transparency=0;
 LP.P.Illustration=[0 0 0];                % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
 % Axis
 LP.P.PlotX=[-4 4];
-LP.P.PlotY_photo(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
+LP.P.PlotY_photo(1,:)=[NaN NaN];     	    % Tight axis if [NaN NaN] / TBD [min max]
 LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max]
 % States and Timing
 LP.P.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
 LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after state to Zero starts
 LP.P.ZeroAt='none';                     % Will zero fluo for each trial to a time point : 'Zero' '2sBefCue' or a timestamp
-LP.P.CueTimeLick=[1 2];                 % Use a different window to calculate lickrate at cue;
+LP.P.CueTimeLick=[1.5 1.9];             % Use a different window to calculate lickrate at cue; % Uncertainty : 1.5 1.9
 LP.P.WheelState='Baseline';             % Options : 'Baseline','Cue','Outcome'
 LP.P.PupilState='NormBaseline';       	% Options : 'NormBaseline','Cue','Outcome'
-LP.P.ReshapedTime=[-6 6];               % PSTH - use [0 180] for oddball
+LP.P.ReshapedTime=[-7 7];               % PSTH - use [0 180] for oddball
 % Filters % default LicksCue=1 LicksOut=2
 LP.P.PupilThreshold=1;
 LP.P.WheelThreshold=2;                  % Speed cm/s
@@ -59,20 +59,21 @@ LP.P.BaselineBefAft=2;                  % calculate Baseline before or after ext
 LP.P.BaselineHisto=0;                   % percentage of data from the baseline to use
 LP.P.CueStats='MAXZ';                   % Options : AVG AVGZ MAX MAXZ
 LP.P.OutcomeStats='MAXZ';               % Options : AVG AVGZ MAX MAXZ
-LP.P.NidaqDecimatedSR=20;               % in Hz 20 for figures 100 for archiving
+LP.P.NidaqDecimatedSR=100;               % in Hz 20 for figures 100 for archiving
 LP.P.Fit_470405=0;
+LP.OW.PhotoCh={'470'};                       % Force one channel only '470' - useful to group sessions with different channels
 % Event detection %AP_DataProcess_Events
-LP.P.EventThreshFactor=0.5;             % will be applied to the data std to detect events
+LP.P.EventThreshFactor=0.8;             % will be applied to the data std to detect events ACh=0.5 DA=0.8
 LP.P.EventMinFactor=0.5;                % will be applied to the threshold to restrict local minima
 LP.P.EventMinTW='auto';                 % TW left of the peak to find minimum. 'auto' : use the width of the peak, 0 to use time between two peaks.
 LP.P.EventWV=1;                         % in sec. Time window for waveform event extraction. 0 to ignore.
-LP.P.EventEpochTW=[-4.8 -2.8; -2.5 -0.5; 0 2];
-LP.P.EventEpochNames={'Baseline','Cue','Outcome'};
+LP.P.EventEpochTW=[-4.8 -2.8; -2.3 -0.3; 0 2]; % Uncertainty [-4.8 -2.8; -2.3 -0.3; 0 2] Uncertainty2 [-4.5 -4; -2.5 -2; -0.5 0];
+LP.P.EventEpochNames={'Baseline','Cue','Reward'};
 %% AOD
 % AP_DataCore_AOD AP_DataProcess_AOD AP_DataSort_AOD AP_CuedOutcome_FiltersAndPlot_AOD
 LP.P.AOD.raw=1;                        % load raw vs dff data (new Analysis only)
 LP.P.AOD.timing='TTL';                 % Bpod, TTL
-LP.P.AOD.smoothing=10;                 % smoothing 'Gaussian parameters' / used 20 for VIP_AOD data
+LP.P.AOD.smoothing=20;                 % smoothing 'Gaussian parameters' / used 20 for VIP_AOD data
 LP.P.AOD.decimateSR=0;                 % does not work :/
 LP.P.AOD.offset='auto';                % 'auto' = minimum-1 vs integer ~120 according to Z
 LP.P.AOD.rewT='meanPos';               % integer vs 'mean' 'median' 'meanPos'

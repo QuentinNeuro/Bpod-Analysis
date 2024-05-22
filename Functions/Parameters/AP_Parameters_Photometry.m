@@ -26,6 +26,11 @@ if isfield(SessionData.TrialSettings(1).GUI,'PhotometryVersion')
     else
         Par.recordedMod=0;
     end
+    if isfield(SessionData.TrialSettings(1).GUI,'Phase')
+        Par.PhotoPhase=SessionData.TrialSettings(1).GUI.Phase;
+    else
+        Par.PhotoPhase=0;
+    end
 % Fiber1 - 470    
     Par.PhotoCh={'470'};
     Par.PhotoChNames{1}=LEDNames{1};

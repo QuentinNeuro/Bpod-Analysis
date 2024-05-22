@@ -63,7 +63,7 @@ elseif contains(Name,'AuditoryTuning','IgnoreCase',true)
     Par.PlotFiltersBehavior=0;
     Par.CueTimeReset=[0 1];
     Par.OutcomeTimeReset=[0 2];
-    Par.ZeroAt=0;
+    % Par.ZeroAt=0;
     Par.BaselineBefAft=1;
 elseif contains(Name,'VisualTuning','IgnoreCase',true)
     Par.Behavior='VisualTuning';
@@ -77,7 +77,7 @@ elseif contains(Name,'VisualTuning','IgnoreCase',true)
     Par.PlotFiltersBehavior=0;
     Par.CueTimeReset=[0 1];
     Par.OutcomeTimeReset=[0 2];
-    Par.ZeroAt=0;
+    % Par.ZeroAt=0;
     Par.BaselineBefAft=1;
 elseif contains(Name,'OptoTuning','IgnoreCase',true)
     Par.Behavior='OptoTuning';

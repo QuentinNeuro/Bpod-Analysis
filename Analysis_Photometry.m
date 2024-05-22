@@ -24,7 +24,7 @@ Analysis=AP_DataProcess(Analysis);
 Analysis=AP_TrialTypes_FiltersAndPlot(Analysis);
 %% Behavior specific : Sort filtered trials and generates plots
 switch Analysis.Parameters.Behavior
-    case 'CuedOutcome'
+    case {'CuedOutcome','Sensor'}
 Analysis=AP_CuedOutcome_FiltersAndPlot(Analysis);
     case 'GoNogo'
 Analysis=AP_GoNogo_FiltersAndPlot(Analysis);
@@ -32,8 +32,8 @@ Analysis=AP_GoNogo_FiltersAndPlot(Analysis);
 AP_AuditoryTuning_FiltersAndPlot(Analysis);
     case 'Oddball'
 Analysis=AP_OddBall_FiltersAndPlot(Analysis);
-    case 'Sensor'
-Analysis=AP_Sensor_FiltersAndPlot(Analysis); 
+%     case 'Sensor'
+% Analysis=AP_Sensor_FiltersAndPlot(Analysis); 
     case 'Continuous'
 AP_Continuous_FiltersAndPlot(Analysis)
     case 'CuedOutcome_AC'

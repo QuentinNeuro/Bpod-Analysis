@@ -1,17 +1,18 @@
 %% test block
-% data=Analysis.type_1.Photo_470.DFF;
-% time=Analysis.type_1.Photo_470.Time;
-% peakStats=Analysis.type_1.Photo_470_peak;
-% trialName='CuedReward';
-% AP_Events_Ploti(peakStats,time,data,trialName);
-% 
-% clear data time peakStats trialName;
+trialType='HVS_Reward';
+data=Analysis.(trialType).Photo_470.DFF;
+time=Analysis.(trialType).Photo_470.Time;
+peakStats=Analysis.(trialType).Photo_470_peak;
+trialName='CuedReward';
+AP_Events_Ploti(peakStats,time,data,trialName);
 
-function AP_Events_Plot(peakStats,time,data,trialName)
+clear data time peakStats trialName;
+
+function AP_Events_Ploti(peakStats,time,data,trialName)
 %% Parameters
 epochTW=peakStats.epochTW;
 epochNames=peakStats.epochNames;
-limTime=[-4 4];
+limTime=[-6 4];
 nTrials=size(data,1);
 trialNbs=unique(peakStats.trials);
 nEpochs=size(epochTW,1);
@@ -33,6 +34,7 @@ binSize=median(peakStats.(promStat))/5;
 %% Data preparation
 % trial for illustration
 aTrial=randi(length(trialNbs));
+% aTrial=10;
 aTrialIdx=trialNbs(aTrial);
 aTrialIdx=peakStats.trials==aTrialIdx;
 while ~aTrialIdx
@@ -94,26 +96,26 @@ end
 ylabel('trials'); set(gca,'Ydir','reverse')
 xlim(limTime);
 %% 'Firing rate'
-subplot(ySP,xSP,[13 14]); hold on;
-x=binTW(2:end);
-y=histcounts(peakStats.TS,binTW)/nTrials;
-plot(x,y,'-k');
-for e=1:nEpochs
-    plot(epochTW(e,:),[max(y) max(y)],'color',colorEpochs(e,:));
-end
-ylabel('Event rate (Hz?)'); xlabel('Time from outcome (s)');
-xlim(limTime);
-yyaxis right
-y=mean(data,1,'omitnan');
-plot(xTime,y);
-ylabel('Fluorescence');
+% subplot(ySP,xSP,[13 14]); hold on;
+% x=binTW(2:end);
+% y=histcounts(peakStats.TS,binTW)/nTrials;
+% plot(x,y,'-k');
+% for e=1:nEpochs
+%     plot(epochTW(e,:),[max(y) max(y)],'color',colorEpochs(e,:));
+% end
+% ylabel('Event rate (Hz?)'); xlabel('Time from outcome (s)');
+% xlim(limTime);
+% yyaxis right
+% y=mean(data,1,'omitnan');
+% plot(xTime,y);
+% ylabel('Fluorescence');
 
 %% Histogram prominences
-subplot(ySP,xSP,[15 16]); hold on;
-hHandle=histogram(peakStats.(promStat),'Normalization','probability');
-hHandle.BinWidth=binSize;
-hHandle.FaceColor=[0.9 0.9 0.9];
-xlabel('Prominences'); ylabel('Count')
+% subplot(ySP,xSP,[15 16]); hold on;
+% hHandle=histogram(peakStats.(promStat),'Normalization','probability');
+% hHandle.BinWidth=binSize;
+% hHandle.FaceColor=[0.9 0.9 0.9];
+% xlabel('Prominences'); ylabel('Count')
 
 for e=1:nEpochs
     thisEStats=peakStats.(epochNames{e});
@@ -138,6 +140,7 @@ for e=1:nEpochs
     xlabel('Prominences'); ylabel('CD');
     [x,y]=cumulative(peakStats.(promStat)(:,thisEFIdx));
     plot(x,y,'color',colorEpochs(e,:));
+    xlim([0 10]);
     % cumulatives AUC
     subplot(ySP,xSP,8); hold on;
     xlabel('FWHM AUC'); ylabel('CD');
@@ -148,10 +151,10 @@ for e=1:nEpochs
     HistoFreqY(e)=thisEStats.Frequency;
     HistoReliabilityY(e)=thisEStats.Reliability;
 
-    subplot(ySP,xSP,[15 16]); hold on;
-    hHandle=histogram(peakStats.(promStat)(:,thisEFIdx),'Normalization','probability');
-    hHandle.BinWidth=binSize;
-    hHandle.FaceColor=colorEpochs(e,:);
+    % subplot(ySP,xSP,[15 16]); hold on;
+    % hHandle=histogram(peakStats.(promStat)(:,thisEFIdx),'Normalization','probability');
+    % hHandle.BinWidth=binSize;
+    % hHandle.FaceColor=colorEpochs(e,:);
 end
 
 subplot(ySP,xSP,11);hold on;

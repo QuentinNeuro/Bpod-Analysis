@@ -38,13 +38,13 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
     end
     switch Analysis.Parameters.ZeroAt
         case 'Zero'
-            data=data-mean(data(time>-0.1 & time<=0),'omitnan');
+            data=data-mean(data(time>-0.1 & time<0),'omitnan');
         case '2sBefCue'
             data=data-mean(data(time>cueTime(1)-2.2 & time<=cueTime(1)-1.8),'omitnan');
         otherwise
             if isnumeric(Analysis.Parameters.ZeroAt)
                 thisZeroTime=Analysis.Parameters.ZeroAt;
-                data=data-mean(data(time>thisZeroTime-0.2 & time<=thisZeroTime+0.2),'omitnan');
+                data=data-mean(data(time>thisZeroTime-0.1 & time<=thisZeroTime+0.1),'omitnan');
             end
     end  
 

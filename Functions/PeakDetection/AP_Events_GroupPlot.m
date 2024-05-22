@@ -1,5 +1,5 @@
 %% test block
-Group_Plot=AP_CuedOutcome_GroupToPlot(Analysis);
+Group_Plot=AP_CuedOutcome_FilterGroups(Analysis);
 thisGroup=Group_Plot{1, 2};
 
 % for thisCh=1
@@ -110,7 +110,7 @@ for g=1:nbOfTypes
         x=groupStats{g}.waveformTW(:,1);
         y=mean(groupStats{g}.waveformsNorm(:,thisEFIdx),2,'omitnan');
         plot(x,y,'color',colorGroup(g,:)*0.8);
-        ylim([0 1.5]);
+        ylim([0 2]);
 % Prominences
         subplot(ySP,xSP,xSP+2+e); hold on;
         xlabel('norm. prominences'); ylabel('CD');

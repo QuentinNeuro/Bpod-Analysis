@@ -15,7 +15,7 @@ end
 GroupTest=AP_CuedOutcome_FilterGroups_Test(Analysis);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 switch Analysis.Parameters.Phase
-        case {'Habituation'}
+    case {'Habituation'}
 indexp=indexp+1;
 GroupPlot{indexp,1}='Reward';
 GroupPlot{indexp,2}={   'Uncued_Reward'             {'Uncued','Reward','LicksOutcome','FirstLick'};... 
@@ -23,6 +23,13 @@ GroupPlot{indexp,2}={   'Uncued_Reward'             {'Uncued','Reward','LicksOut
                         'Uncued_Omission',          {'Omission'}};
 GroupCorr{1,1}='Reward_Correlation';
 GroupCorr{1,2}={        'Uncued_Reward',            {'Uncued','Reward','LicksOutcome','FirstLick'};....
+                        'Uncued_Omission',          {'Omission'}};
+
+    case {'Habituation-Water'}
+indexp=indexp+1;
+GroupPlot{indexp,1}='Reward';
+GroupPlot{indexp,2}={   'Uncued_Reward'             {'Reward','LicksOutcome','FirstLick'};... 
+                        'Uncued_Reward_NotColl'     {'Reward','LicksOutcomeInv','FirstLick'};...
                         'Uncued_Omission',          {'Omission'}};
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
@@ -127,7 +134,7 @@ GroupPlot{indexp,2}={'HVS',                         {'HVS'};...
                     'NoCue',                        {'Uncued'}};
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%         
-    case {'RewardACBValues','RewardBACValues'}
+    case {'RewardACBValues','RewardBACValues','Uncertainty'}
 indexp=indexp+1;
 GroupPlot{indexp,1}='Rewards';
 GroupPlot{indexp,2}={'HVS',                         {'HVS'};...
