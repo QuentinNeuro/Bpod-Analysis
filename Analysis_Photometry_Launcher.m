@@ -8,7 +8,7 @@
 clear SessionData Analysis LP; close all;
 
 %% Analysis type Single/Group/Batch/Online etc
-LP.Analysis_type='Group';
+LP.Analysis_type='Single';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
 DB.DataBase=0;  % DB_Generate

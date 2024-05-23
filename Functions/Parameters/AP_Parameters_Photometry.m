@@ -26,8 +26,8 @@ if isfield(SessionData.TrialSettings(1).GUI,'PhotometryVersion')
     else
         Par.recordedMod=0;
     end
-    if isfield(SessionData.TrialSettings(1).GUI,'Phase')
-        Par.PhotoPhase=SessionData.TrialSettings(1).GUI.Phase;
+    if isfield(SessionData.TrialSettings(1).GUI,'modPhase')
+        Par.PhotoPhase=SessionData.TrialSettings(1).GUI.modPhase;
     else
         Par.PhotoPhase=0;
     end
