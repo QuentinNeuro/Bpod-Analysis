@@ -8,7 +8,7 @@
 clear SessionData Analysis LP; close all;
 
 %% Analysis type Single/Group/Batch/Online etc
-LP.Analysis_type='Single';
+LP.Analysis_type='Online';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
 DB.DataBase=0;  % DB_Generate
@@ -16,13 +16,13 @@ DB.Group=[];
 % global TuningYMAX;
 %% Overwritting Parameters
 LP.OW.PhotoChNames={'F1','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
-LP.OW.CueTimeReset=[0 0.5]; % Uncertainty : 0 0.5
+LP.OW.CueTimeReset=[]; % Uncertainty : 0 0.5
 LP.OW.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
 LP.P.SortFilters=1;
 LP.P.SortCells=0;
-LP.P.EventDetection=1;
+LP.P.EventDetection=0;
 % Figures
 LP.P.PlotSummary1=1;
 LP.P.PlotSummary2=0;
@@ -41,10 +41,10 @@ LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max
 LP.P.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
 LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after state to Zero starts
 LP.P.ZeroAt='none';                     % Will zero fluo for each trial to a time point : 'Zero' '2sBefCue' or a timestamp
-LP.P.CueTimeLick=[1.5 1.9];             % Use a different window to calculate lickrate at cue; % Uncertainty : 1.5 1.9
+LP.P.CueTimeLick=[];             % Use a different window to calculate lickrate at cue; % Uncertainty : 1.5 1.9
 LP.P.WheelState='Baseline';             % Options : 'Baseline','Cue','Outcome'
 LP.P.PupilState='NormBaseline';       	% Options : 'NormBaseline','Cue','Outcome'
-LP.P.ReshapedTime=[-7 7];               % PSTH - use [0 180] for oddball
+LP.P.ReshapedTime=[-6 6];               % PSTH - use [0 180] for oddball
 % Filters % default LicksCue=1 LicksOut=2
 LP.P.PupilThreshold=1;
 LP.P.WheelThreshold=2;                  % Speed cm/s
