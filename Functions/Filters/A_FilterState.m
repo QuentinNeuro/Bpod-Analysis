@@ -14,7 +14,7 @@ end
 %% Parameters
 %Name
 if nargin==2
-    noState=State+'Inv';
+    noState=[State 'Inv'];
 end
 %% Filter
 Logicals=false(Analysis.AllData.nTrials,1);
