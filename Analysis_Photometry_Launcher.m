@@ -5,11 +5,11 @@
 % 'Analysis_Photometry' is the core function used to extract, organize and
 % filters the data according to the behavioral task
 
-clear SessionData Analysis LP; close all;
+clear SessionData Analysis LP; %close all;
 
 %% Analysis type Single/Group/Batch/Online etc
-LP.Analysis_type='Online';
-LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
+LP.Analysis_type='Single';
+LP.Save=2;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
 DB.DataBase=0;  % DB_Generate
 DB.Group=[];
@@ -31,20 +31,20 @@ LP.P.PlotFiltersSummary=0;
 LP.P.PlotFiltersBehavior=0;           	% AP_####_GroupToPlot Oupput 2
 LP.P.PlotCells=0;                       % Generate single cell figures
 LP.P.Illustrator=0;
-LP.P.Transparency=0;
-LP.P.Illustration=[0 0 0];                % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
+LP.P.Transparency=1;
+LP.P.Illustration=[1 0 0];                % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
 % Axis
-LP.P.PlotX=[-4 4];
-LP.P.PlotY_photo(1,:)=[NaN NaN];     	    % Tight axis if [NaN NaN] / TBD [min max]
+LP.P.PlotX=[-3 4];
+LP.P.PlotY_photo(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
 LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max]
 % States and Timing
 LP.P.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
 LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after state to Zero starts
-LP.P.ZeroAt='none';                     % Will zero fluo for each trial to a time point : 'Zero' '2sBefCue' or a timestamp
-LP.P.CueTimeLick=[];             % Use a different window to calculate lickrate at cue; % Uncertainty : 1.5 1.9
+LP.P.ZeroAt='none';                 % Will zero fluo for each trial to a time point : 'Zero' '2sBefCue' or a timestamp
+LP.P.CueTimeLick=[];                    % Use a different window to calculate lickrate at cue; % Uncertainty : 1.5 1.9
 LP.P.WheelState='Baseline';             % Options : 'Baseline','Cue','Outcome'
 LP.P.PupilState='NormBaseline';       	% Options : 'NormBaseline','Cue','Outcome'
-LP.P.ReshapedTime=[-6 6];               % PSTH - use [0 180] for oddball
+LP.P.ReshapedTime=[-5 5];               % PSTH - use [0 180] for oddball
 % Filters % default LicksCue=1 LicksOut=2
 LP.P.PupilThreshold=1;
 LP.P.WheelThreshold=2;                  % Speed cm/s
@@ -54,14 +54,15 @@ LP.P.TrialToFilterOut=[];
 LP.P.LoadIgnoredTrials=1;
 % Fluorescence % default Zsc=1 mov=5 befAft=1 SR=20
 LP.P.Zscore=1;                          % 
-LP.P.BaselineMov=5;                     % 0 to not have moving baseline avg (avg and std)
+LP.P.BaselineMov=1;                     % 0 to not have moving baseline avg (avg and std)
 LP.P.BaselineBefAft=2;                  % calculate Baseline before or after extracting desired PSTH
 LP.P.BaselineHisto=0;                   % percentage of data from the baseline to use
+LP.P.BaselineFit=0;                     % To come
 LP.P.CueStats='MAXZ';                   % Options : AVG AVGZ MAX MAXZ
 LP.P.OutcomeStats='MAXZ';               % Options : AVG AVGZ MAX MAXZ
-LP.P.NidaqDecimatedSR=100;               % in Hz 20 for figures 100 for archiving
+LP.P.NidaqDecimatedSR=20;               % in Hz 20 for figures 100 for archiving
 LP.P.Fit_470405=0;
-LP.OW.PhotoCh={'470'};                       % Force one channel only '470' - useful to group sessions with different channels
+LP.OW.PhotoCh={};                       % Force one channel only '470' - useful to group sessions with different channels
 % Event detection %AP_DataProcess_Events
 LP.P.EventThreshFactor=0.8;             % will be applied to the data std to detect events ACh=0.5 DA=0.8
 LP.P.EventMinFactor=0.5;                % will be applied to the threshold to restrict local minima
@@ -107,6 +108,7 @@ LP.D.StateOfOutcome='WaitForLick';
 LP.D.CueTimeReset=[0 1];
 LP.D.OutcomeTimeReset=[0 1];
 LP.D.NidaqBaseline=[1 2];
+LP.D.Stimulation=0;
 % autoload deactivated
 LP.AutoLoad=1;
 LP.D.Load=0;

@@ -15,24 +15,25 @@ peakStats.epochTW=epochTW;
 for e=1:nEpochs
     thisEIO=peakTS>=epochTW(e,1) & peakTS<=epochTW(e,2);
     peakStats.(epochNames{e}).index=thisEIO;
-    thisJitter=[];
+    thisLatency=[];
     thisFirstIdx=[];
    for t=1:nTrials
        thisTrialIO=peakStats.trials==trialNb(t);
        thisEpochTrialIO=and(thisEIO,thisTrialIO);
        if any(thisEpochTrialIO)
            thisFirstIdx(t)=find(thisEpochTrialIO,1,"first");
-           thisJitter(t)=peakTS(thisFirstIdx(t))-epochTW(e,1);
+           thisLatency(t)=peakTS(thisFirstIdx(t))-epochTW(e,1);
        else
            thisFirstIdx(t)=NaN;
-           thisJitter(t)=diff(epochTW(e,:));
+           thisLatency(t)=diff(epochTW(e,:));
        end
    end
    % Frequency
    peakStats.(epochNames{e}).Frequency=(sum(thisEIO)/nTrials)/diff(epochTW(e,:));
    % First Peak : Jitter / Reliability / Frequency
    peakStats.(epochNames{e}).FirstIdx=thisFirstIdx;
-   peakStats.(epochNames{e}).Jitter=thisJitter;
+   peakStats.(epochNames{e}).Latency=thisLatency;
+   peakStats.(epochNames{e}).Jitter=std(thisLatency);
    peakStats.(epochNames{e}).Reliability=sum(~isnan(thisFirstIdx))/nTrials;
 end
 end

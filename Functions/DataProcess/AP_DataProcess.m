@@ -25,6 +25,9 @@ if Analysis.Parameters.Photometry
     if Analysis.Parameters.Fit_470405
     Analysis=AP_Photometry_2ChFit(Analysis);
     end
+    if Analysis.Parameters.BaselineFit
+        disp('BaselineFit is not ready yet')
+    end
 end
 %% Trial processing
 for thisTrial=1:Analysis.AllData.nTrials

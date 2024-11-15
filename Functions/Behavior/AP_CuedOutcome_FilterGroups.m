@@ -33,7 +33,7 @@ GroupPlot{indexp,2}={   'Uncued_Reward'             {'Reward','LicksOutcome','Fi
                         'Uncued_Omission',          {'Omission'}};
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
-          case {'RewardA','Training','RewardA_woOmi','RewardA_Large','RewardB','RewardB_noUncued'} 
+          case {'RewardA','Training','RewardA_woOmi','RewardA_Large','RewardB','RewardB_noUncued',} 
 indexp=indexp+1;
 GroupPlot{indexp,1}='RewardExp';
 GroupPlot{indexp,2}={   'CS_Reward',                {'CS','Reward','LicksOutcome','FirstLick'};...
@@ -136,7 +136,7 @@ GroupPlot{indexp,2}={'HVS',                         {'HVS'};...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%         
     case {'RewardACBValues','RewardBACValues','Uncertainty'}
 indexp=indexp+1;
-GroupPlot{indexp,1}='Rewards';
+GroupPlot{indexp,1}='Cues';
 GroupPlot{indexp,2}={'HVS',                         {'HVS'};...
                      'MVS',                         {'MVS'};...
                      'LVS',                         {'LVS'}}; 
@@ -145,6 +145,12 @@ GroupPlot{indexp,1}='Rewards';
 GroupPlot{indexp,2}={'HVS_Reward',                  {'HVS','Reward','LicksOutcome'};...
                      'MVS_Reward',                  {'MVS','Reward','LicksOutcome'};...
                      'LVS_Reward',                  {'LVS','Reward','LicksOutcome'}};     
+
+GroupCorr{1,1}='RewardExp_Correlation';
+GroupCorr{1,2}={        'HVS_Reward',                {'HVS','Reward'};...
+                        'MVS_Omission',              {'MVS','Omission'}};
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%         
 case {'Train3C'}
     indexp=indexp+1;
@@ -172,5 +178,9 @@ end
 if Analysis.Parameters.Illustration(3)
 GroupPlot=AP_CuedOutcome_FilterGroups_Arousal(GroupPlot,indexp,Analysis);
 end
+if Analysis.Parameters.Stimulation
+GroupPlot=AP_CuedOutcome_FilterGroups_Stim(GroupPlot,indexp,Analysis);
+end
+
 
 end

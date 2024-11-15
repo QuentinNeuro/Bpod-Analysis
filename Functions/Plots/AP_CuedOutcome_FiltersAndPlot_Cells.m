@@ -2,14 +2,14 @@ function Analysis=AP_CuedOutcome_FiltersAndPlot_Cells(Analysis)
 
 % thisType={'AnticipLick_CS_Reward','AnticipLick_CS_Reward','NoAnticipLick_NS','Uncued_Reward','Uncued_Reward'};
 % thisCellFilter={'posRew','posRewInv','posRew','posRew','posRewInv'};
-% thisType={'Uncued_Reward','Uncued_Reward'};
-% thisCellFilter={'posRew','posRewInv'};
-thisType={'Uncued_Reward'};
-thisCellFilter={'posRew'};
+thisType={'Uncued_Reward','Uncued_Reward'};
+thisCellFilter={'posRew','posRewInv'};
+% thisType={'Uncued_Reward'};
+% thisCellFilter={'posRew'};
 
 %% FilterCells
     Analysis=A_FilterCell(Analysis,'posRew','OutcomeMAX','preSTD','Uncued_Reward');
-    Analysis=A_FilterCell(Analysis,'posCue','CueMAX','preSTD','CS');
+    % Analysis=A_FilterCell(Analysis,'posCue','CueMAX','preSTD','CS');
     for tc=1:size(thisType,2)
         Analysis=AP_DataSort_SingleCells(Analysis,thisType{tc},thisCellFilter{tc});
     end

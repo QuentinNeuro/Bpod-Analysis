@@ -61,10 +61,26 @@ elseif contains(Name,'AuditoryTuning','IgnoreCase',true)
     Par.PlotFiltersSingle=0;
     Par.PlotFiltersSummary=0; 
     Par.PlotFiltersBehavior=0;
-    Par.CueTimeReset=[0 1];
-    Par.OutcomeTimeReset=[0 2];
+    Par.CueTimeReset=[0 1.5];
+    Par.OutcomeTimeReset=[-1.6 -0.6];
     % Par.ZeroAt=0;
     Par.BaselineBefAft=1;
+
+elseif contains(Name,'OptoPsycho','IgnoreCase',true)
+    Par.Behavior='OptoPsycho';
+	Par.StateOfCue='CueDelivery';
+    Par.StateOfOutcome='PostOutcome';
+    Par.Phase='OptoPsycho';
+    Par.PlotSummary1=1;
+    Par.PlotSummary2=0;
+    Par.PlotFiltersSingle=0;
+    Par.PlotFiltersSummary=0; 
+    Par.PlotFiltersBehavior=0;
+    Par.CueTimeReset=[0 1];
+    Par.OutcomeTimeReset=[0 -2];
+    % Par.ZeroAt=0;
+    Par.BaselineBefAft=1;
+    
 elseif contains(Name,'VisualTuning','IgnoreCase',true)
     Par.Behavior='VisualTuning';
 	Par.StateOfCue='CueDelivery';
@@ -75,8 +91,8 @@ elseif contains(Name,'VisualTuning','IgnoreCase',true)
     Par.PlotFiltersSingle=0;
     Par.PlotFiltersSummary=0; 
     Par.PlotFiltersBehavior=0;
-    Par.CueTimeReset=[0 1];
-    Par.OutcomeTimeReset=[0 2];
+    Par.CueTimeReset=[0 2];
+    Par.OutcomeTimeReset=[-1.5 -0.5];
     % Par.ZeroAt=0;
     Par.BaselineBefAft=1;
 elseif contains(Name,'OptoTuning','IgnoreCase',true)
@@ -94,10 +110,16 @@ elseif contains(Name,'OptoTuning','IgnoreCase',true)
     Par.PlotFiltersSingle=0;
     Par.PlotFiltersSummary=0; 
     Par.PlotFiltersBehavior=0;
-    Par.CueTimeReset=[0 1];
+    Par.CueTimeReset=[-1.1 -1.1];
     Par.OutcomeTimeReset=[0 2];
-    Par.ZeroAt=0;
+    % Par.ZeroAt=-0.5;
     Par.BaselineBefAft=1;
+    if sum(contains(Par.TrialNames,'Train_1Hz_500s_5ms_5V'))>0
+        Par.TrialNames(contains(Par.TrialNames,'Train_1Hz_500s_5ms_5V'))={'Train_10Hz_500ms_5ms_5V'};
+    end
+    if sum(contains(Par.TrialNames,'Train_10Hz_500s_5ms_5V'))>0
+        Par.TrialNames(contains(Par.TrialNames,'Train_10Hz_500s_5ms_5V'))={'Train_10Hz_500ms_5ms_5V'};
+    end
 elseif contains(Name,'Oddball','IgnoreCase',true)
     Par.Behavior='Oddball';
 	Par.StateOfCue='PreState';

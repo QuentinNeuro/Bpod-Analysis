@@ -48,8 +48,8 @@ Par.StateToZero     =Par.(Par.StateToZero);
 %% Licks
 if isfield(SessionData.RawEvents.Trial{1, 1}.Events,'Port1In')
     Par.LickPort='Port1In';
-elseif isfield(SessionData.RawEvents.Trial{1, 1}.Events,'Port2In')
-    Par.LickPort='Port2In';
+% elseif isfield(SessionData.RawEvents.Trial{1, 1}.Events,'Port2In')
+%     Par.LickPort='Port2In';
 else
     Par.LickPort=LP.D.LickPort; %Default
 end
@@ -94,6 +94,14 @@ switch Par.Rig
     otherwise
         Par.WheelPolarity=-1;
 end
+
+%% Stimulation
+if isfield(SessionData.TrialSettings(1).GUI,'Optogenetic')
+        Par.Stimulation=SessionData.TrialSettings(1).GUI.Optogenetic;
+    else
+        Par.Stimulation=LP.D.Stimulation; % Default
+end
+
 %% Pupillometry
 Par=AP_Parameters_Pupillometry(Par,Pup,SessionData);
 %% Overwritting

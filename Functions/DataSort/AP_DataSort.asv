@@ -76,8 +76,8 @@ if Analysis.(thistype).nTrials>0
             Analysis.(thistype).(thisChStruct).(strcat(thisAS,'_SEM_S'))(thisS)=std(Analysis.(thistype).(thisChStruct).(thisAS)(idxSession==thisS),0,2,'omitnan')/sqrt(sum(idxSession==thisS));
             end
             else
-                Analysis.(thistype).(thisChStruct).(strcat(thisAS,'_AVG_S'))=Analysis.(thistype).(thisChStruct).(thisAS);
-                Analysis.(thistype).(thisChStruct).(strcat(thisAS,'_SEM_S'))=0;
+                Analysis.(thistype).(thisChStruct).(strcat(thisAS,'_AVG_S'))=Analysis.(thistype).(thisChStruct).(thisAS)(idxSession==thisS),2,'omitnan');
+                Analysis.(thistype).(thisChStruct).(strcat(thisAS,'_SEM_S'))(thisS)=std(Analysis.(thistype).(thisChStruct).(thisAS)(idxSession==thisS),0,2,'omitnan')/sqrt(sum(idxSession==thisS));
             end
         end
         Analysis.(thistype).(thisChStruct).CueAVG_MAX       =max(Analysis.(thistype).(thisChStruct).DFFAVG(Time>CueTime(1) & Time<CueTime(2)));

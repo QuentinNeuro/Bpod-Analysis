@@ -13,14 +13,16 @@ function Analysis=A_FilterCNSMatch(Analysis)
         case {'RewardBPunishAValues','RewardBPunishA'}
             Analysis.Filters.HVS=Analysis.Filters.Cue_B;
             Analysis.Filters.LVS=Analysis.Filters.Cue_A;
-        case {'RewardACBValues'}
+        case {'RewardACBValues','Uncertainty'}
             Analysis.Filters.HVS=Analysis.Filters.Cue_A;
             Analysis.Filters.MVS=Analysis.Filters.Cue_B;
             Analysis.Filters.LVS=Analysis.Filters.Cue_C;
+            Analysis.Parameters.Phase='Uncertainty';
         case {'RewardBACValues'}
             Analysis.Filters.HVS=Analysis.Filters.Cue_B;
             Analysis.Filters.MVS=Analysis.Filters.Cue_A;
             Analysis.Filters.LVS=Analysis.Filters.Cue_C;
+            Analysis.Parameters.Phase='Uncertainty';
         case {'Train3C','Test3C-RewardSize'} % Amy's task
             Analysis.Filters.HVS=Analysis.Filters.Cue_B;
             Analysis.Filters.LVS=Analysis.Filters.Cue_A;

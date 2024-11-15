@@ -23,6 +23,11 @@ Analysis=A_FilterPupil(Analysis,'CuePupil','Cue',2);
 Analysis=A_FilterPupilNaNCheck(Analysis,'PupilNaN',25);
 % Sequence
 Analysis=A_FilterAfollowsB(Analysis,'Reward_After_Punish','Reward','Punish');
+% Optogenetics
+if Analysis.Parameters.Stimulation
+    Analysis=A_FilterTrialName(Analysis,'Stim');
+    Analysis.Filters.StimInv=~Analysis.Filters.Stim;
+end
 
 %% Definitions of meta filters
 [Group_Plot,Group_Corr,Group_Perf]=AP_CuedOutcome_FilterGroups(Analysis);

@@ -6,7 +6,6 @@ dt=1/Analysis.Parameters.NidaqDecimatedSR;
 stateToZero=Analysis.Parameters.StateToZero;
 tw=Analysis.Parameters.ReshapedTime;
 
-
 for thisCh=1:length(Analysis.Parameters.PhotoCh)
     thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
     BaselineAVG=nan(Analysis.AllData.nTrials,1);

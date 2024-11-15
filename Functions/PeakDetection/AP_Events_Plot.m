@@ -1,12 +1,12 @@
-%% test block
-trialType='HVS_Reward';
-data=Analysis.(trialType).Photo_470.DFF;
-time=Analysis.(trialType).Photo_470.Time;
-peakStats=Analysis.(trialType).Photo_470_peak;
-trialName='CuedReward';
-AP_Events_Ploti(peakStats,time,data,trialName);
-
-clear data time peakStats trialName;
+% %% test block
+% trialType='HVS_Reward';
+% data=Analysis.(trialType).Photo_470.DFF;
+% time=Analysis.(trialType).Photo_470.Time;
+% peakStats=Analysis.(trialType).Photo_470_peak;
+% trialName='CuedReward';
+% AP_Events_Ploti(peakStats,time,data,trialName);
+% 
+% clear data time peakStats trialName;
 
 function AP_Events_Ploti(peakStats,time,data,trialName)
 %% Parameters
@@ -128,10 +128,10 @@ for e=1:nEpochs
     x=peakStats.waveformTW(:,1);
     y=mean(peakStats.(waveStat)(:,thisEFIdx),2,'omitnan');
     plot(x,y,'color',colorEpochs(e,:));
-    % jitter
+    % Latency
     subplot(ySP,xSP,4); hold on;
-    xlabel('Jitter (s)'); ylabel('CD')
-    [x,y]=cumulative(thisEStats.Jitter);
+    xlabel('Latency (s)'); ylabel('CD')
+    [x,y]=cumulative(thisEStats.Latency);
     plot(x,y,'color',colorEpochs(e,:));
     xlHandle=xline(diff(epochTW(e,:)),'--');
     xlHandle.Color=colorEpochs(e,:);
