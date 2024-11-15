@@ -18,7 +18,7 @@ for tt=1:nbOfTrialTypes;
     trialCount_Go=Analysis.(thistype_Go).nTrials;
     
     successRate(tt)=trialCount_Go/trialCount_All;
-    thisRT=Analysis.(thistype_Go).Time.Outcome(:,1)-Analysis.(thistype_Go).Time.Cue(:,1);
+    thisRT=diff(Analysis.(thistype_Go).Time.Cue,[],2);
     RT{tt}=thisRT;
     RT_AVG(tt)=mean(thisRT);
 end
