@@ -8,8 +8,8 @@
 clear SessionData Analysis LP; %close all;
 
 %% Analysis type Single/Group/Batch/Online etc
-LP.Analysis_type='Single';
-LP.Save=2;      % 1: Core Data only     // 2: Full Analysis Structure
+LP.Analysis_type='Online';
+LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
 DB.DataBase=0;  % DB_Generate
 DB.Group=[];
@@ -23,6 +23,7 @@ LP.OW.NidaqBaseline=[];
 LP.P.SortFilters=1;
 LP.P.SortCells=0;
 LP.P.EventDetection=0;
+LP.P.Pairing=0;
 % Figures
 LP.P.PlotSummary1=1;
 LP.P.PlotSummary2=0;
@@ -54,7 +55,7 @@ LP.P.TrialToFilterOut=[];
 LP.P.LoadIgnoredTrials=1;
 % Fluorescence % default Zsc=1 mov=5 befAft=1 SR=20
 LP.P.Zscore=1;                          % 
-LP.P.BaselineMov=1;                     % 0 to not have moving baseline avg (avg and std)
+LP.P.BaselineMov=5;                     % 0 to not have moving baseline avg (avg and std)
 LP.P.BaselineBefAft=2;                  % calculate Baseline before or after extracting desired PSTH
 LP.P.BaselineHisto=0;                   % percentage of data from the baseline to use
 LP.P.BaselineFit=0;                     % To come

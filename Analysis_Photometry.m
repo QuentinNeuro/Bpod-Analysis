@@ -30,10 +30,6 @@ Analysis=AP_CuedOutcome_FiltersAndPlot(Analysis);
 Analysis=AP_GoNogo_FiltersAndPlot(Analysis);
     case 'AuditoryTuning'
 AP_AuditoryTuning_FiltersAndPlot(Analysis);
-Analysis=AP_DataSort(Analysis,'Chirp',Analysis.Filters.type_2+Analysis.Filters.type_3);
-AP_PlotData_filter(Analysis,'Chirp');
-AP_PlotData_filter(Analysis,'type_1');
-    case 'VisualTuning'
     case 'Oddball'
 Analysis=AP_OddBall_FiltersAndPlot(Analysis);
     case 'Sensor'
@@ -44,6 +40,9 @@ AP_Continuous_FiltersAndPlot(Analysis)
 Analysis=AP_CuedOutcome_AC_FiltersAndPlot(Analysis); 
     case 'OptoTuning'
         Analysis=AP_OptoTuning_FiltersAndPlot(Analysis);
+end
+if Analysis.Parameters.Pairing
+    Analysis=AP_Pairing_FiltersAndPlot(Analysis);
 end
 %% Save Analysis
 if LauncherParam.Save==2
