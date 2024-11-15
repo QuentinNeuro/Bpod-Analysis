@@ -26,11 +26,11 @@ end
 figure()
 subplot(1,2,1)
 plot([1:nbOfTrialTypes],successRate,'ok');
-ylabel('SuccessRate'); xlim('TrialType');
+ylabel('SuccessRate'); xlabel('TrialType');
 xlim([0 nbOfTrialTypes+0.5]); ylim([0 1]);
 subplot(1,2,2)
 plot([1:nbOfTrialTypes],RT_AVG,'ok');
-ylabel('Reaction Time (s)');  xlim('TrialType');
+ylabel('Reaction Time (s)');  xlabel('TrialType');
 xlim([0 nbOfTrialTypes+0.5]); ylim([0 1]);
 
 end
