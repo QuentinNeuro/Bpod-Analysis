@@ -46,7 +46,7 @@ else
     Pupillometry=[];
 end
 % Parameters, Ignored Trials and Data extraction
-% try
+try
         Analysis.Parameters=AP_Parameters(SessionData,Pupillometry,LP,FileNameNoExt,Analysis.Parameters);
         Analysis=A_FilterIgnoredTrials(Analysis);
         Analysis=A_FilterWheel(Analysis);
@@ -59,9 +59,9 @@ end
         if isfield(SessionData,'Modulation')
             Analysis.Parameters.Modulation=SessionData.Modulation;
         end
-% catch
-%         disp([FileName ' NOT ANALYZED - Error in AP_Load']);
-% end   
+catch
+        disp([FileName ' NOT ANALYZED - Error in AP_Load']);
+end   
 end
 clear SessionData Pupillometry;
 end

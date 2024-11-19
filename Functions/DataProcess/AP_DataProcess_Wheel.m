@@ -1,7 +1,6 @@
 function Analysis=AP_DataProcess_Wheel(Analysis,thisTrial)
 
 if Analysis.Filters.Wheel(thisTrial)
-
 %% Timing
 timeToZero=Analysis.AllData.Time.Zero(thisTrial);
 cueTime=Analysis.AllData.Time.Cue(thisTrial,:)+Analysis.Parameters.CueTimeReset;
@@ -13,8 +12,11 @@ baseline=Analysis.Parameters.NidaqBaselinePoints;
 %% Data
 thisDataDeg=Analysis.Core.Wheel{thisTrial};
 [time,data]=AP_PSTH(thisDataDeg',timeWindow,timeToZero,sampRate);
-DataDistance=data'.*(Analysis.Parameters.WheelPolarity*Analysis.Parameters.WheelDiameter*pi/360);
-
+if ~isfield(Analysis.Parameters,'Prime')
+    DataDistance=data'.*(Analysis.Parameters.WheelPolarity*Analysis.Parameters.WheelDiameter*pi/360);
+else
+    DataDistance=data;
+end
 %% Statistics for Analysis Structure
 if ~isfield(Analysis.AllData,'Wheel')
     Analysis.AllData.Wheel.Time(1:thisTrial-1,:)    =NaN(thisTrial-1,length(time));

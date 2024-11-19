@@ -40,6 +40,9 @@ if Analysis.Parameters.nCells
     if Analysis.Parameters.AOD.AOD
         cmap=[summer ; flip(autumn)];
     end
+    if Analysis.Parameters.Prime.Prime
+        labelY{2}=Analysis.Parameters.Prime.DataType;
+    end
 end
 
 if Analysis.Parameters.Spikes.Spikes

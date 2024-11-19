@@ -8,7 +8,7 @@
 clear SessionData Analysis LP; %close all;
 
 %% Analysis type Single/Group/Batch/Online etc
-LP.Analysis_type='Online';
+LP.Analysis_type='Single';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
 DB.DataBase=0;  % DB_Generate
@@ -27,10 +27,10 @@ LP.P.Pairing=0;
 % Figures
 LP.P.PlotSummary1=1;
 LP.P.PlotSummary2=0;
-LP.P.PlotFiltersSingle=0;               % AP_CuedOutcome_FilterGroups
-LP.P.PlotFiltersSummary=0;
+LP.P.PlotFiltersSingle=1;               % AP_CuedOutcome_FilterGroups
+LP.P.PlotFiltersSummary=1;
 LP.P.PlotFiltersBehavior=0;           	% AP_####_GroupToPlot Oupput 2
-LP.P.PlotCells=0;                       % Generate single cell figures
+LP.P.PlotCells=1;                       % Generate single cell figures
 LP.P.Illustrator=0;
 LP.P.Transparency=1;
 LP.P.Illustration=[1 0 0];                % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
@@ -41,7 +41,7 @@ LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max
 % States and Timing
 LP.P.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
 LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after state to Zero starts
-LP.P.ZeroAt='none';                 % Will zero fluo for each trial to a time point : 'Zero' '2sBefCue' or a timestamp
+LP.P.ZeroAt='Zero';                 % Will zero fluo for each trial to a time point : 'Zero' '2sBefCue' or a timestamp
 LP.P.CueTimeLick=[];                    % Use a different window to calculate lickrate at cue; % Uncertainty : 1.5 1.9
 LP.P.WheelState='Baseline';             % Options : 'Baseline','Cue','Outcome'
 LP.P.PupilState='NormBaseline';       	% Options : 'NormBaseline','Cue','Outcome'
@@ -54,8 +54,8 @@ LP.P.LicksOutcome=2;                    % default : 2
 LP.P.TrialToFilterOut=[];
 LP.P.LoadIgnoredTrials=1;
 % Fluorescence % default Zsc=1 mov=5 befAft=1 SR=20
-LP.P.Zscore=1;                          % 
-LP.P.BaselineMov=5;                     % 0 to not have moving baseline avg (avg and std)
+LP.P.Zscore=0;                          % 
+LP.P.BaselineMov=1;                     % 0 to not have moving baseline avg (avg and std)
 LP.P.BaselineBefAft=2;                  % calculate Baseline before or after extracting desired PSTH
 LP.P.BaselineHisto=0;                   % percentage of data from the baseline to use
 LP.P.BaselineFit=0;                     % To come
@@ -87,6 +87,13 @@ LP.P.Spikes.tagging_timeW=[-0.3 0.3];
 LP.P.Spikes.tagging_TTL=2;
 LP.P.Spikes.pThreshold=[0.01 0.05]; %Latency / FR;
 LP.P.Spikes.TTLTS_spikeTS_Factor=10000; % for MClust clustered spikes
+%% PRIME
+LP.P.Prime.raw=0;
+LP.P.Prime.DataType='Depth'; % 'Depth' or 'Angle';
+LP.P.Prime.smoothing=3;
+LP.P.Prime.Wheel=1;
+LP.P.Prime.SiteExclusion=1;
+LP.P.Prime.ProbeLength=2500;
 %% Miniscope
 LP.P.Miniscope.SR=10;
 LP.P.Miniscope.raw=1;
@@ -117,6 +124,7 @@ LP.D.Photometry=0;
 LP.D.Spikes.Spikes=0;
 LP.D.AOD.AOD=0;
 LP.D.Miniscope.Miniscope=0;
+LP.D.Prime.Prime=0;
 %% Database
 if ~exist('DB_Stat','var')
     DB_Stat=struct();

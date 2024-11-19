@@ -1,5 +1,5 @@
 function Wheel=AP_DataCore_Wheel(SessionData,Analysis,thisTrial)
-
+if ~isfield(Analysis.Parameters,'Prime')
 %% Wheel
 if Analysis.Parameters.Wheel==1
     if ~isfield(SessionData,'DecimatedSampRate')
@@ -17,4 +17,6 @@ Wheel=DataDeg;
 else
     Wheel=[];
 end
+end
+Wheel=[];
 end

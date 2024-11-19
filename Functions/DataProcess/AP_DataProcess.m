@@ -70,7 +70,9 @@ end
 if Analysis.Parameters.Miniscope.Miniscope
     Analysis=AP_DataProcess_Miniscope(Analysis);
 end
-
+if Analysis.Parameters.Prime.Prime
+    Analysis=AP_DataProcess_Prime(Analysis);
+end
 %% Bleaching calculation and axis
 for thisCh=1:length(Analysis.Parameters.PhotoCh)
     thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));

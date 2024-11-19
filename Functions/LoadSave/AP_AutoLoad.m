@@ -4,6 +4,7 @@ function LP=AP_AutoLoad(LP)
 LP.P.Photometry=LP.D.Photometry;
 LP.P.Spikes.Spikes=LP.D.Spikes.Spikes;
 LP.P.AOD.AOD=LP.D.AOD.AOD;
+LP.P.Prime.Prime=LP.D.Prime.Prime;
 LP.P.Miniscope.Miniscope=LP.D.Miniscope.Miniscope;
 LP.Load=LP.D.Load;
 
@@ -26,12 +27,17 @@ if exist('SessionData','var')
     if ~isempty(ls('TT_*'))
         LP.P.Spikes.Spikes=1;
     end
-    test=LP.P.Photometry+LP.P.Spikes.Spikes+LP.P.AOD.AOD;
+    if ~isempty(ls('*PMT_*')) % could also use SessionData.GUI.Prime;
+        LP.P.Prime.Prime=1;
+        LP.P.Prime.Wheel=1;
+    end
+    test=LP.P.Photometry+LP.P.Spikes.Spikes+LP.P.AOD.AOD+LP.P.Prime.Prime;
     if test>1
         disp('AutoLoad function has failed, will use default parameters')
         LP.P.Photometry=LP.D.Photometry;
         LP.P.Spikes.Spikes=LP.D.Spikes.Spikes;
         LP.P.AOD.AOD=LP.D.AOD.AOD;
+        LP.P.Prime.Prime=LP.D.Prime.Prime;
     end
 else
     if exist('Analysis','var')

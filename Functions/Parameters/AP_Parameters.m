@@ -85,7 +85,7 @@ Par.Wheel=0;
 Par.WheelCounterNbits=32;
 Par.WheelEncoderCPR=1024;
 Par.WheelDiameter=14; %cm
-if isfield(SessionData,Par.WheelField)
+if isfield(SessionData,Par.WheelField) || LP.P.Prime.Wheel
     Par.Wheel=1;
 end
 switch Par.Rig
