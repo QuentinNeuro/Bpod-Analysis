@@ -61,7 +61,7 @@ for t=1:nTrials
     timeToZero=Analysis.AllData.Time.Zero(t);
     for c=1:nCells
         [thisTime,thisData]=AP_PSTH(data{t}(c,:),timeWindow,timeToZero,sampRate);
-        thisData=thisData-mean(thisData(1:sampRate),'omitnan');
+        % thisData=thisData-mean(thisData(1:sampRate),'omitnan');
         dataTrial{t}(c,:)=thisData;
         dataCells{c}(t,:)=thisData;
     end

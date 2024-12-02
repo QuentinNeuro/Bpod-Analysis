@@ -45,7 +45,7 @@ LP.P.ZeroAt='Zero';                 % Will zero fluo for each trial to a time po
 LP.P.CueTimeLick=[];                    % Use a different window to calculate lickrate at cue; % Uncertainty : 1.5 1.9
 LP.P.WheelState='Baseline';             % Options : 'Baseline','Cue','Outcome'
 LP.P.PupilState='NormBaseline';       	% Options : 'NormBaseline','Cue','Outcome'
-LP.P.ReshapedTime=[-5 5];               % PSTH - use [0 180] for oddball
+LP.P.ReshapedTime=[-4 5];               % PSTH - use [0 180] for oddball
 % Filters % default LicksCue=1 LicksOut=2
 LP.P.PupilThreshold=1;
 LP.P.WheelThreshold=2;                  % Speed cm/s
@@ -88,9 +88,10 @@ LP.P.Spikes.tagging_TTL=2;
 LP.P.Spikes.pThreshold=[0.01 0.05]; %Latency / FR;
 LP.P.Spikes.TTLTS_spikeTS_Factor=10000; % for MClust clustered spikes
 %% PRIME
-LP.P.Prime.raw=0;
+LP.P.Prime.raw=1;
 LP.P.Prime.DataType='Depth'; % 'Depth' or 'Angle';
 LP.P.Prime.smoothing=3;
+LP.P.Prime.bin=4;
 LP.P.Prime.Wheel=1;
 LP.P.Prime.SiteExclusion=1;
 LP.P.Prime.ProbeLength=2500;
@@ -124,7 +125,7 @@ LP.D.Photometry=0;
 LP.D.Spikes.Spikes=0;
 LP.D.AOD.AOD=0;
 LP.D.Miniscope.Miniscope=0;
-LP.D.Prime.Prime=0;
+LP.D.Prime.Prime=1;
 %% Database
 if ~exist('DB_Stat','var')
     DB_Stat=struct();

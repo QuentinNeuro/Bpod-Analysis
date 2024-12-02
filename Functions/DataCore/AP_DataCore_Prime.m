@@ -1,16 +1,18 @@
 function Analysis=AP_DataCore_Prime(Analysis)
 
 %% Folder directory
-folderTrialList=string(ls('*Trial*'));
-nfTL=size(folderTrialList,1);
+folderTrialList=string(ls('Trial*'));
+nTL=size(folderTrialList,1);
 nTrials=Analysis.Parameters.nTrials;
-if nfTL~=nTrials
-    disp('Trial nb does not match - going with PRIME nTrials');
+if nTL~=nTrials
+    disp('Trial nb does not match nfTL-nTrials:');
+    disp([nTL nTrials])
+    return
 end
 
 %% Load stuff
-for t=1:nfTL
-    thisTrialName=sprintf('Trial%.0d_',1);
+for t=1:nTL
+    thisTrialName=sprintf('Trial%.0d_',t)
     thisTrialFolder=folderTrialList(contains(folderTrialList,thisTrialName));
     cd(thisTrialFolder)
     load("raw_data.mat");
