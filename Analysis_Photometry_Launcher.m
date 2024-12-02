@@ -15,7 +15,7 @@ DB.DataBase=0;  % DB_Generate
 DB.Group=[];
 % global TuningYMAX;
 %% Overwritting Parameters
-LP.OW.PhotoChNames={'F1','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
+LP.OW.Photometry.Names={'F1','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 LP.OW.CueTimeReset=[]; % Uncertainty : 0 0.5
 LP.OW.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
@@ -36,23 +36,28 @@ LP.P.Transparency=1;
 LP.P.Illustration=[1 0 0];                % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
 % Axis
 LP.P.PlotX=[-3 4];
-LP.P.PlotY_photo(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
-LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max]
-% States and Timing
+LP.P.PlotY(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
+LP.P.PlotY(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max]
+% Timing and filters
+LP.P.ReshapedTime=[-4 5];  
 LP.P.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
 LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after state to Zero starts
-LP.P.ZeroAt='Zero';                 % Will zero fluo for each trial to a time point : 'Zero' '2sBefCue' or a timestamp
+LP.P.ZeroAt='Zero';                     % Will zero fluo for each trial to a time point : 'Zero' '2sBefCue' or a timestamp
 LP.P.CueTimeLick=[];                    % Use a different window to calculate lickrate at cue; % Uncertainty : 1.5 1.9
-LP.P.WheelState='Baseline';             % Options : 'Baseline','Cue','Outcome'
-LP.P.PupilState='NormBaseline';       	% Options : 'NormBaseline','Cue','Outcome'
-LP.P.ReshapedTime=[-4 5];               % PSTH - use [0 180] for oddball
-% Filters % default LicksCue=1 LicksOut=2
-LP.P.PupilThreshold=1;
-LP.P.WheelThreshold=2;                  % Speed cm/s
 LP.P.LicksCue=1;                        % default : 1 or 2
 LP.P.LicksOutcome=2;                    % default : 2
 LP.P.TrialToFilterOut=[];
 LP.P.LoadIgnoredTrials=1;
+
+%% Pupil / Wheel
+LP.P.Wheel.FilterState='Baseline';             % Options : 'Baseline','Cue','Outcome'
+LP.P.Pupil.FilterState='NormBaseline';       	% Options : 'NormBaseline','Cue','Outcome'
+LP.P.Pupil.PupilThreshold=1;
+LP.P.Wheel.WheelThreshold=2;   % Speed cm/s
+             % PSTH - use [0 180] for oddball
+% Filters % default LicksCue=1 LicksOut=2
+               
+
 % Fluorescence % default Zsc=1 mov=5 befAft=1 SR=20
 LP.P.Zscore=0;                          % 
 LP.P.BaselineMov=1;                     % 0 to not have moving baseline avg (avg and std)

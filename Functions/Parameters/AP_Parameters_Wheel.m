@@ -6,7 +6,7 @@ Par.Wheel.CounterNbits=32;
 Par.Wheel.EncoderCPR=1024;
 Par.Wheel.Diameter=14; %cm
 
-if isfield(SessionData,Par.WheelField) || LP.P.Prime.Wheel
+if isfield(SessionData,Par.Wheel.WheelPath) || LP.P.Prime.Wheel
     Par.Wheel.Wheel=1;
 end
 
