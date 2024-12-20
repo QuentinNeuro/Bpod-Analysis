@@ -125,7 +125,7 @@ LP.D.Photometry=0;
 LP.D.Spikes.Spikes=0;
 LP.D.AOD.AOD=0;
 LP.D.Miniscope.Miniscope=0;
-LP.D.Prime.Prime=1;
+LP.D.Prime.Prime=0;
 %% Database
 if ~exist('DB_Stat','var')
     DB_Stat=struct();
