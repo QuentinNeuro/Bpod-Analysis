@@ -8,7 +8,7 @@
 clear SessionData Analysis LP; %close all;
 
 %% Analysis type Single/Group/Batch/Online etc
-LP.Analysis_type='Single';
+LP.Analysis_type='Online';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
 DB.DataBase=0;  % DB_Generate
@@ -20,28 +20,28 @@ LP.OW.CueTimeReset=[]; % Uncertainty : 0 0.5
 LP.OW.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
-LP.P.SortFilters=1;
+LP.P.SortFilters=0;
 LP.P.SortCells=0;
 LP.P.EventDetection=0;
 LP.P.Pairing=0;
 % Figures
 LP.P.PlotSummary1=1;
 LP.P.PlotSummary2=0;
-LP.P.PlotFiltersSingle=1;               % AP_CuedOutcome_FilterGroups
-LP.P.PlotFiltersSummary=1;
+LP.P.PlotFiltersSingle=0;               % AP_CuedOutcome_FilterGroups
+LP.P.PlotFiltersSummary=0;
 LP.P.PlotFiltersBehavior=0;           	% AP_####_GroupToPlot Oupput 2
-LP.P.PlotCells=1;                       % Generate single cell figures
+LP.P.PlotCells=0;                       % Generate single cell figures
 LP.P.Illustrator=0;
 LP.P.Transparency=1;
 LP.P.Illustration=[1 0 0];                % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
 % Axis
-LP.P.PlotX=[-3 4];
+LP.P.PlotX=[-4 4];
 LP.P.PlotY_photo(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
 LP.P.PlotY_photo(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max]
 % States and Timing
 LP.P.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
 LP.P.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after state to Zero starts
-LP.P.ZeroAt='Zero';                 % Will zero fluo for each trial to a time point : 'Zero' '2sBefCue' or a timestamp
+LP.P.ZeroAt='Zero';                     % Will zero fluo for each trial to a time point : 'Zero' '2sBefCue' or a timestamp
 LP.P.CueTimeLick=[];                    % Use a different window to calculate lickrate at cue; % Uncertainty : 1.5 1.9
 LP.P.WheelState='Baseline';             % Options : 'Baseline','Cue','Outcome'
 LP.P.PupilState='NormBaseline';       	% Options : 'NormBaseline','Cue','Outcome'
@@ -54,7 +54,7 @@ LP.P.LicksOutcome=2;                    % default : 2
 LP.P.TrialToFilterOut=[];
 LP.P.LoadIgnoredTrials=1;
 % Fluorescence % default Zsc=1 mov=5 befAft=1 SR=20
-LP.P.Zscore=0;                          % 
+LP.P.Zscore=1;                          % 
 LP.P.BaselineMov=1;                     % 0 to not have moving baseline avg (avg and std)
 LP.P.BaselineBefAft=2;                  % calculate Baseline before or after extracting desired PSTH
 LP.P.BaselineHisto=0;                   % percentage of data from the baseline to use
