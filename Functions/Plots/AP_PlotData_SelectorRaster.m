@@ -44,11 +44,4 @@ if Analysis.Parameters.nCells
         labelY{2}=Analysis.Parameters.Prime.DataType;
     end
 end
-
-if Analysis.Parameters.Spikes.Spikes
-    x{1}=Analysis.(thistype).Spikes.AllCells.Bin(1,:);
-    y{1}=1:Analysis.Parameters.Spikes.nCells;
-    data{1}=Analysis.(thistype).Spikes.AllCells.Rate;
-    labelY{1}=['Cells ' Analysis.Parameters.PhotoChNames{1}];
-end
 end

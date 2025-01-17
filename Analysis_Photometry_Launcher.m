@@ -8,7 +8,7 @@
 clear SessionData Analysis LP; %close all;
 
 %% Analysis type Single/Group/Batch/Online etc
-LP.Analysis_type='Online';
+LP.Analysis_type='Single';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
 DB.DataBase=0;  % DB_Generate
@@ -82,7 +82,7 @@ LP.P.AOD.rewT='meanPos';               % integer vs 'mean' 'median' 'meanPos'
 %% Spikes
 LP.P.TE4CellBase=0;
 LP.P.Spikes.Clustering='Kilosort'; %Kilosort MClust
-LP.P.Spikes.BinSize=0.1;
+LP.P.Spikes.BinSize=[0.1 0.001]; %Behavior and Tagging;
 LP.P.Spikes.tagging_timeW=[-0.3 0.3];
 LP.P.Spikes.tagging_TTL=2;
 LP.P.Spikes.pThreshold=[0.01 0.05]; %Latency / FR;

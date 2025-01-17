@@ -43,11 +43,4 @@ if Analysis.Parameters.nCells
     end
 end
 
-if Analysis.Parameters.Spikes.Spikes
-    x{1}=Analysis.(thistype).Spikes.AllCells.Bin(1,:);
-    y{1}=Analysis.(thistype).Spikes.AllCells.RateAVG;
-    sem{1}=Analysis.(thistype).Spikes.AllCells.RateSEM;
-    labelY{1}=[Analysis.Parameters.PhotoChNames{1} ' FR (Hz)'];
-end
-
 end
