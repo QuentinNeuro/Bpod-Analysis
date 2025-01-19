@@ -29,7 +29,7 @@ end
 end
 
 %% Load TTLs
-Analysis.Parameters.Spike.Tag=1;
+Analysis.Parameters.Spikes.Tag=1;
 load 1HzEvents.mat
 if isempty(Events_TS)
     load allStimEvents.mat

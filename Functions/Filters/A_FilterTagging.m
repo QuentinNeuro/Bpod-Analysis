@@ -1,8 +1,5 @@
 function [p, data]=A_FilterTagging(preTag,postTag,dt,tw_dur,pT)
 
-%preTag:vector with 
-
-
 %% Options
 whatToDoWithNoSpikes='max'; %'max'
 testWitLat_nnz=1;

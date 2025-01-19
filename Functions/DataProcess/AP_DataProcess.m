@@ -85,6 +85,6 @@ end
 %% Norm Pupil
 if Analysis.Parameters.Pupillometry
 for thisSession=1:Analysis.AllData.Session(end)
-    Analysis.AllData.Pupil.NormBaseline(Analysis.AllData.Session==thisSession)=Analysis.AllData.Pupil.NormBaseline(Analysis.AllData.Session==thisSession)/nanmean(Analysis.AllData.Pupil.NormBaseline(Analysis.AllData.Session==thisSession));
+    Analysis.AllData.Pupil.NormBaseline(Analysis.AllData.Session==thisSession)=Analysis.AllData.Pupil.NormBaseline(Analysis.AllData.Session==thisSession)/mean(Analysis.AllData.Pupil.NormBaseline(Analysis.AllData.Session==thisSession),'omitnan');
 end
 end

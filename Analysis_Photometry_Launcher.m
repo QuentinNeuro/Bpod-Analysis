@@ -20,8 +20,8 @@ LP.OW.CueTimeReset=[]; % Uncertainty : 0 0.5
 LP.OW.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
 LP.OW.NidaqBaseline=[]; 
 %% Analysis Parameters
-LP.P.SortFilters=0;
-LP.P.SortCells=0;
+LP.P.SortFilters=1;
+LP.P.SortCells=1;
 LP.P.EventDetection=0;
 LP.P.Pairing=0;
 % Figures
@@ -30,7 +30,7 @@ LP.P.PlotSummary2=0;
 LP.P.PlotFiltersSingle=0;               % AP_CuedOutcome_FilterGroups
 LP.P.PlotFiltersSummary=0;
 LP.P.PlotFiltersBehavior=0;           	% AP_####_GroupToPlot Oupput 2
-LP.P.PlotCells=0;                       % Generate single cell figures
+LP.P.PlotCells=1;                       % Generate single cell figures
 LP.P.Illustrator=0;
 LP.P.Transparency=1;
 LP.P.Illustration=[1 0 0];                % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
@@ -83,9 +83,12 @@ LP.P.AOD.rewT='meanPos';               % integer vs 'mean' 'median' 'meanPos'
 LP.P.TE4CellBase=0;
 LP.P.Spikes.Clustering='Kilosort'; %Kilosort MClust
 LP.P.Spikes.BinSize=[0.1 0.001]; %Behavior and Tagging;
-LP.P.Spikes.tagging_timeW=[-0.3 0.3];
 LP.P.Spikes.tagging_TTL=2;
-LP.P.Spikes.pThreshold=[0.01 0.05]; %Latency / FR;
+LP.P.Spikes.tagging_TW=[-0.5 0.5];
+LP.P.Spikes.tagging_baseline=[-0.4 -0.1];
+LP.P.Spikes.tagging_EpochTW=[0 0.01; 0.01 0.1];
+LP.P.Spikes.tagging_EpochNames={'Early','Late'};
+LP.P.Spikes.pThreshold=[0.01 0.05 0.05]; %Latency / FR / Reliability;
 LP.P.Spikes.TTLTS_spikeTS_Factor=10000; % for MClust clustered spikes
 %% PRIME
 LP.P.Prime.raw=1;
