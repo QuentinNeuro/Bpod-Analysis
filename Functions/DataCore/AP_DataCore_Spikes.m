@@ -6,7 +6,7 @@ TTL_Tagging=Analysis.Parameters.Spikes.tagging_TTL;
 switch Analysis.Parameters.Spikes.Clustering
     case 'Kilosort'
     TTLTS_SpikeTS_Factor=1;
-    spike_Label=tdfread('cluster_KSLabel.tsv');
+    % spike_Label=tdfread('cluster_KSLabel.tsv');
     spike_QC=NaN(2,size(fileList,1));
     case 'MClust'
     TTLTS_SpikeTS_Factor=Analysis.Parameters.Spikes.TTLTS_spikeTS_Factor;
@@ -52,7 +52,7 @@ for i=1:size(fileList,1)
     thisTT_TS=TS/TTLTS_SpikeTS_Factor;
     Analysis.Parameters.Spikes.CellID{counterTT}=thisID;
     Analysis.Core.SpikeTS{counterTT}=thisTT_TS;
-    Analysis.Core.Spike_Label{counterTT}='unkwnown';
+    Analysis.Core.SpikeLabel{counterTT}='unknown';
     Analysis.Core.Spike_QC(counterTT,:)=spike_QC(:,i);
 end
 

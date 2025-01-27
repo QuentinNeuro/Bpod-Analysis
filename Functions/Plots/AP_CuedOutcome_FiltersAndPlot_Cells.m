@@ -1,8 +1,14 @@
 function Analysis=AP_CuedOutcome_FiltersAndPlot_Cells(Analysis) 
 
 if Analysis.Parameters.Spikes.Spikes
-    thisType={'Uncued_Reward','CS_Reward'};
-    thisCellFilter={'Tag_Early','Tag_Early'};
+    switch Analysis.Parameters.Phase
+        case {'RewardA','RewardB'}
+    thisType={'Uncued_Reward','CS_Reward','NS_Omission'};
+    thisCellFilter={'Tag_Early','Tag_Early','Tag_Early'};
+        case {'RewardAPunishB','RewardBPunishA'}
+    thisType={'Uncued_Reward','HVS_Reward','LVS_Omission'};
+    thisCellFilter={'Tag_Early','Tag_Early','Tag_Early'};
+    end
 end
 
 if Analysis.Parameters.AOD.AOD

@@ -112,6 +112,9 @@ if Analysis.Parameters.nCells>0 && Analysis.Parameters.SortCells
     Analysis=AP_CuedOutcome_FiltersAndPlot_Cells(Analysis);
 end
 
+%% Spikes
+if Analysis.Parameters.Spikes
+
 %% Spikes Analysis
 % % TrialEvents
 % % if Analysis.Parameters.TE4CellBase

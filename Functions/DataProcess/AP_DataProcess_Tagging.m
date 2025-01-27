@@ -21,9 +21,10 @@ for t=1:nTrials
         thisTS_Zero      = thisTS-zeroTS(t);
         thisTS_align     = thisTS_Zero(thisTS_Zero>=thisBinTW(1) & thisTS_Zero<=thisBinTW(end));
         thisRate         = histcounts(thisTS_align,thisBinTW)/binSize;
-        dataTS{c}{t}     = thisTS_align;
         dataTrial{t}(c,:)= thisRate;
         dataCells{c}(t,:)= thisRate;
+        dataTS{c}{t}     = thisTS_align;
+        trialTS{c}{t}    = t*ones(size(thisTS_align));
     end
     timeTrial(t,:)=thisBinTW(1:end-1);
 end
@@ -37,11 +38,13 @@ for c=1:nCells
     Analysis.Tagging.AllCells.CellName{c}       =thisID;
     Analysis.Tagging.(thisID).Time              =timeTrial;
     Analysis.Tagging.(thisID).Data              =dataCells{c};
-    Analysis.Tagging.(thisID).DataTS            =dataTS{c};
+    Analysis.Tagging.(thisID).SpikeTS           =dataTS{c};
+    Analysis.Tagging.(thisID).TrialTS           =trialTS{c};
 end
 
 %% Tagging metrics
 for c=1:nCells
+    Analysis.Tagging.Label{c}=[];
     baseRate=reshape(dataCells{c}(timeTrial>baseTW(1) & timeTrial<baseTW(2)),nTrials,[]);
     for e=1:size(epochNames,2)
         epochRate=reshape(dataCells{c}(timeTrial>epochTW(e,1) & timeTrial<epochTW(e,2)),nTrials,[]);
@@ -53,6 +56,10 @@ for c=1:nCells
         Analysis.Tagging.AllCells.(epochNames{e}).FiringRate(c,:)=stats.FiringRate;
         Analysis.Tagging.AllCells.(epochNames{e}).Reliability(c,:)=stats.Reliability;
         Analysis.Tagging.(thisID).(epochNames{e}).tagStats=stats;
+        if h
+            Analysis.Tagging.Label{c}=[Analysis.Tagging.Label{c} ' ' epochNames{e}];
+            Analysis.AllData.(thisID).LabelTag=[Analysis.AllData.(thisID).LabelTag ' ' epochNames{e}];
+        end
     end
 end
 
