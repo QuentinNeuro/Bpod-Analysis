@@ -1,6 +1,6 @@
 function Analysis=A_FilterCNSMatch(Analysis)
 
-    switch Analysis.Parameters.Phase
+    switch Analysis.Parameters.Behavior.Phase
         case {'RewardA','Training','RewardA_woOmi','RewardA_Large','PunishA'}
             Analysis.Filters.CS=Analysis.Filters.Cue_A;
             Analysis.Filters.NS=Analysis.Filters.Cue_B;

@@ -1,6 +1,6 @@
 function Analysis=AP_Pairing_FiltersAndPlot(Analysis)
 Title='PairedStimulus';
-switch Analysis.Parameters.Behavior
+switch Analysis.Parameters.Behavior.Behavior
     case 'AuditoryTuning'
         PairedFilter=logical(Analysis.Filters.type_2+Analysis.Filters.type_3);
         PairedFilter_Inv=~PairedFilter;

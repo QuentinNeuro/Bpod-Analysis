@@ -1,7 +1,7 @@
 function LP=AP_AutoLoad(LP)
 
 %% Default Parameters
-LP.P.Photometry=LP.D.Photometry;
+LP.P.Photometry.Photometry=LP.D.Photometry.Photometry;
 LP.P.Spikes.Spikes=LP.D.Spikes.Spikes;
 LP.P.AOD.AOD=LP.D.AOD.AOD;
 LP.P.Prime.Prime=LP.D.Prime.Prime;
@@ -16,7 +16,7 @@ cd(LP.PathName); load(FileName);
 if exist('SessionData','var')
     LP.Load=0;
     if isfield('SessionData','NidaqData')
-        LP.P.Photometry=1;
+        LP.P.Photometry.Photometry=1;
     end
     if ~isempty(ls('dff_*')) || ~isempty(ls('raw_*')) || ~isempty(ls('calcium_*'))
         LP.P.AOD.AOD=1;
@@ -31,10 +31,10 @@ if exist('SessionData','var')
         LP.P.Prime.Prime=1;
         LP.P.Prime.Wheel=1;
     end
-    test=LP.P.Photometry+LP.P.Spikes.Spikes+LP.P.AOD.AOD+LP.P.Prime.Prime;
+    test=LP.P.Photometry.Photometry+LP.P.Spikes.Spikes+LP.P.AOD.AOD+LP.P.Prime.Prime;
     if test>1
         disp('AutoLoad function has failed, will use default parameters')
-        LP.P.Photometry=LP.D.Photometry;
+        LP.P.Photometry=LP.D.Photometry.Photometry;
         LP.P.Spikes.Spikes=LP.D.Spikes.Spikes;
         LP.P.AOD.AOD=LP.D.AOD.AOD;
         LP.P.Prime.Prime=LP.D.Prime.Prime;
@@ -43,7 +43,11 @@ else
     if exist('Analysis','var')
     LP.Load=1;
     if isfield(Analysis.Parameters,'Photometry')
-        LP.P.Photometry=Analysis.Parameters.Photometry;
+        if isstruct(Analysis.Parameters.Photometry)
+            LP.P.Photometry.Photometry=Analysis.Parameters.Photometry.Photometry;
+        else %% OLD VERSION
+            LP.P.Photometry.Photometry=Analysis.Parameters.Photometry;
+        end
     end
     if isfield(Analysis.Parameters,'Spikes')
         LP.P.Spikes.Spikes=Analysis.Parameters.Spikes.Spikes;

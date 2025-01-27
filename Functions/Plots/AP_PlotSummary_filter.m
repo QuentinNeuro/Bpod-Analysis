@@ -6,12 +6,12 @@ nboftypes=length(Group);
 color4plot={'-k';'-b';'-r';'-g';'-c';'-c';'-k'};
 Title=strrep(Title,'_',' ');
 labelx='Time (sec)';   
-xTime=Analysis.Parameters.PlotX;
+xTime=Analysis.Parameters.Plot.xTime;
 xtickvalues=linspace(xTime(1),xTime(2),5);
-transparency=Analysis.Parameters.Transparency;
+transparency=Analysis.Parameters.Plot.Transparency;
 labely1='Licks Rate (Hz)';
 maxrate=10;
-PlotY_photo=Analysis.Parameters.PlotY_photo;
+PlotY_photo=Analysis.Parameters.Plot.yPhoto;
 
 thistypecheck=sprintf('type_%.0d',min(Analysis.Core.TrialTypes));
 [timeAVG,dataAVG,semAVG,labelYData]=AP_PlotData_SelectorAVG(Analysis,thistypecheck);
@@ -19,16 +19,11 @@ nbOfPlotsY=1+size(dataAVG,2);
 nbOfPlotsX=1;
 
 %% Figure
-phototitlelabel=[];
-for thisCh=1:length(Analysis.Parameters.PhotoCh)
-    phototitlelabel=[phototitlelabel '_' Analysis.Parameters.PhotoChNames{thisCh}];
-end
-FigTitle=[Title '_' phototitlelabel];
+FigTitle=Title;
 scrsz = get(groot,'ScreenSize');
-
 figure('Name',FigTitle,'Position', [25 25 scrsz(3)/4 scrsz(4)-150], 'numbertitle','off');
 Legend=uicontrol('style','text');
-set(Legend,'String',Analysis.Parameters.Legend,'Position',[10,5,500,20]); 
+set(Legend,'String',Analysis.Parameters.Plot.Legend,'Position',[10,5,500,20]); 
 
 %% Group plot
 k=1;

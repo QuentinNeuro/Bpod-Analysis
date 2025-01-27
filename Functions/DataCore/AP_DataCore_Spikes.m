@@ -13,16 +13,16 @@ switch Analysis.Parameters.Spikes.Clustering
 end
 
 % Behavior specific
-switch Analysis.Parameters.Behavior
+switch Analysis.Parameters.Behavior.Behavior
     case 'CuedOutcome'
 FieldStates=fieldnames(Analysis.Core.States{1,1});
-TTL_Behavior=find(contains(FieldStates,Analysis.Parameters.StateToZero));
+TTL_Behavior=find(contains(FieldStates,Analysis.Parameters.Timing.StateToZero));
 if size(TTL_Behavior,1)~=1
     TTL_Behavior=TTL_Behavior(1);
 end
     case 'AuditoryTuning'
 FieldStates=fieldnames(Analysis.Core.States{1,1});
-TTL_Behavior=find(contains(FieldStates,Analysis.Parameters.StateToZero));
+TTL_Behavior=find(contains(FieldStates,Analysis.Parameters.Timing.StateToZero));
 if size(TTL_Behavior,1)~=1
     TTL_Behavior=TTL_Behavior(1);
 end
@@ -38,7 +38,7 @@ Analysis.Core.Spikes_TagTS=Events_TS(Events_TTL==TTL_Tagging);
 load behavEvents.mat
 Analysis.Core.Spikes_BehTS=Events_TS(Events_TTL==TTL_Behavior);
 %% Warning - check nb of trials
-if Analysis.Parameters.nTrials ~= length(Analysis.Core.Spikes_BehTS)
+if Analysis.Parameters.Behavior.nTrials ~= length(Analysis.Core.Spikes_BehTS)
     disp('mismatch between the number of trials in Bpod and TTLs - Trying to autocorrect');
     Analysis=AS_TTLmismatch(Analysis); %% see below  %%
 end
@@ -62,9 +62,12 @@ end
 %%%%%%%%%%%%%%%%%% TTLmismatch check %%% %%%%%%%%%%%%%%%%%
 function Analysis=AS_TTLmismatch(Analysis)
 %%   
-    sprintf('Bpod trial nb %.0d - TTL trial nb %.0d', Analysis.Parameters.nTrials,length(Analysis.Core.Spikes_BehTS))
-    
-    if Analysis.Parameters.nTrials > length(Analysis.Core.Spikes_BehTS)
+    nTrialBpod=Analysis.Parameters.Behavior.nTrials;
+    nTrialTTL=length(Analysis.Core.Spikes_BehTS);
+
+    sprintf('Bpod trial nb %.0d - TTL trial nb %.0d', nTrialBpod,nTrialTTL)
+
+    if nTrialBpod > nTrialTTL
        disp('Too many bpod trials');
        if ceil(Analysis.Core.Spikes_BehTS(2)-Analysis.Core.Spikes_BehTS(1))...
                 ==ceil(Analysis.Core.TrialStartTS(2)-Analysis.Core.TrialStartTS(1))

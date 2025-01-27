@@ -6,7 +6,7 @@ cellID=Analysis.Parameters.Spikes.CellID;
 nTrials=Analysis.Core.nTrials;
 zeroTS=Analysis.Core.Spikes_BehTS;
 binSize=Analysis.Parameters.Spikes.BinSize(1);
-TW=Analysis.Parameters.ReshapedTime;
+TW=Analysis.Parameters.Timing.PSTH;
 
 %% Align data to behavior 
 thisBinTW=TW(1):binSize:TW(2);
@@ -24,6 +24,7 @@ for t=1:nTrials
     timeTrial(t,:)=thisBinTW(1:end-1);
 end
 % Save in structure and generate metrics
+Analysis.Parameters.Data.Label={'Spikes'};
 Analysis.AllData.Time.Zero_Spike=zeroTS;
 Analysis.AllData.AllCells.Time=timeTrial;
 Analysis.AllData.AllCells.Data = cell2mat(cellfun(@(x) mean(x,1,'omitnan'),dataTrial,'UniformOutput',false)');

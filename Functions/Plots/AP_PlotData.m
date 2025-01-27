@@ -13,13 +13,13 @@ function Analysis=AP_PlotData(Analysis)
 %% Legends
 FigTitle='Summary-Plot';
 labelx='Time (sec)';   
-xTime=Analysis.Parameters.PlotX;
+xTime=Analysis.Parameters.Plot.xTime;
 xtickvalues=linspace(xTime(1),xTime(2),5);
 labely1='Trial Number (licks)';
 labely2='Licks Rate (Hz)';
 
 %% Nb of plots
-nbOfTrialTypes=Analysis.Parameters.nbOfTrialTypes;
+nbOfTrialTypes=Analysis.Parameters.Behavior.nbOfTrialTypes;
 if nbOfTrialTypes>6
     nbOfPlotsX=nbOfTrialTypes;
 else
@@ -45,7 +45,7 @@ for i=1:nbOfTrialTypes
     end
     end
 end
-PlotY_photo=Analysis.Parameters.PlotY_photo;
+PlotY_photo=Analysis.Parameters.Plot.yPhoto;
 
 %% Plot
 ScrSze=get(0,'ScreenSize');
@@ -53,7 +53,7 @@ FigSze=[ScrSze(3)*1/10 ScrSze(4)*1/10 ScrSze(3)*8/10 ScrSze(4)*8/10];
 figure('Name',FigTitle,'Position', FigSze, 'numbertitle','off');
 
 Legend=uicontrol('style','text');
-set(Legend,'String',Analysis.Parameters.Legend,'Position',[10,5,500,20]); 
+set(Legend,'String',Analysis.Parameters.Plot.Legend,'Position',[10,5,500,20]); 
 
 thisplot=1;
 for i=1:nbOfTrialTypes
@@ -89,7 +89,7 @@ if Analysis.(thistype).nTrials
 [timeRaster,trialRaster,dataRaster,labelYRaster]=AP_PlotData_SelectorRaster(Analysis,thistype);
 
 if ~isempty(dataAVG)
-    if ~Analysis.Parameters.Photometry
+    if ~Analysis.Parameters.Photometry.Photometry
         maxtrial=max(trialRaster{1});
     end
     for thisCh=1:size(dataAVG,2)
@@ -116,7 +116,7 @@ if ~isempty(dataAVG)
                 ylabel(labelYRaster{thisCh});
     end
     imagesc(timeRaster{thisCh},trialRaster{thisCh},dataRaster{thisCh},thisPlotY_photo(thisCh,:));
-    if Analysis.Parameters.Photometry
+    if Analysis.Parameters.Photometry.Photometry
     plot(Analysis.(thistype).Time.Outcome(:,1),trialRaster{thisCh},'.r','MarkerSize',4);
     plot(Analysis.(thistype).Time.Cue(:,1),trialRaster{thisCh},'.m','MarkerSize',4);
     else

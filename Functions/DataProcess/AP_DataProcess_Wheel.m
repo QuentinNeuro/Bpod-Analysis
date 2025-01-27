@@ -3,17 +3,17 @@ function Analysis=AP_DataProcess_Wheel(Analysis,thisTrial)
 if Analysis.Filters.Wheel(thisTrial)
 %% Timing
 timeToZero=Analysis.AllData.Time.Zero(thisTrial);
-cueTime=Analysis.AllData.Time.Cue(thisTrial,:)+Analysis.Parameters.CueTimeReset;
-outcomeTime=Analysis.AllData.Time.Outcome(thisTrial,:)+Analysis.Parameters.OutcomeTimeReset;
-timeWindow=Analysis.Parameters.ReshapedTime;
-sampRate=Analysis.Parameters.NidaqDecimatedSR;
-baseline=Analysis.Parameters.NidaqBaselinePoints; 
+cueTime=Analysis.AllData.Time.Cue(thisTrial,:)+Analysis.Parameters.Timing.CueTimeReset;
+outcomeTime=Analysis.AllData.Time.Outcome(thisTrial,:)+Analysis.Parameters.Timing.OutcomeTimeReset;
+PSTH_TW=Analysis.Parameters.Timing.PSTH;
+sampRate=Analysis.Parameters.Data.NidaqDecimatedSR;
+baseline=Analysis.Parameters.Data.NidaqBaselinePoints; 
 
 %% Data
 thisDataDeg=Analysis.Core.Wheel{thisTrial};
-[time,data]=AP_PSTH(thisDataDeg',timeWindow,timeToZero,sampRate);
+[time,data]=AP_PSTH(thisDataDeg',PSTH_TW,timeToZero,sampRate);
 if ~isfield(Analysis.Parameters,'Prime')
-    DataDistance=data'.*(Analysis.Parameters.WheelPolarity*Analysis.Parameters.WheelDiameter*pi/360);
+    DataDistance=data'.*(Analysis.Parameters.Wheel.Polarity*Analysis.Parameters.Wheel.Diameter*pi/360);
 else
     DataDistance=data;
 end

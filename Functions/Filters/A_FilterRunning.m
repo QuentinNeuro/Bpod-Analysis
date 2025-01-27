@@ -16,19 +16,9 @@ if isfield(Analysis.Filters,checkExist)
     disp(['Filter ' checkExist ' already generated']);
 return
 end
-%% Parameters
-switch nargin
-    case 1
-        FilterName='Run';
-        State=Analysis.Parameters.WheelState;
-        threshold=Analysis.Parameters.WheelThreshold;
-    case 2
-        State=Analysis.Parameters.WheelState;
-        threshold=Analysis.Parameters.WheelThreshold;
-end
 %% Filter
 Logicals=false(Analysis.AllData.nTrials,1);
-if Analysis.Parameters.Wheel==1
+if Analysis.Parameters.Wheel.Wheel
     Logicals(Analysis.AllData.Wheel.(State)>threshold)=true;
     LogicalsInv=~Logicals;
 else

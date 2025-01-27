@@ -12,7 +12,7 @@ return
 end
 
 %% Filter
-for i=1:Analysis.Parameters.nbOfTrialTypes
+for i=1:Analysis.Parameters.Behavior.nbOfTrialTypes
     Logicals=false(Analysis.AllData.nTrials,1);
     thistype=sprintf('type_%.0d',i);
     Logicals(Analysis.AllData.TrialTypes==i)=true;  

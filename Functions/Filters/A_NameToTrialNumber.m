@@ -6,8 +6,8 @@ function TrialNumber=A_NameToTrialNumber(Analysis,StringToSearch)
 
 TrialNumber=NaN;
 k=1;
-for i=1:Analysis.Parameters.nbOfTrialTypes
-    if strfind(Analysis.Parameters.TrialNames{i},StringToSearch)
+for i=1:Analysis.Parameters.Behavior.nbOfTrialTypes
+    if strfind(Analysis.Parameters.Behavior.TrialNames{i},StringToSearch)
         TrialNumber(k)=i;
         k=k+1;
     end

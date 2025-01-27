@@ -2,13 +2,13 @@ function Analysis=AP_DataSort_Events(Analysis,thisType)
 %% Parameters
 nTrials=Analysis.AllData.nTrials;
 trialNbs=Analysis.(thisType).TrialNumbers;
-epochNames=Analysis.Parameters.EventEpochNames;
-epochTW=Analysis.Parameters.EventEpochTW;
+epochNames=Analysis.Parameters.EventDetection.EpochNames;
+epochTW=Analysis.Parameters.EventDetection.EpochTW;
+nbOfChannels=size(Analysis.Parameters.Photometry.Channels,2);
 
-for thisCh=1:length(Analysis.Parameters.PhotoCh)
-    %% Structure path
-    thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
-    thisPeakStruct=[thisChStruct '_peak'];
+for thisCh=1:nbOfChannels
+    thisChStruct=sprintf('Photo_%s',Analysis.Parameters.Photometry.Channels{thisCh});
+    thisPeakStruct=[thisChStruct '_events'];
     thisPeakStats=Analysis.(thisType).(thisPeakStruct);
     
     thisTrialIdx=ismember(thisPeakStats.trials,trialNbs);

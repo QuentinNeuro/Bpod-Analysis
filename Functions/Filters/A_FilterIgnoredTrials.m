@@ -9,9 +9,9 @@ function Analysis=A_FilterIgnoredTrials(Analysis,IT,test)
 %% Checks and loads IT
 switch nargin
     case 1
-        if isfield(Analysis.Parameters,'LoadIgnoredTrials') && isfield(Analysis.Parameters,'TrialToFilterOut')
-IT=Analysis.Parameters.TrialToFilterOut;
-test=Analysis.Parameters.LoadIgnoredTrials;
+        if isfield(Analysis.Parameters.Filters,'LoadIgnoredTrials') && isfield(Analysis.Parameters.Filters,'TrialToFilterOut')
+IT=Analysis.Parameters.Filters.TrialToFilterOut;
+test=Analysis.Parameters.Filters.LoadIgnoredTrials;
         else
 disp('Cannot find parameters for ignoredTrials filter function - Will continue with default parameters');
 IT=[];
@@ -27,7 +27,7 @@ if isempty(IT)==1 && exist(ITFile,'file') && test==1
 end
 
 %% Generates the filter
-Logicals=true(1,Analysis.Parameters.nTrials);
+Logicals=true(1,Analysis.Parameters.Behavior.nTrials);
 Logicals(IT)=false;
 
 if isfield(Analysis,'Filters')

@@ -13,7 +13,7 @@ if isfield(Analysis.Filters,checkExist)
     disp(['Filter ' checkExist ' already generated']);
 return
 end
-if ~Analysis.Parameters.Pupillometry
+if ~Analysis.Parameters.Pupillometry.Pupillometry
     disp('Unable to generate pupillometry based filters');
     return
 end

@@ -2,26 +2,25 @@
 
 %% Timing
 timeToZero=Analysis.AllData.Time.Zero(thisTrial);
-cueTime=Analysis.AllData.Time.Cue(thisTrial,:)+Analysis.Parameters.CueTimeReset;
-outcomeTime=Analysis.AllData.Time.Outcome(thisTrial,:)+Analysis.Parameters.OutcomeTimeReset;
-
-timeWindow=Analysis.Parameters.ReshapedTime;
-sampRate=Analysis.Parameters.NidaqDecimatedSR;
-
-fitTest=Analysis.Parameters.Fit_470405;
+cueTime=Analysis.AllData.Time.Cue(thisTrial,:)+Analysis.Parameters.Timing.CueTimeReset;
+outcomeTime=Analysis.AllData.Time.Outcome(thisTrial,:)+Analysis.Parameters.Timing.OutcomeTimeReset;
+PSTH_TW=Analysis.Parameters.Timing.PSTH;
+sampRate=Analysis.Parameters.Data.NidaqDecimatedSR;
+fitTest=Analysis.Parameters.Photometry.Fit_470405;
+nbOfChannels=size(Analysis.Parameters.Photometry.Channels,2);
 
 %% Data processing
-for thisCh=1:length(Analysis.Parameters.PhotoCh)
-    thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
+for thisCh=1:nbOfChannels
+    thisChStruct=sprintf('Photo_%s',Analysis.Parameters.Photometry.Channels{thisCh});
     data=Analysis.Core.Photometry{thisTrial}{thisCh};
     baselineAVG=Analysis.AllData.(thisChStruct).BaselineAVG(thisTrial);
     baselineSTD=Analysis.AllData.(thisChStruct).BaselineSTD(thisTrial);    
     % Extract desired time window
-    [time,data]=AP_PSTH(data,timeWindow,timeToZero,sampRate);
+    [time,data]=AP_PSTH(data,PSTH_TW,timeToZero,sampRate);
     % DFF / z-scoring
     if fitTest && thisCh==1
         try
-        [time,data405]=AP_PSTH(Analysis.Core.Photometry{thisTrial}{2},timeWindow,timeToZero,sampRate);
+        [time,data405]=AP_PSTH(Analysis.Core.Photometry{thisTrial}{2},PSTH_TW,timeToZero,sampRate);
         p=Analysis.Parameters.PhotometryFit;
         data405=data405*p(1)+p(2);
         data=100*(data-data405)./data405;
@@ -30,29 +29,29 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
         end
     else
     data=data-baselineAVG;
-    if Analysis.Parameters.Zscore
+    if Analysis.Parameters.Data.Zscore
         data=data/baselineSTD;
     else
         data=100*data/baselineAVG;
     end
     end
-    switch Analysis.Parameters.ZeroAt
+    switch Analysis.Parameters.Timing.ZeroAt
         case 'Zero'
             data=data-mean(data(time>-0.1 & time<0),'omitnan');
         case '2sBefCue'
             data=data-mean(data(time>cueTime(1)-2.2 & time<=cueTime(1)-1.8),'omitnan');
         otherwise
-            if isnumeric(Analysis.Parameters.ZeroAt)
-                thisZeroTime=Analysis.Parameters.ZeroAt;
+            if isnumeric(Analysis.Parameters.Timing.ZeroAt)
+                thisZeroTime=Analysis.Parameters.Timing.ZeroAt;
                 data=data-mean(data(time>thisZeroTime-0.1 & time<=thisZeroTime+0.1),'omitnan');
             end
     end  
 
 %% Statistics for Analysis Structure
-    Analysis.AllData.(thisChStruct).Name                                =Analysis.Parameters.PhotoChNames{thisCh};
+    Analysis.AllData.(thisChStruct).Name                                =Analysis.Parameters.Data.Label{thisCh};
     Analysis.AllData.(thisChStruct).Time(thisTrial,:)                   =time;          
-    Analysis.AllData.(thisChStruct).DFF(thisTrial,:)                    =data;
-%     Analysis.AllData.(thisChStruct).Baseline(thisTrial)                 =DFFBaseline;
+    Analysis.AllData.(thisChStruct).Data(thisTrial,:)                   =data;
+    % Analysis.AllData.(thisChStruct).Baseline(thisTrial)                 =DFFBaseline;
     % AVG/MAX
     Analysis.AllData.(thisChStruct).CueAVG(thisTrial)      =mean(data(time>cueTime(1) & time<cueTime(2)),'omitnan');
     Analysis.AllData.(thisChStruct).CueMAX(thisTrial)      =max(data(time>cueTime(1) & time<cueTime(2)));
@@ -69,25 +68,6 @@ for thisCh=1:length(Analysis.Parameters.PhotoCh)
                                                         -Analysis.AllData.(thisChStruct).Z4Outcome(thisTrial);
     Analysis.AllData.(thisChStruct).OutcomeMAXZ(thisTrial)                 =Analysis.AllData.(thisChStruct).OutcomeMAX(thisTrial)...
                                                         -Analysis.AllData.(thisChStruct).Z4Outcome(thisTrial);
-    switch Analysis.Parameters.CueStats
-        case 'AVG';     CueStat=Analysis.AllData.(thisChStruct).CueAVG; 
-        case 'AVGZ';    CueStat=Analysis.AllData.(thisChStruct).CueAVGZ; 
-        case 'MAX';     CueStat=Analysis.AllData.(thisChStruct).CueMAX; 
-        case 'MAXZ';    CueStat=Analysis.AllData.(thisChStruct).CueMAXZ; 
-        otherwise
-            disp('unrecognized parameter for cue statistics')
-            return
-    end
-    Analysis.AllData.(thisChStruct).CueStat=CueStat;
-    switch Analysis.Parameters.OutcomeStats
-        case 'AVG';     OutcomeStat=Analysis.AllData.(thisChStruct).OutcomeAVG; 
-        case 'AVGZ';    OutcomeStat=Analysis.AllData.(thisChStruct).OutcomeAVGZ; 
-        case 'MAX';     OutcomeStat=Analysis.AllData.(thisChStruct).OutcomeMAX; 
-        case 'MAXZ';    OutcomeStat=Analysis.AllData.(thisChStruct).OutcomeMAXZ; 
-        otherwise
-            disp('unrecognized parameter for cue statistics')
-            return
-    end
-    Analysis.AllData.(thisChStruct).OutcomeStat=OutcomeStat;                                                                                         
+                                                                                       
 end
 end

@@ -30,7 +30,7 @@ for thisTrial=1:SessionData.nTrials
 % catch
 %     Analysis.Filters.ignoredTrials(i)=false;
 % end
-    switch Analysis.Parameters.Behavior
+    switch Analysis.Parameters.Behavior.Behavior
     case 'Oddball'
     Analysis.Core.Oddball_StateSeq{i}=SessionData.TrialSettings(thisTrial).StateSequence;
     Analysis.Core.Oddball_SoundSeq{i}=SessionData.TrialSettings(thisTrial).SoundSequence;

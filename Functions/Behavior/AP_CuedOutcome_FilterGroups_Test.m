@@ -1,7 +1,7 @@
 function GroupTest=AP_CuedOutcome_FilterGroups_Test(Analysis)
 GroupTest={};
 
-switch Analysis.Parameters.Phase
+switch Analysis.Parameters.Behavior.Phase
     case {'RewardA','Training','RewardA_woOmi','RewardA_Large'} 
 GroupTest={'type_1','type_1','type_1','type_3'};
 

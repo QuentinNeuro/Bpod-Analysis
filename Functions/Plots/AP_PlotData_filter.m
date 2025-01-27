@@ -32,7 +32,7 @@ end
 %% Plot Parameters
 Title=sprintf('%s (%.0d)',strrep(Analysis.(thistype).Name,'_',' '),Analysis.(thistype).nTrials);
 labelx='Time (s)';   
-xTime=Analysis.Parameters.PlotX;
+xTime=Analysis.Parameters.Plot.xTime;
 xtickvalues=linspace(xTime(1),xTime(2),5);
 labely1='Trial Number (licks)';
 labely2='Licks Rate (Hz)';
@@ -47,7 +47,7 @@ maxrate=max(Analysis.(thistype).Licks.AVG);
 if maxrate<10
     maxrate=10;
 end
-thisPlotY=Analysis.Parameters.PlotY_photo;
+thisPlotY=Analysis.Parameters.Plot.yPhoto;
 
 nbOfPlotsY=3+3*size(dataAVG,2);
 nbOfPlotsX=1;
@@ -78,7 +78,7 @@ set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxrate+1]);
 
 %% Neuronal Data
 if ~isempty(dataAVG)
-    if ~Analysis.Parameters.Photometry
+    if ~Analysis.Parameters.Photometry.Photometry
         maxtrial=max(trialRaster{1});
     end
     counter=0;
@@ -101,7 +101,7 @@ if ~isempty(dataAVG)
         subplot(nbOfPlotsY,nbOfPlotsX,thisSubPlot); hold on;
         imagesc(timeRaster{thisC},trialRaster{thisC},dataRaster{thisC},thisPlotY(thisC,:));
         colormap(cmap)
-        if Analysis.Parameters.Photometry
+        if Analysis.Parameters.Photometry.Photometry
             plot(Analysis.(thistype).Time.Outcome(:,1),trialRaster{thisC},'.r','MarkerSize',4);
             plot(Analysis.(thistype).Time.Cue(:,1),trialRaster{thisC},'.m','MarkerSize',4);
         else

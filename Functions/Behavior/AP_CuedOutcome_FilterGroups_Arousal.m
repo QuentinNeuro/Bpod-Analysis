@@ -1,7 +1,7 @@
 function GroupPlot=AP_CuedOutcome_FilterGroups_Arousal(GroupPlot,indexp,Analysis)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
-if Analysis.Parameters.Wheel
-    switch Analysis.Parameters.Phase
+if Analysis.Parameters.Wheel.Wheel
+    switch Analysis.Parameters.Behavior.Phase
         case {'Habituation'}
                 indexp=indexp+1;
                 GroupPlot{indexp,1}='Uncued_Reward_Running';
@@ -31,8 +31,8 @@ if Analysis.Parameters.Wheel
     end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
-if Analysis.Parameters.Pupillometry
-    switch Analysis.Parameters.Phase
+if Analysis.Parameters.Pupillometry.Pupillometry
+    switch Analysis.Parameters.Behavior.Phase
         case {'Habituation'}
                 indexp=indexp+1;
                 GroupPlot{indexp,1}='Uncued_Reward_Pupil';

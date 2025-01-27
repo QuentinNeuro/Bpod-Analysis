@@ -13,12 +13,12 @@ end
 % CS/NS matching
 Analysis=A_FilterCNSMatch(Analysis);
 % Licks
-Analysis=A_FilterLick(Analysis,'LicksCue','Cue',Analysis.Parameters.LicksCue);
-Analysis=A_FilterLick(Analysis,'LicksOutcome','Outcome',Analysis.Parameters.LicksOutcome);
+Analysis=A_FilterLick(Analysis,'LicksCue','Cue',Analysis.Parameters.Filters.LicksCue);
+Analysis=A_FilterLick(Analysis,'LicksOutcome','Outcome',Analysis.Parameters.Filters.LicksOutcome);
 % Wheel
-Analysis=A_FilterRunning(Analysis,'Run',Analysis.Parameters.WheelState,Analysis.Parameters.WheelThreshold);
+Analysis=A_FilterRunning(Analysis,'Run',Analysis.Parameters.Filters.WheelState,Analysis.Parameters.Filters.WheelThreshold);
 % Pupil
-Analysis=A_FilterPupil(Analysis,'Pupil',Analysis.Parameters.PupilState,Analysis.Parameters.PupilThreshold);
+Analysis=A_FilterPupil(Analysis,'Pupil',Analysis.Parameters.Filters.PupilState,Analysis.Parameters.Filters.PupilThreshold);
 Analysis=A_FilterPupil(Analysis,'CuePupil','Cue',2);
 Analysis=A_FilterPupilNaNCheck(Analysis,'PupilNaN',25);
 % Sequence
@@ -41,7 +41,7 @@ catch
 end
 
 %% Sort and plot Filter
-if Analysis.Parameters.SortFilters
+if Analysis.Parameters.Filters.Sort
 for i=1:size(Group_Plot,1)
     Title=Group_Plot{i,1};
     MetaFilterGroup=cell(size(Group_Plot{i,2},1),1);
@@ -51,30 +51,26 @@ for i=1:size(Group_Plot,1)
         MetaFilterGroup{j}=MetaFilter;
         [Analysis,thisFilter]=A_FilterMeta(Analysis,MetaFilter,Filters);
         Analysis=AP_DataSort(Analysis,MetaFilter,thisFilter);
-        if Analysis.Parameters.PlotFiltersSingle && Analysis.(MetaFilter).nTrials>0
+        if Analysis.Parameters.Plot.FiltersSingle && Analysis.(MetaFilter).nTrials>0
                 AP_PlotData_filter(Analysis,MetaFilter);
-                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend MetaFilter '.png']);
+                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Plot.Legend MetaFilter '.png']);
                 if Analysis.Parameters.Illustrator
-                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend MetaFilter],'epsc');
+                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Plot.Legend MetaFilter],'epsc');
                 end
         end
         clear thisFilter
     end
-    if Analysis.Parameters.PlotFiltersSummary
+    if Analysis.Parameters.Plot.FiltersSummary
         AP_PlotSummary_filter(Analysis,Title,MetaFilterGroup);
-        phototitlelabel=[];
-        for thisCh=1:length(Analysis.Parameters.PhotoCh)
-            phototitlelabel=[phototitlelabel '_' Analysis.Parameters.PhotoChNames{thisCh}];
-        end
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend Title phototitlelabel '.png']);
-        if Analysis.Parameters.Illustrator
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend Title phototitlelabel],'epsc');
+        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Plot.Legend Title '.png']);
+        if Analysis.Parameters.Plot.Illustrator
+        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Plot.Legend Title],'epsc');
         end
     end
 end
 end
 %% Correlations
-if Analysis.Parameters.PlotFiltersBehavior
+if Analysis.Parameters.Plot.FiltersBehavior
 for i=1:size(Group_Corr,1)
     Title=Group_Corr{i,1};
     MetaFilterGroup=cell(size(Group_Corr{i,2},1),1);
@@ -84,23 +80,23 @@ for i=1:size(Group_Corr,1)
         MetaFilterGroup{j}=MetaFilter;
         [Analysis,thisFilter]=A_FilterMeta(Analysis,MetaFilter,Filters);
         Analysis=AP_DataSort(Analysis,MetaFilter,thisFilter);
-        if Analysis.(MetaFilter).nTrials && Analysis.Parameters.Photometry
-            for thisCh=1:length(Analysis.Parameters.PhotoCh)
+        if Analysis.(MetaFilter).nTrials && Analysis.Parameters.Photometry.Photometry
+            for thisCh=1:size(Analysis.Parameters.Photometry.Channels,2)
                 AP_PlotData_Filter_corrDFF(Analysis,MetaFilter,thisCh);
-                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend MetaFilter char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
-                if Analysis.Parameters.Illustrator
-                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend MetaFilter char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
+                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Plot.Legend MetaFilter '.png']);
+                if Analysis.Parameters.Plot.Illustrator
+                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Plot.Legend MetaFilter],'epsc');
                 end
             end
         end
         clear thisFilter
     end
-    if Analysis.Parameters.Photometry
-    for thisCh=1:length(Analysis.Parameters.PhotoCh)
+    if Analysis.Parameters.Photometry.Photometry
+    for thisCh=1:size(Analysis.Parameters.Photometry.Channels,2)
         AP_PlotSummary_Filter_corrDFF(Analysis,Title,MetaFilterGroup,thisCh);
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend Title char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
+        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Plot.Legend Title '.png']);
         if Analysis.Parameters.Illustrator
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend Title char(Analysis.Parameters.PhotoChNames{thisCh})],'epsc');
+        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Plot.Legend Title],'epsc');
         end
     end
     end
@@ -108,13 +104,13 @@ end
 end
 
 %% SingleCells
-if Analysis.Parameters.nCells>0 && Analysis.Parameters.SortCells
+if Analysis.Parameters.nCells>0 && Analysis.Parameters.Filters.Cells
     Analysis=AP_CuedOutcome_FiltersAndPlot_Cells(Analysis);
 end
 
 %% Spikes
-if Analysis.Parameters.Spikes
-
+if Analysis.Parameters.Spikes.Spikes
+end
 %% Spikes Analysis
 % % TrialEvents
 % % if Analysis.Parameters.TE4CellBase

@@ -1,4 +1,4 @@
-function    Analysis=AP_DataSort_SingleCells(Analysis,FilterName,FilterCell)
+function    Analysis=AP_DataSort_FilterSingleCells(Analysis,FilterName,FilterCell)
 % Take the pseudo trial structure of 'FilterName' and select data for the cells
 % specified in 'FilterCell
 

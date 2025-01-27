@@ -1,7 +1,7 @@
 function Analysis=AP_DataCore_AOD(Analysis)
 
 %% Load stuff
-nTrials=Analysis.Parameters.nTrials;
+nTrials=Analysis.Parameters.Behavior.nTrials;
 % data
 try
 if Analysis.Parameters.AOD.raw

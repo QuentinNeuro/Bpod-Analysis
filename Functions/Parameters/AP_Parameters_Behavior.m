@@ -1,179 +1,160 @@
 function Par=AP_Parameters_Behavior(Par,SessionData,LP,Name)
 
-Par.nTrials=SessionData.nTrials;
-Par.nbOfTrialTypes=max(SessionData.TrialTypes);
+Par.Behavior.nTrials=SessionData.nTrials;
+Par.Behavior.nbOfTrialTypes=max(SessionData.TrialTypes);
 if isfield(SessionData.TrialSettings(1),'TrialsNames')
-    Par.TrialNames=SessionData.TrialSettings(1).TrialsNames;
+    Par.Behavior.TrialNames=SessionData.TrialSettings(1).TrialsNames;
 else
 if isfield(SessionData.TrialSettings(1),'TirlasNames')
-    Par.TrialNames=SessionData.TrialSettings(1).TirlasNames;
+    Par.Behavior.TrialNames=SessionData.TrialSettings(1).TirlasNames;
 else
-    Par.TrialNames=LP.D.TrialNames; % Default
+    Par.Behavior.TrialNames=LP.D.TrialNames; % Default
 end
 end
 
 try
-    Par.Phase=SessionData.TrialSettings(1).Names.Phase{SessionData.TrialSettings(1).GUI.Phase};
+    Par.Behavior.Phase=SessionData.TrialSettings(1).Names.Phase{SessionData.TrialSettings(1).GUI.Phase};
 catch
-    Par.Phase=LP.D.Phase;
+    Par.Behavior.Phase=LP.D.Behavior.Phase;
 end
 %% Behavior specific
-Par.TypeOfCue='nc';
-Par.NidaqBaseline=[0.2 1.2];
+Par.Behavior.TypeOfCue='nc';
+Par.Data.NidaqBaseline=[0.2 1.2];
 
 if contains(Name,'Cued','IgnoreCase',true) && ~contains(Name,'Sensor','IgnoreCase',true)  && ~contains(Name,'AudCuedPavl','IgnoreCase',true)
-    Par.Behavior='CuedOutcome';
-    Par.TypeOfCue='Chirp';
+    Par.Behavior.Behavior='CuedOutcome';
+    Par.Behavior.TypeOfCue='Chirp';
     if isfield(SessionData.RawEvents.Trial{1,1}.States,'SoundDelivery')
-        Par.StateOfCue='SoundDelivery';
+        Par.Behavior.StateOfCue='SoundDelivery';
     elseif isfield(SessionData.RawEvents.Trial{1,1}.States,'CueDelivery')
-        Par.StateOfCue='CueDelivery';
+        Par.Behavior.StateOfCue='CueDelivery';
     end
     if isfield(SessionData.TrialSettings(1),'Names')
         if isfield(SessionData.TrialSettings(1).Names,'Cue')
-        Par.TypeOfCue=SessionData.TrialSettings(1).Names.Cue{SessionData.TrialSettings(1).GUI.CueType};
+        Par.Behavior.TypeOfCue=SessionData.TrialSettings(1).Names.Cue{SessionData.TrialSettings(1).GUI.CueType};
         elseif isfield(SessionData.TrialSettings(1).GUI,'VisualCue')
             if SessionData.TrialSettings(1).GUI.VisualCue 
-                Par.TypeOfCue='Visual'; 
+                Par.Behavior.TypeOfCue='Visual'; 
             end
         end
     end
-    Par.StateOfOutcome='Outcome';
+    Par.Behavior.StateOfOutcome='Outcome';
     if isfield(SessionData.TrialSettings(1),'Delay')
-        Par.CueTimeReset=[0 SessionData.TrialSettings(1).Delay];
+        Par.Timing.CueTimeReset=[0 SessionData.TrialSettings(1).Delay];
     else
-        Par.CueTimeReset=[0 1];
+        Par.Timing.CueTimeReset=[0 1];
     end
-    Par.OutcomeTimeReset=[0 2];
+    Par.Timing.OutcomeTimeReset=[0 2];
 elseif contains(Name,'GoNogo','IgnoreCase',true)
-    Par.Behavior='GoNogo';
-	Par.StateOfCue='CueDelivery';
-    Par.StateOfOutcome='PostOutcome';
-    Par.CueTimeReset=[-0.1 0];
-    Par.OutcomeTimeReset=[0 -3];
+    Par.Behavior.Behavior='GoNogo';
+	Par.Behavior.StateOfCue='CueDelivery';
+    Par.Behavior.StateOfOutcome='PostOutcome';
+    Par.Timing.CueTimeReset=[-0.1 0];
+    Par.Timing.OutcomeTimeReset=[0 -3];
+
 elseif contains(Name,'AuditoryTuning','IgnoreCase',true)
-    Par.Behavior='AuditoryTuning';
-	Par.StateOfCue='CueDelivery';
-    Par.StateOfOutcome='CueDelivery';
-    Par.Phase='AuditoryTuning';
-    Par.PlotSummary1=0;
-    Par.PlotSummary2=0;
-    Par.PlotFiltersSingle=0;
-    Par.PlotFiltersSummary=0; 
-    Par.PlotFiltersBehavior=0;
-    Par.CueTimeReset=[0 1.5];
-    Par.OutcomeTimeReset=[-1.6 -0.6];
+    Par.Behavior.Behavior='AuditoryTuning';
+	Par.Behavior.StateOfCue='CueDelivery';
+    Par.Behavior.StateOfOutcome='CueDelivery';
+    Par.Behavior.Phase='AuditoryTuning';
+    Par.Plot.TrialTypes=0;
+    Par.Timing.CueTimeReset=[0 1.5];
+    Par.Timing.OutcomeTimeReset=[-1.6 -0.6];
     % Par.ZeroAt=0;
-    Par.BaselineBefAft=1;
+    Par.Data.BaselineBefAft=1;
 
 elseif contains(Name,'OptoPsycho','IgnoreCase',true)
-    Par.Behavior='OptoPsycho';
-	Par.StateOfCue='CueDelivery';
-    Par.StateOfOutcome='PostOutcome';
-    Par.Phase='OptoPsycho';
-    Par.PlotSummary1=1;
-    Par.PlotSummary2=0;
-    Par.PlotFiltersSingle=0;
-    Par.PlotFiltersSummary=0; 
-    Par.PlotFiltersBehavior=0;
-    Par.CueTimeReset=[0 1];
-    Par.OutcomeTimeReset=[0 -2];
+    Par.Behavior.Behavior='OptoPsycho';
+	Par.Behavior.StateOfCue='CueDelivery';
+    Par.Behavior.StateOfOutcome='PostOutcome';
+    Par.Behavior.Phase='OptoPsycho';
+    Par.Timing.CueTimeReset=[0 1];
+    Par.Timing.OutcomeTimeReset=[0 -2];
     % Par.ZeroAt=0;
-    Par.BaselineBefAft=1;
+    Par.Data.BaselineBefAft=1;
     
 elseif contains(Name,'VisualTuning','IgnoreCase',true)
-    Par.Behavior='VisualTuning';
-	Par.StateOfCue='CueDelivery';
-    Par.StateOfOutcome='CueDelivery';
-    Par.Phase='VisualTuning';
-    Par.PlotSummary1=1;
-    Par.PlotSummary2=0;
-    Par.PlotFiltersSingle=0;
-    Par.PlotFiltersSummary=0; 
-    Par.PlotFiltersBehavior=0;
-    Par.CueTimeReset=[0 2];
-    Par.OutcomeTimeReset=[-1.5 -0.5];
+    Par.Behavior.Behavior='VisualTuning';
+	Par.Behavior.StateOfCue='CueDelivery';
+    Par.Behavior.StateOfOutcome='CueDelivery';
+    Par.Behavior.Phase='VisualTuning';
+    Par.Timing.CueTimeReset=[0 2];
+    Par.Timing.OutcomeTimeReset=[-1.5 -0.5];
     % Par.ZeroAt=0;
-    Par.BaselineBefAft=1;
+    Par.Timing.BaselineBefAft=1;
+
 elseif contains(Name,'OptoTuning','IgnoreCase',true)
-    Par.Behavior='OptoTuning';
+    Par.Behavior.Behavior='OptoTuning';
     if isfield(SessionData.RawEvents.Trial{1, 1}.States,'CueDelivery')
-	    Par.StateOfCue='CueDelivery';
-        Par.StateOfOutcome='CueDelivery';
+	    Par.Behavior.StateOfCue='CueDelivery';
+        Par.Behavior.StateOfOutcome='CueDelivery';
     else
-        Par.StateOfCue='StimDelivery';
-        Par.StateOfOutcome='StimDelivery';
+        Par.Behavior.StateOfCue='StimDelivery';
+        Par.Behavior.StateOfOutcome='StimDelivery';
     end
-    Par.Phase='OptoTuning';
-    Par.PlotSummary1=1;
-    Par.PlotSummary2=0;
-    Par.PlotFiltersSingle=0;
-    Par.PlotFiltersSummary=0; 
-    Par.PlotFiltersBehavior=0;
-    Par.CueTimeReset=[-1.1 -1.1];
-    Par.OutcomeTimeReset=[0 2];
+    Par.Behavior.Phase='OptoTuning';
+    Par.Timing.CueTimeReset=[-1.1 -1.1];
+    Par.Timing.OutcomeTimeReset=[0 2];
     % Par.ZeroAt=-0.5;
-    Par.BaselineBefAft=1;
+    Par.Data.BaselineBefAft=1;
     if sum(contains(Par.TrialNames,'Train_1Hz_500s_5ms_5V'))>0
-        Par.TrialNames(contains(Par.TrialNames,'Train_1Hz_500s_5ms_5V'))={'Train_10Hz_500ms_5ms_5V'};
+        Par.Behavior.TrialNames(contains(Par.TrialNames,'Train_1Hz_500s_5ms_5V'))={'Train_10Hz_500ms_5ms_5V'};
     end
     if sum(contains(Par.TrialNames,'Train_10Hz_500s_5ms_5V'))>0
-        Par.TrialNames(contains(Par.TrialNames,'Train_10Hz_500s_5ms_5V'))={'Train_10Hz_500ms_5ms_5V'};
+        Par.Behavior.TrialNames(contains(Par.TrialNames,'Train_10Hz_500s_5ms_5V'))={'Train_10Hz_500ms_5ms_5V'};
     end
+
 elseif contains(Name,'Oddball','IgnoreCase',true)
-    Par.Behavior='Oddball';
-	Par.StateOfCue='PreState';
-    Par.StateOfOutcome='PreState';
-    Par.PlotSummary1=0;
-    Par.PlotSummary2=0;
-    Par.PlotFiltersSingle=0;
-    Par.PlotFiltersSummary=1;
-    Par.PlotFiltersBehavior=0;
-    Par.CueTimeReset=[0 1];
-    Par.OutcomeTimeReset=[0 2];
-    Par.ReshapedTime=[0 180];
+    Par.Behavior.Behavior='Oddball';
+	Par.Behavior.StateOfCue='PreState';
+    Par.Behavior.StateOfOutcome='PreState';
+    Par.Plot.TrialTypes=0;
+    Par.Timing.CueTimeReset=[0 1];
+    Par.Timing.OutcomeTimeReset=[0 2];
+    Par.Timing.PSTH=[0 180];
     if isfield(SessionData.TrialSettings(1).Names,'Sound')
-        Par.TypeOfCue=SessionData.TrialSettings(1).Names.Sound{SessionData.TrialSettings(1).GUI.SoundType};
+        Par.Behavior.TypeOfCue=SessionData.TrialSettings(1).Names.Sound{SessionData.TrialSettings(1).GUI.SoundType};
     end
+
 elseif contains(Name,'Sensor','IgnoreCase',true)
-    Par.Behavior='Sensor';
-    Par.StateOfCue='CueDelivery';
-    Par.StateOfOutcome='Outcome';
-    Par.CueTimeReset=[0 1];
-    Par.OutcomeTimeReset=[0 2];
+    Par.Behavior.Behavior='Sensor';
+    Par.Behavior.StateOfCue='CueDelivery';
+    Par.Behavior.StateOfOutcome='Outcome';
+    Par.Timing.CueTimeReset=[0 1];
+    Par.Timing.OutcomeTimeReset=[0 2];
+    Par.Photometry.Labels={'470-BLA' '565' '470-VS'};
+
 elseif contains(Name,'Continuous','IgnoreCase',true)
-    Par.Behavior='Continuous';
-	Par.StateOfCue='PreState';
-    Par.StateOfOutcome='Outcome';
-    Par.PlotSummary1=0;
-    Par.PlotSummary2=0;
-    Par.PlotFiltersSingle=0;
-    Par.PlotFiltersSummary=0;
-    Par.PlotFiltersBehavior=0;
-    Par.CueTimeReset=[0 1];
-    Par.OutcomeTimeReset=[0 2];
-    Par.ReshapedTime=[-20 150];   
+    Par.Behavior.Behavior='Continuous';
+	Par.Behavior.StateOfCue='PreState';
+    Par.Behavior.StateOfOutcome='Outcome';
+    Par.Plot.TrialTypes=0;
+    Par.Timing.CueTimeReset=[0 1];
+    Par.Timing.OutcomeTimeReset=[0 2];
+    Par.Timing.PSTH=[-20 150];   
+
 elseif contains(Name,'AudCuedPavl','IgnoreCase',true)
     Par.Name='AOD_ACh';        %'AOD_ACh' - VIP-GCaMP
     Par.Rig='AOD';             %'AOD' 'NA'
-    Par.Behavior='CuedOutcome'; %CuedReward
-    Par.Phase='RewardA';
-    Par.CueType='Chirp';
-    Par.TrialNames={'Cue A Reward','T2','T3','T4','Cue A Omission','Cue B Omission','Uncued Reward','T8','T9','T10'};
-    Par.LickPort='Port1In';
-    Par.StateOfCue='DeliverStimulus'; %DeliverStimulus
-    Par.StateOfOutcome='DeliverStimulus';
+    Par.Behavior.Behavior='CuedOutcome'; %CuedReward
+    Par.Behavior.Phase='RewardA';
+    Par.Behavior.CueType='Chirp';
+    Par.Behavior.TrialNames={'Cue A Reward','T2','T3','T4','Cue A Omission','Cue B Omission','Uncued Reward','T8','T9','T10'};
+    Par.Licks.Port='Port1In';
+    Par.Behavior.StateOfCue='DeliverStimulus'; %DeliverStimulus
+    Par.Behavior.StateOfOutcome='DeliverStimulus';
 %     Par.StateToZero='StateOfCue';
-    Par.CueTimeReset=[0 2];
-    Par.OutcomeTimeReset=[2 4];
-    Par.ReshapedTime=[-6 6]; 
+    Par.Timing.CueTimeReset=[0 2];
+    Par.Timing.OutcomeTimeReset=[2 4];
+    Par.Timing.PSTH=[-6 6]; 
+
 else
-    Par.Behavior=LP.D.Behavior;
-	Par.StateOfCue=LP.D.StateOfCue;
-	Par.StateOfOutcome=LP.D.StateOfOutcome; 
-    Par.CueTimeReset=LP.D.CueTimeReset;
-    Par.OutcomeTimeReset=LP.D.OutcomeTimeReset;
-    Par.NidaqBaseline=LP.D.NidaqBaseline;
+    Par.Behavior.Behavior=LP.D.Behavior;
+	Par.Behavior.StateOfCue=LP.D.StateOfCue;
+	Par.Behavior.StateOfOutcome=LP.D.StateOfOutcome; 
+    Par.Timing.CueTimeReset=LP.D.CueTimeReset;
+    Par.Timing.OutcomeTimeReset=LP.D.OutcomeTimeReset;
+    Par.Data.NidaqBaseline=LP.D.NidaqBaseline;
     if isempty(Par.StateOfCue) || isempty(Par.StateOfOutcome) || isempty(Par.CueTimeReset) || isempty(Par.CueTimeReset) || isempty(Par.NidaqBaseline)
         disp('State names for cue and outcome delivery (or other type of states)...') ;
         disp('need to be defined in the launcher (or directly in AP_Parameters function)');

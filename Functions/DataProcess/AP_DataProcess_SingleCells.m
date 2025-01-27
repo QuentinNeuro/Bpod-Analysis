@@ -5,8 +5,8 @@ nTrials=Analysis.Parameters.nTrials;
 nCells=Analysis.Parameters.nCells;
 cellID=Analysis.AllData.AllCells.CellName;
 
-CueTime=Analysis.AllData.Time.Cue+Analysis.Parameters.CueTimeReset;
-OutcomeTime=Analysis.AllData.Time.Outcome+Analysis.Parameters.OutcomeTimeReset;
+CueTime=Analysis.AllData.Time.Cue+Analysis.Parameters.Timing.CueTimeReset;
+OutcomeTime=Analysis.AllData.Time.Outcome+Analysis.Parameters.Timing.OutcomeTimeReset;
 
 if nargin==1
     baseAVG=NaN(nCells,nTrials);

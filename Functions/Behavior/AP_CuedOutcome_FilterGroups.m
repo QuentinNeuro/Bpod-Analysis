@@ -7,14 +7,14 @@ function [GroupPlot,GroupCorr,GroupTest]=AP_CuedOutcome_FilterGroups(Analysis)
 GroupPlot={};
 GroupCorr={};
 indexp=0;
-if length(Analysis.Parameters.Illustration)==2
-    Analysis.Parameters.Illustration(3)=0;
+if length(Analysis.Parameters.Plot.Illustration)==2
+    Analysis.Parameters.Plot.Illustration(3)=0;
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 GroupTest=AP_CuedOutcome_FilterGroups_Test(Analysis);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
-switch Analysis.Parameters.Phase
+switch Analysis.Parameters.Behavior.Phase
     case {'Habituation'}
 indexp=indexp+1;
 GroupPlot{indexp,1}='Reward';
@@ -41,7 +41,7 @@ GroupPlot{indexp,2}={   'CS_Reward',                {'CS','Reward','LicksOutcome
                         'Uncued_Reward',            {'Uncued','Reward','LicksOutcome','FirstLick'};...
                         'CS_Omission',              {'CS','Omission'}};
 
-if ~Analysis.Parameters.Illustration(1)
+if ~Analysis.Parameters.Plot.Illustration(1)
 indexp=indexp+1;
 GroupPlot{indexp,1}='RewardExp_Licks';
 GroupPlot{indexp,2}={   'AnticipLick_CS_Reward',    {'CS','LicksCue','Reward','LicksOutcome','FirstLick'};...
@@ -175,7 +175,7 @@ GroupPlot{indexp,2}={'NV_Predicted',           	{'type_7','LicksOutcome'};...
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
 
-if Analysis.Parameters.Illustration(3)
+if Analysis.Parameters.Plot.Illustration(3)
 GroupPlot=AP_CuedOutcome_FilterGroups_Arousal(GroupPlot,indexp,Analysis);
 end
 if Analysis.Parameters.Stimulation

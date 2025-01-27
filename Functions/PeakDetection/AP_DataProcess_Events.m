@@ -1,25 +1,26 @@
 function Analysis=AP_DataProcess_Events(Analysis)
 
 %% Parameters
-if ~ischar(Analysis.Parameters.EventMinTW)
-    thisTW=Analysis.Parameters.EventMinTW*Analysis.Parameters.NidaqDecimatedSR;
+nbOfChannels=size(Analysis.Parameters.Photometry.Channels,2);
+if ~ischar(Analysis.Parameters.EventDetection.MinTW)
+    thisTW=Analysis.Parameters.EventDetection.MinTW*Analysis.Parameters.Data.NidaqDecimatedSR;
 else
-    thisTW=Analysis.Parameters.EventMinTW;
+    thisTW=Analysis.Parameters.EventDetection.MinTW;
 end
-thisTW_WV=Analysis.Parameters.NidaqDecimatedSR*Analysis.Parameters.EventWV;
+thisTW_WV=Analysis.Parameters.Data.NidaqDecimatedSR*Analysis.Parameters.EventDetection.waveform_TW;
+localMiniFactor=Analysis.Parameters.EventDetection.MinFactor;
 
 %% Loop over channels and sessions
-for thisCh=1:length(Analysis.Parameters.PhotoCh)
-    thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
-    thisPeakStruct=[thisChStruct '_peak'];
+for thisCh=1:nbOfChannels
+    thisChStruct=sprintf('Photo_%s',Analysis.Parameters.Photometry.Channels{thisCh});
+    thisPeakStruct=[thisChStruct '_events'];
     for thisS=1:max(Analysis.AllData.Session)
         thisSession=Analysis.AllData.Session==thisS;
-        thisData=Analysis.AllData.(thisChStruct).DFF(thisSession,:);
+        thisData=Analysis.AllData.(thisChStruct).Data(thisSession,:);
         thisTime=Analysis.AllData.(thisChStruct).Time(thisSession,:);
-        thisThreshold=std(thisData(:),'omitnan')*Analysis.Parameters.EventThreshFactor;
+        thisThreshold=std(thisData(:),'omitnan')*Analysis.Parameters.EventDetection.ThreshFactor;
 % Peak detection
-        thisPeaks=AP_Events(thisTime,thisData,'miniLocal',thisThreshold,thisThreshold*Analysis.Parameters.EventMinFactor,thisTW,thisTW_WV,0);
-
+        thisPeaks=AP_Events(thisTime,thisData,'miniLocal',thisThreshold,thisThreshold*localMiniFactor,thisTW,thisTW_WV,0);
         if thisS==1
             Analysis.AllData.(thisPeakStruct)=thisPeaks;
         else

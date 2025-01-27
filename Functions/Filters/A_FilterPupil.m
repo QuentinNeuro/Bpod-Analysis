@@ -12,22 +12,13 @@ if isfield(Analysis.Filters,checkExist)
     disp(['Filter ' checkExist ' already generated']);
 return
 end
-if ~Analysis.Parameters.Pupillometry
+if ~Analysis.Parameters.Pupillometry.Pupillometry
     disp('Unable to generate pupillometry based filters');
     return
 end
-%% Parameters
-switch nargin
-    case 1
-        FilterName='Pupil';
-        State=Analysis.Parameters.PupilState;
-        threshold=Analysis.Parameters.PupilThreshold;
-    case 2
-        State=Analysis.Parameters.PupilState;
-        threshold=Analysis.Parameters.PupilThreshold;
-end
-PupillometryFilter=Analysis.Filters.Pupillometry;
+
 %% Filter
+PupillometryFilter=Analysis.Filters.Pupillometry;
 Logicals=false(Analysis.AllData.nTrials,1);
 Logicals(Analysis.AllData.Pupil.(State)>threshold)=true;
 

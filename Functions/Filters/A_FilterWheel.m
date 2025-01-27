@@ -1,7 +1,7 @@
 function Analysis=A_FilterWheel(Analysis)
 
 %% Filter
-Logicals=logical(true(Analysis.Parameters.nTrials,1)*Analysis.Parameters.Wheel);
+Logicals=logical(true(Analysis.Parameters.Behavior.nTrials,1)*Analysis.Parameters.Wheel.Wheel);
 %% Save
 if isfield(Analysis.Filters,'Wheel')
     Analysis.Filters.Wheel=[Analysis.Filters.Wheel;Logicals];

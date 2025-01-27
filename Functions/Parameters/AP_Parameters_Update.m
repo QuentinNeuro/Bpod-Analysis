@@ -31,9 +31,9 @@ for thisField=1:size(FieldsLP_OW,1)
     end
 end
 %
-Par.NidaqBaselinePoints=Par.NidaqBaseline*Par.NidaqDecimatedSR;
-if Par.NidaqBaselinePoints(1)==0
-    Par.NidaqBaselinePoints(1)=1;
+Par.Data.NidaqBaselinePoints=Par.NidaqBaseline*Par.NidaqDecimatedSR;
+if Par.Data.NidaqBaselinePoints(1)==0
+    Par.Data.NidaqBaselinePoints(1)=1;
 end
 %% Version control
 if ~isfield(Par,'nCells')

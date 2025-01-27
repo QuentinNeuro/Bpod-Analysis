@@ -5,6 +5,12 @@ function Analysis=AP_DataSort(Analysis,FilterName,thisFilter)
 %function designed by Quentin 2016 for Analysis_Photometry
 
 %% Parameters
+% Licks
+
+% Photometry
+nbOfChannels=size(Analysis.Parameters.Photometry.Channels,2);
+
+%% Filter
 FilterName=strrep(FilterName,' ','_');
 thistype=FilterName;
 ignoredTrialFilter=Analysis.Filters.ignoredTrials';
@@ -28,106 +34,30 @@ thisFilter=logical(thisFilter.*ignoredTrialFilter);
     Analysis.(thistype).nTrials                     =nnz(thisFilter);
     Analysis.(thistype).IgnoredTrials               =Analysis.AllData.nTrials-Analysis.(thistype).nTrials;
 if Analysis.(thistype).nTrials>0
-    Analysis=AP_DataSort_FieldMatch(Analysis,FilterName,thisFilter);
-    idxSession=Analysis.(thistype).Session;
-% Timing for average    
-    CueTime=Analysis.(thistype).Time.Cue(1,:)+Analysis.Parameters.CueTimeReset;
-    OutcomeTime=Analysis.(thistype).Time.Outcome(1,:)+Analysis.Parameters.OutcomeTimeReset;
-% Licks
-    thisEvents=Analysis.(thistype).Licks.Events;
-    for i=1:length(thisEvents)
-        thisTrials{1,i}=i*ones(length(thisEvents{1,i}),1)';
-    end
-    Analysis.(thistype).Licks.Events=cell2mat(thisEvents);
-    Analysis.(thistype).Licks.Trials=cell2mat(thisTrials);
-% Average
-    Analysis.(thistype).Licks.AVG                       =mean(Analysis.(thistype).Licks.Rate,1);
-    Analysis.(thistype).Licks.SEM                       =std(Analysis.(thistype).Licks.Rate,0,1)/sqrt(Analysis.(thistype).nTrials);
-    Analysis.(thistype).Licks.Bin                       =Analysis.Parameters.ReshapedTime(1)+Analysis.Parameters.Bin:Analysis.Parameters.Bin:Analysis.Parameters.ReshapedTime(2);
-    Analysis.(thistype).Licks.CueAVG                    =mean(Analysis.(thistype).Licks.Cue);
-    Analysis.(thistype).Licks.OutcomeAVG                =mean(Analysis.(thistype).Licks.Outcome);
-    if length(idxSession)>1
-    for thisS=1:max(idxSession)
-        Analysis.(thistype).Licks.CueAVG_S(thisS)=mean(Analysis.(thistype).Licks.Cue(idxSession==thisS),2,'omitnan');
-        Analysis.(thistype).Licks.OutcomeAVG_S(thisS)=mean(Analysis.(thistype).Licks.Outcome(idxSession==thisS),2,'omitnan');
-    end
-    else
-        Analysis.(thistype).Licks.CueAVG_S=Analysis.(thistype).Licks.Cue;
-        Analysis.(thistype).Licks.OutcomeAVG_S=Analysis.(thistype).Licks.Outcome;
-    end
+    Analysis=AP_DataSort_FieldMatch(Analysis,FilterName,thisFilter);    
+%% Licks
+    Analysis=AP_DataSort_Licks(Analysis,thistype);
+%% Photometry
+if Analysis.Parameters.Photometry.Photometry
+    Analysis=AP_DataSort_Photometry(Analysis,thistype);
+end
 
-%% Photometry    
-    for thisCh=1:length(Analysis.Parameters.PhotoCh)
-        thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
-        Time=Analysis.(thistype).(thisChStruct).Time(1,:);
-    % Average
-        Analysis.(thistype).(thisChStruct).DFFAVG       =mean(Analysis.(thistype).(thisChStruct).DFF,1,'omitnan'); 
-        Analysis.(thistype).(thisChStruct).DFFSEM       =std(Analysis.(thistype).(thisChStruct).DFF,0,1,'omitnan')/sqrt(Analysis.(thistype).nTrials);
-        
-        avgStats={'CueAVG','CueAVGZ','CueMAX','CueMAXZ','OutcomeAVG','OutcomeAVGZ','OutcomeMAX','OutcomeMAXZ'};
-
-        for thisAS=avgStats
-            thisAS=char(thisAS);
-            Analysis.(thistype).(thisChStruct).(strcat(thisAS,'_AVG'))=mean(Analysis.(thistype).(thisChStruct).(thisAS),2,'omitnan');
-            Analysis.(thistype).(thisChStruct).(strcat(thisAS,'_SEM'))=std(Analysis.(thistype).(thisChStruct).(thisAS),0,2,'omitnan')/sqrt(Analysis.(thistype).nTrials);
-            if length(idxSession)>1
-            for thisS=1:max(idxSession)
-            Analysis.(thistype).(thisChStruct).(strcat(thisAS,'_AVG_S'))(thisS)=mean(Analysis.(thistype).(thisChStruct).(thisAS)(idxSession==thisS),2,'omitnan');
-            Analysis.(thistype).(thisChStruct).(strcat(thisAS,'_SEM_S'))(thisS)=std(Analysis.(thistype).(thisChStruct).(thisAS)(idxSession==thisS),0,2,'omitnan')/sqrt(sum(idxSession==thisS));
-            end
-            else
-                Analysis.(thistype).(thisChStruct).(strcat(thisAS,'_AVG_S'))=Analysis.(thistype).(thisChStruct).(thisAS);
-                Analysis.(thistype).(thisChStruct).(strcat(thisAS,'_SEM_S'))=0;
-            end
-        end
-        Analysis.(thistype).(thisChStruct).CueAVG_MAX       =max(Analysis.(thistype).(thisChStruct).DFFAVG(Time>CueTime(1) & Time<CueTime(2)));
-        Analysis.(thistype).(thisChStruct).CueAVG_MAXZ      =Analysis.(thistype).(thisChStruct).CueAVG_MAX-mean(Analysis.(thistype).(thisChStruct).DFFAVG(Time>CueTime(1)-0.2 & Time<CueTime(1)-0.01),'omitnan'); 
-        Analysis.(thistype).(thisChStruct).OutcomeAVG_MAX   =max(Analysis.(thistype).(thisChStruct).DFFAVG(Time>OutcomeTime(1) & Time<OutcomeTime(2))); 
-        Analysis.(thistype).(thisChStruct).OutcomeAVG_MAXZ  =Analysis.(thistype).(thisChStruct).OutcomeAVG_MAX-mean(Analysis.(thistype).(thisChStruct).DFFAVG(Time>OutcomeTime(1)-0.2 & Time<OutcomeTime(1)-0.01),'omitnan'); 
- % Fit
-    if Analysis.Parameters.PlotFiltersBehavior 
-         model=fitlm(Analysis.(thistype).(thisChStruct).OutcomeStat,Analysis.(thistype).(thisChStruct).CueStat);
-%        Analysis.(thistype).(thisChStruct).Fit.XData=Analysis.(thistype).(thisChStruct).OutcomeStat;
-         Analysis.(thistype).(thisChStruct).Fit.YFit=model.Fitted;
-         Analysis.(thistype).(thisChStruct).Fit.Function=model.Coefficients.Estimate;
-         Analysis.(thistype).(thisChStruct).Fit.Rsquared=model.Rsquared.Ordinary;
-         Analysis.(thistype).(thisChStruct).Fit.Pvalue=model.Coefficients.pValue(2); 
-	% Cumulatives
-         Analysis.(thistype).(thisChStruct).Cumul.Prob=(1:Analysis.(thistype).nTrials)/Analysis.(thistype).nTrials; 
-         Analysis.(thistype).(thisChStruct).Cumul.CueSort=sort(Analysis.(thistype).(thisChStruct).CueStat);
-         Analysis.(thistype).(thisChStruct).Cumul.OutcomeSort=sort(Analysis.(thistype).(thisChStruct).OutcomeStat);    
-    end
-    %
-    end
 %% AOD / Miniscope / Spikes
-    if Analysis.Parameters.nCells
-        cellNames=Analysis.(thistype).AllCells.CellName;
-    for  c=1:Analysis.Parameters.nCells
-        Analysis.(thistype).(cellNames{c}).DataAVG=mean(Analysis.(thistype).(cellNames{c}).Data,1,'omitnan');
-        Analysis.(thistype).(cellNames{c}).DataSEM=std(Analysis.(thistype).(cellNames{c}).Data,1,'omitnan')/sqrt(Analysis.(thistype).nTrials);
-        Analysis.(thistype).AllCells.Data_Cell(c,:)=Analysis.(thistype).(cellNames{c}).DataAVG;
-        if Analysis.Parameters.Spikes.Spikes
-            for t=1:Analysis.(thistype).nTrials
-                Analysis.(thistype).(cellNames{c}).TrialTS{t}=t*ones(size(Analysis.(thistype).(cellNames{c}).TrialTS{t}));
-            end
-        end
-    
-    end  
-        Analysis.(thistype).AllCells.DataAVG=mean(Analysis.(thistype).AllCells.Data,1,'omitnan');
-        Analysis.(thistype).AllCells.DataSEM=std(Analysis.(thistype).AllCells.Data,1,'omitnan')/sqrt(Analysis.Parameters.nCells);
-    end
+if Analysis.Parameters.nCells
+    Analysis=AP_DataSort_SingleCell(Analysis,thistype);
+end
     
 %% Event detection
-if Analysis.Parameters.EventDetection
+if Analysis.Parameters.EventDetection.Detection
     Analysis=AP_DataSort_Events(Analysis,thistype);
 end
 %% Wheel
-    if Analysis.Parameters.Wheel
+    if Analysis.Parameters.Wheel.Wheel
         Analysis.(thistype).Wheel.DistanceAVG            =mean(Analysis.(thistype).Wheel.Distance,1,'omitnan'); 
         Analysis.(thistype).Wheel.DistanceSEM            =std(Analysis.(thistype).Wheel.Distance,0,1,'omitnan')/sqrt(Analysis.(thistype).nTrials);
     end
 %% Pupillometry
-    if Analysis.Parameters.Pupillometry
+    if Analysis.Parameters.Pupillometry.Pupillometry
         Analysis.(thistype).Pupil.PupilAVG          =mean(Analysis.(thistype).Pupil.PupilDPP,1,'omitnan'); 
         Analysis.(thistype).Pupil.PupilSEM          =std(Analysis.(thistype).Pupil.PupilDPP,0,1,'omitnan')/sqrt(Analysis.(thistype).nTrials);
     end

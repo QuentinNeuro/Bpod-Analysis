@@ -1,7 +1,7 @@
 function Analysis=AP_CuedOutcome_FiltersAndPlot_Cells(Analysis) 
 
 if Analysis.Parameters.Spikes.Spikes
-    switch Analysis.Parameters.Phase
+    switch Analysis.Parameters.Behavior.Phase
         case {'RewardA','RewardB'}
     thisType={'Uncued_Reward','CS_Reward','NS_Omission'};
     thisCellFilter={'Tag_Early','Tag_Early','Tag_Early'};
@@ -26,7 +26,7 @@ end
     end
 
 %% Figures
-if Analysis.Parameters.PlotCells
+if Analysis.Parameters.Plot.Cells
 thisDirFig=[Analysis.Parameters.DirFig 'cellFilter' filesep];
 mkdir(thisDirFig);
     for tc=1:size(thisType,2)

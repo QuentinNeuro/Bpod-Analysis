@@ -10,13 +10,14 @@ if nargin<3
     thiscell=[];
 end
 
-if Analysis.Parameters.Photometry
-    for thisCh=1:length(Analysis.Parameters.PhotoCh)
-        thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{thisCh}));
+if Analysis.Parameters.Photometry.Photometry
+    nbOfChannels=size(Analysis.Parameters.Photometry.Channels,2);
+    for thisCh=1:nbOfChannels
+        thisChStruct=sprintf('Photo_%s',Analysis.Parameters.Photometry.Channels{thisCh});
         x{thisCh}=Analysis.(thistype).(thisChStruct).Time(1,:);
         y{thisCh}=1:Analysis.(thistype).nTrials;
-        data{thisCh}=Analysis.(thistype).(thisChStruct).DFF;
-        labelY{thisCh}=['Trials ' Analysis.Parameters.PhotoChNames{thisCh}];
+        data{thisCh}=Analysis.(thistype).(thisChStruct).Data;
+        labelY{thisCh}=['Trials ' Analysis.Parameters.Data.Label{thisCh}];
     end
 end
 

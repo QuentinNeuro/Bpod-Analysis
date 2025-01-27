@@ -5,8 +5,13 @@ function Analysis=AP_DataProcess_Licks(Analysis,thisTrial,ZeroFirstLick)
 % in the state used as a zero
 
 %% Parameters and Data
-TimeToZero=Analysis.AllData.Time.Zero(thisTrial);
-thisLicks=Analysis.Core.Licks{thisTrial}-TimeToZero;
+timeToZero=Analysis.AllData.Time.Zero(thisTrial);
+thisLicks=Analysis.Core.Licks{thisTrial}-timeToZero;
+PSTH=Analysis.Parameters.Timing.PSTH;
+binSize=Analysis.Parameters.Licks.BinSize;
+binVector=PSTH(1):binSize:PSTH(2);
+cueTimeReset=Analysis.Parameters.Timing.CueTimeLick;
+outcomeTimeReset=Analysis.Parameters.Timing.OutcomeTimeReset;
 
 %% ZeroFirstLick
 newZero=0;
@@ -22,26 +27,22 @@ end
 
 % Modified Analysis.Time data according to the newZero
 if newZero
-    TimeToZero=TimeToZero+newZero;
-    Analysis.AllData.Time.Zero(thisTrial)=TimeToZero;
+    timeToZero=timeToZero+newZero;
+    Analysis.AllData.Time.Zero(thisTrial)=timeToZero;
     Analysis.AllData.Time.Cue(thisTrial,:)=Analysis.AllData.Time.Cue(thisTrial,:)-newZero;
     Analysis.AllData.Time.Outcome(thisTrial,:)=Analysis.AllData.Time.Outcome(thisTrial,:)-newZero;
 end
 
 %% Statistics for Analysis Structure
-if isempty(Analysis.Parameters.CueTimeLick)
-    CueTime=Analysis.AllData.Time.Cue(thisTrial,:)+Analysis.Parameters.CueTimeReset;
-else
-    CueTime=Analysis.AllData.Time.Cue(thisTrial,:)+Analysis.Parameters.CueTimeLick;
-end
-OutcomeTime=Analysis.AllData.Time.Outcome(thisTrial,:)+Analysis.Parameters.OutcomeTimeReset;
+CueTime=Analysis.AllData.Time.Cue(thisTrial,:)+cueTimeReset;
+OutcomeTime=Analysis.AllData.Time.Outcome(thisTrial,:)+outcomeTimeReset;
 BaselineTime=[CueTime(1)-1.5 CueTime(1)-0.5];
 
 Analysis.AllData.Licks.Events{thisTrial}    =thisLicks;
 Analysis.AllData.Licks.Trials{thisTrial}    =linspace(thisTrial,thisTrial,size(thisLicks,2));
-Analysis.AllData.Licks.Bin{thisTrial}       =(Analysis.Parameters.ReshapedTime(1):Analysis.Parameters.Bin:Analysis.Parameters.ReshapedTime(2));
-Analysis.AllData.Licks.Rate(thisTrial,:)    =histcounts(thisLicks,Analysis.AllData.Licks.Bin{thisTrial})/Analysis.Parameters.Bin;
-Analysis.AllData.Licks.Baseline(thisTrial)  =mean(Analysis.AllData.Licks.Rate(thisTrial,Analysis.AllData.Licks.Bin{thisTrial}>BaselineTime(1) & Analysis.AllData.Licks.Bin{thisTrial}<BaselineTime(2)));
-Analysis.AllData.Licks.Cue(thisTrial)       =mean(Analysis.AllData.Licks.Rate(thisTrial,Analysis.AllData.Licks.Bin{thisTrial}>CueTime(1) & Analysis.AllData.Licks.Bin{thisTrial}<CueTime(2)));
-Analysis.AllData.Licks.Outcome(thisTrial)   =mean(Analysis.AllData.Licks.Rate(thisTrial,Analysis.AllData.Licks.Bin{thisTrial}>OutcomeTime(1) & Analysis.AllData.Licks.Bin{thisTrial}<OutcomeTime(2)));
+Analysis.AllData.Licks.Bin{thisTrial}       =binVector;
+Analysis.AllData.Licks.Rate(thisTrial,:)    =histcounts(thisLicks,binVector/binSize);
+Analysis.AllData.Licks.Baseline(thisTrial)  =mean(Analysis.AllData.Licks.Rate(thisTrial,binVector>BaselineTime(1) & binVector<BaselineTime(2)));
+Analysis.AllData.Licks.Cue(thisTrial)       =mean(Analysis.AllData.Licks.Rate(thisTrial,binVector>CueTime(1) & binVector<CueTime(2)));
+Analysis.AllData.Licks.Outcome(thisTrial)   =mean(Analysis.AllData.Licks.Rate(thisTrial,binVector>OutcomeTime(1) & binVector<OutcomeTime(2)));
 end

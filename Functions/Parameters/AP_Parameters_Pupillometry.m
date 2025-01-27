@@ -28,18 +28,18 @@ function Par=AP_Parameters_Pupillometry(Par,Pup,SessionData)
         end
 %% Save in Parameter structure
 thisPupPar.Pupillometry=thisCheck;
-Par.Pupillometry=thisCheck;
+Par.Pupillometry.Pupillometry=thisCheck;
 if ~isfield(Par,'Pupillometry_Parameters')
-    Par.Pupillometry_Parameters{1}=thisPupPar;
+    Par.Pupillometry.Parameters{1}=thisPupPar;
 else
-    Par.Pupillometry_Parameters{end+1}=thisPupPar;
+    Par.Pupillometry.Parameters{end+1}=thisPupPar;
 end
 % Defines default Pupillometry Status
 if ~isfield(Par,'Pupillometry')
-    Par.Pupillometry=thisCheck;
+    Par.Pupillometry.Pupillometry=thisCheck;
 else
-    if ~Par.Pupillometry
-    Par.Pupillometry=thisCheck;
+    if ~Par.Pupillometry.Pupillometry
+    Par.Pupillometry.Pupillometry=thisCheck;
     end
 end
 end

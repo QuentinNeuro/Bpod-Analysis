@@ -6,35 +6,18 @@ function Analysis=AP_TrialTypes_FiltersAndPlot(Analysis)
 
 %% Sort Data according to the trial type number
 Analysis=A_FilterTrialType(Analysis);
-for i=1:Analysis.Parameters.nbOfTrialTypes
+for i=1:Analysis.Parameters.Behavior.nbOfTrialTypes
     thistype=sprintf('type_%.0d',i);
     Analysis=AP_DataSort(Analysis,thistype);
-    Analysis.(thistype).Name=Analysis.Parameters.TrialNames{i};
+    Analysis.(thistype).Name=Analysis.Parameters.Behavior.TrialNames{i};
 end
 % figure folder
 if isfolder(Analysis.Parameters.DirFig)==0
     mkdir(Analysis.Parameters.DirFig);
 end
 %% Summary Plot 1
-if Analysis.Parameters.PlotSummary1==1
+if Analysis.Parameters.Plot.TrialTypes
     Analysis=AP_PlotData(Analysis);
-    phototitlelabel=[];
-    for thisCh=1:length(Analysis.Parameters.PhotoCh)
-        phototitlelabel=[phototitlelabel '_' Analysis.Parameters.PhotoChNames{thisCh}];
-    end
-    saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend '_AllData' phototitlelabel '.png']);
-end
-
-%% Summary Plot 2 (Only if Photometry)
-if Analysis.Parameters.Photometry
-    if Analysis.Parameters.PlotSummary2==1
-        for thisCh=1:length(Analysis.Parameters.PhotoCh)
-        AP_PlotSummary(Analysis,thisCh,'Cue A','Cue B','Reward','Punish');
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend '_Summary' char(Analysis.Parameters.PhotoChNames{thisCh}) '.png']);
-        if Analysis.Parameters.Illustrator
-        saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend '_Summary' char(Analysis.Parameters.PhotoChNames{thisCh}) ],'epsc');
-        end
-        end
-    end
+    saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Plot.Legend '_AllData.png']);
 end
 end

@@ -17,7 +17,7 @@ function Analysis=AP_Load(LP)
 %% Automatically test whether it is a bpodfile or an analysis file, AOD, spikes or photometry etc
 LP=AP_AutoLoad(LP);
 %% Loading pre existing analysis file(s)
-if LP.Load==1
+if LP.Load
    FileName=LP.FileToOpen{1,1}
    cd(LP.PathName); load(FileName); 
    Analysis=AP_DataCore_Load(Analysis);
@@ -56,9 +56,6 @@ end
         if LP.Archive==1
             AP_Archive(Analysis,SessionData,LP);
         end
-        if isfield(SessionData,'Modulation')
-            Analysis.Parameters.Modulation=SessionData.Modulation;
-        end
 % catch
 %         disp([FileName ' NOT ANALYZED - Error in AP_Load']);
 % end   
@@ -69,30 +66,31 @@ end
 %% Adjust some fields upon loading completion
 Analysis.Parameters.nTrials=Analysis.Core.nTrials;
 if sum(Analysis.Filters.Wheel>=1)
-    Analysis.Parameters.Wheel=1;
+    Analysis.Parameters.Wheel.Wheel=1;
 else
-    Analysis.Parameters.Wheel=0;
+    Analysis.Parameters.Wheel.Wheel=0;
 end
 if sum(Analysis.Filters.Pupillometry>=1)
-    Analysis.Parameters.Pupillometry=1;
+    Analysis.Parameters.Pupillometry.Pupillometry=1;
 else
-    Analysis.Parameters.Pupillometry=0;
+    Analysis.Parameters.Pupillometry.Pupillometry=0;
 end
 
 %% File Name
 if iscell(Analysis.Parameters.Files)
+    PhaseTypeOfCue=[Analysis.Parameters.Behavior.Phase '_' Analysis.Parameters.Behavior.TypeOfCue];
     if length(Analysis.Parameters.Files)>1
-    Analysis.Parameters.Legend=[Analysis.Parameters.Animal '_' Analysis.Parameters.Behavior '_' Analysis.Parameters.Phase '_' Analysis.Parameters.TypeOfCue];
+    Analysis.Parameters.Plot.Legend=[Analysis.Parameters.Animal '_' Analysis.Parameters.Behavior.Behavior '_' PhaseTypeOfCue];
     else
-    Analysis.Parameters.Legend=[Analysis.Parameters.Files{1} '_' Analysis.Parameters.Phase '_' Analysis.Parameters.TypeOfCue];
+    Analysis.Parameters.Plot.Legend=[Analysis.Parameters.Files{1} '_' PhaseTypeOfCue];
     end
     else
-    Analysis.Parameters.Legend=[Analysis.Parameters.Files '_' Analysis.Parameters.Phase '_' Analysis.Parameters.TypeOfCue];
+    Analysis.Parameters.Plot.Legend=[Analysis.Parameters.Files '_' PhaseTypeOfCue];
 end
 if ~isempty(LP.SaveTag)
-    Analysis.Parameters.Legend=[Analysis.Parameters.Legend '_' LP.SaveTag];
+    Analysis.Parameters.Plot.Legend=[Analysis.Parameters.Plot.Legend '_' LP.SaveTag];
 end
 
 %% Figure path
-Analysis.Parameters.DirFig=[LP.PathName filesep Analysis.Parameters.Phase filesep];
+Analysis.Parameters.DirFig=[LP.PathName filesep Analysis.Parameters.Behavior.Phase filesep];
 end
