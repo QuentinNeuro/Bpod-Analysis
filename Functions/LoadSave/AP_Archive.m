@@ -1,7 +1,6 @@
 function AP_Archive(Analysis,SessionData,LP)
-WheelField=Analysis.Parameters.WheelField;
-PhotoField=Analysis.Parameters.PhotometryField;
-Photo2Field=Analysis.Parameters.Photometry2Field;
+NidaqWheel=Analysis.Parameters.Wheel.NidaqField;
+NidaqPhoto=Analysis.Parameters.Photometry.NidaqField;
 
 DirArchive=[cd filesep];
 if ~LP.ArchiveOW
@@ -16,33 +15,33 @@ if isfield(SessionData,'DecimatedSampRate')
    disp('SessionData file already archived')
 else
 try
-    if isfield(SessionData,PhotoField)
+    if isfield(SessionData,NidaqPhoto{1})
     for thisTrial=1:SessionData.nTrials
-        SessionData.(PhotoField){1,thisTrial}=Analysis.Core.Photometry{1,thisTrial}{1, 1}';  
+        SessionData.(NidaqPhoto{1}){1,thisTrial}=Analysis.Core.Photometry{1,thisTrial}{1, 1}';  
     end
-    SessionData.DecimatedSampRate=Analysis.Parameters.NidaqDecimatedSR;
+    SessionData.DecimatedSampRate=Analysis.Parameters.Data.NidaqDecimatedSR;
     SessionData.Modulation=Analysis.Parameters.Modulation;
     end
-    if size(Analysis.Parameters.PhotoCh,2)>1
-        switch Analysis.Parameters.PhotoCh{2}{:}
+    if size(Analysis.Parameters.Photometry.Channels,2)>1
+        switch Analysis.Parameters.Photometry.Channels{2}
             case '405'
         for thisTrial=1:SessionData.nTrials
-            SessionData.(PhotoField){1,thisTrial}(:,2)=Analysis.Core.Photometry{1,thisTrial}{2,1}';  
+            SessionData.(NidaqPhoto{1}){1,thisTrial}(:,2)=Analysis.Core.Photometry{1,thisTrial}{2,1}';  
         end 
         end
     end
         
-    if isfield(SessionData,Photo2Field)
+    if isfield(SessionData,NidaqPhoto{2})
     for thisTrial=1:SessionData.nTrials
-        SessionData.(Photo2Field){1,thisTrial}=Analysis.Core.Photometry{1,thisTrial}{2, 1}';  
+        SessionData.(NidaqPhoto{2}){1,thisTrial}=Analysis.Core.Photometry{1,thisTrial}{2, 1}';  
     end
-    SessionData.DecimatedSampRate=Analysis.Parameters.NidaqDecimatedSR;
+    SessionData.DecimatedSampRate=Analysis.Parameters.Data.NidaqDecimatedSR;
     end
-    if isfield(SessionData,WheelField)
+    if isfield(SessionData,NidaqWheel)
     for thisTrial=1:SessionData.nTrials
-        SessionData.(WheelField){1,thisTrial}=Analysis.Core.Wheel{1,thisTrial}';
+        SessionData.(NidaqWheel){1,thisTrial}=Analysis.Core.Wheel{1,thisTrial}';
     end
-    SessionData.DecimatedSampRate=Analysis.Parameters.NidaqDecimatedSR;
+    SessionData.DecimatedSampRate=Analysis.Parameters.Data.NidaqDecimatedSR;
     end
     
     save(DirFile,'SessionData');  

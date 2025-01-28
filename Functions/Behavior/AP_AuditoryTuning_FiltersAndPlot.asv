@@ -149,11 +149,14 @@ title('Bleaching'); ylabel('Norm. DF/F'); xlabel('Trial Number');
 plot(Analysis.AllData.(thisChStruct).Bleach);
 
 %% Save
-saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_AudTun' thisChStruct '.png']);
-if Analysis.Parameters.Plot.Illustrator
-saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_AudTun' thisChStruct],'epsc');
+saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_AudTun' Analysis.Parameters.PhotoCh{thisCh}) '.png']);
+if Analysis.Parameters.Illustrator
+saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_AudTun' Analysis.Parameters.PhotoCh{thisCh})],'epsc');
 end
 
 end
+end
+if Analysis.Parameters.Spikes.Spikes
+    Analysis=Analysis_Spikes(Analysis,'Figure');
 end
 end

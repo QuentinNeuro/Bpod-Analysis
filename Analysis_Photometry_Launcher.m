@@ -7,8 +7,8 @@
 clear SessionData Analysis LP; %close all;
 
 %% Analysis type Single/Group/Batch/Online etc
-LP.Analysis_type='Group';
-LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
+LP.Analysis_type='Single';
+LP.Save=1;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
 DB.DataBase=0;  % DB_Generate
 DB.Group=[];
@@ -37,11 +37,11 @@ LP.P.Plot.xTime=[-4 4];
 LP.P.Plot.yPhoto(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
 LP.P.Plot.yPhoto(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max]
 % States and Timing
-LP.P.Timing.StateToZero='StateOfOutcome';    	%'StateOfCue' 'StateOfOutcome'
-LP.P.Timing.ZeroFirstLick=0;                   % Will look for licks 0 to 2 sec after state to Zero starts
-LP.P.Timing.ZeroAt=-3;                     % Will zero fluo for each trial to a time point : 'Zero' '2sBefCue' or a timestamp
-LP.P.Timing.CueTimeLick=[];                    % Use a different window to calculate lickrate at cue; % Uncertainty : 1.5 1.9
-LP.P.Timing.PSTH=[-4 5];                            % PSTH - use [0 180] for oddball
+LP.P.Timing.StateToZero='StateOfOutcome'; %'StateOfCue' 'StateOfOutcome'
+LP.P.Timing.ZeroFirstLick=0;              % Will look for licks 0 to 2 sec after state to Zero starts
+LP.P.Timing.ZeroAt=-3;                    % Will zero fluo for each trial to a time point : 'Zero' '2sBefCue' or a timestamp
+LP.P.Timing.CueTimeLick=[];               % Use a different window to calculate lickrate at cue; % Uncertainty : 1.5 1.9
+LP.P.Timing.PSTH=[-4 5];                  % PSTH - use [0 180] for oddball
 % Filters % default LicksCue=1 LicksOut=2
 LP.P.Filters.PupilThreshold=1;
 LP.P.Filters.PupilState='NormBaseline';       	% Options : 'NormBaseline','Cue','Outcome'
@@ -117,8 +117,7 @@ LP.D.Timing.OutcomeTimeReset=[0 1];
 LP.D.Licks.Port='Port1In';
 LP.D.Photometry.PhotoChNames={'470-A1L' '405-A1' '470-A1R'};%{'470-A1L' '405-A1' '470-A1R'};{'470-A1' '405-A1' '470-mPFC'}
 LP.D.Data.NidaqBaseline=[1 2];
-LP.D.Stimulation=0;
-% autoload deactivated
+% autoload
 LP.AutoLoad=1;
 LP.D.Load=0;
 LP.D.Photometry.Photometry=0;
@@ -126,6 +125,7 @@ LP.D.Spikes.Spikes=0;
 LP.D.AOD.AOD=0;
 LP.D.Miniscope.Miniscope=0;
 LP.D.Prime.Prime=0;
+LP.D.Stimulation.Stimulation=0;
 %% Database
 if ~exist('DB_Stat','var')
     DB_Stat=struct();

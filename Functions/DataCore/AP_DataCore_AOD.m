@@ -32,7 +32,7 @@ end
 % Bpod timestamp guess
 fieldStates=fieldnames(Analysis.Core.States{1,1});
 stateStart=fieldStates{2};
-StateToZero=Analysis.Parameters.StateToZero;
+StateToZero=Analysis.Parameters.Timing.StateToZero;
 for thisT=1:nTrials 
     zeroTS_Bpod(thisT)=Analysis.Core.States{1,thisT}.(StateToZero)(1)-Analysis.Core.States{1,thisT}.(stateStart)(1);
 end

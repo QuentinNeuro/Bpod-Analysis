@@ -35,17 +35,22 @@ for thisCh=1:nbOfChannels
         data=100*data/baselineAVG;
     end
     end
+    dataZero=0;
     switch Analysis.Parameters.Timing.ZeroAt
         case 'Zero'
-            data=data-mean(data(time>-0.1 & time<0),'omitnan');
+            dataZero=mean(data(time>-0.1 & time<0),'omitnan');
         case '2sBefCue'
-            data=data-mean(data(time>cueTime(1)-2.2 & time<=cueTime(1)-1.8),'omitnan');
+            dataZero=mean(data(time>cueTime(1)-2.2 & time<=cueTime(1)-1.8),'omitnan');
         otherwise
             if isnumeric(Analysis.Parameters.Timing.ZeroAt)
                 thisZeroTime=Analysis.Parameters.Timing.ZeroAt;
-                data=data-mean(data(time>thisZeroTime-0.1 & time<=thisZeroTime+0.1),'omitnan');
+                dataZero=mean(data(time>thisZeroTime-0.1 & time<=thisZeroTime+0.1),'omitnan');
             end
-    end  
+    end
+    if isnan(dataZero)
+        dataZero=0;
+    end
+    data=data-dataZero;
 
 %% Statistics for Analysis Structure
     Analysis.AllData.(thisChStruct).Name                                =Analysis.Parameters.Data.Label{thisCh};

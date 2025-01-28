@@ -178,7 +178,7 @@ end
 if Analysis.Parameters.Plot.Illustration(3)
 GroupPlot=AP_CuedOutcome_FilterGroups_Arousal(GroupPlot,indexp,Analysis);
 end
-if Analysis.Parameters.Stimulation
+if Analysis.Parameters.Stimulation.Stimulation
 GroupPlot=AP_CuedOutcome_FilterGroups_Stim(GroupPlot,indexp,Analysis);
 end
 

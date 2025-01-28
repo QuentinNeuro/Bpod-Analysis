@@ -11,13 +11,13 @@ data=Analysis.Core.Prime_Depth;
 end
 
 sampRate=Analysis.Parameters.Prime.sampRate;
-nTrials=Analysis.Parameters.nTrials;
+nTrials=Analysis.Parameters.Behavior.nTrials;
 nCells=Analysis.Parameters.nCells;
 
-baselinePts=ceil(Analysis.Parameters.NidaqBaseline*sampRate); 
-timeWindow=Analysis.Parameters.ReshapedTime;
-CueTime=Analysis.AllData.Time.Cue+Analysis.Parameters.CueTimeReset;
-OutcomeTime=Analysis.AllData.Time.Outcome+Analysis.Parameters.OutcomeTimeReset;
+baselinePts=ceil(Analysis.Parameters.Data.NidaqBaseline*sampRate); 
+timeWindow=Analysis.Parameters.Timing.PSTH;
+CueTime=Analysis.AllData.Time.Cue+Analysis.Parameters.Timing.CueTimeReset;
+OutcomeTime=Analysis.AllData.Time.Outcome+Analysis.Parameters.Timing.OutcomeTimeReset;
 timeToZero=Analysis.AllData.Time.Zero;
 
 %% Preprocessing - smoothing and decimate
@@ -44,13 +44,13 @@ for t=1:nTrials
         baseSTD(:,t)=std(data{t}(:,baselinePts(1):baselinePts(2)),[],2,'omitnan');
 end
 if Analysis.Parameters.Prime.raw
-if Analysis.Parameters.BaselineMov
-    baseAVG=movmean(baseAVG,Analysis.Parameters.BaselineMov,2,'omitnan');
-    baseSTD=movmean(baseSTD,Analysis.Parameters.BaselineMov,2,'omitnan');
+if Analysis.Parameters.Data.BaselineMov
+    baseAVG=movmean(baseAVG,Analysis.Parameters.Data.BaselineMov,2,'omitnan');
+    baseSTD=movmean(baseSTD,Analysis.Parameters.Data.BaselineMov,2,'omitnan');
 end
 % Data Normalization
     for t=1:nTrials
-        if Analysis.Parameters.Zscore
+        if Analysis.Parameters.Data.Zscore
             data{t}=(data{t}-baseAVG(:,t))./baseSTD(:,t);
         else
             data{t}=100*(data{t}-baseAVG(:,t))./baseAVG(:,t);

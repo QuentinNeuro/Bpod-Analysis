@@ -29,12 +29,12 @@ if exist('SessionData','var')
     end
     if ~isempty(ls('*PMT_*')) % could also use SessionData.GUI.Prime;
         LP.P.Prime.Prime=1;
-        LP.P.Prime.Wheel=1;
+        LP.P.Wheel.Wheel=1;
     end
     test=LP.P.Photometry.Photometry+LP.P.Spikes.Spikes+LP.P.AOD.AOD+LP.P.Prime.Prime;
     if test>1
         disp('AutoLoad function has failed, will use default parameters')
-        LP.P.Photometry=LP.D.Photometry.Photometry;
+        LP.P.Photometry.Photometry=LP.D.Photometry.Photometry;
         LP.P.Spikes.Spikes=LP.D.Spikes.Spikes;
         LP.P.AOD.AOD=LP.D.AOD.AOD;
         LP.P.Prime.Prime=LP.D.Prime.Prime;
@@ -49,12 +49,13 @@ else
             LP.P.Photometry.Photometry=Analysis.Parameters.Photometry;
         end
     end
-    if isfield(Analysis.Parameters,'Spikes')
-        LP.P.Spikes.Spikes=Analysis.Parameters.Spikes.Spikes;
+    recTypes={'Spikes','AOD','Prime'};
+    for rt=1:size(recTypes,2)
+        if isfield(Analysis.Parameters,recTypes{rt})
+            LP.P.(recTypes{rt}).(recTypes{rt})=Analysis.Parameters.(recTypes{rt}).(recTypes{rt});
+        end
     end
-    if isfield(Analysis.Parameters,'AOD')
-        LP.P.AOD.AOD=Analysis.Parameters.AOD.AOD;
-    end
+
     else
         error('Please load a Bpod file or an Analysis file');
     end

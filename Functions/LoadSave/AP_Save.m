@@ -6,7 +6,7 @@ if isfolder(DirAnalysis)==0
     mkdir(DirAnalysis);
 end
 %% File name
-FileName=Analysis.Parameters.Legend;
+FileName=Analysis.Parameters.Plot.Legend;
 if LauncherParam.Save==1
     FileName=[FileName '_core'];
 end

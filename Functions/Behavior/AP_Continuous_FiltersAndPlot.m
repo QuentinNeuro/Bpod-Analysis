@@ -2,11 +2,11 @@ function AP_Continuous_FiltersAndPlot(Analysis)
 
 %% Parameters
 trialType='AllData';
-sampRate=Analysis.Parameters.NidaqDecimatedSR;
+sampRate=Analysis.Parameters.Data.NidaqDecimatedSR;
 wheelTest=0;
 wheelThreshold=10;
 nTrials=Analysis.AllData.nTrials;
-if Analysis.Parameters.Wheel
+if Analysis.Parameters.Wheel.Wheel
     if max(Analysis.AllData.Wheel.Distance)>0
         wheelTest=1;
         doDiffW=1;
@@ -14,12 +14,11 @@ if Analysis.Parameters.Wheel
     end
 end
     fiber2Test=0;
-if size(Analysis.Parameters.PhotoCh,2)>1
+if size(Analysis.Parameters.Photometry.Channels,2)>1
     fiber2Test=1;
 end
 % Reward PSTH
 tw=[-1 4];
-lickT=Analysis.Parameters.LicksOutcome;
 % Cross correlogram
 maxlag=5;
 doSmooth=0;
@@ -31,10 +30,10 @@ xSP=3; %1+wheelTest+fiber2Test;
 
 
 %% Data : Reward PSTH
-thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{1}));
+thisChStruct=sprintf('Photo_%s',Analysis.Parameters.Photometry.Channels{1});
 licks=Analysis.(trialType).Licks.Events;
 timeF=Analysis.(trialType).(thisChStruct).Time;
-dataF=Analysis.(trialType).(thisChStruct).DFF;
+dataF=Analysis.(trialType).(thisChStruct).Data;
 [timeRewF,dataRewF,licksRew]=AP_Continuous_RewPSTH(Analysis,timeF,dataF,tw,sampRate);
 dataRewF_AVG=mean(dataRewF,1,'omitnan');
 dataRewF_SEM=std(dataRewF,[],1,'omitnan')/sqrt(size(dataRewF,1));
@@ -52,9 +51,9 @@ if wheelTest
 
 end
 if fiber2Test
-    thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{2}));
+    thisChStruct=sprintf('Photo_%s',Analysis.Parameters.Photometry.Channels{2});
     timeF2=Analysis.(trialType).(thisChStruct).Time;
-    dataF2=Analysis.(trialType).(thisChStruct).DFF;
+    dataF2=Analysis.(trialType).(thisChStruct).Data;
     [timeRewF2,dataRewF2]=AP_Continuous_RewPSTH(Analysis,timeF2,dataF2,tw,sampRate);
     dataRewF2_AVG=mean(dataRewF2,1,'omitnan');
     dataRewF2_SEM=std(dataRewF2,[],1,'omitnan')/sqrt(size(dataRewF2,1));
@@ -166,7 +165,7 @@ xlabel('Time (s)');
 
 %% Save
 saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_Continuous.png']);
-if Analysis.Parameters.Illustrator
+if Analysis.Parameters.Plot.Illustrator
 saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_Continuous','epsc']);
 end
 

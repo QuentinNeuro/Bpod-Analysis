@@ -1,5 +1,6 @@
 function Analysis=AP_CuedOutcome_FiltersAndPlot_Cells(Analysis) 
 
+thisType={};
 if Analysis.Parameters.Spikes.Spikes
     switch Analysis.Parameters.Behavior.Phase
         case {'RewardA','RewardB'}

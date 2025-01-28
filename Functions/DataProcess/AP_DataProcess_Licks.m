@@ -11,6 +11,9 @@ PSTH=Analysis.Parameters.Timing.PSTH;
 binSize=Analysis.Parameters.Licks.BinSize;
 binVector=PSTH(1):binSize:PSTH(2);
 cueTimeReset=Analysis.Parameters.Timing.CueTimeLick;
+if isempty(cueTimeReset)
+    cueTimeReset=Analysis.Parameters.Timing.CueTimeReset;
+end
 outcomeTimeReset=Analysis.Parameters.Timing.OutcomeTimeReset;
 
 %% ZeroFirstLick

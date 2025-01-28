@@ -24,7 +24,7 @@ Analysis=A_FilterPupilNaNCheck(Analysis,'PupilNaN',25);
 % Sequence
 Analysis=A_FilterAfollowsB(Analysis,'Reward_After_Punish','Reward','Punish');
 % Optogenetics
-if Analysis.Parameters.Stimulation
+if Analysis.Parameters.Stimulation.Stimulation
     Analysis=A_FilterTrialName(Analysis,'Stim');
     Analysis.Filters.StimInv=~Analysis.Filters.Stim;
 end

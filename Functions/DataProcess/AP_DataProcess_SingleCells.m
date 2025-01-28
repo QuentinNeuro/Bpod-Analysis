@@ -1,7 +1,7 @@
 function Analysis=AP_DataProcess_SingleCells(Analysis,baseAVG,baseSTD)
 
 %% Parameters
-nTrials=Analysis.Parameters.nTrials;
+nTrials=Analysis.Parameters.Behavior.nTrials;
 nCells=Analysis.Parameters.nCells;
 cellID=Analysis.AllData.AllCells.CellName;
 

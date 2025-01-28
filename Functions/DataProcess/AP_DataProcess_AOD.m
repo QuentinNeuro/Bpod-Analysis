@@ -10,12 +10,12 @@ if dSR>=SR || dSR==0
 end 
 decimateFactor=floor(dSR/SR);
 offset=Analysis.Parameters.AOD.offset;
-nTrials=Analysis.Parameters.nTrials;
+nTrials=Analysis.Parameters.Behavior.nTrials;
 nCells=Analysis.Parameters.nCells;
-baselinePts=ceil(Analysis.Parameters.NidaqBaseline*dSR); 
-timeWindow=Analysis.Parameters.ReshapedTime;
-CueTime=Analysis.AllData.Time.Cue+Analysis.Parameters.CueTimeReset;
-OutcomeTime=Analysis.AllData.Time.Outcome+Analysis.Parameters.OutcomeTimeReset;
+baselinePts=ceil(Analysis.Parameters.Data.NidaqBaseline*dSR); 
+timeWindow=Analysis.Parameters.Timing.PSTH;
+CueTime=Analysis.AllData.Time.Cue+Analysis.Parameters.Timing.CueTimeReset;
+OutcomeTime=Analysis.AllData.Time.Outcome+Analysis.Parameters.Timing.OutcomeTimeReset;
 
 data=Analysis.Core.AOD;
 zeroTS=Analysis.Core.AOD_TS;
@@ -55,14 +55,14 @@ for t=1:nTrials
         baseAVG(:,t)=mean(data{t}(:,baselinePts(1):baselinePts(2)),2,'omitnan');
         baseSTD(:,t)=std(data{t}(:,baselinePts(1):baselinePts(2)),[],2,'omitnan');
 end
-if Analysis.Parameters.BaselineMov
-    baseAVG=movmean(baseAVG,Analysis.Parameters.BaselineMov,2,'omitnan');
-    baseSTD=movmean(baseSTD,Analysis.Parameters.BaselineMov,2,'omitnan');
+if Analysis.Parameters.Data.BaselineMov
+    baseAVG=movmean(baseAVG,Analysis.Parameters.Data.BaselineMov,2,'omitnan');
+    baseSTD=movmean(baseSTD,Analysis.Parameters.Data.BaselineMov,2,'omitnan');
 end
 % Data Normalization
 if Analysis.Parameters.AOD.raw
     for t=1:nTrials
-        if Analysis.Parameters.Zscore
+        if Analysis.Parameters.Data.Zscore
             data{t}=(data{t}-baseAVG(:,t))./baseSTD(:,t);
         else
             data{t}=100*(data{t}-baseAVG(:,t))./baseAVG(:,t);
@@ -98,7 +98,7 @@ Analysis=AP_DataProcess_SingleCells(Analysis,baseAVG,baseSTD);
 %     nanCount=sum(isnan(Analysis.AllData.cell1.Data))<SR*2;
 %     Analysis.Filters.ignoredTrials=Analysis.Filters.ignoredTrials.*nanCount;
 %% Adjust behavior type - should be moved later on
-    switch Analysis.Parameters.Behavior
+    switch Analysis.Parameters.Behavior.Behavior
         case 'AOD_AudPav'
             Analysis.Parameters.Behavior='CuedOutcome';
     end

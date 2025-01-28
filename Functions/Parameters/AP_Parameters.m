@@ -5,15 +5,12 @@ function Par=AP_Parameters(SessionData,Pup,LP,Name,Par)
 %        photometry recordings
 % Used by Analysis_Photometry
 
+
 %% Parameters from Launcher
 FieldsLP_P=fieldnames(LP.P);
 for thisField=1:size(FieldsLP_P,1)
     Par.(FieldsLP_P{thisField})=LP.P.(FieldsLP_P{thisField});
 end
-
-Par.Photometry.NidaqField={'NidaqData' ; 'Nidaq2Data'};
-Par.Wheel.NidaqField='NidaqWheelData';
-
 %% General
 % Animal Name
 USindex=strfind(Name,'_');
@@ -57,6 +54,7 @@ if isempty(Par.Timing.CueTimeLick)
 end
 
 %% DAQ parameters and plotting
+Par.nCells=0;
 % Processing
 if isfield(SessionData,'DecimatedSampRate')
     Par.Data.NidaqSamplingRate=SessionData.DecimatedSampRate;
@@ -69,26 +67,23 @@ else
     if isfield(SessionData.TrialSettings(1).GUI,'NidaqSamplingRate')
         Par.Data.NidaqSamplingRate=SessionData.TrialSettings(1).GUI.NidaqSamplingRate;
     else
-        Par.Data.NidaqSamplingRate=LP.D.SamplingRate; % Default
+        Par.Data.NidaqSamplingRate=LP.D.Data.SamplingRate; % Default
     end
 end
 Par.Data.NidaqDecimateFactor=ceil(Par.Data.NidaqSamplingRate/Par.Data.NidaqDecimatedSR);
 
 %% Photometry
+Par.Photometry.NidaqField={'NidaqData' ; 'Nidaq2Data'};
 Par=AP_Parameters_Photometry(Par,SessionData);
-Par.nCells=0;
-if isfield(SessionData,'DecimatedSampRate') % Already demodulated
-	Par.Photometry.Modulation=0;
-end
-
 %% Wheel 
+Par.Wheel.NidaqField='NidaqWheelData';
 Par.Wheel.Wheel=0;
-Par.Wheel.CounterNbits=32;
-Par.Wheel.EncoderCPR=1024;
-Par.Wheel.Diameter=14; %cm
 if isfield(SessionData,Par.Wheel.NidaqField) || LP.P.Prime.Wheel
     Par.Wheel.Wheel=1;
 end
+Par.Wheel.CounterNbits=32;
+Par.Wheel.EncoderCPR=1024;
+Par.Wheel.Diameter=14; %cm
 switch Par.Rig
     case 'Photometry5'
         Par.Wheel.Polarity=1;
@@ -98,7 +93,7 @@ end
 
 %% Stimulation
 if isfield(SessionData.TrialSettings(1).GUI,'Optogenetic')
-        Par.Stimulation=SessionData.TrialSettings(1).GUI.Optogenetic;
+        Par.Stimulation.Stimulation=SessionData.TrialSettings(1).GUI.Optogenetic;
     else
         Par.Stimulation=LP.D.Stimulation; % Default
 end
@@ -107,13 +102,17 @@ end
 Par=AP_Parameters_Pupillometry(Par,Pup,SessionData);
 
 %% Overwritting
-% FieldsLP_OW=fieldnames(LP.OW);
-% for thisField=1:size(FieldsLP_OW,1)
-%     if ~isempty(LP.OW.(FieldsLP_OW{thisField})) || ~isfield(Par,FieldsLP_OW{thisField})
-%     Par.(FieldsLP_OW{thisField})=LP.OW.(FieldsLP_OW{thisField});
-%     end
-% end
-%
+FieldsLP_OW1=fieldnames(LP.OW);
+for f1=1:size(FieldsLP_OW1,1)
+    FieldsLP_OW2=fieldnames(LP.OW.(FieldsLP_OW1{f1}));
+    for f2=1:size(FieldsLP_OW2,1)
+    if ~isempty(LP.OW.(FieldsLP_OW1{f1}).(FieldsLP_OW2{f2}))
+        Par.(FieldsLP_OW1{f1}).(FieldsLP_OW2{f2})=LP.OW.(FieldsLP_OW1{f1}).(FieldsLP_OW2{f2});
+    end
+    end
+end
+
+%% Nidaq update
 Par.Data.NidaqBaselinePoints=Par.Data.NidaqBaseline*Par.Data.NidaqDecimatedSR;
 if Par.Data.NidaqBaselinePoints(1)==0
     Par.Data.NidaqBaselinePoints(1)=1;

@@ -19,13 +19,15 @@ LP=AP_AutoLoad(LP);
 %% Loading pre existing analysis file(s)
 if LP.Load
    FileName=LP.FileToOpen{1,1}
-   cd(LP.PathName); load(FileName); 
+   cd(LP.PathName); load(FileName);
+   Analysis=AP_Load_VC(Analysis);
    Analysis=AP_DataCore_Load(Analysis);
    % add try/catch
 for i=2:length(LP.FileToOpen)
    AnalysisTemp=Analysis;
    FileName=LP.FileToOpen{1,i}
    cd(LP.PathName); load(FileName);
+   Analysis=AP_Load_VC(Analysis);
    Analysis=AP_DataCore_Merge(AnalysisTemp,Analysis);
    clear AnalysisTemp
 end
@@ -64,7 +66,7 @@ clear SessionData Pupillometry;
 end
 
 %% Adjust some fields upon loading completion
-Analysis.Parameters.nTrials=Analysis.Core.nTrials;
+Analysis.Parameters.Behavior.nTrials=Analysis.Core.nTrials;
 if sum(Analysis.Filters.Wheel>=1)
     Analysis.Parameters.Wheel.Wheel=1;
 else

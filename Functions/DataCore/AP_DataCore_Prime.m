@@ -3,7 +3,7 @@ function Analysis=AP_DataCore_Prime(Analysis)
 %% Folder directory
 folderTrialList=string(ls('Trial*'));
 nTL=size(folderTrialList,1);
-nTrials=Analysis.Parameters.nTrials;
+nTrials=Analysis.Parameters.Behavior.nTrials;
 if nTL~=nTrials
     disp('Trial nb does not match nfTL-nTrials:');
     disp([nTL nTrials])
@@ -40,8 +40,8 @@ Analysis.Core.Prime_Depth=dataDepth;
 Analysis.Core.Prime_Angle=dataAngle;
 
 % Wheel data
-Analysis.Parameters.Wheel=1;
-Analysis.Parameters.NidaqDecimatedSR=1/mean(diff(timestamps_wheel));
+Analysis.Parameters.Wheel.Wheel=1;
+Analysis.Parameters.Data.NidaqDecimatedSR=1/mean(diff(timestamps_wheel));
 Analysis.Core.Wheel=dataWheel;
 
 end
