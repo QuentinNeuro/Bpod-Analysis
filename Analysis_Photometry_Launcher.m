@@ -5,11 +5,13 @@
 % 'Analysis_Photometry' is the core function used to extract, organize and
 % filters the data according to the behavioral task
 clear SessionData Analysis LP; %close all;
+warning('off','all'); warning;
 
 %% Analysis type Single/Group/Batch/Online etc
 LP.Analysis_type='Single';
-LP.Save=1;      % 1: Core Data only     // 2: Full Analysis Structure
+LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
+LP.BatchType='Spikes'; %Spikes DataBase MegaBatch %%AP_FileBatch
 DB.DataBase=0;  % DB_Generate
 DB.Group=[];
 % global TuningYMAX;
@@ -23,19 +25,19 @@ LP.P.Filters.Sort=1;
 LP.P.Filters.Cells=1;
 LP.P.Filters.Pairing=0;
 % Figures
-LP.P.Plot.TrialTypes=1;
-LP.P.Plot.FiltersSingle=0;               % AP_CuedOutcome_FilterGroups
-LP.P.Plot.FiltersSummary=1;
+LP.P.Plot.TrialTypes=1;                  % Raw trial types - no filter applied
+LP.P.Plot.FiltersSingle=0;               % individual raster for individual trial type
+LP.P.Plot.FiltersSummary=0;              % summary plot for groups of trial type
 LP.P.Plot.FiltersBehavior=0;           	 % AP_####_GroupToPlot Oupput 2
 LP.P.Plot.Cells=0;                       % Generate single cell figures
 LP.P.Plot.Cells_Spike=0;                 % Specific to spike analysis
 LP.P.Plot.Illustrator=0;
 LP.P.Plot.Transparency=1;
-LP.P.Plot.Illustration=[1 0 0];                % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
+LP.P.Plot.Illustration=[0 0 0];          % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
 % Axis
-LP.P.Plot.xTime=[-4 4];
-LP.P.Plot.yPhoto(1,:)=[NaN NaN];     	% Tight axis if [NaN NaN] / TBD [min max]
-LP.P.Plot.yPhoto(2,:)=[NaN NaN];        % Tight axis if [NaN NaN] / TBD [min max]
+LP.P.Plot.xTime=[-3 4];
+LP.P.Plot.yPhoto(1,:)=[NaN NaN];     	 % Tight axis if [NaN NaN] / TBD [min max]
+LP.P.Plot.yPhoto(2,:)=[NaN NaN];         % Tight axis if [NaN NaN] / TBD [min max]
 % States and Timing
 LP.P.Timing.StateToZero='StateOfOutcome'; %'StateOfCue' 'StateOfOutcome'
 LP.P.Timing.ZeroFirstLick=0;              % Will look for licks 0 to 2 sec after state to Zero starts
@@ -135,7 +137,7 @@ end
 LP.P.LauncherVer=2;
 switch LP.Analysis_type
     case 'Batch'
-        [errorFile,DB_Stat]=AP_FileBatch(LP,DB,DB_Stat,'DataBase'); % Spikes DataBase MegaBatch
+        [errorFile,DB_Stat]=AP_FileBatch(LP,DB,DB_Stat,LP.BatchType);
     case 'Online'
         AP_FileOnline(LP);
     case {'Single', 'Group'}

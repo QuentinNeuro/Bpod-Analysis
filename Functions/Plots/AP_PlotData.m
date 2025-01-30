@@ -1,4 +1,4 @@
-function Analysis=AP_PlotData(Analysis)
+function Analysis=AP_PlotData(Analysis,FigTitle,Group)
 %AP_PlotData generates a figure from the licks and the photometry data
 %contained in the structure 'Analysis'. The figure shows for each trial types: 
 %1) a raster plot of the licks events 
@@ -11,7 +11,6 @@ function Analysis=AP_PlotData(Analysis)
 %function designed by Quentin 2016 for Analysis_Photometry
 
 %% Legends
-FigTitle='Summary-Plot';
 labelx='Time (sec)';   
 xTime=Analysis.Parameters.Plot.xTime;
 xtickvalues=linspace(xTime(1),xTime(2),5);
@@ -19,9 +18,9 @@ labely1='Trial Number (licks)';
 labely2='Licks Rate (Hz)';
 
 %% Nb of plots
-nbOfTrialTypes=Analysis.Parameters.Behavior.nbOfTrialTypes;
-if nbOfTrialTypes>6
-    nbOfPlotsX=nbOfTrialTypes;
+nbOfTypes=size(Group,2);
+if nbOfTypes>6
+    nbOfPlotsX=nbOfTypes;
 else
     nbOfPlotsX=6;
 end
@@ -30,8 +29,8 @@ nbOfPlotsY=3;
 %% Axes
 % Automatic definition of axes
 maxtrial=20; maxrate=10;
-for i=1:nbOfTrialTypes
-    thistype=sprintf('type_%.0d',i);
+for i=1:nbOfTypes
+    thistype=Group{i};
     if Analysis.(thistype).nTrials
     [timeAVG,dataAVG,semAVG,labelYData]=AP_PlotData_SelectorAVG(Analysis,thistype);
     nbOfPlotsY=3+3*size(dataAVG,2);
@@ -56,8 +55,8 @@ Legend=uicontrol('style','text');
 set(Legend,'String',Analysis.Parameters.Plot.Legend,'Position',[10,5,500,20]); 
 
 thisplot=1;
-for i=1:nbOfTrialTypes
-    thistype=sprintf('type_%.0d',i);
+for i=1:nbOfTypes
+    thistype=Group{i};
 %% Licking data
 % Lick Raster
     subplot(nbOfPlotsY,nbOfPlotsX,[thisplot thisplot+nbOfPlotsX]); hold on;
@@ -123,7 +122,7 @@ if ~isempty(dataAVG)
     plot(Analysis.(thistype).Time.Outcome(1,1)*ones(size(trialRaster{thisCh})),trialRaster{thisCh},'.r','MarkerSize',4);
     plot(Analysis.(thistype).Time.Cue(1,1)*ones(size(trialRaster{thisCh})),trialRaster{thisCh},'.m','MarkerSize',4);
     end   
-    if thisplot==nbOfTrialTypes
+    if thisplot==nbOfTypes
         pos=get(gca,'pos');
         c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
         c.Label.String = labelYData{thisCh};

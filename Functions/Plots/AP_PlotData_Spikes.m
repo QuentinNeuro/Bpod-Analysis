@@ -14,7 +14,7 @@ nbOfGroups=3;
 disp('Figure for spike data will only show the first 3 behavior group')
 disp('Check AP_PlotData_Spikes for info')
 end
-transparency=Analysis.Parameters.Transparency;
+transparency=Analysis.Parameters.Plot.Transparency;
 colorplot='bgry';
 %% Parameters
 % Subplot All Spikes
@@ -34,7 +34,7 @@ ySpikeRate=[0 10];
 % Subplot Behavior Raster
 yLabelSpikeRaster='Trials';
 xLabelBehav='Time (s)';
-xTimeBehah=Analysis.Parameters.PlotX;
+xTimeBehah=Analysis.Parameters.Plot.xTime;
 
 %% Data
 % Subplot All Spikes
@@ -81,14 +81,14 @@ countSP=0;
 for g=1:nbOfGroups
     groupName=groupTypes{g,1};
     thisGroupTypes=groupTypes{g,2};
-    nbOfTypes=size(thisGroupTypes,1);
+    nbOfTypes=size(thisGroupTypes,2);
     countRaster=0;
     for t=1:nbOfTypes
         subplot(5,3,4+countSP); hold on;
         plot(-10,-10,colorplot(t))
     end
     for t=1:nbOfTypes
-        thisType=thisGroupTypes{t,1}; 
+        thisType=thisGroupTypes{1,t}; 
         if Analysis.(thisType).nTrials>0
         %% Data
         % Timing
@@ -104,6 +104,11 @@ for g=1:nbOfGroups
         spikesBin=Analysis.(thisType).(thisC_Name).Time(1,:);
         raster_Spikes=cell2mat(Analysis.(thisType).(thisC_Name).SpikeTS');
         raster_Trials=cell2mat(Analysis.(thisType).(thisC_Name).TrialTS');
+        if isempty(raster_Trials)
+            countRasterAdd=0;
+        else
+            countRasterAdd=raster_Trials(end);
+        end
         %% Plot
         subplot(5,3,4+countSP); hold on;
         shadedErrorBar(licksBin,licksAVG,licksSEM,colorplot(t),transparency);
@@ -111,9 +116,9 @@ for g=1:nbOfGroups
         shadedErrorBar(spikesBin,spikesAVG,spikesSEM,colorplot(t),transparency);
         subplot(5,3,[10 13]+countSP); hold on;
         plot(raster_Spikes,raster_Trials+countRaster,'sk','MarkerSize',2,'MarkerFaceColor','k');
-        plot([xTimeBehah(2) xTimeBehah(2)],[countRaster countRaster+raster_Trials(end)],['-' colorplot(t)],'LineWidth',2);
+        plot([xTimeBehah(2) xTimeBehah(2)],[countRaster countRaster+countRasterAdd],['-' colorplot(t)],'LineWidth',2);
 
-        countRaster=countRaster+raster_Trials(end)+10;
+        countRaster=countRaster+countRasterAdd+10;
         end
     end
     % Make plot pretty
@@ -123,7 +128,7 @@ for g=1:nbOfGroups
         plot([outcomeTime(1,1) outcomeTime(1,1)],yLicks,'-r','LineWidth',2);
         set(gca,'XLim',xTimeBehah,'YLim',yLicks);
         ylabel(yLabelLicks);
-        legend(thisGroupTypes{:,1})
+        legend(thisGroupTypes{1,:})
         subplot(5,3,7+countSP); hold on;
         plot([cueTime(1,1) cueTime(1,2)],[ySpikeRate(2) ySpikeRate(2)],'-b','LineWidth',2);
         plot([outcomeTime(1,1) outcomeTime(1,1)],ySpikeRate,'-r','LineWidth',2);

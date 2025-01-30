@@ -1,4 +1,4 @@
-function Analysis=AP_PlotData_filter(Analysis,thistype,thiscell)
+function Analysis=AP_PlotData_Filter(Analysis,thistype,thiscell)
 %AP_PlotData_filter generates a figure from the licks and the photometry
 %data of 'channelnb' contained in the structure 'Analysis.(thistype)'. 
 %The figure shows, for the sorted trial types specified by 'thistype' :
@@ -11,8 +11,16 @@ function Analysis=AP_PlotData_filter(Analysis,thistype,thiscell)
 %
 %function designed by Quentin 2017 for Analysis_Photometry
 
+%% Check trialType
+if Analysis.(thistype).nTrials==0
+    disp(['Cannot create filter plot for ' thistype'])
+    disp('Check AP_PlotData_Filter')
+    return
+end
+
+%% 
 FigTitle=['Filter ' thistype];
-illustrationTest=Analysis.Parameters.Illustration(2);
+illustrationTest=Analysis.Parameters.Plot.Illustration(2);
 if nargin==3
     if ~ischar(thiscell)
         thiscell=Analysis.(thistype).AllCells.CellName{thiscell};
@@ -20,7 +28,7 @@ if nargin==3
 else
     thiscell=[];
 end
-%% Close figures
+%% Close existing figures
 try
     close FigTitle;
 end
@@ -56,7 +64,7 @@ nbOfPlotsX=1;
 scrsz = get(groot,'ScreenSize');
 figure('Name',FigTitle,'Position', [25 25 scrsz(3)/4 scrsz(4)-150], 'numbertitle','off');
 Legend=uicontrol('style','text');
-set(Legend,'String',Analysis.Parameters.Legend,'Position',[10,5,500,20]); 
+set(Legend,'String',Analysis.Parameters.Plot.Legend,'Position',[10,5,500,20]); 
 
 %% Licking Data
 subplot(nbOfPlotsY,nbOfPlotsX,[1 2]); hold on;
@@ -77,43 +85,41 @@ ylabel(labely2); xlabel(labelx);
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxrate+1]);
 
 %% Neuronal Data
-if ~isempty(dataAVG)
-    if ~Analysis.Parameters.Photometry.Photometry
-        maxtrial=max(trialRaster{1});
-    end
-    counter=0;
-    for thisC=1:size(dataAVG,2)
+if ~Analysis.Parameters.Photometry.Photometry
+    maxtrial=max(trialRaster{1});
+end
+counter=0;
+for thisC=1:size(dataAVG,2)
 % Average
-        thisSubPlot=6+counter;
-        subplot(nbOfPlotsY,nbOfPlotsX,thisSubPlot); hold on;
-        shadedErrorBar(timeAVG{thisC},dataAVG{thisC},semAVG{thisC},'-k',transparency);
-        if isnan(thisPlotY(thisC,:))
-            axis tight;
-            thisPlotY(thisC,:)=get(gca,'YLim');
-        end
-        plot([0 0],thisPlotY,'-r');
-        plot(Analysis.(thistype).Time.Cue(1,:),[thisPlotY(thisC,2) thisPlotY(thisC,2)],'-b','LineWidth',2);
-        ylabel(labelYData{thisC}); xlabel(labelx);
-        set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',thisPlotY(thisC,:));
-    
-% Raster
-        thisSubPlot=[4 5]+counter;
-        subplot(nbOfPlotsY,nbOfPlotsX,thisSubPlot); hold on;
-        imagesc(timeRaster{thisC},trialRaster{thisC},dataRaster{thisC},thisPlotY(thisC,:));
-        colormap(cmap)
-        if Analysis.Parameters.Photometry.Photometry
-            plot(Analysis.(thistype).Time.Outcome(:,1),trialRaster{thisC},'.r','MarkerSize',4);
-            plot(Analysis.(thistype).Time.Cue(:,1),trialRaster{thisC},'.m','MarkerSize',4);
-        else
-            plot(Analysis.(thistype).Time.Outcome(1,1)*ones(size(trialRaster{thisC})),trialRaster{thisC},'.r','MarkerSize',4);
-            plot(Analysis.(thistype).Time.Cue(1,1)*ones(size(trialRaster{thisC})),trialRaster{thisC},'.m','MarkerSize',4);
-        end  
-        pos=get(gca,'pos');
-        c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
-        c.Label.String = labelYRaster{thisC};
-        ylabel(labelYRaster{thisC});
-        set(gca,'XLim',xTime,'XTick',xtickvalues,'YDir','reverse'); %'YLim',[0 maxtrial]
-        counter=counter+3;
+    thisSubPlot=6+counter;
+    subplot(nbOfPlotsY,nbOfPlotsX,thisSubPlot); hold on;
+    shadedErrorBar(timeAVG{thisC},dataAVG{thisC},semAVG{thisC},'-k',transparency);
+    if isnan(thisPlotY(thisC,:))
+        axis tight;
+        thisPlotY(thisC,:)=get(gca,'YLim');
     end
-end    
+    plot([0 0],thisPlotY,'-r');
+    plot(Analysis.(thistype).Time.Cue(1,:),[thisPlotY(thisC,2) thisPlotY(thisC,2)],'-b','LineWidth',2);
+    ylabel(labelYData{thisC}); xlabel(labelx);
+    set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',thisPlotY(thisC,:));
+
+% Raster
+    thisSubPlot=[4 5]+counter;
+    subplot(nbOfPlotsY,nbOfPlotsX,thisSubPlot); hold on;
+    imagesc(timeRaster{thisC},trialRaster{thisC},dataRaster{thisC},thisPlotY(thisC,:));
+    colormap(cmap)
+    if Analysis.Parameters.Photometry.Photometry
+        plot(Analysis.(thistype).Time.Outcome(:,1),trialRaster{thisC},'.r','MarkerSize',4);
+        plot(Analysis.(thistype).Time.Cue(:,1),trialRaster{thisC},'.m','MarkerSize',4);
+    else
+        plot(Analysis.(thistype).Time.Outcome(1,1)*ones(size(trialRaster{thisC})),trialRaster{thisC},'.r','MarkerSize',4);
+        plot(Analysis.(thistype).Time.Cue(1,1)*ones(size(trialRaster{thisC})),trialRaster{thisC},'.m','MarkerSize',4);
+    end  
+    pos=get(gca,'pos');
+    c=colorbar('location','eastoutside','position',[pos(1)+pos(3)+0.001 pos(2) 0.01 pos(4)]);
+    c.Label.String = labelYRaster{thisC};
+    ylabel(labelYRaster{thisC});
+    set(gca,'XLim',xTime,'XTick',xtickvalues,'YDir','reverse'); %'YLim',[0 maxtrial]
+    counter=counter+3;
+end  
 end

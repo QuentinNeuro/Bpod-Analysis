@@ -56,7 +56,7 @@ for c=1:nCells
         Analysis.Tagging.AllCells.(epochNames{e}).FiringRate(c,:)=stats.FiringRate;
         Analysis.Tagging.AllCells.(epochNames{e}).Reliability(c,:)=stats.Reliability;
         Analysis.Tagging.(thisID).(epochNames{e}).tagStats=stats;
-        if h
+        if prod(h(1:2))
             Analysis.Tagging.Label{c}=[Analysis.Tagging.Label{c} ' ' epochNames{e}];
             Analysis.AllData.(thisID).LabelTag=[Analysis.AllData.(thisID).LabelTag ' ' epochNames{e}];
         end

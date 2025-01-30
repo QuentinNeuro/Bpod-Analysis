@@ -1,4 +1,4 @@
-function AP_PlotData_Filter_corrDFF(Analysis,thistype,channelnb)
+function AP_PlotData_Corr(Analysis,thistype,channelnb)
 
 if nargin==2
     channelnb=1;

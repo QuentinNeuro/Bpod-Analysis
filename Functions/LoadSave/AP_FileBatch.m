@@ -40,18 +40,23 @@ switch batchType
 
 %% Spikes
     case 'Spikes'
-folders=ls('VIP-*');
+folders=ls('VIP-Ai32*');
 for f=1:size(folders,1)
-    thisFolder=deblank(folders(f,:))
+    thisFolder=deblank(folders(f,:));
     cd(thisFolder);
-    cd(ls('*offlinesorter'))
+    switch LP.P.Spikes.Clustering
+        case 'Kilosort'
+            cd KS_Units
+        case 'MClust'
+            cd MC_Units
+    end
     thisFile=ls('*CuedOutcome*');
     if ~isempty(thisFile)
     try
         LP.FileList=thisFile;
         LP.FileToOpen=cellstr(LP.FileList);
         LP.PathName=[pwd filesep];
-        Analysis_Photometry(LP)
+        Analysis_Photometry(LP);
     catch
         errorCount=errorCount+1;
         errorFile{errorCount}=thisFolder;

@@ -1,4 +1,4 @@
-function AP_PlotSummary_Filter_corrDFF(Analysis,Title,Group,channelnb)
+function AP_PlotData_Corr_Summary(Analysis,Title,Group,channelnb)
 
 thisChStruct=sprintf('Photo_%s',char(Analysis.Parameters.PhotoCh{channelnb}));
 FigTitle=sprintf('Analysis-Plot %s %s',char(Analysis.Parameters.PhotoCh{channelnb}),Title);

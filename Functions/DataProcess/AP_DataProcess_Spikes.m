@@ -24,7 +24,7 @@ for t=1:nTrials
     timeTrial(t,:)=thisBinTW(1:end-1);
 end
 % Save in structure and generate metrics
-Analysis.Parameters.Data.Label={'Spikes'};
+Analysis.Parameters.Data.Label={['Spikes ' Analysis.Parameters.Data.Label{1}]};
 Analysis.AllData.Time.Zero_Spike=zeroTS;
 Analysis.AllData.AllCells.Time=timeTrial;
 Analysis.AllData.AllCells.Data = cell2mat(cellfun(@(x) mean(x,1,'omitnan'),dataTrial,'UniformOutput',false)');

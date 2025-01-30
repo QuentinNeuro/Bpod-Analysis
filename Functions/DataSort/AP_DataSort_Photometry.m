@@ -32,7 +32,8 @@ for thisCh=1:nbOfChannels
     Analysis.(thistype).(thisChStruct).CueAVG_MAXZ      =Analysis.(thistype).(thisChStruct).CueAVG_MAX-mean(Analysis.(thistype).(thisChStruct).DataAVG(Time>CueTime(1)-0.2 & Time<CueTime(1)-0.01),'omitnan'); 
     Analysis.(thistype).(thisChStruct).OutcomeAVG_MAX   =max(Analysis.(thistype).(thisChStruct).DataAVG(Time>OutcomeTime(1) & Time<OutcomeTime(2))); 
     Analysis.(thistype).(thisChStruct).OutcomeAVG_MAXZ  =Analysis.(thistype).(thisChStruct).OutcomeAVG_MAX-mean(Analysis.(thistype).(thisChStruct).DataAVG(Time>OutcomeTime(1)-0.2 & Time<OutcomeTime(1)-0.01),'omitnan'); 
-% Fit
+
+    % Fit
 if Analysis.Parameters.Plot.FiltersBehavior 
      model=fitlm(Analysis.(thistype).(thisChStruct).OutcomeStat,Analysis.(thistype).(thisChStruct).CueStat);
 %        Analysis.(thistype).(thisChStruct).Fit.XData=Analysis.(thistype).(thisChStruct).OutcomeStat;

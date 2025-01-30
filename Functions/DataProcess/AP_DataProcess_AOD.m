@@ -82,7 +82,7 @@ for t=1:nTrials
 end
 
 %% Save in structure and generate metrics
-Analysis.Parameters.Data.Label={'AOD'};
+Analysis.Parameters.Data.Label={['AOD ' Analysis.Parameters.Data.Label{1}]};
 Analysis.AllData.AllCells.Time=timeTrial;
 Analysis.AllData.AllCells.Data = cell2mat(cellfun(@(x) mean(x,1,'omitnan'),dataTrial,'UniformOutput',false)');
 for c=1:nCells

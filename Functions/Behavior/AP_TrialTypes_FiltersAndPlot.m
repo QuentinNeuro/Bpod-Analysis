@@ -7,17 +7,17 @@ function Analysis=AP_TrialTypes_FiltersAndPlot(Analysis)
 %% Sort Data according to the trial type number
 Analysis=A_FilterTrialType(Analysis);
 for i=1:Analysis.Parameters.Behavior.nbOfTrialTypes
-    thistype=sprintf('type_%.0d',i);
-    Analysis=AP_DataSort(Analysis,thistype);
-    Analysis.(thistype).Name=Analysis.Parameters.Behavior.TrialNames{i};
+    theseTypes{i}=sprintf('type_%.0d',i);
+    Analysis=AP_DataSort(Analysis,theseTypes{i});
+    Analysis.(theseTypes{i}).Name=Analysis.Parameters.Behavior.TrialNames{i};
 end
 % figure folder
 if isfolder(Analysis.Parameters.DirFig)==0
     mkdir(Analysis.Parameters.DirFig);
 end
-%% Summary Plot 1
+%% Figure
 if Analysis.Parameters.Plot.TrialTypes
-    Analysis=AP_PlotData(Analysis);
+    Analysis=AP_PlotData(Analysis,'TrialTypes',theseTypes);
     saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Plot.Legend '_AllData.png']);
 end
 end

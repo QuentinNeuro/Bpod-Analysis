@@ -6,8 +6,15 @@ TTL_Tagging=Analysis.Parameters.Spikes.tagging_TTL;
 switch Analysis.Parameters.Spikes.Clustering
     case 'Kilosort'
     TTLTS_SpikeTS_Factor=1;
-    % spike_Label=tdfread('cluster_KSLabel.tsv');
-    spike_QC=NaN(2,size(fileList,1));
+    tempCI=load('clusterInfo.mat');
+    clusterInfo=tempCI.clusterInfo;
+    spikeLabel=clusterInfo.group;
+    ksLabel=clusterInfo.KSLabel;
+    for i=1:size(spikeLabel,1)
+        if isempty(spikeLabel{i})
+            spikeLabel{i}=[ksLabel{i} '_KS'];
+        end
+    end
     case 'MClust'
     TTLTS_SpikeTS_Factor=Analysis.Parameters.Spikes.TTLTS_spikeTS_Factor;
 end
@@ -52,11 +59,12 @@ for i=1:size(fileList,1)
     thisTT_TS=TS/TTLTS_SpikeTS_Factor;
     Analysis.Parameters.Spikes.CellID{counterTT}=thisID;
     Analysis.Core.SpikeTS{counterTT}=thisTT_TS;
-    Analysis.Core.SpikeLabel{counterTT}='unknown';
-    Analysis.Core.Spike_QC(counterTT,:)=spike_QC(:,i);
+    Analysis.Core.SpikeLabel{counterTT}=spikeLabel{i};
+    % Analysis.Core.Spike_QC(counterTT,:)=spike_QC(:,i);
 end
 
 Analysis.Parameters.nCells=counterTT;
+Analysis.Parameters.Spikes.clusterInfo=clusterInfo;
 end
 
 %%%%%%%%%%%%%%%%%% TTLmismatch check %%% %%%%%%%%%%%%%%%%%
