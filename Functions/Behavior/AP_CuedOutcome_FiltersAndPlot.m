@@ -69,7 +69,7 @@ for i=1:size(Group_Plot,1)
     end
 end
 end
-%% Correlations
+%% Correlations - probably not working
 if Analysis.Parameters.Plot.FiltersBehavior
 for i=1:size(Group_Corr,1)
     Title=Group_Corr{i,1};

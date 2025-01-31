@@ -51,7 +51,7 @@ if ~illustrationTest
     maxTrial=20;
 end
 %Lick AVG y axes
-maxrate=max(Analysis.(thistype).Licks.AVG);
+maxrate=max(Analysis.(thistype).Licks.DataAVG);
 if maxrate<10
     maxrate=10;
 end
@@ -78,7 +78,7 @@ ylabel(labely1);
 set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxtrial+1],'YDir','reverse');
 % Average
 subplot(nbOfPlotsY,nbOfPlotsX,3); hold on;
-shadedErrorBar(Analysis.(thistype).Licks.Bin, Analysis.(thistype).Licks.AVG, Analysis.(thistype).Licks.SEM,'-k',transparency);
+shadedErrorBar(Analysis.(thistype).Licks.Time(1,:), Analysis.(thistype).Licks.DataAVG, Analysis.(thistype).Licks.DataSEM,'-k',transparency);
 plot([0 0],[0 maxrate+1],'-r');
 plot(Analysis.(thistype).Time.Cue(1,:),[maxrate maxrate],'-b','LineWidth',2);
 ylabel(labely2); xlabel(labelx);

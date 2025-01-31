@@ -29,8 +29,8 @@ LP.P.Plot.TrialTypes=1;                  % Raw trial types - no filter applied
 LP.P.Plot.FiltersSingle=0;               % individual raster for individual trial type
 LP.P.Plot.FiltersSummary=0;              % summary plot for groups of trial type
 LP.P.Plot.FiltersBehavior=0;           	 % AP_####_GroupToPlot Oupput 2
-LP.P.Plot.Cells=0;                       % Generate single cell figures
-LP.P.Plot.Cells_Spike=0;                 % Specific to spike analysis
+LP.P.Plot.Cells=1;                       % Generate single cell filter figures
+LP.P.Plot.Cells_Spike=1;                 % Specific to spike analysis
 LP.P.Plot.Illustrator=0;
 LP.P.Plot.Transparency=1;
 LP.P.Plot.Illustration=[0 0 0];          % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
@@ -71,7 +71,6 @@ LP.P.EventDetection.waveform_TW=1;                % in sec. Time window for wave
 LP.P.EventDetection.EpochTW=[-4.8 -2.8; -2.3 -0.3; 0 2]; % Uncertainty [-4.8 -2.8; -2.3 -0.3; 0 2] Uncertainty2 [-4.5 -4; -2.5 -2; -0.5 0];
 LP.P.EventDetection.EpochNames={'Baseline','Cue','Reward'};
 %% AOD
-% AP_DataCore_AOD AP_DataProcess_AOD AP_DataSort_AOD AP_CuedOutcome_FiltersAndPlot_AOD
 LP.P.AOD.raw=1;                        % load raw vs dff data (new Analysis only)
 LP.P.AOD.timing='TTL';                 % Bpod, TTL
 LP.P.AOD.smoothing=20;                 % smoothing 'Gaussian parameters' / used 20 for VIP_AOD data

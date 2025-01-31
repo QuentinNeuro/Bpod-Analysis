@@ -21,7 +21,7 @@ for t=1:nTrials
         dataTS{c}{t}     = thisTS_align;
         trialTS{c}{t}    = t*ones(size(thisTS_align));
     end
-    timeTrial(t,:)=thisBinTW(1:end-1);
+    timeTrial(t,:)=thisBinTW(2:end);
 end
 % Save in structure and generate metrics
 Analysis.Parameters.Data.Label={['Spikes ' Analysis.Parameters.Data.Label{1}]};

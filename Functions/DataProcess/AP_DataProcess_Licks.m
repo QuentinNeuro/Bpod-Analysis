@@ -43,9 +43,9 @@ BaselineTime=[CueTime(1)-1.5 CueTime(1)-0.5];
 
 Analysis.AllData.Licks.Events{thisTrial}    =thisLicks;
 Analysis.AllData.Licks.Trials{thisTrial}    =linspace(thisTrial,thisTrial,size(thisLicks,2));
-Analysis.AllData.Licks.Bin{thisTrial}       =binVector;
-Analysis.AllData.Licks.Rate(thisTrial,:)    =histcounts(thisLicks,binVector/binSize);
-Analysis.AllData.Licks.Baseline(thisTrial)  =mean(Analysis.AllData.Licks.Rate(thisTrial,binVector>BaselineTime(1) & binVector<BaselineTime(2)));
-Analysis.AllData.Licks.Cue(thisTrial)       =mean(Analysis.AllData.Licks.Rate(thisTrial,binVector>CueTime(1) & binVector<CueTime(2)));
-Analysis.AllData.Licks.Outcome(thisTrial)   =mean(Analysis.AllData.Licks.Rate(thisTrial,binVector>OutcomeTime(1) & binVector<OutcomeTime(2)));
+Analysis.AllData.Licks.Time(thisTrial,:)    =binVector(2:end);
+Analysis.AllData.Licks.Data(thisTrial,:)    =histcounts(thisLicks,binVector/binSize);
+Analysis.AllData.Licks.Baseline(thisTrial)  =mean(Analysis.AllData.Licks.Data(thisTrial,binVector>BaselineTime(1) & binVector<BaselineTime(2)));
+Analysis.AllData.Licks.Cue(thisTrial)       =mean(Analysis.AllData.Licks.Data(thisTrial,binVector>CueTime(1) & binVector<CueTime(2)));
+Analysis.AllData.Licks.Outcome(thisTrial)   =mean(Analysis.AllData.Licks.Data(thisTrial,binVector>OutcomeTime(1) & binVector<OutcomeTime(2)));
 end

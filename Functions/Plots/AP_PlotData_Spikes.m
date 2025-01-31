@@ -4,7 +4,7 @@ function Analysis=AP_PlotData_Spikes(Analysis,cellID,groupTypes)
 thisC_Name=Analysis.AllData.AllCells.CellName{cellID};
 testTag=Analysis.Parameters.Spikes.Tag;
 thisLabelTag=Analysis.AllData.(thisC_Name).LabelTag;
-thisLabelCluster=Analysis.AllData.(thisC_Name).LabelTag;
+thisLabelCluster=Analysis.AllData.(thisC_Name).LabelCluster;
 
 %% Parameters
 % Plot
@@ -16,6 +16,7 @@ disp('Check AP_PlotData_Spikes for info')
 end
 transparency=Analysis.Parameters.Plot.Transparency;
 colorplot='bgry';
+
 %% Parameters
 % Subplot All Spikes
 xLabelAll='Time Session (s)';
@@ -95,9 +96,9 @@ for g=1:nbOfGroups
         cueTime=Analysis.(thisType).Time.Cue;
         outcomeTime=Analysis.(thisType).Time.Outcome;
         % Licks
-        licksAVG=Analysis.(thisType).Licks.AVG;
-        licksSEM=Analysis.(thisType).Licks.SEM;
-        licksBin=Analysis.(thisType).Licks.Bin;
+        licksAVG=Analysis.(thisType).Licks.DataAVG;
+        licksSEM=Analysis.(thisType).Licks.DataSEM;
+        licksBin=Analysis.(thisType).Licks.Time(1,:);
         % spikes
         spikesAVG=Analysis.(thisType).(thisC_Name).DataAVG;
         spikesSEM=Analysis.(thisType).(thisC_Name).DataSEM;
@@ -140,25 +141,5 @@ for g=1:nbOfGroups
         xlabel(xLabelBehav);
 
         countSP=countSP+1;
-end
-
-%% Save
-% if isfield(Analysis.AllData.Spikes,'TagStat')
-%     tagStatus=find(Analysis.AllData.Spikes.TagStat.Decision(c,:));
-%     if ~isempty(tagStatus)
-%         tagName=['-' Analysis.AllData.Spikes.TagStat.TagNames{tagStatus}];
-%     else tagName=[];
-%     end
-% end
-% FileName=[Analysis.Parameters.Name '-' thisC_Name tagName]
-% DirEvents=[pwd filesep ['Figure_Spikes' tagName] filesep];
-% if isfolder(DirEvents)==0
-%     mkdir(DirEvents);
-% end
-% DirFile=[DirEvents FileName];
-% saveas(gcf,DirFile,'png');
-% if Analysis.Parameters.Illustrator
-% 	saveas(gcf,DirFile,'epsc');
-% end
-% close 'Figure TT';    
+end  
 end

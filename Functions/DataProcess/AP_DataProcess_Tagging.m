@@ -26,7 +26,7 @@ for t=1:nTrials
         dataTS{c}{t}     = thisTS_align;
         trialTS{c}{t}    = t*ones(size(thisTS_align));
     end
-    timeTrial(t,:)=thisBinTW(1:end-1);
+    timeTrial(t,:)=thisBinTW(2:end);
 end
 % Save in structure
 Analysis.Tagging.nTrials=nTrials;
@@ -44,6 +44,7 @@ end
 
 %% Tagging metrics
 for c=1:nCells
+    thisID=cellID{c};
     Analysis.Tagging.Label{c}=[];
     baseRate=reshape(dataCells{c}(timeTrial>baseTW(1) & timeTrial<baseTW(2)),nTrials,[]);
     for e=1:size(epochNames,2)

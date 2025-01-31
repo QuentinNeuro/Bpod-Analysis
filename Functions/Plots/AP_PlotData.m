@@ -10,6 +10,19 @@ function Analysis=AP_PlotData(Analysis,FigTitle,Group)
 %
 %function designed by Quentin 2016 for Analysis_Photometry
 
+%% Check trialTypes inside group
+nbOfTypes=size(Group,2);
+testEmpty=[]; testCounter=1;
+while isempty(testEmpty) | testCounter<=nbOfTypes
+    testEmpty=Analysis.(Group{testCounter}).nTrials;
+    testCounter=testCounter+1;
+end
+if isempty(testEmpty)
+    disp(['Cannot create filter summary plot for ' FigTitle'])
+    disp('Check AP_PlotData')
+    return
+end
+
 %% Legends
 labelx='Time (sec)';   
 xTime=Analysis.Parameters.Plot.xTime;
@@ -39,8 +52,8 @@ for i=1:nbOfTypes
         maxtrial=Analysis.(thistype).nTrials;
     end
 %Lick AVG y axes
-    if max(Analysis.(thistype).Licks.AVG)>maxrate
-        maxrate=max(Analysis.(thistype).Licks.AVG);
+    if max(Analysis.(thistype).Licks.DataAVG)>maxrate
+        maxrate=max(Analysis.(thistype).Licks.DataAVG);
     end
     end
 end
@@ -77,7 +90,7 @@ if Analysis.(thistype).nTrials
     end
     xlabel(labelx);
     set(gca,'XLim',xTime,'XTick',xtickvalues,'YLim',[0 maxrate+1]);
-    shadedErrorBar(Analysis.(thistype).Licks.Bin, Analysis.(thistype).Licks.AVG, Analysis.(thistype).Licks.SEM,'-k',0);
+    shadedErrorBar(Analysis.(thistype).Licks.Time(1,:), Analysis.(thistype).Licks.DataAVG, Analysis.(thistype).Licks.DataSEM,'-k',0);
     plot([0 0],[0 maxrate+1],'-r');
     plot(Analysis.(thistype).Time.Cue(1,:),[maxrate maxrate],'-b','LineWidth',2);
     

@@ -12,9 +12,8 @@ idxSession=Analysis.(thistype).Session;
     Analysis.(thistype).Licks.Events=cell2mat(thisEvents);
     Analysis.(thistype).Licks.Trials=cell2mat(thisTrials);
 % Average
-    Analysis.(thistype).Licks.AVG                       =mean(Analysis.(thistype).Licks.Rate,1);
-    Analysis.(thistype).Licks.SEM                       =std(Analysis.(thistype).Licks.Rate,0,1)/sqrt(Analysis.(thistype).nTrials);
-    Analysis.(thistype).Licks.Bin                       =binVector(1:end-1);
+    Analysis.(thistype).Licks.DataAVG                   =mean(Analysis.(thistype).Licks.Data,1);
+    Analysis.(thistype).Licks.DataSEM                   =std(Analysis.(thistype).Licks.Data,0,1)/sqrt(Analysis.(thistype).nTrials);
     Analysis.(thistype).Licks.CueAVG                    =mean(Analysis.(thistype).Licks.Cue);
     Analysis.(thistype).Licks.OutcomeAVG                =mean(Analysis.(thistype).Licks.Outcome);
     if length(idxSession)>1

@@ -2,15 +2,15 @@ function AP_PlotData_Filter_Summary(Analysis,FigTitle,Group)
 
 %% Check trialTypes inside group
 nbOfTypes=size(Group,2);
-dataTest=[]; tcounter=1;
-while isempty(dataTest) || tcounter<=nbOfTypes
-    thistype=Group{tcounter};
+testData=[]; testCounter=1;
+while isempty(testData) | testCounter<=nbOfTypes
+    thistype=Group{testCounter};
     if Analysis.(thistype).nTrials
-    [~,dataTest,~,~]=AP_PlotData_SelectorAVG(Analysis,thistype); 
+    [~,testData,~,~]=AP_PlotData_SelectorAVG(Analysis,thistype); 
     end
-    tcounter=tcounter+1;
+    testCounter=testCounter+1;
 end
-if isempty(dataTest) && tcounter==nbOfTypes
+if isempty(testData) && testCounter==nbOfTypes
         disp(['Cannot create filter summary plot for ' FigTitle'])
         disp('Check AP_PlotData_Filter')
     return
@@ -26,7 +26,7 @@ transparency=Analysis.Parameters.Plot.Transparency;
 labely1='Licks Rate (Hz)';
 maxrate=10;
 PlotY_photo=Analysis.Parameters.Plot.yPhoto;
-nbOfPlotsY=1+size(dataTest,2);
+nbOfPlotsY=1+size(testData,2);
 nbOfPlotsX=1;
 
 %% Figure
@@ -43,7 +43,7 @@ if Analysis.(thistype).nTrials
     handle.title{k}=sprintf('%s (%.0d)',Analysis.(thistype).Name,Analysis.(thistype).nTrials);
 % Licks
     subplot(nbOfPlotsY,nbOfPlotsX,1); hold on;
-    hs=shadedErrorBar(Analysis.(thistype).Licks.Bin, Analysis.(thistype).Licks.AVG, Analysis.(thistype).Licks.SEM,color4plot{k},transparency); 
+    hs=shadedErrorBar(Analysis.(thistype).Licks.Time(1,:), Analysis.(thistype).Licks.DataAVG, Analysis.(thistype).Licks.DataSEM,color4plot{k},transparency); 
     hp(k)=hs.mainLine;
 % Neuronal Data
     [timeAVG,dataAVG,semAVG,labelYData]=AP_PlotData_SelectorAVG(Analysis,thistype);

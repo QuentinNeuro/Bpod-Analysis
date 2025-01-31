@@ -8,8 +8,8 @@ if Analysis.Parameters.Spikes.Spikes
         case {'RewardA','RewardB'}
     thisType={'Uncued_Reward','CS_Reward','NS'};
     thisCellFilter={'Tag_Early','Tag_Early','Tag_Early'};
-        case {'RewardAPunishB','RewardBPunishA'}
-    thisType={'Uncued_Reward','HVS_Reward','LVS_Omission'};
+        case {'RewardAPunishB','RewardBPunishA','RewardAPunishBValues','RewardBPunishAValues'}
+    thisType={'Uncued_Reward','HVS_Reward','LVS'};
     thisCellFilter={'Tag_Early','Tag_Early','Tag_Early'};
     end
 end
@@ -32,10 +32,11 @@ end
 if Analysis.Parameters.Plot.Cells
 thisDirFig=[Analysis.Parameters.DirFig 'cellFilter' filesep];
 mkdir(thisDirFig);
+theseTypeCells={};
     for tc=1:size(thisType,2)
         theseTypeCells{tc}=[thisType{tc} '_' thisCellFilter{tc}];
-        AP_PlotData_Filter(Analysis,theseTypeCells{tc});
-        saveas(gcf,[thisDirFig Analysis.Parameters.Plot.Legend theseTypeCells{tc} '.png']);
+        % AP_PlotData_Filter(Analysis,theseTypeCells{tc});
+        % saveas(gcf,[thisDirFig Analysis.Parameters.Plot.Legend theseTypeCells{tc} '.png']);
     end
         AP_PlotData(Analysis,'CellFilter',theseTypeCells);
         saveas(gcf,[thisDirFig Analysis.Parameters.Plot.Legend 'CellFilter.png']);
@@ -47,12 +48,20 @@ if Analysis.Parameters.Spikes.Spikes && Analysis.Parameters.Plot.Cells_Spike
     thisDirFig=[Analysis.Parameters.DirFig 'Spikes' filesep];
     mkdir(thisDirFig);
     GroupPlot_Spikes=AP_CuedOutcome_FilterGroups_Spikes(Analysis);
+    
+    tempCellFilter=false(size(1,Analysis.Parameters.nCells));
+    for e=1:size(Analysis.Parameters.Spikes.tagging_EpochNames,2)
+        tempCellFilter=tempCellFilter+Analysis.Filters.(['Tag_' Analysis.Parameters.Spikes.tagging_EpochNames{e}]);
+    end
+
     for c=1:Analysis.Parameters.nCells
+        if tempCellFilter(c)
         AP_PlotData_Spikes(Analysis,c,GroupPlot_Spikes);
         cellID=Analysis.AllData.AllCells.CellName{c};
         cellID_Label=[Analysis.AllData.(cellID).LabelCluster '_' Analysis.AllData.(cellID).LabelTag];
         saveas(gcf,[thisDirFig Analysis.Parameters.Plot.Legend '_' cellID '_' cellID_Label '.png']);
         close
+        end
     end
 end
 

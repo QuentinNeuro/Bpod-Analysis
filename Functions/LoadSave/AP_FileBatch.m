@@ -40,7 +40,7 @@ switch batchType
 
 %% Spikes
     case 'Spikes'
-folders=ls('VIP-Ai32*');
+folders=ls('170*');
 for f=1:size(folders,1)
     thisFolder=deblank(folders(f,:));
     cd(thisFolder);
@@ -50,7 +50,7 @@ for f=1:size(folders,1)
         case 'MClust'
             cd MC_Units
     end
-    thisFile=ls('*CuedOutcome*');
+    thisFile=ls('*CuedReward*');
     if ~isempty(thisFile)
     try
         LP.FileList=thisFile;
