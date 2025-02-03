@@ -18,19 +18,20 @@ DB.Group=[];
 %% Overwritting Parameters
 LP.P.Data.Label={'F1','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'} --> more to OW
 LP.OW.Timing.CueTimeReset=[]; % Uncertainty : 0 0.5
-LP.OW.Timing.TimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
+LP.OW.Timing.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
+LP.OW.Behavior.EpochTimeReset=[];
 LP.OW.Data.NidaqBaseline=[]; 
 %% Analysis Parameters
 LP.P.Filters.Sort=1;
 LP.P.Filters.Cells=1;
 LP.P.Filters.Pairing=0;
 % Figures
-LP.P.Plot.TrialTypes=1;                  % Raw trial types - no filter applied
+LP.P.Plot.TrialTypes=0;                  % Raw trial types - no filter applied
 LP.P.Plot.FiltersSingle=0;               % individual raster for individual trial type
 LP.P.Plot.FiltersSummary=0;              % summary plot for groups of trial type
 LP.P.Plot.FiltersBehavior=0;           	 % AP_####_GroupToPlot Oupput 2
-LP.P.Plot.Cells=1;                       % Generate single cell filter figures
-LP.P.Plot.Cells_Spike=1;                 % Specific to spike analysis
+LP.P.Plot.Cells=0;                       % Generate single cell filter figures
+LP.P.Plot.Cells_Spike=0;                 % Specific to spike analysis
 LP.P.Plot.Illustrator=0;
 LP.P.Plot.Transparency=1;
 LP.P.Plot.Illustration=[0 0 0];          % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
@@ -38,12 +39,17 @@ LP.P.Plot.Illustration=[0 0 0];          % #1 basic filtergroup #2 no ylim on ra
 LP.P.Plot.xTime=[-3 4];
 LP.P.Plot.yPhoto(1,:)=[NaN NaN];     	 % Tight axis if [NaN NaN] / TBD [min max]
 LP.P.Plot.yPhoto(2,:)=[NaN NaN];         % Tight axis if [NaN NaN] / TBD [min max]
+% States - not implemented yet
+LP.P.Behavior.EpochStates={''};
+LP.P.Behavior.EpochNames={''};
+LP.P.Behavior.EpochTimeReset=[];
 % States and Timing
+LP.P.Timing.PSTH=[-4 5];                  % PSTH - use [0 180] for oddball
+LP.P.Timing.EpochZeroPSTH='';             % BpodState
 LP.P.Timing.StateToZero='StateOfOutcome'; %'StateOfCue' 'StateOfOutcome'
 LP.P.Timing.ZeroFirstLick=0;              % Will look for licks 0 to 2 sec after state to Zero starts
 LP.P.Timing.ZeroAt=-3;                    % Will zero fluo for each trial to a time point : 'Zero' '2sBefCue' or a timestamp
 LP.P.Timing.CueTimeLick=[];               % Use a different window to calculate lickrate at cue; % Uncertainty : 1.5 1.9
-LP.P.Timing.PSTH=[-4 5];                  % PSTH - use [0 180] for oddball
 % Filters % default LicksCue=1 LicksOut=2
 LP.P.Filters.PupilThreshold=1;
 LP.P.Filters.PupilState='NormBaseline';       	% Options : 'NormBaseline','Cue','Outcome'
@@ -84,7 +90,7 @@ LP.P.Spikes.BinSize=[0.1 0.001]; %Behavior and Tagging;
 LP.P.Spikes.tagging_TTL=2;
 LP.P.Spikes.tagging_TW=[-0.5 0.5];
 LP.P.Spikes.tagging_baseline=[-0.4 -0.1];
-LP.P.Spikes.tagging_EpochTW=[0 0.01; 0.01 0.1];
+LP.P.Spikes.tagging_EpochTW=[0 0.02; 0.01 0.1];
 LP.P.Spikes.tagging_EpochNames={'Early','Late'};
 LP.P.Spikes.pThreshold=[0.01 0.05 0.05]; %Latency / FR / Reliability;
 LP.P.Spikes.TTLTS_spikeTS_Factor=10000; % for MClust clustered spikes
@@ -121,6 +127,7 @@ LP.D.Data.NidaqBaseline=[1 2];
 % autoload
 LP.AutoLoad=1;
 LP.D.Load=0;
+LP.D.Data.Recording=[];
 LP.D.Photometry.Photometry=0;
 LP.D.Spikes.Spikes=0;
 LP.D.AOD.AOD=0;
@@ -140,5 +147,5 @@ switch LP.Analysis_type
     case 'Online'
         AP_FileOnline(LP);
     case {'Single', 'Group'}
-        [Analysis,DB_Stat]=AP_FileManual(LP,DB,DB_Stat);
+        [Analysis,DB_Stat,Feedback]=AP_FileManual(LP,DB,DB_Stat);
 end

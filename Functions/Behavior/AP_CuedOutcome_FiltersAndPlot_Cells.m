@@ -35,11 +35,11 @@ mkdir(thisDirFig);
 theseTypeCells={};
     for tc=1:size(thisType,2)
         theseTypeCells{tc}=[thisType{tc} '_' thisCellFilter{tc}];
-        % AP_PlotData_Filter(Analysis,theseTypeCells{tc});
-        % saveas(gcf,[thisDirFig Analysis.Parameters.Plot.Legend theseTypeCells{tc} '.png']);
+        AP_PlotData_Filter(Analysis,theseTypeCells{tc});
+        saveas(gcf,[thisDirFig Analysis.Parameters.Plot.Legend theseTypeCells{tc} '.png']);
     end
-        AP_PlotData(Analysis,'CellFilter',theseTypeCells);
-        saveas(gcf,[thisDirFig Analysis.Parameters.Plot.Legend 'CellFilter.png']);
+    AP_PlotData(Analysis,'CellFilter',theseTypeCells);
+    saveas(gcf,[thisDirFig Analysis.Parameters.Plot.Legend 'CellFilter.png']);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -49,7 +49,7 @@ if Analysis.Parameters.Spikes.Spikes && Analysis.Parameters.Plot.Cells_Spike
     mkdir(thisDirFig);
     GroupPlot_Spikes=AP_CuedOutcome_FilterGroups_Spikes(Analysis);
     
-    tempCellFilter=false(size(1,Analysis.Parameters.nCells));
+    tempCellFilter=false(1,Analysis.Parameters.nCells);
     for e=1:size(Analysis.Parameters.Spikes.tagging_EpochNames,2)
         tempCellFilter=tempCellFilter+Analysis.Filters.(['Tag_' Analysis.Parameters.Spikes.tagging_EpochNames{e}]);
     end
@@ -63,6 +63,8 @@ if Analysis.Parameters.Spikes.Spikes && Analysis.Parameters.Plot.Cells_Spike
         close
         end
     end
+
+
 end
 
 end

@@ -6,14 +6,11 @@ PSTH_TW=Analysis.Parameters.Timing.PSTH;
 sampRate=Analysis.Parameters.Data.NidaqDecimatedSR;
 fitTest=Analysis.Parameters.Photometry.Fit_470405;
 nbOfChannels=size(Analysis.Parameters.Photometry.Channels,2);
-nTrials=Analysis.Parameters.Behavior.nTrials;
 
 %% Data processing
-for c=1:nbOfChannels
-    dataTrial=[];
-    timeTrial=[];
-    thisC_Name=sprintf('Photo_%s',Analysis.Parameters.Photometry.Channels{thisCh});
-    for t=1:nTrials
+for t=1:nTrials
+    for c=1:nbOfChannels
+        thisC_Name=sprintf('Photo_%s',Analysis.Parameters.Photometry.Channels{thisCh});
         data=Analysis.Core.Photometry{t}{thisCh};
         baselineAVG=Analysis.AllData.(thisC_Name).BaselineAVG(t);
         baselineSTD=Analysis.AllData.(thisC_Name).BaselineSTD(t);    
@@ -37,7 +34,6 @@ for c=1:nbOfChannels
             data=100*data/baselineAVG;
         end
         end
-
         dataZero=0;
         switch Analysis.Parameters.Timing.ZeroAt
             case 'Zero'
@@ -55,12 +51,14 @@ for c=1:nbOfChannels
         end
         data=data-dataZero;
 
-        dataTrial(t,:)=data;
-        timeTrial(t,:)=time;
+        dataTrial{t}(c,:)=data;
     end
-    %% Statistics for Analysis Structure
-    Analysis.AllData.(thisC_Name).Name                   =Analysis.Parameters.Data.Label{thisCh};
-    Analysis.AllData.(thisC_Name).Time                   =timeTrial;          
-    Analysis.AllData.(thisC_Name).Data                   =dataTrial;
+end
+%% Statistics for Analysis Structure
+    Analysis.AllData.(thisC_Name).Name                        =Analysis.Parameters.Data.Label{thisCh};
+    Analysis.AllData.(thisC_Name).Time(t,:)                   =time;          
+    Analysis.AllData.(thisC_Name).Data(t,:)                   =data;
+    % Analysis.AllData.(thisC_Name).Baseline(t)                 =DFFBaseline;
+    % AVG/MAX
 end
 end

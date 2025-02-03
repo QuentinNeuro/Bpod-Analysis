@@ -6,20 +6,21 @@ dt=1/Analysis.Parameters.Data.NidaqDecimatedSR;
 stateToZero=Analysis.Parameters.Timing.StateToZero;
 tw=Analysis.Parameters.Timing.PSTH;
 nbOfChannels=size(Analysis.Parameters.Photometry.Channels,2);
+nTrials=Analysis.Parameters.Behavior.nTrials;
 
-for thisCh=1:nbOfChannels
-    thisChStruct=sprintf('Photo_%s',Analysis.Parameters.Photometry.Channels{thisCh});
+for c=1:nbOfChannels
+    thisC_Name=sprintf('Photo_%s',Analysis.Parameters.Photometry.Channels{c});
     BaselineAVG=nan(Analysis.AllData.nTrials,1);
     BaselineSTD=nan(Analysis.AllData.nTrials,1);
-    for thisT=1:Analysis.AllData.nTrials
+    for t=1:nTrials
         try
-        Data=Analysis.Core.Photometry{thisT}{thisCh};
+        Data=Analysis.Core.Photometry{t}{c};
         switch Analysis.Parameters.Data.BaselineBefAft
             case 1 % Baseline calculated from start of recording
                 DataBaseline=Data(BaselinePts(1):BaselinePts(2));
             case 2 % Baseline calculated from start of time window
                 time=[0:1:length(Data)-1]*dt;
-                timeZ=time-Analysis.Core.States{1,thisT}.(stateToZero)(1);
+                timeZ=time-Analysis.Core.States{1,t}.(stateToZero)(1);
                 timeZ_IO=false(size(timeZ));
                 timeZ_IO(timeZ>=tw(1) & timeZ<=tw(2))=true;
                 dataTW=Data(timeZ_IO);
@@ -33,11 +34,11 @@ for thisCh=1:nbOfChannels
             Cutoff=Analysis.Parameters.Data.BaselineHisto/100;
             DataBaselineSort=sort(DataBaseline);
             BaselinePtsHisto=round(length(DataBaseline)*Cutoff);
-            BaselineAVG(thisT)=mean(DataBaseline(1:BaselinePtsHisto),'omitnan');
-            BaselineSTD(thisT)=std(DataBaseline(1:BaselinePtsHisto),'omitnan');
+            BaselineAVG(t)=mean(DataBaseline(1:BaselinePtsHisto),'omitnan');
+            BaselineSTD(t)=std(DataBaseline(1:BaselinePtsHisto),'omitnan');
         else
-        BaselineAVG(thisT)=mean(DataBaseline,'omitnan');
-        BaselineSTD(thisT)=std(DataBaseline,'omitnan');
+        BaselineAVG(t)=mean(DataBaseline,'omitnan');
+        BaselineSTD(t)=std(DataBaseline,'omitnan');
         end
         catch
             disp('error in photometry baseline calculation')
@@ -50,7 +51,7 @@ for thisCh=1:nbOfChannels
         BaselineSTD(Analysis.Core.Session==thisS)=movmean(BaselineSTD(Analysis.Core.Session==thisS),movBaseParam,'omitnan');
     end
     end
-    Analysis.AllData.(thisChStruct).BaselineAVG=BaselineAVG;
-    Analysis.AllData.(thisChStruct).BaselineSTD=BaselineSTD;
+    Analysis.AllData.(thisC_Name).BaselineAVG=BaselineAVG;
+    Analysis.AllData.(thisC_Name).BaselineSTD=BaselineSTD;
 end
 end

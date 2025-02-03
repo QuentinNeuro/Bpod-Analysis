@@ -22,7 +22,6 @@ for thisTrial=1:SessionData.nTrials
     Analysis.Core.States{i}=SessionData.RawEvents.Trial{1,thisTrial}.States;
 % try
     Analysis.Core.Licks{i}           =AP_DataCore_Licks(SessionData,Analysis,thisTrial);
-    Analysis.Core.Photometry{i}      =AP_DataCore_Photometry(SessionData,Analysis,thisTrial);
     Analysis.Core.Wheel{i}           =AP_DataCore_Wheel(SessionData,Analysis,thisTrial);
     Analysis.Core.Pup{i}             =AP_DataCore_Pupil(Pup,Analysis,thisTrial,i);
     [~,Analysis.Core.PupSmooth{i}]   =AP_DataCore_Pupil(Pup,Analysis,thisTrial,i);
@@ -38,20 +37,17 @@ for thisTrial=1:SessionData.nTrials
     end
 end  
 
-if Analysis.Parameters.AOD.AOD
-    Analysis=AP_DataCore_AOD(Analysis);
+%% Recording Type
+switch Analysis.Parameters.Data.RecordingType
+    case 'Photometry'
+Analysis=AP_DataCore_Photometry(Analysis,SessionData);
+    case 'AOD'
+Analysis=AP_DataCore_AOD(Analysis);
+    case 'Spikes'
+Analysis=AP_DataCore_Spikes(Analysis);
+    case 'Miniscope'
+Analysis=AP_DataCore_Miniscope(Analysis);
+    case 'Prime'
+Analysis=AP_DataCore_Prime(Analysis);
 end
-
-if Analysis.Parameters.Spikes.Spikes
-    Analysis=AP_DataCore_Spikes(Analysis);
-end
-
-if Analysis.Parameters.Miniscope.Miniscope
-    Analysis=AP_DataCore_Miniscope(Analysis);
-end
-
-if Analysis.Parameters.Prime.Prime
-    Analysis=AP_DataCore_Prime(Analysis);
-end
-
 end

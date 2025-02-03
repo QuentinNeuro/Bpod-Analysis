@@ -40,10 +40,11 @@ switch batchType
 
 %% Spikes
     case 'Spikes'
-folders=ls('170*');
+folders=ls('Q24*');
 for f=1:size(folders,1)
     thisFolder=deblank(folders(f,:));
     cd(thisFolder);
+    try
     switch LP.P.Spikes.Clustering
         case 'Kilosort'
             cd KS_Units
@@ -52,15 +53,14 @@ for f=1:size(folders,1)
     end
     thisFile=ls('*CuedReward*');
     if ~isempty(thisFile)
-    try
         LP.FileList=thisFile;
         LP.FileToOpen=cellstr(LP.FileList);
         LP.PathName=[pwd filesep];
         Analysis_Photometry(LP);
+    end
     catch
         errorCount=errorCount+1;
         errorFile{errorCount}=thisFolder;
-    end
     end
     cd(thisOrigin)
 end

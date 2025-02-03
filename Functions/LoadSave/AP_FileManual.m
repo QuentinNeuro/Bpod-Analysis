@@ -1,5 +1,5 @@
-function [Analysis,DB_Stat]=AP_FileManual(LP,DB,DB_Stat)
-
+function [Analysis,DB_Stat,Feedback]=AP_FileManual(LP,DB,DB_Stat)
+Feedback='';
 [LP.FileList,LP.PathName]=uigetfile('*.mat','Select the BPod file(s)','MultiSelect', 'on');
 if iscell(LP.FileList)==0
 	LP.FileToOpen=cellstr(LP.FileList);
@@ -24,8 +24,17 @@ switch LP.Analysis_type
                 DB_Stat.LP=LP;
                 disp(Analysis.Parameters.CueTimeReset)
             end
-%             AllAnimals{i}=Analysis.Parameters.Animal;
-%             AllTuning{i}=TuningYMAX;
+            if sum(Analysis.Filters.Tag_Early)>0
+                try
+            Feedback.Session{i}=Analysis.Parameters.Files;
+            Feedback.DataTag{i}=Analysis.Tagging.AllCells.Data_Cell(Analysis.Filters.Tag_Early,:);
+            Feedback.DataUR{i}=Analysis.Uncued_Reward_Tag_Early.AllCells.Data_Cell;
+            % Feedback.DataCR{i}=Analysis.HVS_Reward_Tag_Early.AllCells.Data_Cell;
+            Feedback.DataCR{i}=Analysis.CS_Reward_Tag_Early.AllCells.Data_Cell;
+                catch
+                    disp([LP.FileToOpen 'could not be added to spikes']);
+                end
+            end
          end    
 
 	case 'Group'

@@ -72,9 +72,11 @@ else
 end
 Par.Data.NidaqDecimateFactor=ceil(Par.Data.NidaqSamplingRate/Par.Data.NidaqDecimatedSR);
 
-%% Photometry
-Par.Photometry.NidaqField={'NidaqData' ; 'Nidaq2Data'};
-Par=AP_Parameters_Photometry(Par,SessionData);
+%% Recording Type
+switch Par.Data.RecordingType
+    case 'Photometry'
+        Par=AP_Parameters_Photometry(Par,SessionData);
+end
 %% Wheel 
 Par.Wheel.NidaqField='NidaqWheelData';
 Par.Wheel.Wheel=0;

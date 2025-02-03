@@ -146,7 +146,7 @@ plot([0 nbOfTrialTypes+1],[0 0],'-g');
 % Bleach
 subplot(2,3,6); hold on
 title('Bleaching'); ylabel('Norm. DF/F'); xlabel('Trial Number');
-plot(Analysis.AllData.(thisChStruct).Bleach);
+plot(Analysis.AllData.(thisChStruct).BaselineAVG./mean(Analysis.AllData.(thisChStruct).BaselineAVG(1:2)));
 
 %% Save
 saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_AudTun' thisChStruct '.png']);

@@ -40,6 +40,7 @@ for c=1:nCells
     Analysis.Tagging.(thisID).Data              =dataCells{c};
     Analysis.Tagging.(thisID).SpikeTS           =dataTS{c};
     Analysis.Tagging.(thisID).TrialTS           =trialTS{c};
+    Analysis.Tagging.AllCells.Data_Cell(c,:)=mean(dataCells{c},1,'omitnan');
 end
 
 %% Tagging metrics

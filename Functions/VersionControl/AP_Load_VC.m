@@ -13,14 +13,14 @@ if ~isfield(Analysis.Parameters,'LauncherVer')
     newField_lvl1={'Behavior','Photometry','Wheel','Data','Timing'};
     newField_lvl2{1}={'nTrials','nbOfTrialTypes','Behavior','Phase','TrialNames',...
                             'TypeOfCue','StateOfCue','StateOfOutcome'};
-    newField_lvl2{2}={'Photometry','Modulation','recordedMod','AmpField','FreqField','ModulData'};
+    newField_lvl2{2}={'Modulation','recordedMod','AmpField','FreqField','ModulData'};
     newField_lvl2{3}={'Wheel','CounterNbits','EncoderCPR','Diameter','Polarity','NidaqField'};
     newField_lvl2{4}={'NidaqDecimatedSR','NidaqBaseline','NidaqSamplingRate',...
                             'NidaqDecimateFactor','NidaqBaselinePoints'};
     newField_lvl2{5}={'CueTimeReset','OutcomeTimeReset'};
 
     oldField{1}=newField_lvl2{1};
-    oldField{2}={'Photometry','Modulation','recordedMod','PhotoAmpField','PhotoFreqField','PhotoModulData'};
+    oldField{2}={'Modulation','recordedMod','PhotoAmpField','PhotoFreqField','PhotoModulData'};
     oldField{3}={'Wheel','WheelCounterNbits','WheelEncoderCPR','WheelDiameter','WheelPolarity','WheelField'};
     oldField{4}=newField_lvl2{4};
     oldField{5}=newField_lvl2{5};

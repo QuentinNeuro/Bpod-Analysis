@@ -2,7 +2,6 @@ function Par=AP_Parameters_Photometry_VC(Par,SessionData)
 %% Run inside AP_Parameters_Photometry for data acquired using old Bpod protocol version
 try
 if isfield(SessionData,Par.Photometry.NidaqField{1})
-    Par.Photometry.Photometry=1;
     Par.Photometry.Modulation=1;
 	Par.Photometry.recordedMod=1;
 % First Channel
@@ -54,6 +53,7 @@ end
     disp('Photometry parameter extraction : success')
 catch
     disp('Photometry parameter extraction : failed')
+    Par.Data.RecordingType={};
 end
 end
 

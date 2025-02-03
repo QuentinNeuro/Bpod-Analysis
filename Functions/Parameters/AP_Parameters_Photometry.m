@@ -1,12 +1,11 @@
 function Par=AP_Parameters_Photometry(Par,SessionData)
-Par.Photometry.Photometry=0;
-Par.Photometry.Channels={};   
 
+Par.Photometry.NidaqField={'NidaqData' ; 'Nidaq2Data'};
+Par.Photometry.Channels={};   
 %% Auto-Detection
 if isfield(SessionData.TrialSettings(1).GUI,'PhotometryVersion')
     if SessionData.TrialSettings(1).GUI.Photometry
 % General parameters        
-    Par.Photometry.Photometry=1;
     Par.Photometry.Modulation=SessionData.TrialSettings(1).GUI.Modulation;
     if size(SessionData.(Par.Photometry.NidaqField{1}){1,1},2)>1
         Par.Photometry.recordedMod=1;

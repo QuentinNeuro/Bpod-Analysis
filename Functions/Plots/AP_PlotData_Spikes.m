@@ -26,6 +26,7 @@ ySpikeAll=[-0.1 0.1];
 % Subplot Tagging Raster
 xLabelTag='Time from Laser (s)';
 xTimeTag=Analysis.Parameters.Spikes.tagging_TW;
+xTimeTag=[-0.1 0.2];
 % Subplot Licks
 yLabelLicks='Licks (Hz)';
 yLicks=[0 10];

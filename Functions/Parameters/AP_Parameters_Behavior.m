@@ -24,6 +24,7 @@ Par.Data.NidaqBaseline=[0.2 1.2];
 if contains(Name,'Cued','IgnoreCase',true) && ~contains(Name,'Sensor','IgnoreCase',true)  && ~contains(Name,'AudCuedPavl','IgnoreCase',true)
     Par.Behavior.Behavior='CuedOutcome';
     Par.Behavior.TypeOfCue='Chirp';
+    % Cue
     if isfield(SessionData.RawEvents.Trial{1,1}.States,'SoundDelivery')
         Par.Behavior.StateOfCue='SoundDelivery';
     elseif isfield(SessionData.RawEvents.Trial{1,1}.States,'CueDelivery')

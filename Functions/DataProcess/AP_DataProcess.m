@@ -19,7 +19,7 @@ switch Analysis.Parameters.Behavior.Behavior
     maxITI=max(diff(Analysis.Core.TrialStartTS));
     Analysis.Parameters.Timing.PSTH=[0 ceil(maxITI)+1];
 end
-%% Baseline for fiber photometry
+%% Baseline calculation
 if Analysis.Parameters.Photometry.Photometry
     Analysis=AP_Photometry_Baseline(Analysis);
     if Analysis.Parameters.Photometry.Fit_470405
@@ -38,18 +38,20 @@ for thisTrial=1:Analysis.AllData.nTrials
     Analysis.AllData.Time.Outcome(thisTrial,:)      =thisStates.(StateOfOutcome)-thisStates.(StateToZero)(1);
     % Licks
     Analysis=AP_DataProcess_Licks(Analysis,thisTrial,Analysis.Parameters.Timing.ZeroFirstLick);
-    % Photometry
-    if Analysis.Parameters.Photometry.Photometry
-    Analysis=AP_DataProcess_Photometry(Analysis,thisTrial);
-    end 
-    % Wheel
-    if Analysis.Parameters.Wheel.Wheel
-    Analysis=AP_DataProcess_Wheel(Analysis,thisTrial);
-    end
-    % Pupil
-    if Analysis.Parameters.Pupillometry.Pupillometry
-	Analysis=AP_DataProcess_Pupil(Analysis,thisTrial);
-    end
+end
+
+%% Recording Type
+switch Analysis.Parameters.Data.RecordingType
+    case 'Photometry'
+Analysis=AP_DataProcess_Photometry(Analysis,SessionData);
+    case 'AOD'
+Analysis=AP_DataProcess_AOD(Analysis);
+    case 'Spikes'
+Analysis=AP_DataProcess_Spikes(Analysis);
+    case 'Miniscope'
+Analysis=AP_DataProcess_Miniscope(Analysis);
+    case 'Prime'
+Analysis=AP_DataProcess_Prime(Analysis);
 end
 
 %% Event Detection
@@ -57,31 +59,16 @@ if Analysis.Parameters.EventDetection.Detection
     Analysis=AP_DataProcess_Events(Analysis);
 end
 
-%% Spike Analysis
-if Analysis.Parameters.Spikes.Spikes
-    Analysis=AP_DataProcess_Spikes(Analysis);
+%% Wheel and Pupil
+% Wheel
+if Analysis.Parameters.Wheel.Wheel
+Analysis=AP_DataProcess_Wheel(Analysis);
 end
-%% AOD
-if Analysis.Parameters.AOD.AOD
-    Analysis=AP_DataProcess_AOD(Analysis);
+% Pupil
+if Analysis.Parameters.Pupillometry.Pupillometry
+Analysis=AP_DataProcess_Pupil(Analysis);
 end
 
-%% Miniscope
-if Analysis.Parameters.Miniscope.Miniscope
-    Analysis=AP_DataProcess_Miniscope(Analysis);
-end
-if Analysis.Parameters.Prime.Prime
-    Analysis=AP_DataProcess_Prime(Analysis);
-end
-%% Bleaching calculation and axis
-for thisCh=1:size(Analysis.Parameters.Photometry.Channels,2)
-    thisChStruct=sprintf('Photo_%s',Analysis.Parameters.Photometry.Channels{thisCh});
-    Analysis.AllData.(thisChStruct).Bleach=Analysis.AllData.(thisChStruct).BaselineAVG/mean(Analysis.AllData.(thisChStruct).BaselineAVG(1:2));
-%     if ischar(Analysis.Parameters.PlotY_photo(thisCh,:))
-%         thisYAxis(thisCh,1)=min(min(Analysis.AllData.(thisChStruct).DFF));
-%         thisYAxis(thisCh,2)=max(max(Analysis.AllData.(thisChStruct).DFF));
-%     end
-end 
 %% Norm Pupil
 if Analysis.Parameters.Pupillometry.Pupillometry
 for thisSession=1:Analysis.AllData.Session(end)

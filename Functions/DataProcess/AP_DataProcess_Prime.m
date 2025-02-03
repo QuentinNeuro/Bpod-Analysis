@@ -16,8 +16,6 @@ nCells=Analysis.Parameters.nCells;
 
 baselinePts=ceil(Analysis.Parameters.Data.NidaqBaseline*sampRate); 
 timeWindow=Analysis.Parameters.Timing.PSTH;
-CueTime=Analysis.AllData.Time.Cue+Analysis.Parameters.Timing.CueTimeReset;
-OutcomeTime=Analysis.AllData.Time.Outcome+Analysis.Parameters.Timing.OutcomeTimeReset;
 timeToZero=Analysis.AllData.Time.Zero;
 
 %% Preprocessing - smoothing and decimate

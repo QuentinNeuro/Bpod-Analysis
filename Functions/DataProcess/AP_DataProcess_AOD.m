@@ -14,8 +14,7 @@ nTrials=Analysis.Parameters.Behavior.nTrials;
 nCells=Analysis.Parameters.nCells;
 baselinePts=ceil(Analysis.Parameters.Data.NidaqBaseline*dSR); 
 timeWindow=Analysis.Parameters.Timing.PSTH;
-CueTime=Analysis.AllData.Time.Cue+Analysis.Parameters.Timing.CueTimeReset;
-OutcomeTime=Analysis.AllData.Time.Outcome+Analysis.Parameters.Timing.OutcomeTimeReset;
+
 
 data=Analysis.Core.AOD;
 zeroTS=Analysis.Core.AOD_TS;
