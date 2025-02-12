@@ -6,10 +6,10 @@ cellID=Analysis.Parameters.Spikes.CellID;
 nTrials=Analysis.Core.nTrials;
 zeroTS=Analysis.Core.Spikes_BehTS;
 binSize=Analysis.Parameters.Spikes.BinSize(1);
-TW=Analysis.Parameters.Timing.PSTH;
+PSTH_TW=Analysis.Parameters.Timing.PSTH;
 
-%% Align data to behavior 
-thisBinTW=TW(1):binSize:TW(2);
+%% Behavior PSTH and baseline extraction
+thisBinTW=PSTH_TW(1):binSize:PSTH_TW(2);
 for t=1:nTrials
     for c=1:nCells
         thisTS           = Analysis.Core.SpikeTS{c};
@@ -42,6 +42,6 @@ end
 % Metrics
 Analysis=AP_DataProcess_SingleCells(Analysis);
 
-%% Align data to Tagging
+%% Tagging PSTH
 Analysis=AP_DataProcess_Tagging(Analysis);
 end

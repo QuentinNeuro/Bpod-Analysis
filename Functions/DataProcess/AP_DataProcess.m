@@ -1,6 +1,6 @@
 function Analysis=AP_DataProcess(Analysis)
-% Create AllData structure from Core structure + computes some statistics
-% and aligns recordings to a time zero
+% Create AllData structure from Core structure : generate PSTH, normalize
+% and create epoch-related metrics
 
 %% Parameters
 StateToZero=Analysis.Parameters.Timing.StateToZero;
@@ -17,7 +17,7 @@ for t=1:nTrials
     Analysis.AllData.Time.Zero(t)=Analysis.Core.States{1,t}.(StateToZero)(1);
 end
 
-%% Data processing
+%% Licks and Data processing
 Analysis=AP_DataProcess_Licks(Analysis);
 
 switch Analysis.Parameters.Data.RecordingType

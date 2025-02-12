@@ -48,34 +48,20 @@ if decimateFactor>1
     data=decData;
 end
 
-%% Process data
-% Baseline Calculation
-for t=1:nTrials
-        baseAVG(:,t)=mean(data{t}(:,baselinePts(1):baselinePts(2)),2,'omitnan');
-        baseSTD(:,t)=std(data{t}(:,baselinePts(1):baselinePts(2)),[],2,'omitnan');
-end
-if Analysis.Parameters.Data.BaselineMov
-    baseAVG=movmean(baseAVG,Analysis.Parameters.Data.BaselineMov,2,'omitnan');
-    baseSTD=movmean(baseSTD,Analysis.Parameters.Data.BaselineMov,2,'omitnan');
-end
-% Data Normalization
-if Analysis.Parameters.AOD.raw
-    for t=1:nTrials
-        if Analysis.Parameters.Data.Zscore
-            data{t}=(data{t}-baseAVG(:,t))./baseSTD(:,t);
-        else
-            data{t}=100*(data{t}-baseAVG(:,t))./baseAVG(:,t);
-        end
-    end
-end
-
 %% make PSTH for each trial
+dataBaseline=[];
 for t=1:nTrials
     for c=1:nCells
         [thisTime,thisData]=AP_PSTH(data{t}(c,:),timeWindow,zeroTS(t),dSR);
         thisData=thisData-mean(thisData(1:dSR),'omitnan');
         dataTrial{t}(c,:)=thisData;
         dataCells{c}(t,:)=thisData;
+        switch testBaseline
+            case 1
+                dataBaseline{c}(t,:)=data{t}(baselinePts(1):baselinePts(2),c);
+            case 2
+                dataBaseline{c}(t,:)=dataTW(baselinePts(1):baselinePts(2));
+        end
     end
     timeTrial(t,:)=thisTime;
 end
@@ -89,9 +75,8 @@ for c=1:nCells
     Analysis.AllData.AllCells.CellName{c}       =thisC_Name;
     Analysis.AllData.(thisC_Name).Time          =timeTrial;
     Analysis.AllData.(thisC_Name).Data          =dataCells{c};
+    Analysis.AllData.(thisID).DataBaseline      = dataBaseline{c};
 end    
-% Metrics
-Analysis=AP_DataProcess_SingleCells(Analysis,baseAVG,baseSTD);
 
 % %% remove trials with too many missing points
 %     nanCount=sum(isnan(Analysis.AllData.cell1.Data))<SR*2;

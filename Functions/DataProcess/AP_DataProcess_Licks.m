@@ -1,8 +1,5 @@
 function Analysis=AP_DataProcess_Licks(Analysis)
-% Realigns Licks and creates Lick-related statistics for 'thisTrial'
-% Gets the Licks data from Analysis.Core
-% ZeroFirstLick is a logical  to Align EVERYTHING on any first lick one second
-% in the state used as a zero
+% Lick PSTH and readjust PSTH's zero to first lick if option is activated
 
 %% Timing
 timeToZero=Analysis.AllData.Time.Zero;
@@ -20,7 +17,7 @@ for t=1:nTrials
 
     zeroFirstLick(t)=0;
     if testZeroFirstLick
-        licksDuringZeroState=licks{t}(licks{t}> 0 & licks{t} < 4);
+        licksDuringZeroState=licks{t}(licks{t}> 0 & licks{t} < 2);
         if ~isempty(licksDuringZeroState)
             zeroFirstLick(t)=licksDuringZeroState(1);
 
