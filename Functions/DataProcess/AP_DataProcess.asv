@@ -4,22 +4,40 @@ function Analysis=AP_DataProcess(Analysis)
 
 %% Parameters
 StateToZero=Analysis.Parameters.Timing.StateToZero;
-nTrials=Analysis.Core.nTrials;
+nTrials=Analysis.Parameters.Behavior.nTrials;
 
 %% Non Trial specific:
-Analysis.AllData.nTrials=nTrials;
+Analysis.AllData.nTrials=Analysis.Core.nTrials;
 Analysis.AllData.Session=Analysis.Core.Session;
 Analysis.AllData.TrialNumbers=Analysis.Core.TrialNumbers;
 Analysis.AllData.TrialTypes=Analysis.Core.TrialTypes;
+Analysis.Filters.FirstLick=true(Analysis.AllData.nTrials,1);
 
 %% Timing
 for t=1:nTrials
-    Analysis.AllData.Time.Zero(t)=Analysis.Core.States{1,t}.(StateToZero)(1);
+%% Baseline
+
+
+%% Baseline calculation
+if Analysis.Parameters.Photometry.Photometry
+    Analysis=AP_Photometry_Baseline(Analysis);
+    if Analysis.Parameters.Photometry.Fit_470405
+    Analysis=AP_Photometry_2ChFit(Analysis);
+    end
+    if Analysis.Parameters.Data.BaselineFit
+        disp('BaselineFit is not ready yet')
+    end
+end
+%% Trial processing
+for thisTrial=1:Analysis.AllData.nTrials
+	% Timing - some of these values could be modified by process% functions
+    thisStates=Analysis.Core.States{1,thisTrial};
+    Analysis.AllData.Time.Zero(thisTrial)           =thisStates.(StateToZero)(1);
+    % Licks
+    Analysis=AP_DataProcess_Licks(Analysis,thisTrial,Analysis.Parameters.Timing.ZeroFirstLick);
 end
 
-%% Data processing
-Analysis=AP_DataProcess_Licks(Analysis);
-
+%% Recording Type
 switch Analysis.Parameters.Data.RecordingType
     case 'Photometry'
 Analysis=AP_DataProcess_Photometry(Analysis,SessionData);
@@ -32,9 +50,6 @@ Analysis=AP_DataProcess_Miniscope(Analysis);
     case 'Prime'
 Analysis=AP_DataProcess_Prime(Analysis);
 end
-
-%% Data Normalize
-Analysis=AP_DataProcess_Normalize(Analysis);
 
 %% Event Detection
 if Analysis.Parameters.EventDetection.Detection

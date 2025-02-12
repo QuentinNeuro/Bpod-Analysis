@@ -17,8 +17,8 @@ DB.Group=[];
 % global TuningYMAX;
 %% Overwritting Parameters
 LP.P.Data.Label={'F1','F2'}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'} --> more to OW
-LP.OW.Timing.CueTimeReset=[]; % Uncertainty : 0 0.5
-LP.OW.Timing.OutcomeTimeReset=[]; %AOD [0 1] %GoNoGo default [0 -3];
+LP.P.Timing.TimeResetLicks=[]; % Uncertainty : 0 0.5
+LP.P.Timing.TimeResetData=[]; %AOD [0 1] %GoNoGo default [0 -3];
 LP.OW.Behavior.EpochTimeReset=[];
 LP.OW.Data.NidaqBaseline=[]; 
 %% Analysis Parameters

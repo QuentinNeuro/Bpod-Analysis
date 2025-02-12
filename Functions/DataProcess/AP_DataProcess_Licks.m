@@ -1,51 +1,48 @@
-function Analysis=AP_DataProcess_Licks(Analysis,thisTrial,ZeroFirstLick)
+function Analysis=AP_DataProcess_Licks(Analysis)
 % Realigns Licks and creates Lick-related statistics for 'thisTrial'
 % Gets the Licks data from Analysis.Core
 % ZeroFirstLick is a logical  to Align EVERYTHING on any first lick one second
 % in the state used as a zero
 
-%% Parameters and Data
-timeToZero=Analysis.AllData.Time.Zero(thisTrial);
-thisLicks=Analysis.Core.Licks{thisTrial}-timeToZero;
-PSTH=Analysis.Parameters.Timing.PSTH;
+%% Timing
+timeToZero=Analysis.AllData.Time.Zero;
+PSTH_TW=Analysis.Parameters.Timing.PSTH;
 binSize=Analysis.Parameters.Licks.BinSize;
-binVector=PSTH(1):binSize:PSTH(2);
-cueTimeReset=Analysis.Parameters.Timing.CueTimeLick;
-if isempty(cueTimeReset)
-    cueTimeReset=Analysis.Parameters.Timing.CueTimeReset;
-end
-outcomeTimeReset=Analysis.Parameters.Timing.OutcomeTimeReset;
+binVector=PSTH_TW(1):binSize:PSTH_TW(2);
+nTrials=Analysis.Parameters.Behavior.nTrials;
+testZeroFirstLick=Analysis.Parameters.Timing.ZeroFirstLick;
+firstLickFilter=true(Analysis.AllData.nTrials,1);
 
-%% ZeroFirstLick
-newZero=0;
-if ZeroFirstLick
-    LicksDuringZeroState=thisLicks(thisLicks> 0 & thisLicks < 4);
-    if ~isempty(LicksDuringZeroState)
-        newZero=LicksDuringZeroState(1);
-        thisLicks=thisLicks-newZero;
-    else 
-        Analysis.Filters.FirstLick(thisTrial)=false;
+%% Data processing
+for t=1:nTrials
+    licks{t}=Analysis.Core.Licks{t}-timeToZero(t);
+    trials{t}=t*ones(size(licks));
+
+    zeroFirstLick(t)=0;
+    if testZeroFirstLick
+        licksDuringZeroState=licks{t}(licks{t}> 0 & licks{t} < 4);
+        if ~isempty(licksDuringZeroState)
+            zeroFirstLick(t)=licksDuringZeroState(1);
+
+        else 
+            Analysis.Filters.FirstLick(thisTrial)=false;
+        end
+    licks{t}=licks{t}-zeroFirstLick(t);
+    timeToZero(t)=timeToZero(t)-zeroFirstLick(t);
     end
-end
-
-% Modified Analysis.Time data according to the newZero
-if newZero
-    timeToZero=timeToZero+newZero;
-    Analysis.AllData.Time.Zero(thisTrial)=timeToZero;
-    Analysis.AllData.Time.Cue(thisTrial,:)=Analysis.AllData.Time.Cue(thisTrial,:)-newZero;
-    Analysis.AllData.Time.Outcome(thisTrial,:)=Analysis.AllData.Time.Outcome(thisTrial,:)-newZero;
+    
+    % PSTH
+    time(t,:)=binVector(2:end);
+    data(t,:)=histcounts(licks{t},binVector/binSize);
 end
 
 %% Statistics for Analysis Structure
-CueTime=Analysis.AllData.Time.Cue(thisTrial,:)+cueTimeReset;
-OutcomeTime=Analysis.AllData.Time.Outcome(thisTrial,:)+outcomeTimeReset;
-BaselineTime=[CueTime(1)-1.5 CueTime(1)-0.5];
+Analysis.AllData.Licks.Events   =licks;
+Analysis.AllData.Licks.Trials   =trials;
+Analysis.AllData.Licks.Time     =time;
+Analysis.AllData.Licks.Data     =data;
 
-Analysis.AllData.Licks.Events{thisTrial}    =thisLicks;
-Analysis.AllData.Licks.Trials{thisTrial}    =linspace(thisTrial,thisTrial,size(thisLicks,2));
-Analysis.AllData.Licks.Time(thisTrial,:)    =binVector(2:end);
-Analysis.AllData.Licks.Data(thisTrial,:)    =histcounts(thisLicks,binVector/binSize);
-Analysis.AllData.Licks.Baseline(thisTrial)  =mean(Analysis.AllData.Licks.Data(thisTrial,binVector>BaselineTime(1) & binVector<BaselineTime(2)));
-Analysis.AllData.Licks.Cue(thisTrial)       =mean(Analysis.AllData.Licks.Data(thisTrial,binVector>CueTime(1) & binVector<CueTime(2)));
-Analysis.AllData.Licks.Outcome(thisTrial)   =mean(Analysis.AllData.Licks.Data(thisTrial,binVector>OutcomeTime(1) & binVector<OutcomeTime(2)));
+Analysis.AllData.Time.Zero=timeToZero;
+Analysis.AllData.Time.zeroFirstLick=zeroFirstLick;
+Analysis.Filters.FirstLick=firstLickFilter;
 end
