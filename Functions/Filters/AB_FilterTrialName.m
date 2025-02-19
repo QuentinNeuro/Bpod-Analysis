@@ -1,4 +1,4 @@
-function Analysis=A_FilterTrialName(Analysis,FilterName)
+function Analysis=AB_FilterTrialName(Analysis,FilterName)
 % This script creates a filter according to the name of the trial types. 
 % 
 % Function designed by Quentin 2020 for Analysis_Photometry
@@ -11,7 +11,7 @@ if isfield(Analysis.Filters,checkExist)
 return
 end
 %% Parameters
-TypeNb=A_NameToTrialNumber(Analysis,FilterName);
+TypeNb=AB_NameToTrialNumber(Analysis,FilterName);
 
 %% Filter
 Logicals=false(Analysis.AllData.nTrials,1);

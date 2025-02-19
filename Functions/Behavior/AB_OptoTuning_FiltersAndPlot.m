@@ -1,16 +1,16 @@
-function Analysis=AP_OptoTuning_FiltersAndPlot(Analysis)
+function Analysis=AB_OptoTuning_FiltersAndPlot(Analysis)
 %This function can be used to generates filters based on behavior or states
 %and to plot single and summary figures.
 
 %% Generates filters
 % Groups
-TrialTypeNames=Analysis.Parameters.TrialNames;
+TrialTypeNames=Analysis.Parameters.Behavior.TrialNames;
 for i=1:length(TrialTypeNames)
-    Analysis=A_FilterTrialName(Analysis,TrialTypeNames{i});
+    Analysis=AB_FilterTrialName(Analysis,TrialTypeNames{i});
 end
 
 %% Sort and plot Filter
-if Analysis.Parameters.SortFilters
+if Analysis.Parameters.Filters.Sort
     for i=1:length(TrialTypeNames)
         Analysis=AP_DataSort(Analysis,TrialTypeNames{i});
         if Analysis.Parameters.PlotFiltersSingle && Analysis.(TrialTypeNames{i}).nTrials>0

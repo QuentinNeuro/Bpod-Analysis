@@ -14,10 +14,10 @@ DirFile=[DirArchive Analysis.Parameters.Name '.mat'];
 if isfield(SessionData,'DecimatedSampRate')
    disp('SessionData file already archived')
 else
-try
+% try
     if isfield(SessionData,NidaqPhoto{1})
     for thisTrial=1:SessionData.nTrials
-        SessionData.(NidaqPhoto{1}){1,thisTrial}=Analysis.Core.Photometry{1,thisTrial}{1, 1}';  
+        SessionData.(NidaqPhoto{1}){1,thisTrial}=Analysis.Core.Photometry{1,thisTrial}(1,:)';  
     end
     SessionData.DecimatedSampRate=Analysis.Parameters.Data.SamplingRateDecimated;
     SessionData.Modulation=Analysis.Parameters.Photometry.Modulation;
@@ -26,14 +26,14 @@ try
         switch Analysis.Parameters.Photometry.Channels{2}
             case '405'
         for thisTrial=1:SessionData.nTrials
-            SessionData.(NidaqPhoto{1}){1,thisTrial}(:,2)=Analysis.Core.Photometry{1,thisTrial}{2,1}';  
+            SessionData.(NidaqPhoto{1}){1,thisTrial}(:,2)=Analysis.Core.Photometry{1,thisTrial}(2,:)';  
         end 
         end
     end
         
     if isfield(SessionData,NidaqPhoto{2})
     for thisTrial=1:SessionData.nTrials
-        SessionData.(NidaqPhoto{2}){1,thisTrial}=Analysis.Core.Photometry{1,thisTrial}{2, 1}';  
+        SessionData.(NidaqPhoto{2}){1,thisTrial}=Analysis.Core.Photometry{1,thisTrial}(2,:)';  
     end
     SessionData.DecimatedSampRate=Analysis.Parameters.Data.SamplingRateDecimated;
     end
@@ -45,8 +45,8 @@ try
     end
     
     save(DirFile,'SessionData');  
-catch
-    disp('Could not archive this SessionData')
-end
+% catch
+%     disp('Could not archive this SessionData')
+% end
 end
 end

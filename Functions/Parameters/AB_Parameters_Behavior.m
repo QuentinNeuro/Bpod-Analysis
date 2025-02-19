@@ -136,10 +136,10 @@ if isfield(SessionData.RawEvents.Trial{1, 1}.States,'StimDelivery')
     Par.Behavior.EpochStates{1}='StimDelivery';
     Par.Timing.EpochZeroPSTH='StimDelivery';
 end
-if sum(contains(Par.TrialNames,'Train_1Hz_500s_5ms_5V'))>0
+if sum(contains(Par.Behavior.TrialNames,'Train_1Hz_500s_5ms_5V'))>0
     Par.Behavior.TrialNames(contains(Par.TrialNames,'Train_1Hz_500s_5ms_5V'))={'Train_10Hz_500ms_5ms_5V'};
 end
-if sum(contains(Par.TrialNames,'Train_10Hz_500s_5ms_5V'))>0
+if sum(contains(Par.Behavior.TrialNames,'Train_10Hz_500s_5ms_5V'))>0
     Par.Behavior.TrialNames(contains(Par.TrialNames,'Train_10Hz_500s_5ms_5V'))={'Train_10Hz_500ms_5ms_5V'};
 end
 end
