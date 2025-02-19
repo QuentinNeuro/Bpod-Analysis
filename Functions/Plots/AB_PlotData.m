@@ -109,7 +109,7 @@ if Analysis.(thistype).nTrials
 
 %% Neuronal Data
 [timeAVG,dataAVG,semAVG,labelYData]=AB_PlotData_SelectorAVG(Analysis,thistype);
-[timeRaster,trialRaster,dataRaster,labelYRaster]=AP_PlotData_SelectorRaster(Analysis,thistype);
+[timeRaster,trialRaster,dataRaster,labelYRaster]=AB_PlotData_SelectorRaster(Analysis,thistype);
 
 if ~isempty(dataAVG)
     if ~Analysis.Parameters.Photometry.Photometry

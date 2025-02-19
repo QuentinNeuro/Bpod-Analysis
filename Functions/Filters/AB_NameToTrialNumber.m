@@ -1,4 +1,4 @@
-function TrialNumber=A_NameToTrialNumber(Analysis,StringToSearch)
+function TrialNumber=AB_NameToTrialNumber(Analysis,StringToSearch)
 %A_NameToTrialNumber returns the trial type numbers for which the title
 %contains StringToSearch. Returns NaN if no correspondance is found.
 %

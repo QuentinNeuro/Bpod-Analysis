@@ -28,7 +28,7 @@ if WheelFilter(t)
     if ~Analysis.Parameters.Prime.Wheel
     thisData=thisData.*(Analysis.Parameters.Wheel.Polarity*Analysis.Parameters.Wheel.Diameter*pi/360);
     end
-    [timeTW,dataTW]=AP_PSTH(thisData',PSTH_TW,timeToZero(t),sampRate);
+    [timeTW,dataTW]=myPSTH(thisData',PSTH_TW,timeToZero(t),sampRate);
     
     dataWheel(t,:)=dataTW;
     timeWheel(t,:)=timeTW;

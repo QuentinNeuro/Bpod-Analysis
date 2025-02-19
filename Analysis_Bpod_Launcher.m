@@ -6,7 +6,7 @@ clear SessionData Analysis LP; %close all;
 warning('off','all'); warning;
 
 %% Analysis type Single/Group/Batch/Online etc
-LP.Analysis_type='Single';
+LP.Analysis_type='Online';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
 LP.BatchType=''; %Spikes DataBase MegaBatch %%AP_FileBatch
@@ -62,7 +62,7 @@ LP.P.Data.BaselineHisto=0;                   % percentage of data from the basel
 LP.P.Data.ZeroTW=[];                         % in sec
 LP.P.Data.SamplingRateDecimated=20;          % in Hz 20 for figures 100 for archiving
 LP.P.Data.BaselineFit=0;                     % To come
-LP.P.Photometry.Fit_470405=1;                % To TEST
+LP.P.Photometry.Fit_470405=0;                % To TEST
 LP.OW.Photometry.PhotoCh={};                 % Force one channel only '470' - useful to group sessions with different channels
 % Event detection %AP_DataProcess_Events
 LP.P.EventDetection.Detection=0;

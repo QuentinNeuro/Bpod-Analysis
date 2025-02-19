@@ -21,7 +21,7 @@ if Analysis.Parameters.Photometry.Photometry
     end
 end
 
-if Analysis.Parameters.nCells
+if Analysis.Parameters.Data.nCells
     if isempty(thiscell)
     nCells=size(Analysis.(thistype).AllCells.CellName,2);
     x{1}=Analysis.(thistype).AllCells.Time(1,:);

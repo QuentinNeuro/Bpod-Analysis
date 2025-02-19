@@ -4,8 +4,8 @@ if Analysis.Parameters.Photometry.Photometry
     nbOfTrialTypes=Analysis.Parameters.Behavior.nbOfTrialTypes;
     trialNames=Analysis.Parameters.Behavior.TrialNames;
 %% Filters
-WNtypes=A_NameToTrialNumber(Analysis,'White');
-ChirpTypes=A_NameToTrialNumber(Analysis,'to');
+WNtypes=AB_NameToTrialNumber(Analysis,'White');
+ChirpTypes=AB_NameToTrialNumber(Analysis,'to');
 if nbOfTrialTypes>3
     ToneTypes=4:1:nbOfTrialTypes;
 else
