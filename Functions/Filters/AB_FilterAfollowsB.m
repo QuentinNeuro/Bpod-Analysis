@@ -1,4 +1,4 @@
-function Analysis=A_FilterAfollowsB(Analysis,FilterName,TypeA,TypeB)
+function Analysis=AB_FilterAfollowsB(Analysis,FilterName,TypeA,TypeB)
 % Function to filter trials according to a trial type sequence
 %
 % function designed by Quentin 2020 for Analysis_Photometry
@@ -11,7 +11,7 @@ return
 end
 %% Parameters
 if ischar(TypeA)
-    TypeA=A_NameToTrialNumber(Analysis,TypeA);
+    TypeA=AB_NameToTrialNumber(Analysis,TypeA);
 elseif iscell(TypeA)
     n=size(TypeA,1);
     TempTypeA=[];
@@ -22,7 +22,7 @@ elseif iscell(TypeA)
 end
 
 if ischar(TypeB)
-    TypeB=A_NameToTrialNumber(Analysis,TypeB);
+    TypeB=AB_NameToTrialNumber(Analysis,TypeB);
 elseif iscell(TypeB)
     n=size(TypeB,1);
     TempTypeB=[];

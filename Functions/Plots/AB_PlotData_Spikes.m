@@ -1,10 +1,10 @@
-function Analysis=AP_PlotData_Spikes(Analysis,cellID,groupTypes)
+function Analysis=AB_PlotData_Spikes(Analysis,cellID,groupTypes)
 
 %% Cell ID
 thisC_Name=Analysis.AllData.AllCells.CellName{cellID};
 testTag=Analysis.Parameters.Spikes.Tag;
 thisLabelTag=Analysis.AllData.(thisC_Name).LabelTag;
-thisLabelCluster=Analysis.AllData.(thisC_Name).LabelCluster;
+thisLabelCluster=Analysis.AllData.(thisC_Name).LabelClustering;
 
 %% Parameters
 % Plot
@@ -20,7 +20,7 @@ colorplot='bgry';
 %% Parameters
 % Subplot All Spikes
 xLabelAll='Time Session (s)';
-xTimeAll=[Analysis.Core.Spikes_BehTS(1) Analysis.Core.Spikes_BehTS(end)];
+xTimeAll=[Analysis.Core.SpikesBehTS(1) Analysis.Core.SpikesBehTS(end)];
 yLabelSpikeAll='Spikes';
 ySpikeAll=[-0.1 0.1];
 % Subplot Tagging Raster
@@ -41,7 +41,7 @@ xTimeBehah=Analysis.Parameters.Plot.xTime;
 %% Data
 % Subplot All Spikes
 NbOfSpikes=500;
-thisSpikes_All=Analysis.Core.SpikeTS{cellID};
+thisSpikes_All=Analysis.Core.SpikesTS{cellID};
 thislength=length(thisSpikes_All);
 if thislength>=NbOfSpikes
     thisSpikes_All=decimate(thisSpikes_All,ceil(thislength/NbOfSpikes));

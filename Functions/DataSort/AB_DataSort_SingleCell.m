@@ -13,7 +13,7 @@ end
 thisType=[FilterName '_' FilterCell];
 thisFilter=Analysis.Filters.(FilterCell);
 nTrials=Analysis.(FilterName).nTrials;
-nCells=Analysis.Parameters.nCells;
+nCells=Analysis.Parameters.Data.nCells;
 nCellsF=sum(thisFilter);
 cellName=Analysis.AllData.AllCells.CellName;
 if ~nCellsF

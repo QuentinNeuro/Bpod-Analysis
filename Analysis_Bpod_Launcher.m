@@ -6,7 +6,7 @@ clear SessionData Analysis LP; %close all;
 warning('off','all'); warning;
 
 %% Analysis type Single/Group/Batch/Online etc
-LP.Analysis_type='Online';
+LP.Analysis_type='Single';
 LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];  % string to be added to the saved analysis file name
 LP.BatchType=''; %Spikes DataBase MegaBatch %%AP_FileBatch
@@ -17,16 +17,16 @@ DB.Group=[];
 LP.P.Data.Label={}; %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 LP.P.Timing.ForceEpochTimeReset=[]; % cue / outcome / delay
 %% Analysis Parameters
-LP.P.Filters.Sort=0;
-LP.P.Filters.Cells=0;
+LP.P.Filters.Sort=1;
+LP.P.Filters.Cells=1;
 LP.P.Filters.Pairing=0;
 % Figures
-LP.P.Plot.TrialTypes=0;                  % Raw trial types - no filter applied
+LP.P.Plot.TrialTypes=1;                  % Raw trial types - no filter applied
 LP.P.Plot.FiltersSingle=0;               % individual raster for individual trial type
 LP.P.Plot.FiltersSummary=0;              % summary plot for groups of trial type
 LP.P.Plot.FiltersBehavior=0;           	 % AP_####_GroupToPlot Oupput 2
 LP.P.Plot.Cells=0;                       % Generate single cell filter figures
-LP.P.Plot.Cells_Spike=0;                 % Specific to spike analysis
+LP.P.Plot.Cells_Spike=1;                 % Specific to spike analysis
 LP.P.Plot.Illustrator=0;
 LP.P.Plot.Transparency=1;
 LP.P.Plot.Illustration=[0 0 0];          % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots

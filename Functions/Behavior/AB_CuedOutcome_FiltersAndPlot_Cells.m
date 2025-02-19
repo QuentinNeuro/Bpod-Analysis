@@ -25,7 +25,7 @@ end
 
 %% FilterCells
     for tc=1:size(thisType,2)
-        Analysis=AP_DataSort_Filter_SingleCell(Analysis,thisType{tc},thisCellFilter{tc});
+        Analysis=AB_DataSort_SingleCell(Analysis,thisType{tc},thisCellFilter{tc});
     end
 
 %% Figures
@@ -47,18 +47,18 @@ end
 if Analysis.Parameters.Spikes.Spikes && Analysis.Parameters.Plot.Cells_Spike
     thisDirFig=[Analysis.Parameters.DirFig 'Spikes' filesep];
     mkdir(thisDirFig);
-    GroupPlot_Spikes=AP_CuedOutcome_FilterGroups_Spikes(Analysis);
+    GroupPlot_Spikes=AB_CuedOutcome_FilterGroups_Spikes(Analysis);
     
-    tempCellFilter=false(1,Analysis.Parameters.nCells);
+    tempCellFilter=false(1,Analysis.Parameters.Data.nCells);
     for e=1:size(Analysis.Parameters.Spikes.tagging_EpochNames,2)
         tempCellFilter=tempCellFilter+Analysis.Filters.(['Tag_' Analysis.Parameters.Spikes.tagging_EpochNames{e}]);
     end
 
-    for c=1:Analysis.Parameters.nCells
+    for c=1:Analysis.Parameters.Data.nCells
         if tempCellFilter(c)
         AB_PlotData_Spikes(Analysis,c,GroupPlot_Spikes);
         cellID=Analysis.AllData.AllCells.CellName{c};
-        cellID_Label=[Analysis.AllData.(cellID).LabelCluster '_' Analysis.AllData.(cellID).LabelTag];
+        cellID_Label=[Analysis.AllData.(cellID).LabelClustering '_' Analysis.AllData.(cellID).LabelTag];
         saveas(gcf,[thisDirFig Analysis.Parameters.Plot.Legend '_' cellID '_' cellID_Label '.png']);
         close
         end

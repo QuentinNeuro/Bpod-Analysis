@@ -70,7 +70,7 @@ switch Analysis.Parameters.Spikes.recClustering
         if isempty(cellLabel{c})
             cellLabel{c}=[thisCI.KSLabel{:} '_KS'];
         end
-        cellCh=clusterInfo(clusterInfo.ch==cellNb,:);
+        cellCh=thisCI.ch;
         Analysis.AllData.(cellID{c}).LabelChannel=cellCh;
         Analysis.AllData.(cellID{c}).LabelClustering=cellLabel{c};
     end
