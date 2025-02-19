@@ -1,4 +1,4 @@
-function AP_Archive(Analysis,SessionData,LP)
+function AB_Archive(Analysis,SessionData,LP)
 NidaqWheel=Analysis.Parameters.Wheel.NidaqField;
 NidaqPhoto=Analysis.Parameters.Photometry.NidaqField;
 
@@ -19,8 +19,8 @@ try
     for thisTrial=1:SessionData.nTrials
         SessionData.(NidaqPhoto{1}){1,thisTrial}=Analysis.Core.Photometry{1,thisTrial}{1, 1}';  
     end
-    SessionData.DecimatedSampRate=Analysis.Parameters.Data.NidaqDecimatedSR;
-    SessionData.Modulation=Analysis.Parameters.Modulation;
+    SessionData.DecimatedSampRate=Analysis.Parameters.Data.SamplingRateDecimated;
+    SessionData.Modulation=Analysis.Parameters.Photometry.Modulation;
     end
     if size(Analysis.Parameters.Photometry.Channels,2)>1
         switch Analysis.Parameters.Photometry.Channels{2}
@@ -35,13 +35,13 @@ try
     for thisTrial=1:SessionData.nTrials
         SessionData.(NidaqPhoto{2}){1,thisTrial}=Analysis.Core.Photometry{1,thisTrial}{2, 1}';  
     end
-    SessionData.DecimatedSampRate=Analysis.Parameters.Data.NidaqDecimatedSR;
+    SessionData.DecimatedSampRate=Analysis.Parameters.Data.SamplingRateDecimated;
     end
     if isfield(SessionData,NidaqWheel)
     for thisTrial=1:SessionData.nTrials
         SessionData.(NidaqWheel){1,thisTrial}=Analysis.Core.Wheel{1,thisTrial}';
     end
-    SessionData.DecimatedSampRate=Analysis.Parameters.Data.NidaqDecimatedSR;
+    SessionData.DecimatedSampRate=Analysis.Parameters.Data.SamplingRateDecimated;
     end
     
     save(DirFile,'SessionData');  
