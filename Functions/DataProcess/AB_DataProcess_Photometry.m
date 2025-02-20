@@ -6,7 +6,7 @@ nChannels=size(Analysis.Parameters.Photometry.Channels,2);
 PSTH_TW=Analysis.Parameters.Timing.PSTH;
 timeToZero=Analysis.AllData.Time.Zero;
 % Sampling Rate
-sampRate=Analysis.Parameters.Photometry.SamplingRateDecimated;
+sampRate=Analysis.Parameters.Photometry.SamplingRate;
 sampRateDecimated=Analysis.Parameters.Data.SamplingRateDecimated;
 if sampRate<sampRateDecimated
     disp('Error in decimating processed photometry data : sampling Rate is lower than requested decimated sampling rate')
@@ -18,6 +18,12 @@ decimateFactor=ceil(sampRate/sampRateDecimated);
 testBaseline=Analysis.Parameters.Data.BaselineBefAft;
 baselineTW=Analysis.Parameters.Data.BaselineTW;
 baselinePts=baselineTW*sampRateDecimated;
+% Label
+if isempty(Analysis.Parameters.Data.Label)
+    for c=1:nChannels
+        Analysis.Parameters.Data.Label{c}=sprintf('Fiber%.0d',c);
+    end
+end
 
 %% Fit Option
 if Analysis.Parameters.Photometry.Fit_470405

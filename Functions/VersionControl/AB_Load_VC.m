@@ -4,27 +4,24 @@ function Analysis=AB_Load_VC(Analysis)
 if ~isfield(Analysis.Parameters,'LauncherVer')
     oldPar=Analysis.Parameters;
     newPar.LauncherVers_old=1;    
-    % keep as is
+%% Automatic changes
     keepField={'Animal','Name','Files','Rig','AOD','Miniscope','Spikes'};
     for kf=1:size(keepField,2)
         newPar.(keepField{kf})=oldPar.(keepField{kf});
     end
     % nested parameters
-    newField_lvl1={'Behavior','Photometry','Wheel','Data','Timing'};
-    newField_lvl2{1}={'nTrials','nbOfTrialTypes','Behavior','Phase','TrialNames',...
-                            'TypeOfCue','StateOfCue','StateOfOutcome'};
-    newField_lvl2{2}={'Modulation','recordedMod','AmpField','FreqField','ModulData'};
-    newField_lvl2{3}={'Wheel','CounterNbits','EncoderCPR','Diameter','Polarity','NidaqField'};
-    newField_lvl2{4}={'NidaqDecimatedSR','NidaqBaseline','NidaqSamplingRate',...
-                            'NidaqDecimateFactor','NidaqBaselinePoints'};
-    newField_lvl2{5}={'CueTimeReset','OutcomeTimeReset'};
-
+    newField_lvl1{1}='Behavior';
+    newField_lvl2{1}={'nTrials','nbOfTrialTypes','Behavior','Phase','TrialNames','TypeOfCue'};
     oldField{1}=newField_lvl2{1};
-    oldField{2}={'Modulation','recordedMod','PhotoAmpField','PhotoFreqField','PhotoModulData'};
-    oldField{3}={'Wheel','WheelCounterNbits','WheelEncoderCPR','WheelDiameter','WheelPolarity','WheelField'};
-    oldField{4}=newField_lvl2{4};
-    oldField{5}=newField_lvl2{5};
 
+    newField_lvl1{2}='Photometry';
+    newField_lvl2{2}={'Modulation','recordedMod','AmpField','FreqField','ModulData','SamplingRate'};
+    oldField{2}={'Modulation','recordedMod','PhotoAmpField','PhotoFreqField','PhotoModulData','NidaqDecimatedSR'};
+
+    newField_lvl1{3}='Wheel';
+    newField_lvl2{3}={'Wheel','CounterNbits','EncoderCPR','Diameter','Polarity','NidaqField','SamplingRate'};
+    oldField{3}={'Wheel','WheelCounterNbits','WheelEncoderCPR','WheelDiameter','WheelPolarity','WheelField','NidaqSamplingRate'};
+    
     for f1=1:size(newField_lvl1,2)
         for f2=1:size(newField_lvl2{f1},2)
             if isfield(oldPar,oldField{f1}{f2})
@@ -34,12 +31,25 @@ if ~isfield(Analysis.Parameters,'LauncherVer')
             end
         end
     end
-
-    % manual changes
-    % Licks
+%% manual changes
+% Behavior
+    newPar.Behavior.nSessions=size(newPar.Files,2);
+    switch newPar.Behavior.Behavior
+        case 'CuedOutcome'
+            newPar.Timing.EpochNames={'Cue','Outcome','Delay'};
+            newPar.Timing.EpochStates={oldPar.StateOfCue,oldPar.StateOfOutcome,'Delay'};
+            newPar.Timing.EpochTimeReset=[oldPar.CueTimeReset ; oldPar.OutcomeTimeReset; 0 0];  
+        otherwise
+            newPar.Timing.EpochNames={'Cue'};
+            newPar.Timing.EpochStates={oldPar.StateOfCue};
+            newPar.Timing.EpochTimeReset=[oldPar.CueTimeReset]; 
+    end
+% Timing
+    newPar.Timing.EpochZeroPSTH=oldPar.StateOfOutcome;
+% Licks
     newPar.Licks.Port=oldPar.LickPort;
     newPar.Licks.BinSize=oldPar.Bin;
-    % Photometry
+% Photometry
     newPar.Photometry.NidaqField={oldPar.PhotometryField oldPar.Photometry2Field};
     if isfield(oldPar,'PhotoPhase')
         newPar.Photometry.Phase=oldPar.PhotoPhase;
@@ -55,23 +65,25 @@ if ~isfield(Analysis.Parameters,'LauncherVer')
     else
          newPar.Stimulation.Stimulation=oldPar.Stimulation;
     end
-    % Pupil
+% Pupil
     newPar.Pupillometry.Pupillometry=oldPar.Pupillometry;
     newPar.Pupillometry.Parameters=oldPar.Pupillometry_Parameters;
+    newPar.Pupillometry.SamplingRate=20;
+    newPar.Pupillometry.StartState='PreState';
 
     % Save new parameter structure
     Analysis.Parameters=newPar;
 
     %% Older version
 if ~isfield(Analysis.Parameters,'nCells')
-    Analysis.Parameters.nCells=0;
+    Analysis.Parameters.Data.nCells=0;
 end
 if ~isfield(Analysis.Parameters,'Stimulation')
     Analysis.Stimulation.Stimulation=0;
 end
-
+    %% Data fields
+if isfield(Analysis.Core,'Photometry')
+    p_old=Analysis.Core.Photometry;
+    Analysis.Core.Photometry=cellfun(@cell2mat,p_old,'UniformOutput',false);
 end
-
-
-
 end

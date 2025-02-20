@@ -3,7 +3,7 @@ function dataStructure=AB_DataProcess_Epochs(dataStructure,Analysis)
 time=dataStructure.Time;
 data=dataStructure.Data;
 nReps=size(data,1);
-epochNames=Analysis.Parameters.Behavior.EpochNames;
+epochNames=Analysis.Parameters.Timing.EpochNames;
 epochTime=Analysis.AllData.Time;
 nEpochs=size(epochNames,2);
 

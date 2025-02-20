@@ -63,7 +63,7 @@ end
 PlotY_photo=Analysis.Parameters.Plot.yData;
 
 %% Epoch markers
-epochNames=Analysis.Parameters.Behavior.EpochNames;
+epochNames=Analysis.Parameters.Timing.EpochNames;
 nEpochs=size(epochNames,2);
 epochColors='rgbybkm';
 

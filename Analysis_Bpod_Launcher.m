@@ -34,14 +34,13 @@ LP.P.Plot.Illustration=[0 0 0];          % #1 basic filtergroup #2 no ylim on ra
 LP.P.Plot.xTime=[-3 4];
 LP.P.Plot.yData(1,:)=[NaN NaN];     	 % Tight axis if [NaN NaN] / TBD [min max]
 LP.P.Plot.yData(2,:)=[NaN NaN];          % Tight axis if [NaN NaN] / TBD [min max]
-% Epochs for statistics - TO TEST
-LP.P.Behavior.EpochNames=[];
-LP.P.Behavior.EpochStates=[];
-LP.P.Behavior.EpochTimeReset=[];
-% States and Timing
+% % States and Timing
 LP.P.Timing.PSTH=[-4 5];                   % PSTH
 LP.P.Timing.ZeroFirstLick=0;               % Will look for licks 0 to 2 sec after state to Zero starts
 LP.OW.Timing.EpochZeroPSTH=[];             % BpodState (or EpochName), load a default state if blank
+LP.P.Timing.EpochNames=[];
+LP.P.Timing.EpochStates=[];
+LP.P.Timing.EpochTimeReset=[];
 % Filters % default LicksCue=1 LicksOut=2
 LP.P.Filters.PupilThreshold=1;
 LP.P.Filters.PupilState='BaselineAVG_N';       	% Options : 'NormBaseline','CueAVG','OutcomeAVG'
@@ -54,13 +53,13 @@ LP.P.Filters.LoadIgnoredTrials=1;
 LP.P.Filters.Cells_Stats='';
 LP.P.Filters.Cells_Threshold=[];
 % Data Normalization % default Zsc=1 mov=5 befAft=1 SR=20
-LP.P.Data.Normalize='Hz';                   % 'Zsc' 'DFF' 'No or empty or Hz'
+LP.P.Data.Normalize='Zsc';                   % 'Zsc' 'DFF' 'No or empty or Hz'
 LP.P.Data.BaselineTW=[0.2 1.2];              % Baseline time
 LP.P.Data.BaselineBefAft=2;                  % calculate Baseline before or after extracting desired PSTH
 LP.P.Data.BaselineMov=5;                     % 
 LP.P.Data.BaselineHisto=0;                   % percentage of data from the baseline to use
 LP.P.Data.ZeroTW=[];                         % in sec
-LP.P.Data.SamplingRateDecimated=20;          % in Hz 20 for figures 100 for archiving
+LP.P.Data.SamplingRateDecimated=100;         % in Hz 20 for figures 100 for archiving - DOES NOT WORK :(
 LP.P.Data.BaselineFit=0;                     % To come
 LP.P.Photometry.Fit_470405=0;                % To TEST
 LP.OW.Photometry.PhotoCh={};                 % Force one channel only '470' - useful to group sessions with different channels

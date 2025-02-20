@@ -69,14 +69,7 @@ end
 end
 else
     disp('Old Bpod protocol detected, attempting to extract photometry parameters')
-    Par=AP_Parameters_Photometry_VC(Par,SessionData);
+    Par=AB_Parameters_Photometry_VC(Par,SessionData);
 end
-end
-%% Adjust Label in data field
-if isempty(Par.Data.Label)
-    nChannels=size(Par.Photometry.Channels,2);
-    for c=1:nChannels
-    Par.Data.Label{c}=sprintf('Fiber%.0d',c);
-    end
 end
 end

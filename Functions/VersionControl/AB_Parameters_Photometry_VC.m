@@ -1,7 +1,8 @@
-function Par=AP_Parameters_Photometry_VC(Par,SessionData)
+function Par=AB_Parameters_Photometry_VC(Par,SessionData)
 %% Run inside AP_Parameters_Photometry for data acquired using old Bpod protocol version
 try
 if isfield(SessionData,Par.Photometry.NidaqField{1})
+    Par.Photometry.Phase=0;
     Par.Photometry.Modulation=1;
 	Par.Photometry.recordedMod=1;
 % First Channel
@@ -21,7 +22,7 @@ if isfield(SessionData,Par.Photometry.NidaqField{1})
                 case 1                                      %% LED commads not recorded
                     Par.Photometry.recordedMod=0;
                 case 2
-                    if max(SessionData.(Par.PhotometryField){1,1}(:,2))<0.9*SessionData.TrialSettings(1).GUI.LED1_Amp
+                    if max(SessionData.(Par.Photometry.PhotoField{1}){1,1}(:,2))<0.9*SessionData.TrialSettings(1).GUI.LED1_Amp
                             Par.Photometry.Modulation=0;
                     end
             end

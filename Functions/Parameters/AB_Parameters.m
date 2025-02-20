@@ -21,7 +21,7 @@ for f1=1:size(P_F1,1)
 end
 end
 
-%% Behavior
+%% Behavior and Timing
 Par=AB_Parameters_Behavior(Par,SessionData,LP,Name);
 
 %% Licks

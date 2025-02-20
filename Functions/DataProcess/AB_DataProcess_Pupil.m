@@ -27,8 +27,8 @@ for t=1:nTrials
         OffsetPupil(t)=Analysis.Core.States{1,t}.(startState)(1);
         timeToZero_Offset=timeToZero(t)-OffsetPupil(t);
         
-        [timeTW,PupTW]  =AP_PSTH(dataPupilSmooth(t,:),PSTH_TW,timeToZero_Offset,sampRate);
-        [~,BlinkTW]=AP_PSTH(dataPupilBlink(t,:),PSTH_TW,timeToZero_Offset,sampRate);
+        [timeTW,PupTW]  =myPSTH(dataPupilSmooth(t,:),PSTH_TW,timeToZero_Offset,sampRate);
+        [~,BlinkTW]     =myPSTH(dataPupilBlink(t,:),PSTH_TW,timeToZero_Offset,sampRate);
         
         dataPupil(t,:)=PupTW;
         dataBlink(t,:)=BlinkTW;

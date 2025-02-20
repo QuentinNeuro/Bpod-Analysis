@@ -21,17 +21,15 @@ switch LP.Load
    case 'Analysis'
    FileName=LP.FileToOpen{1,1}
    cd(LP.PathName); load(FileName);
-   Analysis=AB_Load_VC(Analysis);
    Analysis=AB_DataCore_Load(Analysis);
-   % add try/catch
 for i=2:length(LP.FileToOpen)
    AnalysisTemp=Analysis;
    FileName=LP.FileToOpen{1,i}
    cd(LP.PathName); load(FileName);
-   Analysis=AB_Load_VC(Analysis);
    Analysis=AB_DataCore_Merge(AnalysisTemp,Analysis);
    clear AnalysisTemp
 end
+Analysis=AB_Load_VC(Analysis);
 Analysis.Parameters=AB_Parameters_Update(Analysis.Parameters,LP);
 
 %% Loading Bpod file    

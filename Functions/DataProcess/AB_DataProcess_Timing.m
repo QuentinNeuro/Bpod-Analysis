@@ -2,10 +2,10 @@ function Analysis=AB_DataProcess_Timing(Analysis,action)
 
 %% Parameters
 nTrials=Analysis.Core.nTrials;
-nEpochs=size(Analysis.Parameters.Behavior.EpochNames,2);
-epochNames=Analysis.Parameters.Behavior.EpochNames;
-epochStates=Analysis.Parameters.Behavior.EpochStates;
-epochReset=Analysis.Parameters.Behavior.EpochTimeReset;
+nEpochs=size(Analysis.Parameters.Timing.EpochNames,2);
+epochNames=Analysis.Parameters.Timing.EpochNames;
+epochStates=Analysis.Parameters.Timing.EpochStates;
+epochReset=Analysis.Parameters.Timing.EpochTimeReset;
 ForceEpochTimeReset=Analysis.Parameters.Timing.ForceEpochTimeReset;
 
 ignoreTrialFilter=Analysis.Filters.ignoredTrials;
@@ -34,7 +34,7 @@ if ~isempty(ForceEpochTimeReset)
             epochReset(e,:)=ForceEpochTimeReset(e,:);
         end
     end
-    Analysis.Parameters.Behavior.EpochTimeReset=epochReset;
+    Analysis.Parameters.Timing.EpochTimeReset=epochReset;
 end
 
 %% Process PSTH and Epoch Times

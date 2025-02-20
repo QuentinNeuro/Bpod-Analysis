@@ -44,7 +44,7 @@ Analysis.Parameters.AOD.SamplingRate=sampRate;
 Analysis.Parameters.AOD.min=min(nData);
 Analysis.Parameters.AOD.nCells=nCells;
 Analysis.Parameters.AOD.recRaw=Analysis.Parameters.AOD.raw;
-
+Analysis.Core.AOD=dataTrial;
 if ~isempty(ttlFile)
     load(ttlFile)
     Analysis.Core.AOD_TS=TTL_Outcome(:,1)';

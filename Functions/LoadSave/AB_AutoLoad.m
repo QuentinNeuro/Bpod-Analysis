@@ -49,27 +49,11 @@ else
     LP.Load='Analysis';
     if isfield(Analysis.Parameters,'LauncherVer')
         LP.P.Data.RecordingType=Analysis.Parameters.Data.RecordingType;
-    else
-        
+    else    
     % version control
-    if isfield(Analysis.Parameters,'Photometry')
-        if isstruct(Analysis.Parameters.Photometry)
-            if Analysis.Parameters.Photometry.Photometry
-                LP.P.Data.RecordingType='Photometry';
-                testRecTypes=testRecTypes+1;
-            end
-        elseif Analysis.Parameters.Photometry
-            LP.P.Data.RecordingType='Photometry';
-            testRecTypes=testRecTypes+1;
-        end
-    end
-    for rt=1:size(recTypes,2)
-        if isfield(Analysis.Parameters,recTypes{rt})
-            if Analysis.Parameters.(recTypes{rt}).(recTypes{rt})
-                LP.P.Data.RecoringType=recTypes{rt};
-                testRecTypes=testRecTypes+1;
-            end
-        end
+    if isfield(Analysis.Core,'Photometry')
+        LP.P.Data.RecordingType='Photometry';
+        LP.P.Photometry.Photometry=1;
     end
     end
     else

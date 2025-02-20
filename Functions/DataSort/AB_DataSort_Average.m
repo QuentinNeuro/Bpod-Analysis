@@ -7,7 +7,7 @@ nCells=Analysis.Parameters.Data.nCells;
 nTrials=Analysis.(thisType).nTrials;
 nTrialSQRT=sqrt(nTrials);
 
-epochNames=Analysis.Parameters.Behavior.EpochNames;
+epochNames=Analysis.Parameters.Timing.EpochNames;
 epochTime=Analysis.(thisType).Time;
 nEpochs=size(epochNames,2);
 %% Detect data fields to average data

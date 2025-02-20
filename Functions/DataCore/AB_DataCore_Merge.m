@@ -29,7 +29,7 @@ if ischar(A_New.Parameters.Files)
     A_New.Parameters.Files=temp;
 end
 A_New.Parameters.Files{end+1}=A_ToAdd.Parameters.Files;
-A_New.Parameters.Pupillometry_Parameters{end+1}=A_ToAdd.Parameters.Pupillometry_Parameters{:};
+A_New.Parameters.Pupillometry.Parameters{end+1}=A_ToAdd.Parameters.Pupillometry_Parameters{:};
 % Filters
 A_New.Filters.ignoredTrials=[A_OG.Filters.ignoredTrials,A_ToAdd.Filters.ignoredTrials];
 A_New.Filters.Wheel=[A_OG.Filters.Wheel;A_ToAdd.Filters.Wheel];
