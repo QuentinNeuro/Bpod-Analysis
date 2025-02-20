@@ -19,7 +19,8 @@ testBaseline=Analysis.Parameters.Data.BaselineBefAft;
 baselineTW=Analysis.Parameters.Data.BaselineTW;
 baselinePts=baselineTW*sampRateDecimated;
 testNorm=Analysis.Parameters.AOD.raw;
-% AOD Timing
+
+%% AOD Timing
 fieldStates=fieldnames(Analysis.Core.States{1,1});
 startState=fieldStates{2};
 for t=1:Analysis.Core.nTrials
@@ -39,12 +40,12 @@ else
     Analysis.Parameters.AOD.timing='Bpod';
     timeToZeroAOD=timeToZero_Bpod;
 end
-% AOD data processing
-AODoffset=Analysis.Parameters.AOD.offset;
-AODsmooth=Analysis.Parameters.AOD.smoothing;
 
 %% Preprocessing - smoothing and offset
 data=Analysis.Core.AOD(Analysis.Filters.ignoredTrials);
+AODoffset=Analysis.Parameters.AOD.offset;
+AODsmooth=Analysis.Parameters.AOD.smoothing;
+
 % offset
 if ischar(AODoffset)
     switch AODoffset

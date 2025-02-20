@@ -1,5 +1,5 @@
 %% test block
-Group_Plot=AP_CuedOutcome_FilterGroups(Analysis);
+Group_Plot=AB_CuedOutcome_FilterGroups(Analysis);
 thisGroup=Group_Plot{1, 2};
 
 % for thisCh=1
@@ -11,12 +11,12 @@ for g=1:size(thisGroup,1)
     data{g}=Analysis.(thisType{g}).(thisChData).DFF;
     groupStats{g}=Analysis.(thisType{g}).(thisChStats)
 end
-    AP_Events_GroupPloti(groupStats,time,data,thisType);
+    AB_Events_GroupPloti(groupStats,time,data,thisType);
 % end
 
 clear data time peakStats groupStats thisType Group_Plot thisGroup;
 
-function AP_Events_GroupPloti(groupStats,time,data,typeNames)
+function AB_Events_GroupPloti(groupStats,time,data,typeNames)
 %% Parameters
 colorGroup=[1 0 0; 0 1 0; 0 0 1; 1 0 1; 0 1 1];
 epochTW=groupStats{1}.epochTW;

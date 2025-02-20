@@ -32,6 +32,11 @@ if ~isfield(Analysis.Parameters,'LauncherVer')
         end
     end
 %% manual changes
+    if isfield(oldPar,'nCells')
+        newPar.Data.nCells=oldPar.nCells;
+    else
+        newPar.Data.nCells=0;
+    end
 % Behavior
     newPar.Behavior.nSessions=size(newPar.Files,2);
     switch newPar.Behavior.Behavior
@@ -70,14 +75,16 @@ if ~isfield(Analysis.Parameters,'LauncherVer')
     newPar.Pupillometry.Parameters=oldPar.Pupillometry_Parameters;
     newPar.Pupillometry.SamplingRate=20;
     newPar.Pupillometry.StartState='PreState';
+% AOD
+    if isfield(oldPar,'AOD')
+        newPar.AOD.SamplingRate=oldPar.AOD.sampRate;
+    end
 
     % Save new parameter structure
     Analysis.Parameters=newPar;
 
     %% Older version
-if ~isfield(Analysis.Parameters,'nCells')
-    Analysis.Parameters.Data.nCells=0;
-end
+
 if ~isfield(Analysis.Parameters,'Stimulation')
     Analysis.Stimulation.Stimulation=0;
 end
@@ -85,5 +92,9 @@ end
 if isfield(Analysis.Core,'Photometry')
     p_old=Analysis.Core.Photometry;
     Analysis.Core.Photometry=cellfun(@cell2mat,p_old,'UniformOutput',false);
+end
+if isfield(Analysis.Core,'AOD')
+    a_old=Analysis.Core.AOD;
+    Analysis.Core.AOD=cellfun(@(x) permute(x,[2 1]),a_old,'UniformOutput',false);
 end
 end

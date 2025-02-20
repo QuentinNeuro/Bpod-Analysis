@@ -6,7 +6,7 @@ function Analysis=Analysis_Bpod(LauncherParam)
 %   - AB_Process : Process the data extracted in AB_Load
 %   - AB_TrialTypes_FiltersAndPlot : sort data according to trial types and
 %   generates summary plots
-%   - AB_#####_FiltersAndPlot : sort data according to logical filters
+%   - AB_BEHAVIOR_FiltersAndPlot : sort data according to logical filters
 %   specifics to behavior
 %
 % function designed by QuentinC 2020

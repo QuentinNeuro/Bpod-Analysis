@@ -18,7 +18,7 @@ thisFilter=Analysis.Filters.(thistype);
 end
 % Check whether data have already been filtered using the specified filter
 if isfield(Analysis,thistype)
-    disp(['Data for ' thistype ' have already been computed']);
+    % disp(['Data for ' thistype ' have already been computed']);
     return
 end
 %% Extract Data

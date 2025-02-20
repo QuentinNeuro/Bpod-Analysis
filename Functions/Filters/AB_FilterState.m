@@ -1,4 +1,4 @@
-function Analysis=A_FilterState(Analysis,State,noState)
+function Analysis=AB_FilterState(Analysis,State,noState)
 % Function to filter trials according to the active state 'State'.
 % Also generates a noState filter.
 %

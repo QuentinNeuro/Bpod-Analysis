@@ -51,9 +51,13 @@ else
         LP.P.Data.RecordingType=Analysis.Parameters.Data.RecordingType;
     else    
     % version control
-    if isfield(Analysis.Core,'Photometry')
+    if isfield(Analysis.Parameters,'Photometry') && Analysis.Parameters.Photometry
         LP.P.Data.RecordingType='Photometry';
         LP.P.Photometry.Photometry=1;
+    end
+    if isfield(Analysis.Core,'AOD')
+        LP.P.Data.RecordingType='AOD';
+        LP.P.AOD.AOD=1;
     end
     end
     else

@@ -1,18 +1,16 @@
-function Analysis=AP_DataSort_Events(Analysis,thisType)
+function Analysis=AB_DataSort_Events(Analysis,thisType)
 %% Parameters
-nTrials=Analysis.AllData.nTrials;
 trialNbs=Analysis.(thisType).TrialNumbers;
 epochNames=Analysis.Parameters.EventDetection.EpochNames;
 epochTW=Analysis.Parameters.EventDetection.EpochTW;
-nbOfChannels=size(Analysis.Parameters.Photometry.Channels,2);
+cellID=Analysis.Parameters.Photometry.CellID;
+nCells=size(cellID,2);
 
-for thisCh=1:nbOfChannels
-    thisChStruct=sprintf('Photo_%s',Analysis.Parameters.Photometry.Channels{thisCh});
-    thisPeakStruct=[thisChStruct '_events'];
+for c=1:nCells
+    thisID=cellID{c};
+    thisPeakStruct=[thisID '_events'];
     thisPeakStats=Analysis.(thisType).(thisPeakStruct);
-    
     thisTrialIdx=ismember(thisPeakStats.trials,trialNbs);
-    
     peakField=fieldnames(thisPeakStats);
     for thisF=1:size(peakField,1)
         thisField=peakField{thisF};
@@ -27,7 +25,7 @@ for thisCh=1:nbOfChannels
         thisPeakStats.trials(thisPeakStats.trials_OG==trialNbs(t))=t;
     end
 
-    thisPeakStats=AP_Events_Epochs(thisPeakStats,epochTW,epochNames);
+    thisPeakStats=AB_Events_Epochs(thisPeakStats,epochTW,epochNames);
 
     Analysis.(thisType).(thisPeakStruct)=thisPeakStats;
 end      

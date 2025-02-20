@@ -40,9 +40,9 @@ for c=1:nCells
     end
 % Baseline calculation and data normalization
     [dataCells_N,baselineAVG,baselineSTD]=AB_DataProcess_Normalize(Analysis,timeTrial,dataCells{c},dataBaseline);
-    if testNorm
-        dataCells{c}=dataCells_N;
-    end
+    % if testNorm
+    %     dataCells{c}=dataCells_N;
+    % end
 % For AllCells structure
     for t=1:nTrials
         dataTrial{t}(c,:)= dataCells{c}(t,:);

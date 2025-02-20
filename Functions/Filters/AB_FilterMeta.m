@@ -1,4 +1,4 @@
-function [Analysis,Logicals]=A_FilterMeta(Analysis,FilterName,FiltersCell)
+function [Analysis,Logicals]=AB_FilterMeta(Analysis,FilterName,FiltersCell)
 % Function to merge filters specified in 'FiltersCell' into one filter array (0 or 1) 
 %
 % function designed by Quentin 2020 for Analysis_Photometry
@@ -15,9 +15,8 @@ if sum(isfield(Analysis.Filters,FiltersCell))~=NbOfFilters
     return
 end
 
-checkExist=FilterName;
-if isfield(Analysis.Filters,checkExist)
-    disp(['Filter ' checkExist ' already generated']);
+if isfield(Analysis.Filters,FilterName)
+    % disp(['Filter ' checkExist ' already generated']);
     Logicals=Analysis.Filters.(FilterName);
     return
 end

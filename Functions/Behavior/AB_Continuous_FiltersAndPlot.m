@@ -34,7 +34,7 @@ thisChStruct=sprintf('Photo_%s',Analysis.Parameters.Photometry.Channels{1});
 licks=Analysis.(trialType).Licks.Events;
 timeF=Analysis.(trialType).(thisChStruct).Time;
 dataF=Analysis.(trialType).(thisChStruct).Data;
-[timeRewF,dataRewF,licksRew]=AP_Continuous_RewPSTH(Analysis,timeF,dataF,tw,sampRate);
+[timeRewF,dataRewF,licksRew]=AB_Continuous_RewPSTH(Analysis,timeF,dataF,tw,sampRate);
 dataRewF_AVG=mean(dataRewF,1,'omitnan');
 dataRewF_SEM=std(dataRewF,[],1,'omitnan')/sqrt(size(dataRewF,1));
 
@@ -45,7 +45,7 @@ if wheelTest
         dataW=abs(diff(dataW'))';
         dataW(:,end+1)=dataW(:,end);
     end
-    [timeRewW,dataRewW]=AP_Continuous_RewPSTH(Analysis,timeW,dataW,tw,sampRate);
+    [timeRewW,dataRewW]=AB_Continuous_RewPSTH(Analysis,timeW,dataW,tw,sampRate);
     dataRewW_AVG=mean(dataRewW,1,'omitnan');
     dataRewW_SEM=std(dataRewW,[],1,'omitnan')/sqrt(size(dataRewW,1));
 
@@ -54,7 +54,7 @@ if fiber2Test
     thisChStruct=sprintf('Photo_%s',Analysis.Parameters.Photometry.Channels{2});
     timeF2=Analysis.(trialType).(thisChStruct).Time;
     dataF2=Analysis.(trialType).(thisChStruct).Data;
-    [timeRewF2,dataRewF2]=AP_Continuous_RewPSTH(Analysis,timeF2,dataF2,tw,sampRate);
+    [timeRewF2,dataRewF2]=AB_Continuous_RewPSTH(Analysis,timeF2,dataF2,tw,sampRate);
     dataRewF2_AVG=mean(dataRewF2,1,'omitnan');
     dataRewF2_SEM=std(dataRewF2,[],1,'omitnan')/sqrt(size(dataRewF2,1));
 end
@@ -172,7 +172,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%% Nested Functions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [PSTHtime,PSTHdata,PSTHlicks]=AP_Continuous_RewPSTH(Analysis,time,data,tw,sampRate)
+function [PSTHtime,PSTHdata,PSTHlicks]=AB_Continuous_RewPSTH(Analysis,time,data,tw,sampRate)
     PSTHlicks={};
     PSTHtime=[];
     PSTHdata=[];
@@ -187,7 +187,7 @@ function [PSTHtime,PSTHdata,PSTHlicks]=AP_Continuous_RewPSTH(Analysis,time,data,
                 timeToZero=thisR-time(1);
                 PSTHlicks{end+1}=thisLicksTS(thisLicksTS>=tw(1) & thisLicksTS<=tw(2));
                 try
-                [PSTHtime(end+1,:),PSTHdata(end+1,:)]=AP_PSTH(data(thisTrial,:),tw,timeToZero,sampRate);
+                [PSTHtime(end+1,:),PSTHdata(end+1,:)]=myPSTH(data(thisTrial,:),tw,timeToZero,sampRate);
                 catch
                     disp('Nodata for this PSTH');
                 end

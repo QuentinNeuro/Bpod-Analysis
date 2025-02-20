@@ -4,11 +4,11 @@
 % time=Analysis.(trialType).Photo_470.Time;
 % peakStats=Analysis.(trialType).Photo_470_peak;
 % trialName='CuedReward';
-% AP_Events_Ploti(peakStats,time,data,trialName);
+% AB_Events_Ploti(peakStats,time,data,trialName);
 % 
 % clear data time peakStats trialName;
 
-function AP_Events_Ploti(peakStats,time,data,trialName)
+function AB_Events_Ploti(peakStats,time,data,trialName)
 %% Parameters
 epochTW=peakStats.epochTW;
 epochNames=peakStats.epochNames;

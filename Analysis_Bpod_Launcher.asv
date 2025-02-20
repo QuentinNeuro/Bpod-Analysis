@@ -6,18 +6,19 @@ clear SessionData Analysis LP; %close all;
 warning('off','all'); warning;
 
 %% Analysis type Single/Group/Batch/Online etc
-LP.Analysis_type='Single';
+LP.Analysis_type='Group';
 LP.Save=0;              % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];          % string to be added to the saved analysis file name
 LP.BatchType='';        % Spikes DataBase MegaBatch
 DB.DataBase=0;          % DB_Generate
 DB.Group=[];
+% global TuningYMAX;
 %% Overwritting Parameters
-LP.P.Data.Label={};                     %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
+LP.P.Data.Label={};  %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
 LP.P.Timing.ForceEpochTimeReset=[];     % cue / outcome / delay
 %% Analysis Parameters
 LP.P.Filters.Sort=1;
-LP.P.Filters.Cells=0;
+LP.P.Filters.Cells=1;
 LP.P.Filters.Pairing=0;
 % Figures
 LP.P.Plot.TrialTypes=1;                  % Raw trial types - no filter applied
@@ -34,9 +35,9 @@ LP.P.Plot.xTime=[-3 4];
 LP.P.Plot.yData(1,:)=[NaN NaN];     	 % Tight axis if [NaN NaN] / TBD [min max]
 LP.P.Plot.yData(2,:)=[NaN NaN];          % Tight axis if [NaN NaN] / TBD [min max]
 % % States and Timing
-LP.P.Timing.PSTH=[-4 5];                 % PSTH
-LP.P.Timing.ZeroFirstLick=0;             % Will look for licks 0 to 2 sec after state to Zero starts
-LP.OW.Timing.EpochZeroPSTH=[];           % BpodState (or EpochName), load a default state if blank
+LP.P.Timing.PSTH=[-4 5];                   % PSTH
+LP.P.Timing.ZeroFirstLick=0;               % Will look for licks 0 to 2 sec after state to Zero starts
+LP.OW.Timing.EpochZeroPSTH=[];             % BpodState (or EpochName), load a default state if blank
 LP.P.Timing.EpochNames=[];
 LP.P.Timing.EpochStates=[];
 LP.P.Timing.EpochTimeReset=[];
@@ -58,7 +59,7 @@ LP.P.Data.BaselineBefAft=2;                  % calculate Baseline before or afte
 LP.P.Data.BaselineMov=5;                     % 
 LP.P.Data.BaselineHisto=0;                   % percentage of data from the baseline to use
 LP.P.Data.ZeroTW=[];                         % in sec
-LP.P.Data.SamplingRateDecimated=100;         % in Hz 20 for figures 100 for archiving - DOES NOT WORK :(
+LP.P.Data.SamplingRateDecimated=20;         % in Hz 20 for figures 100 for archiving - DOES NOT WORK :(
 LP.P.Data.BaselineFit=0;                     % To come
 LP.P.Photometry.Fit_470405=0;                % To TEST
 LP.OW.Photometry.PhotoCh={};                 % Force one channel only '470' - useful to group sessions with different channels
@@ -99,7 +100,6 @@ LP.P.Prime.SiteExclusion=1;
 LP.P.Prime.ProbeLength=2500; %TBD
 %% Miniscope
 LP.P.Miniscope.SamplingRate=10;
-LP.P.Miniscope.raw=1;
 %% Archiving photometry data
 LP.Archive=0; %
 LP.ArchiveOnly=0;
