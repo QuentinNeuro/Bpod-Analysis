@@ -6,7 +6,7 @@ nChannels=size(Analysis.Parameters.Photometry.Channels,2);
 PSTH_TW=Analysis.Parameters.Timing.PSTH;
 timeToZero=Analysis.AllData.Time.Zero;
 % Sampling Rate
-sampRate=Analysis.Parameters.Photometry.SamplingRate;
+sampRate=Analysis.Parameters.Photometry.SamplingRateDecimated;
 sampRateDecimated=Analysis.Parameters.Data.SamplingRateDecimated;
 if sampRate<sampRateDecimated
     disp('Error in decimating processed photometry data : sampling Rate is lower than requested decimated sampling rate')

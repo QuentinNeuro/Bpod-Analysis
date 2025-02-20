@@ -15,12 +15,12 @@ if ~isfield(Analysis.Parameters,'LauncherVer')
     oldField{1}=newField_lvl2{1};
 
     newField_lvl1{2}='Photometry';
-    newField_lvl2{2}={'Modulation','recordedMod','AmpField','FreqField','ModulData','SamplingRate'};
-    oldField{2}={'Modulation','recordedMod','PhotoAmpField','PhotoFreqField','PhotoModulData','NidaqDecimatedSR'};
+    newField_lvl2{2}={'Modulation','recordedMod','AmpField','FreqField','ModulData','SamplingRateDecimated','SamplingRate'};
+    oldField{2}={'Modulation','recordedMod','PhotoAmpField','PhotoFreqField','PhotoModulData','NidaqDecimatedSR','NidaqSamplingRate'};
 
     newField_lvl1{3}='Wheel';
-    newField_lvl2{3}={'Wheel','CounterNbits','EncoderCPR','Diameter','Polarity','NidaqField','SamplingRate'};
-    oldField{3}={'Wheel','WheelCounterNbits','WheelEncoderCPR','WheelDiameter','WheelPolarity','WheelField','NidaqSamplingRate'};
+    newField_lvl2{3}={'Wheel','CounterNbits','EncoderCPR','Diameter','Polarity','NidaqField','SamplingRateDecimated','SamplingRate'};
+    oldField{3}={'Wheel','WheelCounterNbits','WheelEncoderCPR','WheelDiameter','WheelPolarity','WheelField','NidaqSamplingRate','NidaqSamplingRate'};
     
     for f1=1:size(newField_lvl1,2)
         for f2=1:size(newField_lvl2{f1},2)

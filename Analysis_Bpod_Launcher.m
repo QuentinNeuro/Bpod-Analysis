@@ -7,10 +7,10 @@ warning('off','all'); warning;
 
 %% Analysis type Single/Group/Batch/Online etc
 LP.Analysis_type='Single';
-LP.Save=0;      % 1: Core Data only     // 2: Full Analysis Structure
-LP.SaveTag=[];  % string to be added to the saved analysis file name
-LP.BatchType=''; %Spikes DataBase MegaBatch %%AP_FileBatch
-DB.DataBase=0;  % DB_Generate
+LP.Save=0;              % 1: Core Data only     // 2: Full Analysis Structure
+LP.SaveTag=[];          % string to be added to the saved analysis file name
+LP.BatchType='';        % Spikes DataBase MegaBatch
+DB.DataBase=0;          % DB_Generate
 DB.Group=[];
 % global TuningYMAX;
 %% Overwritting Parameters
@@ -26,7 +26,7 @@ LP.P.Plot.FiltersSingle=0;               % individual raster for individual tria
 LP.P.Plot.FiltersSummary=0;              % summary plot for groups of trial type
 LP.P.Plot.FiltersBehavior=0;           	 % AP_####_GroupToPlot Oupput 2
 LP.P.Plot.Cells=0;                       % Generate single cell filter figures
-LP.P.Plot.Cells_Spike=1;                 % Specific to spike analysis
+LP.P.Plot.Cells_Spike=0;                 % Specific to spike analysis
 LP.P.Plot.Illustrator=0;
 LP.P.Plot.Transparency=1;
 LP.P.Plot.Illustration=[0 0 0];          % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
@@ -59,7 +59,7 @@ LP.P.Data.BaselineBefAft=2;                  % calculate Baseline before or afte
 LP.P.Data.BaselineMov=5;                     % 
 LP.P.Data.BaselineHisto=0;                   % percentage of data from the baseline to use
 LP.P.Data.ZeroTW=[];                         % in sec
-LP.P.Data.SamplingRateDecimated=100;         % in Hz 20 for figures 100 for archiving - DOES NOT WORK :(
+LP.P.Data.SamplingRateDecimated=20;         % in Hz 20 for figures 100 for archiving - DOES NOT WORK :(
 LP.P.Data.BaselineFit=0;                     % To come
 LP.P.Photometry.Fit_470405=0;                % To TEST
 LP.OW.Photometry.PhotoCh={};                 % Force one channel only '470' - useful to group sessions with different channels
