@@ -46,6 +46,19 @@ thislength=length(thisSpikes_All);
 if thislength>=NbOfSpikes
     thisSpikes_All=decimate(thisSpikes_All,ceil(thislength/NbOfSpikes));
 end  
+% Waveforms
+testwaveforms=0;
+if isfield(Analysis.Tagging.(thisC_Name).Early,'Waveforms')
+    testwaveforms=1;
+    wvTag=Analysis.Tagging.(thisC_Name).Early.Waveforms;
+    wvAll=Analysis.Core.SpikesWV{cellID};
+% Averages
+    wvTag_AVG=mean(wvTag,2);
+    wvTag_SEM=std(wvTag,0,2)/sqrt(size(wvTag,2));
+    wvAll_AVG=mean(wvAll,2);
+    wvAll_SEM=std(wvAll,0,2)/sqrt(size(wvAll,2));
+    wvTime=(1:size(wvTag,1))*1000/Analysis.Parameters.Spikes.SamplingRate;
+end
 
 %% Figure
 scrsz = get(groot,'ScreenSize');
@@ -55,6 +68,16 @@ figure('Name','Figure TT','Position', [200 100 1200 700], 'numbertitle','off');
 Legend=uicontrol('style','text');
 set(Legend,'String',FigureLegend,'Position',[10,5,500,20]); 
 
+%% Waveform
+if testwaveforms
+subplot(6,3,1); hold on;
+if testwaveforms
+shadedErrorBar(wvTime,wvAll_AVG,wvAll_SEM,'-k',1);
+shadedErrorBar(wvTime,wvTag_AVG,wvTag_SEM,'-b',1);
+end
+xlabel('time (ms)')
+title(sprintf('Channel : %.0f', Analysis.AllData.(thisC_Name).LabelChannel))
+end    
 %% TT Timing
 subplot(6,3,2); hold on;
 title([thisC_Name ' ' thisLabelCluster]);

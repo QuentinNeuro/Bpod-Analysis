@@ -10,9 +10,13 @@ PSTH_TW=Analysis.Parameters.Timing.PSTH;
 BinTW=PSTH_TW(1):binSize:PSTH_TW(2);
 ignoreTrialFilter=Analysis.Filters.ignoredTrials;
 % Baseline
-baselineTW=Analysis.Parameters.Data.BaselineTW + PSTH_TW(1);
-baselinePts=BinTW>baselineTW(1) & BinTW<baselineTW(2);
-baselinePts=baselinePts(2:end);
+testNormalize=Analysis.Parameters.Data.Normalize;
+testZeroAt=Analysis.Parameters.Data.ZeroTW;
+ZeroTW=testZeroAt/binSize;
+% baselineTW=Analysis.Parameters.Data.BaselineTW + PSTH_TW(1);
+% baselinePts=BinTW>baselineTW(1) & BinTW<baselineTW(2);
+% baselinePts=baselinePts(2:end);
+
 
 %% Behavior PSTH and baseline extraction
 data=Analysis.Core.SpikesTS;
@@ -30,17 +34,30 @@ for c=1:nCells
         trialTS{c}{tcount,:}     = t*ones(size(thisTS_align));
         thisRate                 = histcounts(thisTS_align,BinTW)/binSize;
         dataCells{c}(tcount,:)   = thisRate;
-        dataBaseline{c}(tcount,:)= thisRate(baselinePts);
         end
-    end
-    
+    end    
 % Baseline calculation and data normalization
-        [dataCells{c},baselineAVG,baselineSTD]=AB_DataProcess_Normalize(Analysis,timeTrial,dataCells{c},dataBaseline{c});
+        thisTS_df=diff(thisTS);
+        fr_avg=1/mean(thisTS_df);
+        fr_std=1/std(thisTS_df);
+        switch testNormalize
+            case 'DFF'
+        dataCells{c}=100*(dataCells{c}-fr_avg)./fr_std;
+            case 'Zsc'
+        dataCells{c}=(dataCells{c}-fr_avg)./fr_std;
+        end
+        
+        % set data to zero if requested
+        dataZero=0;
+        if ~isempty(testZeroAt)
+            dataZero=mean(dataCells{c}(:,ZeroTW),2,'omitnan');
+        end
+        dataCells{c}=dataCells{c}-dataZero;
+
 % For AllCells structure
     for t=1:tcount
         dataTrial{t}(c,:)= dataCells{c}(t,:);
     end  
-
 %% Save in structure
     thisID=cellID{c};
     Analysis.AllData.AllCells.CellName{c}       = thisID;
@@ -48,8 +65,8 @@ for c=1:nCells
     Analysis.AllData.(thisID).Data              = dataCells{c};
     Analysis.AllData.(thisID).SpikeTS           = dataTS{c};
     Analysis.AllData.(thisID).TrialTS           = trialTS{c};
-    Analysis.AllData.(thisID).BaselineAVG       = baselineAVG;
-    Analysis.AllData.(thisID).BaselineSTD       = baselineSTD;
+    Analysis.AllData.(thisID).BaselineAVG       = fr_avg;
+    Analysis.AllData.(thisID).BaselineSTD       = fr_std;
 
     Analysis.AllData.(thisID)=AB_DataProcess_Epochs(Analysis.AllData.(thisID),Analysis);
 
@@ -75,10 +92,13 @@ switch Analysis.Parameters.Spikes.recClustering
         Analysis.AllData.(cellID{c}).LabelClustering=cellLabel{c};
     end
     case 'MClust'
+        for c=1:nCells
+            Analysis.AllData.(cellID{c}).LabelChannel='unknown';
+            Analysis.AllData.(cellID{c}).LabelClustering='unknown';
+        end
 end
 
 %% Tagging PSTH
 Analysis=AB_DataProcess_Spikes_Tagging(Analysis);
-
 
 end

@@ -60,12 +60,11 @@ if Analysis.Parameters.Spikes.Spikes && Analysis.Parameters.Plot.Cells_Spike
         cellID=Analysis.AllData.AllCells.CellName{c};
         cellID_Label=[Analysis.AllData.(cellID).LabelClustering '_' Analysis.AllData.(cellID).LabelTag];
         saveas(gcf,[thisDirFig Analysis.Parameters.Plot.Legend '_' cellID '_' cellID_Label '.png']);
-        close
+        % close
         end
     end
 
 
 end
-
 end
     

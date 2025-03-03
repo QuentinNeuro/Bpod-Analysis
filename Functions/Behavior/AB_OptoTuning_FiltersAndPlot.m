@@ -12,9 +12,9 @@ end
 %% Sort and plot Filter
 if Analysis.Parameters.Filters.Sort
     for i=1:length(TrialTypeNames)
-        Analysis=AP_DataSort(Analysis,TrialTypeNames{i});
-        if Analysis.Parameters.PlotFiltersSingle && Analysis.(TrialTypeNames{i}).nTrials>0
-            AP_PlotData_filter(Analysis,TrialTypeNames{i});
+        Analysis=AB_DataSort(Analysis,TrialTypeNames{i});
+        if Analysis.Parameters.Plot.FiltersSingle && Analysis.(TrialTypeNames{i}).nTrials>0
+                AB_PlotData_Filter(Analysis,TrialTypeNames{i});
                 saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend TrialTypeNames{i} '.png']);
                 if Analysis.Parameters.Illustrator
                 saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend TrialTypeNames{i}],'epsc');

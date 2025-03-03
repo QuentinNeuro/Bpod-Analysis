@@ -106,7 +106,7 @@ end
 %% Tuning protocols
 if contains(Name,'AuditoryTuning')
 Par.Behavior.Behavior='AuditoryTuning';
-Par.Behavior.Phase='Tuning';
+Par.Behavior.Phase='AuditoryTuning';
 Par.Timing.EpochNames{1}='Cue';
 Par.Timing.EpochStates{1}='CueDelivery';
 Par.Timing.EpochTimeReset=[0 1.5];
@@ -116,7 +116,7 @@ end
 
 if contains(Name,'VisualTuning')
 Par.Behavior.Behavior='VisualTuning';
-Par.Behavior.Phase='Tuning';
+Par.Behavior.Phase='VisualTuning';
 Par.Timing.EpochNames{1}='Cue';
 Par.Timing.EpochStates{1}='CueDelivery';
 Par.Timing.EpochTimeReset=[0 1.5];
@@ -126,7 +126,7 @@ end
 
 if contains(Name,'OptoTuning')
 Par.Behavior.Behavior='OptoTuning';
-Par.Behavior.Phase='Tuning';
+Par.Behavior.Phase='OptoTuning';
 Par.Timing.EpochNames{1}='Cue';
 Par.Timing.EpochStates{1}='CueDelivery';
 Par.Timing.EpochTimeReset=[0 1.5];

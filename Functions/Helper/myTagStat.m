@@ -53,6 +53,7 @@ postFR=mean(postData,2);
 [h(3), p(3)]=kstest2(preReliability,postReliability,'alpha',alphas(3));
 
 %% stats
+h=double(h);
 stats.Latency(1)=mean(preLatency,'omitnan');
 stats.Latency(2)=mean(postLatency,'omitnan');
 stats.FiringRate(1)=mean(preFR,'omitnan');

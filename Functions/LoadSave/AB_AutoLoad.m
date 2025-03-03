@@ -32,7 +32,7 @@ if exist('SessionData','var')
         LP.P.Miniscope.Miniscope=1;
         testRecTypes=testRecTypes+1;
     end
-    if ~isempty(ls('TT_*'))
+    if ~isempty(ls('TT*'))
         LP.P.Data.RecordingType='Spikes';
         LP.P.Spikes.Spikes=1;
         testRecTypes=testRecTypes+1;
@@ -49,6 +49,7 @@ else
     LP.Load='Analysis';
     if isfield(Analysis.Parameters,'LauncherVer')
         LP.P.Data.RecordingType=Analysis.Parameters.Data.RecordingType;
+        LP.P.(LP.P.Data.RecordingType).(LP.P.Data.RecordingType)=1;
     else    
     % version control
     if isfield(Analysis.Parameters,'Photometry') && Analysis.Parameters.Photometry
@@ -58,6 +59,10 @@ else
     if isfield(Analysis.Core,'AOD')
         LP.P.Data.RecordingType='AOD';
         LP.P.AOD.AOD=1;
+    end
+    if isfield(Analysis.Core,'SpikesTS')
+        LP.P.Data.RecordingType='Spikes';
+        LP.P.Spikes.Spikes=1;
     end
     end
     else

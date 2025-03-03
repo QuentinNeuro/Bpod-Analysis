@@ -76,7 +76,7 @@ if ~isfield(Analysis.Parameters,'LauncherVer')
     newPar.Pupillometry.SamplingRate=20;
     newPar.Pupillometry.StartState='PreState';
 % AOD
-    if isfield(oldPar,'AOD')
+    if isfield(oldPar,'AOD') && isfield(oldPar.AOD,'sampRate')
         newPar.AOD.SamplingRate=oldPar.AOD.sampRate;
     end
 

@@ -1,10 +1,10 @@
-function Analysis=AP_OptoPsycho_FiltersAndPlot(Analysis)
+function Analysis=AB_OptoPsycho_FiltersAndPlot(Analysis)
 %% Initialization
 successRate=[];
 RT=[];
 nbOfTrialTypes=Analysis.Parameters.nbOfTrialTypes;
 %% Create filter
-Analysis=A_FilterState(Analysis,'Outcome');
+Analysis=AB_FilterState(Analysis,'Outcome');
 %% Generate filter data
 for tt=1:nbOfTrialTypes;
     thistype=sprintf('type_%.0d',tt);

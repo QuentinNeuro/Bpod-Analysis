@@ -101,16 +101,16 @@ end
 function Analysis=AS_TTLmismatch(Analysis)
 %%   
     nTrialBpod=Analysis.Parameters.Behavior.nTrials;
-    nTrialTTL=length(Analysis.Core.Spikes_BehTS);
+    nTrialTTL=length(Analysis.Core.SpikesBehTS);
 
     sprintf('Bpod trial nb %.0d - TTL trial nb %.0d', nTrialBpod,nTrialTTL)
 
     if nTrialBpod > nTrialTTL
        disp('Too many bpod trials');
-       if ceil(Analysis.Core.Spikes_BehTS(2)-Analysis.Core.Spikes_BehTS(1))...
+       if ceil(Analysis.Core.SpikesBehTS(2)-Analysis.Core.SpikesBehTS(1))...
                 ==ceil(Analysis.Core.TrialStartTS(2)-Analysis.Core.TrialStartTS(1))
-            for indexTTLFix=length(Analysis.Core.Spikes_BehTS)+1:Analysis.Parameters.nTrials
-                Analysis.Core.Spikes_BehTS(indexTTLFix)=Analysis.Core.Spikes_BehTS(indexTTLFix-1)...
+            for indexTTLFix=length(Analysis.Core.SpikesBehTS)+1:nTrialBpod
+                Analysis.Core.SpikesBehTS(indexTTLFix)=Analysis.Core.SpikesBehTS(indexTTLFix-1)...
                     +(Analysis.Core.TrialStartTS(2)-Analysis.Core.TrialStartTS(1));
             end
             disp('TTL mismatch resolved')
@@ -122,9 +122,9 @@ function Analysis=AS_TTLmismatch(Analysis)
     else
 %%
        disp('Too many TTLs');
-        if ceil(Analysis.Core.Spikes_BehTS(2)-Analysis.Core.Spikes_BehTS(1))...
+        if ceil(Analysis.Core.SpikesBehTS(2)-Analysis.Core.SpikesBehTS(1))...
                 ==ceil(Analysis.Core.TrialStartTS(2)-Analysis.Core.TrialStartTS(1))
-            Analysis.Core.Spikes_BehTS=Analysis.Core.Spikes_BehTS(1:Analysis.Parameters.nTrials);
+            Analysis.Core.SpikesBehTS=Analysis.Core.SpikesBehTS(1:nTrialBpod);
         disp('TTL mismatch resolved')
         else
            disp('dont know how to correct the mismatch in TTL yet')

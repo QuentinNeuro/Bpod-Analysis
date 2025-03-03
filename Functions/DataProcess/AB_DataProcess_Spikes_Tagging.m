@@ -56,6 +56,9 @@ for c=1:nCells
     for e=1:nEpochs
         epochRate=reshape(dataCells{c}(timeTrial>epochTW(e,1) & timeTrial<epochTW(e,2)),nTrials,[]);
         [p,h,stats]=myTagStat(baseRate,epochRate,alphas);
+        if diff(stats.FiringRate)<0
+            h(2)=-h(2);
+        end
 % Save in structure
         Analysis.Tagging.AllCells.(epochNames{e}).p(c,:)=p;
         Analysis.Tagging.AllCells.(epochNames{e}).h(c,:)=h;
@@ -63,9 +66,13 @@ for c=1:nCells
         Analysis.Tagging.AllCells.(epochNames{e}).FiringRate(c,:)=stats.FiringRate;
         Analysis.Tagging.AllCells.(epochNames{e}).Reliability(c,:)=stats.Reliability;
         Analysis.Tagging.(thisID).(epochNames{e}).tagStats=stats;
-        if prod(h(1:2))
-            Analysis.Tagging.Label{c}   =[Analysis.Tagging.Label{c} ' ' epochNames{e}];
+        if prod(h(1:2))>0
+            Analysis.Tagging.Label{c}           =[Analysis.Tagging.Label{c} ' ' epochNames{e}];
             Analysis.Tagging.(thisID).LabelTag  =[Analysis.Tagging.Label{c} ' ' epochNames{e}];
+            Analysis.AllData.(thisID).LabelTag  =Analysis.Tagging.Label{c};
+        elseif prod(h(1:2))<0
+            Analysis.Tagging.Label{c}           =[Analysis.Tagging.Label{c} ' ' epochNames{e} '_Inhib'];
+            Analysis.Tagging.(thisID).LabelTag  =Analysis.Tagging.Label{c};
             Analysis.AllData.(thisID).LabelTag  =Analysis.Tagging.Label{c};
         end
     end
@@ -78,13 +85,18 @@ for c=1:nCells
     thisTS=data{c};
     thisWV=dataWV{c};
     thisID=cellID{c};
+    if ~isempty(thisWV)
     for e=1:nEpochs
         thisWV_epoch=[];
         for t=1:nTrials
             thisTS_Zero      = thisTS-zeroTS(t);
-            thisWV_epoch     = [thisWV_epoch thisWV(:,thisTS_Zero>epochTW(e,1) & thisTS_Zero<epochTW(e,2))];
+            thisWV_epoch_temp=thisWV(:,thisTS_Zero>epochTW(e,1) & thisTS_Zero<epochTW(e,2));
+            if ~isempty(thisWV_epoch_temp)
+                thisWV_epoch     = [thisWV_epoch thisWV_epoch_temp(:,1)];
+            end
         end
         Analysis.Tagging.(thisID).(epochNames{e}).Waveforms=thisWV_epoch;
+    end
     end
 end
 end
@@ -95,15 +107,22 @@ for e=1:nEpochs
 end
 
 %% Plot using filters
-% for e=1:nEpochs
-%     thisFilter=Analysis.Filters.(['Tag_' (epochNames{e})]);
-%     for c=1:length(thisFilter)
-%         if thisFilter(c)
-%             AB_PlotTag(Analysis,c,epochTW(e,:))
-%         end
-%     end
-% end
+switch Analysis.Parameters.Plot.Cells_tag
+    case 'All'
 for c=1:nCells
-    AB_PlotTag(Analysis,c,epochTW(1,:))
+    try
+    AB_PlotTag(Analysis,c,1)
+    catch
+    end
+end
+    case 'Tag'
+for e=1:nEpochs
+    thisFilter=Analysis.Filters.(['Tag_' (epochNames{e})]);
+    for c=1:length(thisFilter)
+        if thisFilter(c)
+            AB_PlotTag(Analysis,c,e)
+        end
+    end
+end
 end
 end

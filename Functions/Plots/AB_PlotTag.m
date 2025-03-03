@@ -1,18 +1,23 @@
-function AB_PlotTag(Analysis,cellNb,epochTime)
+function AB_PlotTag(Analysis,cellNb,epochNb)
+% epochNb=1;
 % cellNb=15;
-% epochTime=Analysis.Parameters.Spikes.tagging_EpochTW(1,:);
 
 %% Parameters
 cellID=Analysis.Parameters.Spikes.CellID{cellNb};
 refreactoryThreshold=2; % in ms
 samplingRate=30000;
-
+dataTS=Analysis.Core.SpikesTS{1,cellNb};
+epochTime=Analysis.Parameters.Spikes.tagging_EpochTW(epochNb,:);
+epochName=Analysis.Parameters.Spikes.tagging_EpochNames{epochNb};
 %% Clustering info
 clusterInfo=Analysis.Parameters.Spikes.clusterInfo;
 clusteringLabel=Analysis.AllData.(cellID).LabelClustering;
 
 %% Waveforms
-wvTag=Analysis.Tagging.(cellID).Early.Waveforms;
+testwaveforms=0;
+if isfield(Analysis.Tagging.(cellID).(epochName),'Waveforms')
+    testwaveforms=1;
+wvTag=Analysis.Tagging.(cellID).(epochName).Waveforms;
 wvAll=Analysis.Core.SpikesWV{cellNb};
 % Averages
 wvTag_AVG=mean(wvTag,2);
@@ -20,16 +25,19 @@ wvTag_SEM=std(wvTag,0,2)/sqrt(size(wvTag,2));
 wvAll_AVG=mean(wvAll,2);
 wvAll_SEM=std(wvAll,0,2)/sqrt(size(wvAll,2));
 wvTime=(1:size(wvTag,1))*1000/samplingRate;
+end
 %% ISI
-ISI=1000*diff(Analysis.Core.SpikesTS{1,cellNb});
-nISI=length(ISI);
-ISIcount=(1:nISI)*100/nISI;
-fr=1000/mean(ISI);
-refractorySpikes=sum(ISI<refreactoryThreshold)/length(ISI);
+ISIs=diff(dataTS);
+nISI=length(ISIs);
+fr=1/mean(ISIs);
+ISIms=1000*ISIs;
+ISI_edges=0:0.2:max(50);
+[ISI_histY,ISI_histX]=histcounts(ISIms,ISI_edges);
+refractorySpikes=sum(find(ISIms<refreactoryThreshold))/length(ISIms);
 
 %% Tagging
 tagLabel=Analysis.AllData.(cellID).LabelTag;
-
+tagStats=Analysis.Tagging.(cellID).(epochName).tagStats;
 timeTag=Analysis.Tagging.(cellID).Time(1,:);
 dataTag=Analysis.Tagging.(cellID).Data;
 dataTag_AVG=mean(dataTag,1,'omitnan');
@@ -40,19 +48,22 @@ rasterTagTrial=cell2mat(Analysis.Tagging.(cellID).TrialTS');
 
 figure()
 subplot(2,2,1); hold on;
+if testwaveforms
 shadedErrorBar(wvTime,wvAll_AVG,wvAll_SEM,'-k',1);
 shadedErrorBar(wvTime,wvTag_AVG,wvTag_SEM,'-b',1);
+end
 xlabel('time (ms)')
 title([cellID ' Clustering ' clusteringLabel])
 
 subplot(2,2,3); hold on;
-plot(sort(ISI),ISIcount,'-k');
-xlim([0 5]);
-ISIThresholdY=get(gca,'YLim');
-plot([refreactoryThreshold refreactoryThreshold], ISIThresholdY,'-r')
+plot(ISI_histX(2:end),100*ISI_histY/nISI,'-k');
+xlim([0 20]);
+thisYlim=get(gca,'YLim');
+thisYlim=[0 ceil(thisYlim(2))];
+plot([refreactoryThreshold refreactoryThreshold], thisYlim,'-r')
 xlabel('ISI (ms)');
 ylabel('Spike count (%)');
-title(sprintf('Firing Rate %.1f',fr))
+title(sprintf('Firing Rate %.1f Hz',fr))
 
 subplot(2,2,2); hold on;
 plot(rasterTagTS,rasterTagTrial,'sk','MarkerSize',2,'MarkerFaceColor','k');
@@ -67,5 +78,6 @@ shadedErrorBar(timeTag,dataTag_AVG,dataTag_SEM,'-k',1)
 xlabel('time from stim (s)')
 ylabel('firing rate (Hz)')
 xlim([-0.02 0.1]);
+title(sprintf('Latency %.1f ms',tagStats.Latency(2)))
 
 end
