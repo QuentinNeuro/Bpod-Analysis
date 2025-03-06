@@ -56,7 +56,7 @@ if Analysis.Parameters.Spikes.Spikes && Analysis.Parameters.Plot.Cells_Spike
 
     for c=1:Analysis.Parameters.Data.nCells
         if tempCellFilter(c)
-        AB_PlotData_Spikes(Analysis,c,GroupPlot_Spikes);
+        AB_PlotData_Spikes_Behavior(Analysis,c,GroupPlot_Spikes);
         cellID=Analysis.AllData.AllCells.CellName{c};
         cellID_Label=[Analysis.AllData.(cellID).LabelClustering '_' Analysis.AllData.(cellID).LabelTag];
         saveas(gcf,[thisDirFig Analysis.Parameters.Plot.Legend '_' cellID '_' cellID_Label '.png']);

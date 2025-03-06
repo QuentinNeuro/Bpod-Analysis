@@ -1,4 +1,4 @@
-function AB_PlotTag(Analysis,cellNb,epochNb)
+function AB_PlotData_Spikes_Tag(Analysis,cellNb,epochNb)
 % epochNb=1;
 % cellNb=15;
 

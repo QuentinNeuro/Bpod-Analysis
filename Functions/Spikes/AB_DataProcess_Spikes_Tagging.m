@@ -15,9 +15,16 @@ epochNames=Analysis.Parameters.Spikes.tagging_EpochNames;
 nEpochs=size(epochNames,2);
 alphas=Analysis.Parameters.Spikes.pThreshold;
 
-%% Align data to stimulation 
+%% Load data
 data=Analysis.Core.SpikesTS;
+if isfield(Analysis.Core,'SpikesWV')
+    dataWV=Analysis.Core.SpikesWV;
+else
+    dataWV=[];
+end
+[~,data,dataWV]=AB_DataProcess_Spikes_Cleanup('update',data,dataWV,'auto',Analysis.Filters.Cell_Artifacts);
 timeTrial=ones(nTrials,1)*BinTW(2:end);
+%% Align data to stimulation 
 for c=1:nCells
     thisTS           = data{c};
     for t=1:nTrials
@@ -79,8 +86,7 @@ for c=1:nCells
 end
 
 % Waveforms
-if isfield(Analysis.Core,'SpikesWV')
-    dataWV=Analysis.Core.SpikesWV;
+if ~isempty(dataWV)
 for c=1:nCells
     thisTS=data{c};
     thisWV=dataWV{c};
@@ -102,6 +108,8 @@ for c=1:nCells
             end
         end
         Analysis.Tagging.(thisID).(epochNames{e}).Waveforms=thisWV_epoch;
+        Analysis.Tagging.(thisID).(epochNames{e}).Waveforms_Stats=AB_DataProcess_Spikes_Waveforms('Stats',thisWV_epoch,[]);
+        Analysis.Tagging.(thisID).(epochNames{e}).Waveforms_Corr=AB_DataProcess_Spikes_Waveforms('xcorr',thisWV,thisWV_epoch);
     end
     end
 end
@@ -117,7 +125,7 @@ switch Analysis.Parameters.Plot.Cells_tag
     case 'All'
 for c=1:nCells
     try
-    AB_PlotTag(Analysis,c,1)
+    AB_PlotData_Spikes_Tag(Analysis,c,1)
     catch
     end
 end
@@ -126,7 +134,7 @@ for e=1:nEpochs
     thisFilter=Analysis.Filters.(['Tag_' (epochNames{e})]);
     for c=1:length(thisFilter)
         if thisFilter(c)
-            AB_PlotTag(Analysis,c,e)
+            AB_PlotData_Spikes_Tag(Analysis,c,e)
         end
     end
 end
