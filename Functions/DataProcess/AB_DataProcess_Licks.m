@@ -23,7 +23,7 @@ for t=1:nTrials
             zeroFirstLick(t)=licksDuringZeroState(1);
 
         else 
-            Analysis.Filters.FirstLick(thisTrial)=false;
+            Analysis.Filters.FirstLick(t)=false;
         end
     licks{t}=licks{t}-zeroFirstLick(t);
     timeToZero(t)=timeToZero(t)-zeroFirstLick(t);

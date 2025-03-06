@@ -7,13 +7,15 @@ BaselineMov=Analysis.Parameters.Data.BaselineMov;
 % Baseline histogram
 BaselineHisto=Analysis.Parameters.Data.BaselineHisto;
 BaselineHistoCutOff=Analysis.Parameters.Data.BaselineHisto/100;
-BaselineHistoPts=round(size(dataBaseline,2)*BaselineHistoCutOff);
 % Normalization
 testNormalize=Analysis.Parameters.Data.Normalize;
 testZeroAt=Analysis.Parameters.Data.ZeroTW;
 
 %% Baseline computation
+% Fluorescence
+if ~Analysis.Parameters.Spikes.Spikes
 if BaselineHisto
+    BaselineHistoPts=round(size(dataBaseline,2)*BaselineHistoCutOff);
     dataBaseline=sort(dataBaseline,2);
     dataBaseline=dataBaseline(:,1:BaselineHistoPts);
 end
@@ -26,6 +28,19 @@ if BaselineMov
         baselineAVG(sessionIndex==s)=movmean(baselineAVG(sessionIndex==s),BaselineMov,'omitnan');
         baselineSTD(sessionIndex==s)=movmean(baselineSTD(sessionIndex==s),BaselineMov,'omitnan');
     end
+end
+
+% Spike rate
+else
+    dataBaseline=sort(diff(dataBaseline),'descend');
+    if BaselineHisto
+        BaselineHistoPts=round(size(dataBaseline,1)*BaselineHistoCutOff);
+        dataBaseline=sort(dataBaseline,2);
+        dataBaseline=dataBaseline(1:BaselineHistoPts);
+    end
+
+    baselineAVG=1/mean(dataBaseline,'omitnan');
+    baselineSTD=1/std(dataBaseline,'omitnan');
 end
 
 %% Data Normalization

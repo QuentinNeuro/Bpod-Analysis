@@ -40,11 +40,11 @@ switch batchType
 
 %% Spikes
     case 'Spikes'
-folders=ls('Q24*');
+folders=ls();
 for f=1:size(folders,1)
+    try
     thisFolder=deblank(folders(f,:));
     cd(thisFolder);
-    try
     switch LP.P.Spikes.Clustering
         case 'Kilosort'
             cd KS_Units

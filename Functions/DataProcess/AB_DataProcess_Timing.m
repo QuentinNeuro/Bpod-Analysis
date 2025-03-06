@@ -26,6 +26,8 @@ if ~isfield(bpodStates,StateToZero)
     Analysis.Parameters.Timing.EpochZeroPSTH=StateToZero;
 end
 
+% Spikes
+
 %% adjust EpochTime
 if ~isempty(ForceEpochTimeReset)
     nForceEpochs=size(ForceEpochTimeReset,2);
@@ -50,4 +52,7 @@ Analysis.AllData.Time.Zero=Analysis.AllData.Time.Zero(ignoreTrialFilter);
 for e=1:nEpochs
     Analysis.AllData.Time.(epochNames{e})=Analysis.AllData.Time.(epochNames{e})(ignoreTrialFilter,:)+epochReset(e,:)-Analysis.AllData.Time.Zero;
 end
+
+% Spikes
+
 end

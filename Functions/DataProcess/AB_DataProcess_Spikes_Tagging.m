@@ -84,15 +84,21 @@ if isfield(Analysis.Core,'SpikesWV')
 for c=1:nCells
     thisTS=data{c};
     thisWV=dataWV{c};
+    wvnan=nan(size(thisWV,1),size(thisWV,2),1);
+    % thisWV=dataWV{c}(1,:,:);
+    % thisWV=reshape(thisWV,size(thisWV,2),size(thisWV,3));
     thisID=cellID{c};
     if ~isempty(thisWV)
     for e=1:nEpochs
         thisWV_epoch=[];
         for t=1:nTrials
             thisTS_Zero      = thisTS-zeroTS(t);
-            thisWV_epoch_temp=thisWV(:,thisTS_Zero>epochTW(e,1) & thisTS_Zero<epochTW(e,2));
+            thisWV_epoch_temp= thisWV(:,:,thisTS_Zero>epochTW(e,1) & thisTS_Zero<epochTW(e,2));
             if ~isempty(thisWV_epoch_temp)
-                thisWV_epoch     = [thisWV_epoch thisWV_epoch_temp(:,1)];
+                thisWV_epoch(:,:,t)     = thisWV_epoch_temp(:,:,1);
+            else
+                
+                thisWV_epoch(:,:,t)     = wvnan;
             end
         end
         Analysis.Tagging.(thisID).(epochNames{e}).Waveforms=thisWV_epoch;

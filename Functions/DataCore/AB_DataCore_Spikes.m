@@ -78,7 +78,7 @@ if Analysis.Parameters.Spikes.LoadWV
         counterWV=counterWV+1;
         thiWV=deblank(fileList_WV(w,:));
         SpikeWV=double(readNPY(thiWV));
-        if size(SpikeWV,2)==size(Analysis.Core.SpikesTS{counterWV},1)
+        if size(SpikeWV,3)==size(Analysis.Core.SpikesTS{counterWV},1)
             Analysis.Parameters.Spikes.CellID_WV{counterWV}=thiWV;
             Analysis.Core.SpikesWV{counterWV}=SpikeWV;
         end

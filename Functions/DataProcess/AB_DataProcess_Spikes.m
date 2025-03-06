@@ -12,11 +12,15 @@ ignoreTrialFilter=Analysis.Filters.ignoredTrials;
 % Baseline
 testNormalize=Analysis.Parameters.Data.Normalize;
 testZeroAt=Analysis.Parameters.Data.ZeroTW;
+testHisto=Analysis.Parameters.Data.BaselineHisto;
 ZeroTW=testZeroAt/binSize;
+% ISI
+refreactoryThreshold=0.002; % in s 
+refreactoryExclusion=1.5;   % in %
+refractoryFilter=true(nCells,1);
 % baselineTW=Analysis.Parameters.Data.BaselineTW + PSTH_TW(1);
 % baselinePts=BinTW>baselineTW(1) & BinTW<baselineTW(2);
 % baselinePts=baselinePts(2:end);
-
 
 %% Behavior PSTH and baseline extraction
 data=Analysis.Core.SpikesTS;
@@ -35,29 +39,20 @@ for c=1:nCells
         thisRate                 = histcounts(thisTS_align,BinTW)/binSize;
         dataCells{c}(tcount,:)   = thisRate;
         end
-    end    
-% Baseline calculation and data normalization
-        thisTS_df=diff(thisTS);
-        fr_avg=1/mean(thisTS_df);
-        fr_std=1/std(thisTS_df);
-        switch testNormalize
-            case 'DFF'
-        dataCells{c}=100*(dataCells{c}-fr_avg)./fr_std;
-            case 'Zsc'
-        dataCells{c}=(dataCells{c}-fr_avg)./fr_std;
-        end
-        
-        % set data to zero if requested
-        dataZero=0;
-        if ~isempty(testZeroAt)
-            dataZero=mean(dataCells{c}(:,ZeroTW),2,'omitnan');
-        end
-        dataCells{c}=dataCells{c}-dataZero;
+    end
+
+% Baseline data normalization
+    [dataCells{c},fr_avg,fr_std]=AB_DataProcess_Normalize(Analysis,timeTrial,dataCells{c},thisTS);
 
 % For AllCells structure
     for t=1:tcount
         dataTrial{t}(c,:)= dataCells{c}(t,:);
-    end  
+    end
+% refractory period
+    refractorySpikes(c)=100*length(find(diff(thisTS)<refreactoryThreshold))/length(diff(thisTS));
+    if refractorySpikes(c)>refreactoryExclusion
+        refractoryFilter(c)=false;
+    end
 %% Save in structure
     thisID=cellID{c};
     Analysis.AllData.AllCells.CellName{c}       = thisID;
@@ -67,14 +62,13 @@ for c=1:nCells
     Analysis.AllData.(thisID).TrialTS           = trialTS{c};
     Analysis.AllData.(thisID).BaselineAVG       = fr_avg;
     Analysis.AllData.(thisID).BaselineSTD       = fr_std;
-
     Analysis.AllData.(thisID)=AB_DataProcess_Epochs(Analysis.AllData.(thisID),Analysis);
-
 end
 Analysis.Parameters.Data.Label=['Spikes ' Analysis.Parameters.Data.Label];
 Analysis.AllData.Time.Zero_Spike=zeroTS;
 Analysis.AllData.AllCells.Time=timeTrial;
 Analysis.AllData.AllCells.Data = cell2mat(cellfun(@(x) mean(x,1,'omitnan'),dataTrial,'UniformOutput',false)');
+Analysis.Filters.Cell_Refractory=refractoryFilter;
 
 %% label
 switch Analysis.Parameters.Spikes.recClustering

@@ -31,13 +31,14 @@ switch LP.Analysis_type
                 DB_Stat.DataUR{i}=Analysis.Uncued_Reward.AllCells.Data_Cell(thisFilter,:);
                 if isfield(Analysis,'AnticipLick_HVS_Reward')
                     DB_Stat.DataCR{i}=Analysis.AnticipLick_HVS_Reward.AllCells.Data_Cell(thisFilter,:);
-                    DB_Stat.DataLVR{i}=Analysis.NoAnticipLick_LVS_Reward.AllCells.Data_Cell(thisFilter,:);
+                    DB_Stat.DataLVR{i}=Analysis.NoAnticipLick_HVS_Reward.AllCells.Data_Cell(thisFilter,:);
                     DB_Stat.DataHVS{i}=Analysis.AnticipLick_HV.AllCells.Data_Cell(thisFilter,:);
                     DB_Stat.DataLVS{i}=Analysis.NoAnticipLick_LV.AllCells.Data_Cell(thisFilter,:);
-                elseif isfield('CS_Reward')
-                    DB_Stat.DataCR=Analysis.CS_Reward.AllCells.Data_Cell(thisFilter,:);
-                    DB_Stat.DataHVS{i}=Analysis.CS.AllCells.Data_Cell(thisFilter,:);
-                    DB_Stat.DataLVS{i}=Analysis.NS.AllCells.Data_Cell(thisFilter,:);
+                elseif isfield(Analysis,'CS_Reward')
+                    DB_Stat.DataCR{i}=Analysis.CS_Reward.AllCells.Data_Cell(thisFilter,:);
+                    DB_Stat.DataHVS{i}=Analysis.AnticipLick_CS_Reward.AllCells.Data_Cell(thisFilter,:);
+                    DB_Stat.DataLVR{i}=Analysis.NoAnticipLick_CS_Reward.AllCells.Data_Cell(thisFilter,:);
+                    DB_Stat.DataLVS{i}=Analysis.NoAnticipLick_NS.AllCells.Data_Cell(thisFilter,:);
                 end
                 catch
                     disp([LP.FileToOpen 'could not be added to spikes']);

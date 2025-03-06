@@ -61,7 +61,7 @@ nbOfPlotsY=3+3*size(dataAVG,2);
 nbOfPlotsX=1;
 
 %% Epoch markers
-epochNames=Analysis.Parameters.Behavior.EpochNames;
+epochNames=Analysis.Parameters.Timing.EpochNames;
 nEpochs=size(epochNames,2);
 epochColors='rgbybkm';
 

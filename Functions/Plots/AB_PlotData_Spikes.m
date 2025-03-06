@@ -53,11 +53,11 @@ if isfield(Analysis.Tagging.(thisC_Name).Early,'Waveforms')
     wvTag=Analysis.Tagging.(thisC_Name).Early.Waveforms;
     wvAll=Analysis.Core.SpikesWV{cellID};
 % Averages
-    wvTag_AVG=mean(wvTag,2);
-    wvTag_SEM=std(wvTag,0,2)/sqrt(size(wvTag,2));
-    wvAll_AVG=mean(wvAll,2);
-    wvAll_SEM=std(wvAll,0,2)/sqrt(size(wvAll,2));
-    wvTime=(1:size(wvTag,1))*1000/Analysis.Parameters.Spikes.SamplingRate;
+    wvTag_AVG=mean(wvTag,3,'omitnan');
+    wvTag_STD=std(wvTag,0,3,'omitnan');
+    wvAll_AVG=mean(wvAll,3,'omitnan');
+    wvAll_STD=std(wvAll,0,3,'omitnan');
+    wvTime=(1:size(wvTag,2))*1000/Analysis.Parameters.Spikes.SamplingRate;
 end
 
 %% Figure
@@ -72,8 +72,12 @@ set(Legend,'String',FigureLegend,'Position',[10,5,500,20]);
 if testwaveforms
 subplot(6,3,1); hold on;
 if testwaveforms
-shadedErrorBar(wvTime,wvAll_AVG,wvAll_SEM,'-k',1);
-shadedErrorBar(wvTime,wvTag_AVG,wvTag_SEM,'-b',1);
+    tadd=0;
+    for w=1:size(wvAll_AVG,1)
+        shadedErrorBar(wvTime+tadd,wvAll_AVG(w,:),wvAll_STD(w,:),'-k',1);
+        shadedErrorBar(wvTime+tadd,wvTag_AVG(w,:),wvTag_STD(w,:),'-b',1);
+        tadd=tadd+wvTime(end)+0.1*wvTime(end);
+    end
 end
 xlabel('time (ms)')
 title(sprintf('Channel : %.0f', Analysis.AllData.(thisC_Name).LabelChannel))

@@ -4,15 +4,15 @@
 % see also AB_Parameters / AB_DataCore / AB_DataProcess / AB_DataSort
 clear SessionData Analysis LP; %close all;
 warning('off','all'); warning;
-try
-KilosortToTT()
-end
+% try
+% KilosortToTT([],'good')
+% end
 %% Analysis type Single/Group/Batch/Online etc
 LP.Analysis_type='Single';
 LP.Save=0;              % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];          % string to be added to the saved analysis file name
-LP.BatchType='Spikes';  % Spikes DataBase MegaBatch
-DB.DataBase=0;          % 1 : DB_Generate - 2 : Tag Hack
+LP.BatchType='DataBase';  % Spikes DataBase MegaBatch
+DB.DataBase=2;          % 1 : DB_Generate - 2 : Tag Hack
 DB.Group='Tag_Early';            % Tag Hack : select filter
 %% Overwritting Parameters
 LP.P.Data.Label={};                     %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
@@ -29,7 +29,7 @@ LP.P.Plot.FiltersBehavior=0;           	 % AP_####_GroupToPlot Oupput 2
 LP.P.Plot.Cells=0;                       % Generate single cell filter figures
 LP.P.Plot.Cells_Spike=1;                 % Specific to spike analysis
 LP.P.Plot.Illustrator=0;
-LP.P.Plot.Transparency=1;
+LP.P.Plot.Transparency=0;
 LP.P.Plot.Illustration=[0 0 0];          % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
 % Axis
 LP.P.Plot.xTime=[-4 4];
@@ -54,12 +54,12 @@ LP.P.Filters.LoadIgnoredTrials=1;
 LP.P.Filters.Cells_Stats='';
 LP.P.Filters.Cells_Threshold=[];
 % Data Normalization % default Zsc=1 mov=5 befAft=1 SR=20
-LP.P.Data.Normalize='Hz';                   % 'Zsc' 'DFF' 'No or empty or Hz'
+LP.P.Data.Normalize='DFF';                   % 'Zsc' 'DFF' 'No or empty or Hz'
 LP.P.Data.BaselineTW=[0.2 1.2];              % Baseline time
 LP.P.Data.BaselineBefAft=1;                  % calculate Baseline before or after extracting desired PSTH
 LP.P.Data.BaselineMov=5;                     % 
-LP.P.Data.BaselineHisto=0;                   % percentage of data from the baseline to use
-LP.P.Data.ZeroTW=[1 2];                         % in sec
+LP.P.Data.BaselineHisto=90;                 % percentage of data from the baseline to use
+LP.P.Data.ZeroTW=[];                         % in sec - within Timing.PSTH
 LP.P.Data.SamplingRateDecimated=100;         % in Hz 20 for figures 100 for archiving - DOES NOT WORK :(
 LP.P.Data.BaselineFit=0;                     % To come
 LP.P.Photometry.Fit_470405=0;                % To TEST
@@ -86,9 +86,9 @@ LP.P.Spikes.LoadWV=1;
 LP.P.Spikes.tagging_TTL=2;
 LP.P.Spikes.tagging_TW=[-0.5 0.5];
 LP.P.Spikes.tagging_baseline=[-0.4 -0.1];
-LP.P.Spikes.tagging_EpochTW=[0 0.02]; % ; 0.02 0.1];
+LP.P.Spikes.tagging_EpochTW=[0 0.01]; % ; 0.02 0.1];
 LP.P.Spikes.tagging_EpochNames={'Early'}; %'Late'};
-LP.P.Plot.Cells_tag='All'; %All %Tag
+LP.P.Plot.Cells_tag=''; %All %Tag
 LP.P.Spikes.pThreshold=[0.05 0.01 0.05]; %Latency / FR / Reliability;
 LP.P.Spikes.TTLTS_spikeTS_Factor=10000; % for MClust clustered spikes
 LP.P.Spikes.SamplingRate=30000;
