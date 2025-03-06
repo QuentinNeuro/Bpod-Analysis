@@ -83,6 +83,7 @@ LP.P.Spikes.TE4CellBase=0;
 LP.P.Spikes.Clustering='Kilosort'; %Kilosort MClust
 LP.P.Spikes.BinSize=[0.1 0.001]; %Behavior and Tagging;
 LP.P.Spikes.LoadWV=1;
+LP.P.Spikes.WV_Cleaning='auto';
 LP.P.Spikes.tagging_TTL=2;
 LP.P.Spikes.tagging_TW=[-0.5 0.5];
 LP.P.Spikes.tagging_baseline=[-0.4 -0.1];

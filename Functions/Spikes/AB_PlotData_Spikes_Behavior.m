@@ -1,10 +1,10 @@
-function Analysis=AB_PlotData_Spikes(Analysis,cellID,groupTypes)
+function Analysis=AB_PlotData_Spikes_Behavior(Analysis,cellID,groupTypes)
 
 %% Cell ID
-thisC_Name=Analysis.AllData.AllCells.CellName{cellID};
+thisID=Analysis.AllData.AllCells.CellName{cellID};
 testTag=Analysis.Parameters.Spikes.Tag;
-thisLabelTag=Analysis.AllData.(thisC_Name).LabelTag;
-thisLabelCluster=Analysis.AllData.(thisC_Name).LabelClustering;
+thisLabelTag=Analysis.AllData.(thisID).LabelTag;
+thisLabelCluster=Analysis.AllData.(thisID).LabelClustering;
 
 %% Parameters
 % Plot
@@ -39,25 +39,15 @@ xLabelBehav='Time (s)';
 xTimeBehah=Analysis.Parameters.Plot.xTime;
 
 %% Data
-% Subplot All Spikes
-NbOfSpikes=500;
-thisSpikes_All=Analysis.Core.SpikesTS{cellID};
-thislength=length(thisSpikes_All);
-if thislength>=NbOfSpikes
-    thisSpikes_All=decimate(thisSpikes_All,ceil(thislength/NbOfSpikes));
-end  
 % Waveforms
 testwaveforms=0;
-if isfield(Analysis.Tagging.(thisC_Name).Early,'Waveforms')
+if isfield(Analysis.Core,'SpikesWV')
     testwaveforms=1;
-    wvTag=Analysis.Tagging.(thisC_Name).Early.Waveforms;
-    wvAll=Analysis.Core.SpikesWV{cellID};
 % Averages
-    wvTag_AVG=mean(wvTag,3,'omitnan');
-    wvTag_STD=std(wvTag,0,3,'omitnan');
-    wvAll_AVG=mean(wvAll,3,'omitnan');
-    wvAll_STD=std(wvAll,0,3,'omitnan');
-    wvTime=(1:size(wvTag,2))*1000/Analysis.Parameters.Spikes.SamplingRate;
+    wvTag=Analysis.Tagging.(thisID).Early.Waveforms_Stats;
+    wvTagCorr=Analysis.Tagging.(thisID).Early.Waveforms_Corr;
+    wvAll=Analysis.AllData.(thisID).Waveforms_Stats;
+    wvTime=(1:size(wvAll.WaveformAVG,2))*1000/Analysis.Parameters.Spikes.SamplingRate;
 end
 
 %% Figure
@@ -71,31 +61,49 @@ set(Legend,'String',FigureLegend,'Position',[10,5,500,20]);
 %% Waveform
 if testwaveforms
 subplot(6,3,1); hold on;
-if testwaveforms
-    tadd=0;
-    for w=1:size(wvAll_AVG,1)
-        shadedErrorBar(wvTime+tadd,wvAll_AVG(w,:),wvAll_STD(w,:),'-k',1);
-        shadedErrorBar(wvTime+tadd,wvTag_AVG(w,:),wvTag_STD(w,:),'-b',1);
-        tadd=tadd+wvTime(end)+0.1*wvTime(end);
+tadd=0;
+for w=1:size(wvAll.WaveformAVG,1)
+    thisTime=wvTime+tadd;
+    shadedErrorBar(thisTime,wvAll.WaveformAVG(w,:),wvAll.WaveformSTD(w,:),'-k',1);
+    shadedErrorBar(thisTime,wvTag.WaveformAVG(w,:),wvTag.WaveformSTD(w,:),'-b',1);
+    if ~isnan(wvAll.peakX(w))
+        plot(thisTime(wvAll.peakX(w)),wvAll.WaveformAVG(w,wvAll.peakX(w)),'xr')
+        plot(thisTime(wvAll.troughX(w)),wvAll.WaveformAVG(w,wvAll.troughX(w)),'xr')
+        plot(thisTime(wvAll.FWHMx(w,:)),[wvAll.FWHMy(w) wvAll.FWHMy(w)],'-r');
     end
+    tadd=thisTime(end)+0.1*wvTime(end);
 end
+ylabel([min(min(wvAll.WaveformAVG))-10 max(max(wvAll.WaveformAVG))-10])
 xlabel('time (ms)')
-title(sprintf('Channel : %.0f', Analysis.AllData.(thisC_Name).LabelChannel))
+fwhm=1000*diff(wvAll.FWHMx(1,:))/Analysis.Parameters.Spikes.SamplingRate;
+title(sprintf('Ch : %.0f - FWHM = %.1f ms - xtag = %.2f', Analysis.AllData.(thisID).LabelChannel, fwhm, wvTagCorr.Waveform_Corr));
 end    
 %% TT Timing
 subplot(6,3,2); hold on;
-title([thisC_Name ' ' thisLabelCluster]);
-plot(thisSpikes_All,0,'sk',...
-        'MarkerSize',2,'MarkerFaceColor','k');
-set(gca,'XLim',xTimeAll,'YLim',ySpikeAll);
-ylabel(yLabelSpikeAll);
-xlabel(xLabelAll);
+ISI_HistoY=Analysis.AllData.AllCells.ISI_HistoY(cellID,:);
+ISI_HistoX=1000*Analysis.AllData.AllCells.ISI_HistoX;
+rpViolation=Analysis.AllData.AllCells.RefractoryViolation(cellID);
+fr=Analysis.AllData.(thisID).BaselineAVG;
+rpTime=1000*Analysis.Parameters.Spikes.RefractoryPeriod;
+
+plot(ISI_HistoX,ISI_HistoY,'-k');
+xlim([0 50]);
+thisYlim=get(gca,'YLim');
+thisYlim=[0 ceil(thisYlim(2))];
+plot([rpTime rpTime], thisYlim,'-r')
+xlabel('ISI (ms)');
+ylabel('Spike count');
+title(sprintf('%s  - Firing Rate %.1f Hz - RP violation %.2f %: ',thisID, fr, rpViolation))
+% set(gca,'XLim',xTimeAll,'YLim',ySpikeAll);
+% ylabel(yLabelSpikeAll);
+% xlabel(xLabelAll);
+% title([thisC_Name ' ' thisLabelCluster]);
 
 %% PhotoTagging
 if testTag
     % Data
-raster_Spikes=cell2mat(Analysis.Tagging.(thisC_Name).SpikeTS');
-raster_Trials=cell2mat(Analysis.Tagging.(thisC_Name).TrialTS');
+raster_Spikes=cell2mat(Analysis.Tagging.(thisID).SpikeTS');
+raster_Trials=cell2mat(Analysis.Tagging.(thisID).TrialTS');
     % Plot
 subplot(6,3,3); hold on;
 title(['PhotoTagging ' thisLabelTag]);
@@ -128,11 +136,11 @@ for g=1:nbOfGroups
         licksSEM=Analysis.(thisType).Licks.DataSEM;
         licksBin=Analysis.(thisType).Licks.Time(1,:);
         % spikes
-        spikesAVG=Analysis.(thisType).(thisC_Name).DataAVG;
-        spikesSEM=Analysis.(thisType).(thisC_Name).DataSEM;
-        spikesBin=Analysis.(thisType).(thisC_Name).Time(1,:);
-        raster_Spikes=cell2mat(Analysis.(thisType).(thisC_Name).SpikeTS);
-        raster_Trials=cell2mat(Analysis.(thisType).(thisC_Name).TrialTS);
+        spikesAVG=Analysis.(thisType).(thisID).DataAVG;
+        spikesSEM=Analysis.(thisType).(thisID).DataSEM;
+        spikesBin=Analysis.(thisType).(thisID).Time(1,:);
+        raster_Spikes=cell2mat(Analysis.(thisType).(thisID).SpikeTS);
+        raster_Trials=cell2mat(Analysis.(thisType).(thisID).TrialTS);
         if isempty(raster_Trials)
             countRasterAdd=0;
         else
