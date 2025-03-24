@@ -11,6 +11,10 @@ function stats=AB_DataProcess_Spikes_Waveforms(action,wf1,wf2)
 
 %% Parameters
 nCh=size(wf1,1);
+% for xcorr - bootstrap is not available yet - correlation index is only
+% calculated for ch=1;
+c=1;
+nBootStrap=[1 30];
 
 %% Data Processing
 switch action
@@ -74,9 +78,7 @@ switch action
     %% Waveform xcorr
     case 'xcorr'
         if ~isempty(wf2)
-        c=1;
-        nBootStrap=[1 30];
-        
+
         thiswf1=reshape(wf1(c,:,:),size(wf1,2),size(wf1,3));
         thiswf2=reshape(wf2(c,:,:),size(wf2,2),size(wf2,3));
         wfnan=~isnan(thiswf2);

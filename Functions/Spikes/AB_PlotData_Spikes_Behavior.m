@@ -16,6 +16,8 @@ disp('Check AP_PlotData_Spikes for info')
 end
 transparency=Analysis.Parameters.Plot.Transparency;
 colorplot='bgry';
+epochNames=Analysis.Parameters.Spikes.tagging_EpochNames;
+nEpochs=size(epochNames,2);
 
 %% Parameters
 % Subplot All Spikes
@@ -41,13 +43,18 @@ xTimeBehah=Analysis.Parameters.Plot.xTime;
 %% Data
 % Waveforms
 testwaveforms=0;
+testtag=0;
 if isfield(Analysis.Core,'SpikesWV')
     testwaveforms=1;
 % Averages
-    wvTag=Analysis.Tagging.(thisID).Early.Waveforms_Stats;
-    wvTagCorr=Analysis.Tagging.(thisID).Early.Waveforms_Corr;
     wvAll=Analysis.AllData.(thisID).Waveforms_Stats;
     wvTime=(1:size(wvAll.WaveformAVG,2))*1000/Analysis.Parameters.Spikes.SamplingRate;
+    if isfield(Analysis.Tagging.(thisID).(epochNames{1}),'Waveforms_Stats')
+        testtag=1;
+        wvTag=Analysis.Tagging.(thisID).(epochNames{1}).Waveforms_Stats;
+        wvTagCorr=Analysis.Tagging.(thisID).(epochNames{1}).Waveforms_Corr;
+    end
+
 end
 
 %% Figure
@@ -65,7 +72,9 @@ tadd=0;
 for w=1:size(wvAll.WaveformAVG,1)
     thisTime=wvTime+tadd;
     shadedErrorBar(thisTime,wvAll.WaveformAVG(w,:),wvAll.WaveformSTD(w,:),'-k',1);
-    shadedErrorBar(thisTime,wvTag.WaveformAVG(w,:),wvTag.WaveformSTD(w,:),'-b',1);
+    if testtag
+        shadedErrorBar(thisTime,wvTag.WaveformAVG(w,:),wvTag.WaveformSTD(w,:),'-b',1);
+    end
     if ~isnan(wvAll.peakX(w))
         plot(thisTime(wvAll.peakX(w)),wvAll.WaveformAVG(w,wvAll.peakX(w)),'xr')
         plot(thisTime(wvAll.troughX(w)),wvAll.WaveformAVG(w,wvAll.troughX(w)),'xr')

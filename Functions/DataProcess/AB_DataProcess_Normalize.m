@@ -45,6 +45,8 @@ end
 
 %% Data Normalization
 switch testNormalize
+    case 'DF'
+        DataTW_N=100*(dataTW-baselineAVG);
     case 'DFF'
         dataTW_N=100*(dataTW-baselineAVG)./baselineAVG;
     case 'Zsc'

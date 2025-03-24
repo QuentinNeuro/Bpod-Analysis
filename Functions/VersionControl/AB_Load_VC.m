@@ -84,7 +84,6 @@ if ~isfield(Analysis.Parameters,'LauncherVer')
     Analysis.Parameters=newPar;
 
     %% Older version
-
 if ~isfield(Analysis.Parameters,'Stimulation')
     Analysis.Stimulation.Stimulation=0;
 end

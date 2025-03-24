@@ -16,9 +16,7 @@ testZeroAt=Analysis.Parameters.Data.ZeroTW;
 testHisto=Analysis.Parameters.Data.BaselineHisto;
 ZeroTW=testZeroAt/binSize;
 % ISI
-Analysis.Parameters.Spikes.RefractoryPeriod=0.002; % in s 
-Analysis.Parameters.Spikes.RefractoryExclusion=1.5;   % in %
-refractoryPeriod=Analysis.Parameters.Spikes.RefractoryPeriod; % in s 
+refractoryPeriod=Analysis.Parameters.Spikes.RefractoryPeriod;         % in s 
 refractoryExclusion=Analysis.Parameters.Spikes.RefractoryExclusion;   % in %
 refractoryFilter=true(nCells,1);
 % Data Cleaning
@@ -55,7 +53,7 @@ for c=1:nCells
     end
 
 % Baseline data normalization
-    [dataCells{c},fr_avg,fr_std]=AB_DataProcess_Normalize(Analysis,timeTrial,dataCells{c},thisTS);
+    [dataCells{c},fr_avg(c),fr_std]=AB_DataProcess_Normalize(Analysis,timeTrial,dataCells{c},thisTS);
 
 % For AllCells structure
     for t=1:tcount
@@ -70,6 +68,11 @@ for c=1:nCells
     ISI_edges=0:0.001:0.05;
     [ISI_histY(c,:),~]=histcounts(ISIs,ISI_edges);
 
+% waveforms
+waveforms_Stats=AB_DataProcess_Spikes_Waveforms('Stats',dataWV{c},[]);
+FWHM(c,:)=diff(waveforms_Stats.FWHMx,[],2)/sampRate;
+Amp(c,:)=waveforms_Stats.peakP;
+
 %% Save in structure
     thisID=cellID{c};
     Analysis.AllData.AllCells.CellName{c}       = thisID;
@@ -77,8 +80,9 @@ for c=1:nCells
     Analysis.AllData.(thisID).Data              = dataCells{c};
     Analysis.AllData.(thisID).SpikeTS           = dataTS{c};
     Analysis.AllData.(thisID).TrialTS           = trialTS{c};
-    Analysis.AllData.(thisID).BaselineAVG       = fr_avg;
+    Analysis.AllData.(thisID).BaselineAVG       = fr_avg(c);
     Analysis.AllData.(thisID).BaselineSTD       = fr_std;
+    Analysis.AllData.(thisID).Waveforms_Stats   = waveforms_Stats;
     Analysis.AllData.(thisID)=AB_DataProcess_Epochs(Analysis.AllData.(thisID),Analysis);
 end
 Analysis.Parameters.Data.Label=['Spikes ' Analysis.Parameters.Data.Label];
@@ -86,10 +90,14 @@ Analysis.AllData.Time.Zero_Spike=zeroTS;
 Analysis.AllData.AllCells.Time=timeTrial;
 Analysis.AllData.AllCells.Data = cell2mat(cellfun(@(x) mean(x,1,'omitnan'),dataTrial,'UniformOutput',false)');
 Analysis.AllData.AllCells.RefractoryViolation=refractorySpikes;
+Analysis.AllData.AllCells.FiringRate=fr_avg;
+Analysis.AllData.AllCells.FWHM=FWHM;
+Analysis.AllData.AllCells.Amplitude=Amp;
 Analysis.AllData.AllCells.ISI_HistoY=ISI_histY;
 Analysis.AllData.AllCells.ISI_HistoX=ISI_edges(2:end);
+
 % Filters
-Analysis.Filters.Cell_Refractory=refractoryFilter;
+Analysis.Filters.Cell_RefractoryViolation=refractoryFilter;
 Analysis.Filters.Cell_Artifacts=filter;
 
 %% label
@@ -114,10 +122,6 @@ switch Analysis.Parameters.Spikes.recClustering
         end
 end
 
-%% Waveforms
-for c=1:nCells
-    Analysis.AllData.(cellID{c}).Waveforms_Stats=AB_DataProcess_Spikes_Waveforms('Stats',dataWV{c},[]);
-end
 %% Tagging PSTH
 Analysis=AB_DataProcess_Spikes_Tagging(Analysis);
 

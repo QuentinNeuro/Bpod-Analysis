@@ -22,26 +22,11 @@ switch LP.Analysis_type
             if DB.DataBase==1
                 DB_Stat=Database_Generate(Analysis,DB_Stat,LP.FileToOpen,LP.PathName,DB.Group);
                 DB_Stat.LP=LP;
-                disp(Analysis.Parameters.CueTimeReset)
             elseif DB.DataBase==2
                 try
-                thisFilter=Analysis.Filters.(DB.Group);
-                DB_Stat.Session{i}=Analysis.Parameters.Files;
-                DB_Stat.DataTag{i}=Analysis.Tagging.AllCells.Data_Cell(thisFilter,:);
-                DB_Stat.DataUR{i}=Analysis.Uncued_Reward.AllCells.Data_Cell(thisFilter,:);
-                if isfield(Analysis,'AnticipLick_HVS_Reward')
-                    DB_Stat.DataCR{i}=Analysis.AnticipLick_HVS_Reward.AllCells.Data_Cell(thisFilter,:);
-                    DB_Stat.DataLVR{i}=Analysis.NoAnticipLick_HVS_Reward.AllCells.Data_Cell(thisFilter,:);
-                    DB_Stat.DataHVS{i}=Analysis.AnticipLick_HV.AllCells.Data_Cell(thisFilter,:);
-                    DB_Stat.DataLVS{i}=Analysis.NoAnticipLick_LV.AllCells.Data_Cell(thisFilter,:);
-                elseif isfield(Analysis,'CS_Reward')
-                    DB_Stat.DataCR{i}=Analysis.CS_Reward.AllCells.Data_Cell(thisFilter,:);
-                    DB_Stat.DataHVS{i}=Analysis.AnticipLick_CS_Reward.AllCells.Data_Cell(thisFilter,:);
-                    DB_Stat.DataLVR{i}=Analysis.NoAnticipLick_CS_Reward.AllCells.Data_Cell(thisFilter,:);
-                    DB_Stat.DataLVS{i}=Analysis.NoAnticipLick_NS.AllCells.Data_Cell(thisFilter,:);
-                end
+                DB_Stat=Database_Generate_Spikes(Analysis,DB_Stat);
                 catch
-                    disp([LP.FileToOpen 'could not be added to spikes']);
+                    disp([LP.FileToOpen ' was not added to database'])
                 end
             end
          end    

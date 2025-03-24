@@ -7,10 +7,10 @@ if Analysis.Parameters.Spikes.Spikes
     switch Analysis.Parameters.Behavior.Phase
         case {'RewardA','RewardB'}
     thisType={'Uncued_Reward','CS_Reward','NS'};
-    thisCellFilter={'Tag_Early','Tag_Early','Tag_Early'};
+    thisCellFilter={'TagEarly','TagEarly','TagEarly'};
         case {'RewardAPunishB','RewardBPunishA','RewardAPunishBValues','RewardBPunishAValues'}
     thisType={'Uncued_Reward','HVS_Reward','LVS'};
-    thisCellFilter={'Tag_Early','Tag_Early','Tag_Early'};
+    thisCellFilter={'TagEarly','TagEarly','TagEarly'};
     end
 end
 
@@ -49,13 +49,18 @@ if Analysis.Parameters.Spikes.Spikes && Analysis.Parameters.Plot.Cells_Spike
     mkdir(thisDirFig);
     GroupPlot_Spikes=AB_CuedOutcome_FilterGroups_Spikes(Analysis);
     
-    tempCellFilter=false(1,Analysis.Parameters.Data.nCells);
-    for e=1:size(Analysis.Parameters.Spikes.tagging_EpochNames,2)
-        tempCellFilter=tempCellFilter+Analysis.Filters.(['Tag_' Analysis.Parameters.Spikes.tagging_EpochNames{e}]);
+    switch Analysis.Parameters.Plot.Cells_Spike
+        case 1
+            cellFilter=false(1,Analysis.Parameters.Data.nCells);
+            for e=1:size(Analysis.Parameters.Spikes.tagging_EpochNames,2)
+                cellFilter=cellFilter+Analysis.Filters.(Analysis.Parameters.Spikes.tagging_EpochNames{e});
+            end
+        case 2
+            cellFilter=true(1,Analysis.Parameters.Data.nCells);
     end
 
     for c=1:Analysis.Parameters.Data.nCells
-        if tempCellFilter(c)
+        if cellFilter(c)
         AB_PlotData_Spikes_Behavior(Analysis,c,GroupPlot_Spikes);
         cellID=Analysis.AllData.AllCells.CellName{c};
         cellID_Label=[Analysis.AllData.(cellID).LabelClustering '_' Analysis.AllData.(cellID).LabelTag];

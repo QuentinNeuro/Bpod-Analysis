@@ -32,7 +32,7 @@ if Analysis.Parameters.Prime.SiteExclusion
         data{t}=data{t}(filterExclusion,:);
     end
     nCells=sum(filterExclusion);
-    Analysis.Parameters.nCells=nCells;
+    Analysis.Parameters.Data.nCells=nCells;
 end
 
 % smoothing

@@ -31,14 +31,14 @@ for t=1:nTrials
     
     % PSTH
     timeTrial(t,:)=binVector(2:end);
-    dataTrial(t,:)=histcounts(licks{t},binVector/binSize);
+    dataTrial(t,:)=histcounts(licks{t},binVector);
 end
 
 %% Statistics for Analysis Structure
 Analysis.AllData.Licks.Events   =licks;
 Analysis.AllData.Licks.Trials   =trials;
 Analysis.AllData.Licks.Time     =timeTrial;
-Analysis.AllData.Licks.Data     =dataTrial;
+Analysis.AllData.Licks.Data     =dataTrial/binSize;
 
 Analysis.AllData.Time.Zero=timeToZero;
 Analysis.AllData.Time.zeroFirstLick=zeroFirstLick;

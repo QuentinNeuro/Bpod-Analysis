@@ -59,7 +59,7 @@ Par.Behavior.Behavior=[];
 Par.Behavior.TypeOfCue='nc';
 Par.Timing.EpochStates=[];
 Par.Timing.EpochNames=[];
-Par.Timing.EpochTimeReset=[];
+Par.Timing.EpochTimeReset_auto=[];
 Par.Timing.EpochZeroPSTH=[];
 
 %% CuedOutcome
@@ -69,14 +69,14 @@ Par.Behavior.Behavior='CuedOutcome';
 Par.Behavior.TypeOfCue='Chirp';
 Par.Timing.EpochNames={'Cue' 'Outcome' 'Delay'};
 Par.Timing.EpochStates={'CueDelivery' 'Outcome' 'Delay'};
-Par.Timing.EpochTimeReset=[0 1 ; 0 2 ; 0 0];
+Par.Timing.EpochTimeReset_auto=[0 1 ; 0 2 ; 0 0];
 Par.Timing.EpochZeroPSTH='Outcome';
 
 if isfield(SessionData.RawEvents.Trial{1,1}.States,'SoundDelivery')
     Par.Timing.EpochStates{1}='SoundDelivery';
 end
 if isfield(SessionData.TrialSettings(1),'Delay')
-    Par.Timing.EpochTimeReset(1,2)=SessionData.TrialSettings(1).Delay;
+    Par.Timing.EpochTimeReset_auto(1,2)=SessionData.TrialSettings(1).Delay;
 end
 if isfield(SessionData.TrialSettings(1),'Names') && isfield(SessionData.TrialSettings(1).Names,'Cue')
     Par.Behavior.TypeOfCue=SessionData.TrialSettings(1).Names.Cue{SessionData.TrialSettings(1).GUI.CueType};
@@ -91,7 +91,7 @@ Par.Behavior.Phase='OptoPsycho';
 Par.Behavior.TypeOfCue='Chirp';
 Par.Timing.EpochNames={'Cue' 'Outcome'};
 Par.Timing.EpochStates={'CueDelivery' 'PostOutcome'};
-Par.Timing.EpochTimeReset=[0 1 ; 0 -2];
+Par.Timing.EpochTimeReset_auto=[0 1 ; 0 -2];
 Par.Timing.EpochZeroPSTH='PostOutcome';
 end
 % GoNogo - optoPsycho
@@ -99,7 +99,7 @@ if contains(Name,'GoNogo')
 Par.Behavior.Behavior='GoNogo';
 Par.Timing.EpochNames={'Cue' 'Outcome'};
 Par.Timing.EpochStates={'CueDelivery' 'PostOutcome'};
-Par.Timing.EpochTimeReset=[-0.1 0 ; 0 -3];
+Par.Timing.EpochTimeReset_auto=[-0.1 0 ; 0 -3];
 Par.Timing.EpochZeroPSTH='PostOutcome';
 end
 
@@ -109,7 +109,7 @@ Par.Behavior.Behavior='AuditoryTuning';
 Par.Behavior.Phase='AuditoryTuning';
 Par.Timing.EpochNames{1}='Cue';
 Par.Timing.EpochStates{1}='CueDelivery';
-Par.Timing.EpochTimeReset=[0 1.5];
+Par.Timing.EpochTimeReset_auto=[0 1.5];
 Par.Data.BaselineBefAft=1;
 Par.Timing.EpochZeroPSTH='CueDelivery';
 end
@@ -119,7 +119,7 @@ Par.Behavior.Behavior='VisualTuning';
 Par.Behavior.Phase='VisualTuning';
 Par.Timing.EpochNames{1}='Cue';
 Par.Timing.EpochStates{1}='CueDelivery';
-Par.Timing.EpochTimeReset=[0 1.5];
+Par.Timing.EpochTimeReset_auto=[0 1.5];
 Par.Data.BaselineBefAft=1;
 Par.Timing.EpochZeroPSTH='CueDelivery';
 end
@@ -129,7 +129,7 @@ Par.Behavior.Behavior='OptoTuning';
 Par.Behavior.Phase='OptoTuning';
 Par.Timing.EpochNames{1}='Cue';
 Par.Timing.EpochStates{1}='CueDelivery';
-Par.Timing.EpochTimeReset=[0 1.5];
+Par.Timing.EpochTimeReset_auto=[0 1.5];
 Par.Data.BaselineBefAft=1;
 Par.Timing.EpochZeroPSTH='CueDelivery';
 if isfield(SessionData.RawEvents.Trial{1, 1}.States,'StimDelivery')
@@ -176,7 +176,7 @@ if contains(Name,'AudCuedPavl','IgnoreCase',true)
     Par.Timing.EpochNames={'Cue' 'Outcome'};
     Par.Timing.EpochStates={'DeliverStimulus' 'DeliverStimulus'};
     Par.Timing.EpochZeroPSTH='DeliverStimulus';
-    Par.Timing.EpochTimeReset=[0 2 ; 2 4];
+    Par.Timing.EpochTimeReset_auto=[0 2 ; 2 4];
     Par.Timing.PSTH=[-6 6]; 
 else
     disp('Could not autodetect the behavior protocol')
@@ -193,7 +193,7 @@ end
 if ~isempty(LP.P.Timing.EpochStates) | ~isempty(LP.P.Timing.EpochNames)
     Par.Timing.EpochNames=[Par.Timing.EpochNames LP.P.Timing.EpochNames];
     Par.Timing.EpochStates=[Par.Timing.EpochStates LP.P.Timing.EpochStates];
-    Par.Timing.EpochTimeReset=[Par.Timing.EpochTimeReset LP.P.Timing.EpochTimeReset];
+    Par.Timing.EpochTimeReset_auto=[Par.Timing.EpochTimeReset_auto LP.P.Timing.EpochTimeReset];
 end
 
 

@@ -15,6 +15,9 @@ epochNames=Analysis.Parameters.Spikes.tagging_EpochNames;
 nEpochs=size(epochNames,2);
 alphas=Analysis.Parameters.Spikes.pThreshold;
 
+% if nTrials>100
+%     nTrials=100;
+% end
 %% Load data
 data=Analysis.Core.SpikesTS;
 if isfield(Analysis.Core,'SpikesWV')
@@ -50,7 +53,6 @@ for c=1:nCells
     Analysis.Tagging.(thisID).SpikeTS           =dataTS{c};
     Analysis.Tagging.(thisID).TrialTS           =trialTS{c};
     Analysis.Tagging.AllCells.Data_Cell(c,:)    =mean(dataCells{c},1,'omitnan');
-    
 end
 
 %% Tagging metrics
@@ -110,6 +112,7 @@ for c=1:nCells
         Analysis.Tagging.(thisID).(epochNames{e}).Waveforms=thisWV_epoch;
         Analysis.Tagging.(thisID).(epochNames{e}).Waveforms_Stats=AB_DataProcess_Spikes_Waveforms('Stats',thisWV_epoch,[]);
         Analysis.Tagging.(thisID).(epochNames{e}).Waveforms_Corr=AB_DataProcess_Spikes_Waveforms('xcorr',thisWV,thisWV_epoch);
+        Analysis.Tagging.AllCells.(epochNames{e}).wf_corr(c)=Analysis.Tagging.(thisID).(epochNames{e}).Waveforms_Corr.Waveform_Corr;
     end
     end
 end
@@ -117,7 +120,7 @@ end
 
 %% Filters
 for e=1:nEpochs
-    Analysis.Filters.(['Tag_' (epochNames{e})])=logical(sum(Analysis.Tagging.AllCells.(epochNames{e}).h(:,1:2),2)>=2);
+    Analysis.Filters.(epochNames{e})=logical(sum(Analysis.Tagging.AllCells.(epochNames{e}).h(:,1:2),2)>=2);
 end
 
 %% Plot using filters
@@ -131,7 +134,7 @@ for c=1:nCells
 end
     case 'Tag'
 for e=1:nEpochs
-    thisFilter=Analysis.Filters.(['Tag_' (epochNames{e})]);
+    thisFilter=Analysis.Filters.(epochNames{e});
     for c=1:length(thisFilter)
         if thisFilter(c)
             AB_PlotData_Spikes_Tag(Analysis,c,e)

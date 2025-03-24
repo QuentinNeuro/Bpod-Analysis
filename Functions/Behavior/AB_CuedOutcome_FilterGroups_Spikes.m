@@ -1,4 +1,4 @@
-function [GroupPlot]=AP_CuedOutcome_FilterGroups_Spikes(Analysis)
+function [GroupPlot]=AB_CuedOutcome_FilterGroups_Spikes(Analysis)
 
 GroupPlot={};
 indexp=0;
