@@ -122,6 +122,10 @@ switch Analysis.Parameters.Spikes.recClustering
         end
 end
 
+%% Waveforms
+for c=1:nCells
+    Analysis.AllData.(cellID{c}).Waveforms_Stats=AB_DataProcess_Spikes_Waveforms('Stats',dataWV{c},[]);
+end
 %% Tagging PSTH
 Analysis=AB_DataProcess_Spikes_Tagging(Analysis);
 
