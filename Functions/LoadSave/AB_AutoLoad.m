@@ -22,7 +22,7 @@ if exist('SessionData','var')
         LP.P.Photometry.Photometry=1;
         testRecTypes=testRecTypes+1;
     end
-    if ~isempty(ls('dff_*')) || ~isempty(ls('raw_*')) || ~isempty(ls('calcium_*'))
+    if ~isempty(ls('dff_*')) | ~isempty(ls('raw_*')) | ~isempty(ls('calcium_*'))
         LP.P.Data.RecordingType='AOD';
         LP.P.AOD.AOD=1;
         testRecTypes=testRecTypes+1;
@@ -32,7 +32,7 @@ if exist('SessionData','var')
         LP.P.Miniscope.Miniscope=1;
         testRecTypes=testRecTypes+1;
     end
-    if ~isempty(ls('TT*'))
+    if ~isempty(ls('TT*')) && isempty(ls('TTL*'))
         LP.P.Data.RecordingType='Spikes';
         LP.P.Spikes.Spikes=1;
         testRecTypes=testRecTypes+1;

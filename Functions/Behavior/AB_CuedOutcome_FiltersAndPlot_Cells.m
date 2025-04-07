@@ -15,11 +15,12 @@ if Analysis.Parameters.Spikes.Spikes
 end
 
 if Analysis.Parameters.AOD.AOD
-    thisType={'Uncued_Reward','Uncued_Reward'};
-    thisCellFilter={'posRew','posRewInv'};
-    Analysis=A_FilterCell(Analysis,'posRew','OutcomeMAX','preSTD','Uncued_Reward');
-    % thisType={'AnticipLick_CS_Reward','AnticipLick_CS_Reward','NoAnticipLick_NS','Uncued_Reward','Uncued_Reward'};
-    % thisCellFilter={'posRew','posRewInv','posRew','posRew','posRewInv'};
+    % thisType={'Uncued_Reward','Uncued_Reward'};
+    % thisCellFilter={'posRew','posRewInv'};
+    Analysis=AB_FilterCell(Analysis,'posRew','OutcomeAVGZ',Analysis.Parameters.AOD.rewT,'Uncued_Reward');
+    % Analysis=AB_FilterCell(Analysis,'posRew','OutcomeMAXZ',Analysis.Parameters.AOD.rewT,'Uncued_Reward');
+    thisType={'AnticipLick_CS_Reward','AnticipLick_CS_Reward','NoAnticipLick_NS','Uncued_Reward','Uncued_Reward'};
+    thisCellFilter={'posRew','posRewInv','posRew','posRew','posRewInv'};
     % Analysis=A_FilterCell(Analysis,'posCue','CueMAX','preSTD','CS');
 end
 

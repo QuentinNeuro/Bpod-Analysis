@@ -44,7 +44,7 @@ else
 if isfield(SessionData.TrialSettings(1),'TirlasNames')
     Par.Behavior.TrialNames=SessionData.TrialSettings(1).TirlasNames;
 else
-    Par.Behavior.TrialNames=LP.D.TrialNames; % Default
+    Par.Behavior.TrialNames=LP.D.Behavior.TrialNames; % Default
 end
 end
 
@@ -173,10 +173,10 @@ if contains(Name,'AudCuedPavl','IgnoreCase',true)
     Par.Behavior.Phase='RewardA';
     Par.Behavior.CueType='Chirp';
     Par.Behavior.TrialNames={'Cue A Reward','T2','T3','T4','Cue A Omission','Cue B Omission','Uncued Reward','T8','T9','T10'};
-    Par.Timing.EpochNames={'Cue' 'Outcome'};
-    Par.Timing.EpochStates={'DeliverStimulus' 'DeliverStimulus'};
+    Par.Timing.EpochNames={'Cue' 'Outcome' 'Delay'};
+    Par.Timing.EpochStates={'DeliverStimulus' 'DeliverStimulus' 'DeliverStimulus'};
     Par.Timing.EpochZeroPSTH='DeliverStimulus';
-    Par.Timing.EpochTimeReset_auto=[0 2 ; 2 4];
+    Par.Timing.EpochTimeReset_auto=[0 1 ; 2 4 ; 1 2];
     Par.Timing.PSTH=[-6 6]; 
 else
     disp('Could not autodetect the behavior protocol')

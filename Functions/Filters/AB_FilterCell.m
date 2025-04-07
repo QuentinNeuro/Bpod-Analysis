@@ -1,33 +1,33 @@
-function Analysis=A_FilterCell(Analysis,filterName,filterMetric,filterThreshold,thisType)
+function Analysis=AB_FilterCell(Analysis,filterName,filterMetric,filterThreshold,thisType)
 
-if ischar(filterThreshold)
-    switch filterThreshold
-        case 'mean'
-            filterThreshold=mean(Analysis.(thisType).AllCells.(filterMetric),'all','omitnan');
-        case 'median'
-            filterThreshold=median(Analysis.(thisType).AllCells.(filterMetric),'all','omitnan');
-        case 'meanPos'
-            filterThreshold=mean(Analysis.(thisType).AllCells.(filterMetric)>0,'all','omitnan');
-        case 'preAVG'
-            filterThreshold=mean(Analysis.(thisType).AllCells.preCueAVG,2)*2;
-        case 'preSTD'
-            filterThreshold=mean(Analysis.(thisType).AllCells.preCueSTD,2)*3;
-    end
-end
-   
-nCells=Analysis.Parameters.nCells;
+%% General Parameters
+nTrials=Analysis.AllData.nTrials;
+recType=Analysis.Parameters.Data.RecordingType;
+nCells=Analysis.Parameters.Data.nCells;
+cellID=Analysis.Parameters.(recType).CellID;
+%% Filter initiation
 thisFilter=false(1,nCells);
 
-thisMetric=mean(Analysis.(thisType).AllCells.(filterMetric),2,'omitnan');
-
-if size(filterThreshold,1)>1
-    for c=1:nCells
-        if thisMetric(c)>filterThreshold(c)
-        thisFilter(c)=true;
-        end
+%% Filter
+for c=1:nCells
+    thisID=cellID{c};
+    thisMetric=mean(Analysis.(thisType).(thisID).(filterMetric),'omitnan');
+    switch filterThreshold
+        case 'mean'
+            filterThreshold=mean(Analysis.(thisType).(thisID).(filterMetric),'omitnan');
+        case 'median'
+            filterThreshold=median(Analysis.(thisType).(thisID).(filterMetric),'omitnan');
+        case 'meanPos'
+            filterThreshold=mean(Analysis.(thisType).(thisID).(filterMetric)>0,'omitnan');
+        case 'preAVG'
+            filterThreshold=mean(Analysis.AllData.(thisID).BaselineAVG,'omitnan')*2;
+        case 'preSTD'
+            filterThreshold=mean(Analysis.AllData.(thisID).BaselineSTD,'omitnan')*3;
     end
-else
-thisFilter(thisMetric>filterThreshold)=true;
+
+    if thisMetric>filterThreshold
+        thisFilter(c)=true;
+    end
 end
 
 Analysis.Filters.(filterName)=thisFilter;

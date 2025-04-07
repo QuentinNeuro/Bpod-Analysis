@@ -15,11 +15,11 @@ latencyTW=1:min([size(preData,2) size(postData,2)]);
 latencyNoSpikes_zmn=[0 latencyTW(end) NaN];
 switch Opt_noSpikesLatency
     case 'zero'
-        latencyNoSpikes=0;
+        latencyNoSpikes(1)=0;
     case 'max'
-        latencyNoSpikes=latencyTW(end);
+        latencyNoSpikes(2)=latencyTW(end);
     case 'NaN'
-        latencyNoSpikes=NaN;
+        latencyNoSpikes(3)=NaN;
 end
 
 
@@ -46,6 +46,7 @@ preLatency_zmn(preLatency==0,2)=latencyNoSpikes_zmn(2);
 preLatency_zmn(preLatency==0,3)=latencyNoSpikes_zmn(3);
 preLatency(preLatency==0)=latencyNoSpikes;
 
+
 dataLatency=postData(:,latencyTW);
 dataLatency=dataLatency(:,latencyTW);
 dataLatency=dataLatency>0;
@@ -55,11 +56,10 @@ postReliability=length(nonzeros(postLatency))/nTrials;
 postFR=mean(postData,2);
 
 postLatency_zmn=postLatency*ones(1,3);
-postLatency_zmn(postLatency==0,1)=latencyNoSpikes_zmn(1);
-postLatency_zmn(postLatency==0,2)=latencyNoSpikes_zmn(2);
-postLatency_zmn(postLatency==0,3)=latencyNoSpikes_zmn(3);
+postLatency_zmn(1,postLatency==0)=latencyNoSpikes_zmn(1);
+postLatency_zmn(2,postLatency==0)=latencyNoSpikes_zmn(2);
+postLatency_zmn(3,postLatency==0)=latencyNoSpikes_zmn(3);
 postLatency(postLatency==0)=latencyNoSpikes;
-
 %% Test
 [h(1), p(1)]=kstest2(preLatency,postLatency,'alpha',alphas(1));
 [h(2), p(2)]=kstest2(preFR,postFR,'alpha',alphas(2));
@@ -73,7 +73,7 @@ stats.FiringRate(1)=mean(preFR,'omitnan');
 stats.FiringRate(2)=mean(postFR,'omitnan');
 stats.Reliability(1)=mean(preReliability);
 stats.Reliability(2)=postReliability;
-stats.Latency_zmn(1,:)=mean(preLatency_zmn,1,'omitnan');
-stats.Latency_zmn(2,:)=mean(postLatency_zmn,1,'omitnan');
+stats.Latency_zmn(1,:)=mean(preLatency_zmn,2,'omitnan');
+stats.Latency_zmn(2,:)=mean(postLatency_zmn,2,'omitnan');
 
 end

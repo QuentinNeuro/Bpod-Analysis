@@ -19,15 +19,17 @@ switch LP.Analysis_type
             end 
             close all;
             % DataBase
-            if DB.DataBase==1
-                DB_Stat=Database_Generate(Analysis,DB_Stat,LP.FileToOpen,LP.PathName,DB.Group);
+            if DB.DataBase
                 DB_Stat.LP=LP;
-            elseif DB.DataBase==2
-                try
+                switch Analysis.Parameters.Data.RecordingType
+                    case 'Photometry'
+                DB_Stat=Database_Generate(Analysis,DB_Stat,LP.FileToOpen,LP.PathName,DB.Group);
+                    case 'Spikes'
                 DB_Stat=Database_Generate_Spikes(Analysis,DB_Stat);
-                catch
-                    disp([LP.FileToOpen ' was not added to database'])
+                    case 'AOD'
+                 DB_Stat=Database_Generate_AOD(Analysis,DB_Stat);
                 end
+                DB_Stat.LP=LP;
             end
          end    
 

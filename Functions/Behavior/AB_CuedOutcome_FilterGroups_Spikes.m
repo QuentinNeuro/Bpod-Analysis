@@ -27,7 +27,7 @@ GroupPlot{indexp,2}={'Uncued_Reward','HVS_Reward','HVS_Omission'};
 
 indexp=indexp+1;
 GroupPlot{indexp,1}='PunPE';
-GroupPlot{indexp,2}={'Uncued_Punish','LVS_Punish','LVS_Omission'};
+GroupPlot{indexp,2}={'Uncued_Punish','LVS_Punish','type_7'};
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
     case {'RewardAPunishBValues','RewardBPunishAValues'}
 

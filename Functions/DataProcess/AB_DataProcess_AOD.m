@@ -13,7 +13,7 @@ if sampRate<sampRateDecimated
     sampRateDecimated=sampRate;
 end
 Analysis.Parameters.AOD.SamplingRateDecimated=sampRateDecimated;
-decimateFactor=floor(sampRate/sampRateDecimated);
+[p,q] = rat(sampRateDecimated / sampRate);
 % Baseline and Normalize
 testBaseline=Analysis.Parameters.Data.BaselineBefAft;
 baselineTW=Analysis.Parameters.Data.BaselineTW;
@@ -24,7 +24,7 @@ testNorm=Analysis.Parameters.AOD.raw;
 fieldStates=fieldnames(Analysis.Core.States{1,1});
 startState=fieldStates{2};
 for t=1:Analysis.Core.nTrials
-    AODTimeOffset(t,1)=Analysis.Core.States{1,t}.(startState)(1);
+    AODTimeOffset(t,1)=Analysis.Core.States{1,t}.(startState)(1)+Analysis.Parameters.AOD.offsetTime;
 end
 AODTimeOffset=AODTimeOffset(Analysis.Filters.ignoredTrials);
 timeToZero_Bpod=timeToZero-AODTimeOffset;
@@ -68,6 +68,7 @@ end
 for c=1:nCells
     dataBaseline=[];
     for t=1:nTrials
+        % thisData=resample(data{t}(:,c),p,q);
         thisData=data{t}(:,c);
         [timeTW,dataTW]=myPSTH(thisData,PSTH_TW,timeToZeroAOD(t),sampRate);
         dataCells{c}(t,:)=dataTW;

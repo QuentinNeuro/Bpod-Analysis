@@ -15,6 +15,7 @@ nCh=size(wf1,1);
 % calculated for ch=1;
 c=1;
 nBootStrap=[1 30];
+xcorrTrim=[2 2];
 
 %% Data Processing
 switch action
@@ -99,7 +100,7 @@ switch action
         else
             wf1_AVG = mean(thiswf1,2);
             wf2_AVG = mean(thiswf2,2);
-            [wf_corr,wf_p] = corrcoef(wf1_AVG,wf2_AVG);
+            [wf_corr,wf_p] = corrcoef(wf1_AVG(1+xcorrTrim(1):end-xcorrTrim(2)),wf2_AVG(1+xcorrTrim(1):end-xcorrTrim(2)));
             % wf_corr = wf_corr(1,2);
         end
         stats.Waveform_Corr=wf_corr(1,2);

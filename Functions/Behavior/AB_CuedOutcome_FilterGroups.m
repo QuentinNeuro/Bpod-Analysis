@@ -140,8 +140,8 @@ GroupPlot{indexp,2}={'HVS',                         {'HVS'};...
                     'NoCue',                        {'Uncued'}};
 indexp=indexp+1;
 GroupPlot{indexp,1}='Omission';
-GroupPlot{indexp,2}={ 'HVS',                        {'HVS','Omission'};...
-                      'LVS',                        {'LVS','Omission'}};
+GroupPlot{indexp,2}={ 'HVS_Omission',                        {'HVS','Omission'};...
+                      'LVS_Omission',                        {'LVS','Omission'}};
 
 indexp=indexp+1;
 GroupPlot{indexp,1}='Cues_Licks';

@@ -36,7 +36,7 @@ for f=1:size(fields,1)
     end
 end
 Analysis.(thisType).AllCells.CellName=cellName(thisFilter);
-% Analysis.(thisType).AllCells.Data_Cell=Analysis.(thisType).AllCells.Data_Cell(thisFilter,:);
+Analysis.(thisType).AllCells.Data_Cell=Analysis.(thisType).AllCells.Data_Cell(thisFilter,:);
 Analysis.(thisType).AllCells.DataAVG=mean(Analysis.(thisType).AllCells.Data_Cell,1,'omitnan');
 Analysis.(thisType).AllCells.DataSEM=std(Analysis.(thisType).AllCells.Data_Cell,0,1,'omitnan')/sqrt(nCellsF);
 

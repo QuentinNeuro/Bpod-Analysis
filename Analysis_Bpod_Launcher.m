@@ -9,11 +9,10 @@ warning('off','all'); warning;
 % end
 %% Analysis type Single/Group/Batch/Online etc
 LP.Analysis_type='Single';
-LP.Save=0;                          % 1: Core Data only     // 2: Full Analysis Structure
+LP.Save=2;                          % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];                      % string to be added to the saved analysis file name
 LP.BatchType='DataBase';            % Spikes DataBase MegaBatch
-DB.DataBase=0;
-% 1 : DB_Generate - 2 : Tag Hack
+DB.DataBase=0;                      % 1 : DB_Generate - 2 : Tag Hack
 DB.Group='';                        % 
 %% Overwritting Parameters
 LP.P.Data.Label={};                     %{'ACx' 'mPFC' 'ACxL' 'ACxR' 'VS' 'BLA'}
@@ -23,12 +22,12 @@ LP.P.Filters.Sort=1;
 LP.P.Filters.Cells=1;
 LP.P.Filters.Pairing=0;
 % Figures
-LP.P.Plot.TrialTypes=0;                  % Raw trial types - no filter applied
+LP.P.Plot.TrialTypes=1;                  % Raw trial types - no filter applied
 LP.P.Plot.FiltersSingle=0;               % individual raster for individual trial type
 LP.P.Plot.FiltersSummary=0;              % summary plot for groups of trial type
 LP.P.Plot.FiltersBehavior=0;           	 % AP_####_GroupToPlot Oupput 2
-LP.P.Plot.Cells=0;                       % Generate single cell filter figures
-LP.P.Plot.Cells_Spike=1;                 % 1 for only tagged, 2 for all neurons
+LP.P.Plot.Cells=1;                       % Generate single cell filter figures
+LP.P.Plot.Cells_Spike=0;                 % 1 for only tagged, 2 for all neurons
 LP.P.Plot.Illustrator=0;
 LP.P.Plot.Transparency=0;
 LP.P.Plot.Illustration=[0 0 0];          % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
@@ -55,11 +54,11 @@ LP.P.Filters.LoadIgnoredTrials=1;
 LP.P.Filters.Cells_Stats='';
 LP.P.Filters.Cells_Threshold=[];
 % Data Normalization % default Zsc=1 mov=5 befAft=1 SR=20
-LP.P.Data.Normalize='Hz';                    % 'Zsc' 'DFF' 'No or empty or Hz'
+LP.P.Data.Normalize='DFF';                   % 'Zsc' 'DFF' 'No or empty or Hz'
 LP.P.Data.BaselineTW=[0.2 1.2];              % Baseline time
-LP.P.Data.BaselineBefAft=1;                  % calculate Baseline before or after extracting desired PSTH
+LP.P.Data.BaselineBefAft=2;                  % calculate Baseline before or after extracting desired PSTH
 LP.P.Data.BaselineMov=1;                     % 
-LP.P.Data.BaselineHisto=90;                  % percentage of data from the baseline to use
+LP.P.Data.BaselineHisto=0;                   % percentage of data from the baseline to use
 LP.P.Data.ZeroTW=[];                         % in sec - within Timing.PSTH
 LP.P.Data.SamplingRateDecimated=100;         % in Hz 20 for figures 100 for archiving - DOES NOT WORK :(
 LP.P.Data.BaselineFit=0;                     % To come
@@ -75,24 +74,25 @@ LP.P.EventDetection.EpochTW=[-4.8 -2.8; -2.3 -0.3; 0 2]; % Uncertainty [-4.8 -2.
 LP.P.EventDetection.EpochNames={'Baseline','Cue','Reward'};
 %% AOD
 LP.P.AOD.raw=1;                        % load raw vs dff data (new Analysis only)
-LP.P.AOD.timing='Bpod';                % Bpod, TTL
+LP.P.AOD.timing='Bpod';                 % Bpod, TTL
 LP.P.AOD.smoothing=20;                 % smoothing 'Gaussian parameters' / used 20 for VIP_AOD data
 LP.P.AOD.offset='auto';                % 'auto' = minimum-1 vs integer ~120 according to Z
-LP.P.AOD.rewT='meanPos';               % integer vs 'mean' 'median' 'meanPos'
+LP.P.AOD.rewT='preSTD';               % integer vs 'mean' 'median' 'meanPos'
+LP.P.AOD.offsetTime=0.2;
 %% Spikes
 LP.P.Spikes.TE4CellBase=0;
 LP.P.Spikes.Clustering='Kilosort';  %Kilosort MClust
 LP.P.Spikes.BinSize=[0.1 0.001];    %Behavior and Tagging;
 LP.P.Spikes.LoadWV=1;
 LP.P.Spikes.WV_Cleaning='auto';
-LP.P.Spikes.RefractoryPeriod=0.0015; % in sec
+LP.P.Spikes.RefractoryPeriod=0.002; % in sec
 LP.P.Spikes.RefractoryExclusion=5;  % %
 LP.P.Spikes.tagging_TTL=2;
 LP.P.Spikes.tagging_TW=[-0.5 0.5];
 LP.P.Spikes.tagging_baseline=[-0.4 -0.1];
 LP.P.Spikes.tagging_EpochTW=[0 0.01 ; 0.02 0.1]; % 0.02 0.1];
 LP.P.Spikes.tagging_EpochNames={'TagEarly','TagLate'}; %'Late'};
-LP.P.Spikes.Drift=0;
+LP.P.Spikes.tagging_Select=1;
 LP.P.Plot.Cells_tag=''; %All %Tag
 LP.P.Spikes.pThreshold=[0.05 0.01 0.05]; %Latency / FR / Reliability;
 LP.P.Spikes.TTLTS_spikeTS_Factor=10000; % for MClust clustered spikes

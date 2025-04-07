@@ -65,9 +65,9 @@ for c=1:nCells
     if refractorySpikes(c)>refractoryExclusion
         refractoryFilter(c)=false;
     end
-    ISI_edges=0:0.001:0.05;
+    ISI_edges=0:0.0001:0.05;
     [ISI_histY(c,:),~]=histcounts(ISIs,ISI_edges);
-
+    ISI_histY(c,:)=ISI_histY(c,:)/length(ISIs);
 % waveforms
 waveforms_Stats=AB_DataProcess_Spikes_Waveforms('Stats',dataWV{c},[]);
 FWHM(c,:)=diff(waveforms_Stats.FWHMx,[],2)/sampRate;
@@ -127,6 +127,10 @@ for c=1:nCells
     Analysis.AllData.(cellID{c}).Waveforms_Stats=AB_DataProcess_Spikes_Waveforms('Stats',dataWV{c},[]);
 end
 %% Tagging PSTH
-Analysis=AB_DataProcess_Spikes_Tagging(Analysis);
+if Analysis.Parameters.Spikes.tagging_Select
+    Analysis=AB_DataProcess_Spikes_Tagging_Select(Analysis);
+else
+    Analysis=AB_DataProcess_Spikes_Tagging(Analysis);
+end
 
 end
