@@ -27,7 +27,7 @@ switch Analysis.Parameters.Behavior.Behavior
     case {'CuedOutcome'} %,'Sensor'
 Analysis=AB_CuedOutcome_FiltersAndPlot(Analysis);
     case 'GoNogo'
-Analysis=AB_GoNogo_FiltersAndPlot(Analysis);
+% Analysis=AB_GoNogo_FiltersAndPlot(Analysis);
     case 'AuditoryTuning'
 AB_AuditoryTuning_FiltersAndPlot(Analysis);
     case 'Oddball'

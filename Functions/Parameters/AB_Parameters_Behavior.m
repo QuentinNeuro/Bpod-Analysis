@@ -84,7 +84,7 @@ if isfield(SessionData.TrialSettings(1),'Names') && isfield(SessionData.TrialSet
     Par.Behavior.TypeOfCue='Visual'; 
 end
 end
-% GoNogo - optoPsycho
+% optoPsycho
 if contains(Name,'OptoPsycho')
 Par.Behavior.Behavior='OptoPsycho';
 Par.Behavior.Phase='OptoPsycho';
@@ -94,9 +94,18 @@ Par.Timing.EpochStates={'CueDelivery' 'PostOutcome'};
 Par.Timing.EpochTimeReset_auto=[0 1 ; 0 -2];
 Par.Timing.EpochZeroPSTH='PostOutcome';
 end
-% GoNogo - optoPsycho
+% GoNogo
 if contains(Name,'GoNogo')
 Par.Behavior.Behavior='GoNogo';
+Par.Behavior.TypeOfCue='NC';
+Par.Behavior.Phase='NC';
+if isfield(SessionData.TrialSettings(1),'Names') && isfield(SessionData.TrialSettings(1).Names,'Cue')
+    Par.Behavior.TypeOfCue=SessionData.TrialSettings(1).Names.Cue{SessionData.TrialSettings(1).GUI.CueType};
+end
+if isfield(SessionData.TrialSettings(1),'Phase') && isfield(SessionData.TrialSettings(1).Names,'Phase')
+    Par.Behavior.Phase=[SessionData.TrialSettings(1).Names.Cue{SessionData.TrialSettings(1).GUI.CueType}...
+        ' ' SessionData.TrialSettings(1).Names.Type{SessionData.TrialSettings(1).GUI.CueType}];
+end
 Par.Timing.EpochNames={'Cue' 'Outcome'};
 Par.Timing.EpochStates={'CueDelivery' 'PostOutcome'};
 Par.Timing.EpochTimeReset_auto=[-0.1 0 ; 0 -3];
@@ -175,8 +184,8 @@ if contains(Name,'AudCuedPavl','IgnoreCase',true)
     Par.Behavior.TrialNames={'Cue A Reward','T2','T3','T4','Cue A Omission','Cue B Omission','Uncued Reward','T8','T9','T10'};
     Par.Timing.EpochNames={'Cue' 'Outcome' 'Delay'};
     Par.Timing.EpochStates={'DeliverStimulus' 'DeliverStimulus' 'DeliverStimulus'};
-    Par.Timing.EpochZeroPSTH='DeliverStimulus';
-    Par.Timing.EpochTimeReset_auto=[0 1 ; 2 4 ; 1 2];
+    Par.Timing.EpochZeroPSTH='Cue';
+    Par.Timing.EpochTimeReset_auto=[0 1 ; 1.5 3.5 ; 1 2];
     Par.Timing.PSTH=[-6 6]; 
 else
     disp('Could not autodetect the behavior protocol')

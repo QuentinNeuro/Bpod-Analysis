@@ -50,6 +50,9 @@ for c=1:nChannels
                 dataBaseline(t,:)=thisData(baselinePts(1):baselinePts(2));
             case 2
                 dataBaseline(t,:)=dataTW(baselinePts(1):baselinePts(2));
+                if isnan(dataBaseline(t,:))
+                    dataBaseline(t,:)=thisData(baselinePts(1):baselinePts(2));
+                end
         end
     end
 % Baseline calculation and data normalization

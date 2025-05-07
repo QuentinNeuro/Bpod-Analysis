@@ -15,7 +15,9 @@ for e=1:nEpochs
         thisData=data(r,thisTime>thisEpochTime(r,1) & thisTime<thisEpochTime(r,2));
         epochPre(r,:)=mean(data(r,thisTime>thisEpochTime(r,1)-0.3 & thisTime<thisEpochTime(r,1)),'omitnan');
         if ~isempty(thisData)
-        epochMAX(r,:)=max(thisData,[],'omitnan');
+            epochMAX(r,:)=max(thisData,[],'omitnan');
+        else
+            epochMAX(r,:)=NaN;
         end
         epochAVG(r,:)=mean(thisData,'omitnan');
     end

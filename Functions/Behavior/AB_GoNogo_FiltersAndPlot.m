@@ -1,4 +1,4 @@
-function  Analysis=AP_GoNogo_FiltersAndPlot(Analysis)
+function  Analysis=AB_GoNogo_FiltersAndPlot(Analysis)
 %This function can be used to generates filters based on behavior or states
 %and to plot single and summary figures.
 %COMMENTS TO COME
@@ -7,13 +7,13 @@ function  Analysis=AP_GoNogo_FiltersAndPlot(Analysis)
 
 %% Generates filters
 % Trial types
-Analysis=A_FilterState(Analysis,'Go','Nogo');
-Analysis=A_FilterLick(Analysis,'LicksOutcome','Outcome',Analysis.Parameters.LicksOutcome);
+Analysis=AB_FilterState(Analysis,'Go','Nogo');
+Analysis=AB_FilterLick(Analysis,'LicksOutcome','Outcome',Analysis.Parameters.LicksOutcome);
 % Wheel
-Analysis=A_FilterRunning(Analysis,'Run',Analysis.Parameters.WheelState,Analysis.Parameters.WheelThreshold);
+Analysis=AB_FilterRunning(Analysis,'Run',Analysis.Parameters.WheelState,Analysis.Parameters.WheelThreshold);
 % Pupil
-Analysis=A_FilterPupil(Analysis,'Pupil',Analysis.Parameters.PupilState,Analysis.Parameters.PupilThreshold);
-Analysis=A_FilterPupilNaNCheck(Analysis,'PupilNaN',25);
+Analysis=AB_FilterPupil(Analysis,'Pupil',Analysis.Parameters.PupilState,Analysis.Parameters.PupilThreshold);
+Analysis=AB_FilterPupilNaNCheck(Analysis,'PupilNaN',25);
 
 %% Plot Filters
 [Group_Plot,Group_Corr]=AP_GoNogo_GroupToPlot(Analysis);

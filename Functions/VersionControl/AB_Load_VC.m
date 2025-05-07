@@ -7,7 +7,11 @@ if ~isfield(Analysis.Parameters,'LauncherVer')
 %% Automatic changes
     keepField={'Animal','Name','Files','Rig','AOD','Miniscope','Spikes'};
     for kf=1:size(keepField,2)
-        newPar.(keepField{kf})=oldPar.(keepField{kf});
+        try
+            newPar.(keepField{kf})=oldPar.(keepField{kf});
+        catch
+            newPar.(keepField{kf})=struct();
+        end
     end
     % nested parameters
     newField_lvl1{1}='Behavior';
@@ -90,10 +94,35 @@ end
     %% Data fields
 if isfield(Analysis.Core,'Photometry')
     p_old=Analysis.Core.Photometry;
-    Analysis.Core.Photometry=cellfun(@cell2mat,p_old,'UniformOutput',false);
+    if iscell(p_old)
+        if size(p_old{1,1}{1,1},2) > size(p_old{1,1}{1,1},1)
+            p_new=cellfun(@(x) cell2mat(x),p_old,'UniformOutput',false);
+        else
+            p_new=cellfun(@(x) cell2mat(x'),p_old,'UniformOutput',false);
+            p_new=cellfun(@(x) x',p_new,'UniformOutput',false);
+        end
+        Analysis.Core.Photometry=p_new;
+    end
 end
 if isfield(Analysis.Core,'AOD')
     a_old=Analysis.Core.AOD;
     Analysis.Core.AOD=cellfun(@(x) permute(x,[2 1]),a_old,'UniformOutput',false);
+end
+if isfield(Analysis.Core,'Pup')
+    nTrialsPup=size(Analysis.Core.Pup,2);
+    nFrames=max(cellfun(@(x) size(x,2),Analysis.Core.PupSmooth,'UniformOutput',true));
+    pupNaN=NaN(1,nFrames);
+    pupField_old={'Pup','PupSmooth','PupBlink'};
+    pupField_new={'Pupil','PupilSmooth','PupilBlink'};
+    for pf=1:size(pupField_old,2)
+        for t=1:nTrialsPup
+            if ~isempty(Analysis.Core.(pupField_old{pf}){1, t})
+                Analysis.Core.(pupField_new{pf})(t,:)=Analysis.Core.(pupField_old{pf}){1, t};
+            else
+                Analysis.Core.(pupField_new{pf})(t,:)=pupNaN;
+            end
+        end
+        Analysis.Core = rmfield(Analysis.Core,pupField_old{pf});
+    end
 end
 end

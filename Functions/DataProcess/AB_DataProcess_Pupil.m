@@ -12,8 +12,9 @@ PupilFilter=Analysis.Filters.RecPupillometry(Analysis.Filters.ignoredTrials);
 sampRate=Analysis.Parameters.Pupillometry.SamplingRate;
 baselineTW=Analysis.Parameters.Data.BaselineTW;
 baselinePts=baselineTW*sampRate;
-
+timeTW=linspace(PSTH_TW(1),PSTH_TW(2),diff(PSTH_TW)*sampRate);
 %% Data Processing
+testPupil=0;
 % Find timing of trigger
 for t=1:Analysis.Core.nTrials
      OffsetPupil(t)=Analysis.Core.States{1,t}.(startState)(1);
@@ -22,6 +23,9 @@ end
 % create PSTHs
 dataPupilSmooth=Analysis.Core.PupilSmooth(Analysis.Filters.ignoredTrials,:);
 dataPupilBlink=Analysis.Core.PupilBlink(Analysis.Filters.ignoredTrials,:);
+dataPupil=NaN(nTrials,length(timeTW));
+dataBlink=dataPupil;
+timePupil=dataPupil;
 for t=1:nTrials
     if PupilFilter(t)
         OffsetPupil(t)=Analysis.Core.States{1,t}.(startState)(1);
@@ -43,7 +47,7 @@ for s=1:nSessions
 end
 % Normalize
 dataPupil_Norm=(dataPupil-baselineAVG)./baselineAVG;
-
+% dataPupil_Norm(isnan(dataPupil_Norm))=0;
 %% Save in structure
 Analysis.AllData.Pupil.Time          = timePupil;          
 Analysis.AllData.Pupil.Data          = dataPupil_Norm;
