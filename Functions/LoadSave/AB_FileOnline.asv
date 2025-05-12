@@ -4,7 +4,7 @@
 
 function AB_FileOnline(LP)
 global BpodSystem
-BpodPSTH=[BpodSystem.Data.TrialSettings(1).GUI.TimeMin-2  BpodSystem.Data.TrialSettings(1).GUI.TimeMax+2];
+BpodPSTH=[BpodSystem.Data.TrialSettings(1).GUI.TimeMin-2  BpodSystem.Data.TrialSettings(1).GUI.TimeMax+2]  
 %% Adjust some launcher parameters just in case
 %% Overwritting Parameters
 LP.Analysis_type='Single';

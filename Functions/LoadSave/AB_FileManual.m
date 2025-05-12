@@ -23,7 +23,12 @@ switch LP.Analysis_type
                 DB_Stat.LP=LP;
                 switch Analysis.Parameters.Data.RecordingType
                     case 'Photometry'
+                        switch Analysis.Parameters.Behavior.Behavior
+                            case 'CuedOutcome'
                 DB_Stat=Database_Generate(Analysis,DB_Stat,LP.FileToOpen,LP.PathName,DB.Group);
+                            case 'AuditoryTuning'
+                DB_Stat=Database_Generate_AuditoryTuning(Analysis,DB_Stat,DB.Group);
+                        end
                     case 'Spikes'
                 DB_Stat=Database_Generate_Spikes(Analysis,DB_Stat);
                     case 'AOD'

@@ -102,9 +102,9 @@ Par.Behavior.Phase='NC';
 if isfield(SessionData.TrialSettings(1),'Names') && isfield(SessionData.TrialSettings(1).Names,'Cue')
     Par.Behavior.TypeOfCue=SessionData.TrialSettings(1).Names.Cue{SessionData.TrialSettings(1).GUI.CueType};
 end
-if isfield(SessionData.TrialSettings(1),'Phase') && isfield(SessionData.TrialSettings(1).Names,'Phase')
-    Par.Behavior.Phase=[SessionData.TrialSettings(1).Names.Cue{SessionData.TrialSettings(1).GUI.CueType}...
-        ' ' SessionData.TrialSettings(1).Names.Type{SessionData.TrialSettings(1).GUI.CueType}];
+if isfield(SessionData.TrialSettings(1),'Names') && isfield(SessionData.TrialSettings(1).Names,'Phase')
+    Par.Behavior.Phase=[SessionData.TrialSettings(1).Names.Phase{SessionData.TrialSettings(1).GUI.Phase}...
+        ' ' SessionData.TrialSettings(1).Names.Type{SessionData.TrialSettings(1).GUI.Type}];
 end
 Par.Timing.EpochNames={'Cue' 'Outcome'};
 Par.Timing.EpochStates={'CueDelivery' 'PostOutcome'};
@@ -202,7 +202,7 @@ end
 if ~isempty(LP.P.Timing.EpochStates) | ~isempty(LP.P.Timing.EpochNames)
     Par.Timing.EpochNames=[Par.Timing.EpochNames LP.P.Timing.EpochNames];
     Par.Timing.EpochStates=[Par.Timing.EpochStates LP.P.Timing.EpochStates];
-    Par.Timing.EpochTimeReset_auto=[Par.Timing.EpochTimeReset_auto LP.P.Timing.EpochTimeReset];
+    Par.Timing.EpochTimeReset_auto=[Par.Timing.EpochTimeReset_auto ; LP.P.Timing.EpochTimeReset];
 end
 
 

@@ -4,14 +4,12 @@
 % see also AB_Parameters / AB_DataCore / AB_DataProcess / AB_DataSort
 clear SessionData Analysis LP; %close all;
 warning('off','all'); warning;
-% try
-% KilosortToTT([],'good')
-% end
+
 %% Analysis type Single/Group/Batch/Online etc
-LP.Analysis_type='Single';
+LP.Analysis_type='Online';
 LP.Save=0;                          % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];                      % string to be added to the saved analysis file name
-LP.BatchType='DataBase';            % Spikes DataBase MegaBatch
+LP.BatchType='';                    % Spikes DataBase MegaBatch
 DB.DataBase=0;                      % 1 : DB_Generate - 2 : Tag Hack
 DB.Group='';                        % 
 %% Overwritting Parameters
@@ -32,11 +30,11 @@ LP.P.Plot.Illustrator=0;
 LP.P.Plot.Transparency=0;
 LP.P.Plot.Illustration=[1 0 0];          % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
 % Axis
-LP.P.Plot.xTime=[-3 4];
+LP.P.Plot.xTime=[-10 4];
 LP.P.Plot.yData(1,:)=[NaN NaN];     	 % Tight axis if [NaN NaN] / TBD [min max]
 LP.P.Plot.yData(2,:)=[NaN NaN];          % Tight axis if [NaN NaN] / TBD [min max]
 % % States and Timing
-LP.P.Timing.PSTH=[-6 6];                 % PSTH
+LP.P.Timing.PSTH=[-14 5];                 % PSTH
 LP.P.Timing.ZeroFirstLick=0;             % Will look for licks 0 to 2 sec after state to Zero starts
 LP.OW.Timing.EpochZeroPSTH=[];           % BpodState (or EpochName), load a default state if blank
 LP.P.Timing.EpochNames=[];
@@ -60,7 +58,7 @@ LP.P.Data.BaselineBefAft=1;                  % calculate Baseline before or afte
 LP.P.Data.BaselineMov=5;                     % 
 LP.P.Data.BaselineHisto=0;                   % percentage of data from the baseline to use
 LP.P.Data.ZeroTW=[];                         % in sec - within Timing.PSTH
-LP.P.Data.SamplingRateDecimated=20;         % in Hz 20 for figures 100 for archiving - DOES NOT WORK :(
+LP.P.Data.SamplingRateDecimated=20;          % in Hz 20 for figures 100 for archiving - DOES NOT WORK :(
 LP.P.Data.BaselineFit=0;                     % To come
 LP.P.Photometry.Fit_470405=0;                % To TEST
 LP.OW.Photometry.PhotoCh={};                 % Force one channel only '470' - useful to group sessions with different channels
