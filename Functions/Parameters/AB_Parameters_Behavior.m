@@ -116,7 +116,7 @@ if isfield(SessionData.TrialSettings(1),'Names') && isfield(SessionData.TrialSet
     Par.Timing.EpochTimeReset_auto=[Par.Timing.EpochTimeReset_auto ; 0 0];
 end
 Par.Timing.EpochZeroPSTH='PostOutcome';
-
+end
 %% Tuning protocols
 if contains(Name,'AuditoryTuning')
 Par.Behavior.Behavior='AuditoryTuning';
