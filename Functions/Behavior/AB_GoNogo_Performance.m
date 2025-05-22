@@ -121,7 +121,7 @@ for b=1:length(blocID)
 % Lick rate
     subplot(2,1,2);
     plot(thisTrials,9*ones(size(thisTrials)),['-' bloc_color(b)])
-    text(thisTrials(5),10,sprintf('go : %.2f , nogo : %.2f (Hz)',lickRate(1),lickRate(1)));
+    text(thisTrials(5),10,sprintf('go : %.2f , nogo : %.2f (Hz)',lickRate(1),lickRate(2)));
     catch
     end
 end
