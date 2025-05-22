@@ -111,9 +111,9 @@ Par.Timing.EpochStates={'CueDelivery' 'PostOutcome'};
 Par.Timing.EpochTimeReset_auto=[-0.1 0 ; 0 -3];
 if isfield(SessionData.TrialSettings(1),'Names') && isfield(SessionData.TrialSettings(1).Names,'Type')...
         && contains(SessionData.TrialSettings(1).Names.Type{SessionData.TrialSettings(1).GUI.Type},'Trace')
-    Par.Timing.EpochNames=[Par.Timing.EpochNames 'CueResponse'];
-    Par.Timing.EpochStates=[Par.Timing.EpochStates 'CueResponse'];
-    Par.Timing.EpochTimeReset_auto=[Par.Timing.EpochTimeReset_auto ; 0 0];
+    Par.Timing.EpochNames=[Par.Timing.EpochNames 'Delay' 'CueResponse'];
+    Par.Timing.EpochStates=[Par.Timing.EpochStates 'CueResponse' 'CueResponse'];
+    Par.Timing.EpochTimeReset_auto=[Par.Timing.EpochTimeReset_auto ; -2 0 ; 0 0];
 end
 Par.Timing.EpochZeroPSTH='PostOutcome';
 end

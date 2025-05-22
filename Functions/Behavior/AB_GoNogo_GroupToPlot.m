@@ -1,4 +1,4 @@
-function [GTP,GTPB]=AP_GoNogo_GroupToPlot(Analysis)
+function [GTP,GTPB]=AB_GoNogo_GroupToPlot(Analysis)
 %
 %
 %function designed by Quentin 2017
@@ -9,7 +9,7 @@ indexb=0;
 
 index=index+1;
 GTP{index,1}='CueAvsCueB_EasyTrials';
-GTP{index,2}={'CueA_Go_Hit',                {'type_1','Go','LicksOutcome'};...
+GTP{index,2}={'CueA_Go_Hit',                {'type_1','Go'};...
           'CueA_Go_Miss',                   {'type_1','Nogo'};...
           'CueB_Nogo_CorrectRej',           {'type_2','Nogo'};...
           'CueB_Nogo_FalseAlarm',           {'type_2','Go'}};

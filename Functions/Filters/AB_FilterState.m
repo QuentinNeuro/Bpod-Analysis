@@ -4,18 +4,19 @@ function Analysis=AB_FilterState(Analysis,State,noState)
 %
 % Function designed by Quentin 2017 for Analysis_Photometry
 
+%% FilterName
+FilterName=[State '_State'];
+if nargin==3
+    FilterNameInv=[noState '_State'];
+else
+    FilterNameInv=[FilterName 'Inv'];
+end
 %% Check
-checkExist=State;
-if isfield(Analysis.Filters,checkExist)
+if isfield(Analysis.Filters,FilterName)
     disp(['Filter ' checkExist ' already generated']);
 return
 end
 
-%% Parameters
-%Name
-if nargin==2
-    noState=[State 'Inv'];
-end
 %% Filter
 Logicals=false(Analysis.AllData.nTrials,1);
 for i=1:Analysis.AllData.nTrials
@@ -25,6 +26,6 @@ for i=1:Analysis.AllData.nTrials
 end
 
 %% Save
-Analysis.Filters.(State)=Logicals;
-Analysis.Filters.(noState)=~Logicals;
+Analysis.Filters.(FilterName)=Logicals;
+Analysis.Filters.(FilterNameInv)=~Logicals;
 end

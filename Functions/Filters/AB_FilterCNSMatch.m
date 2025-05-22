@@ -1,4 +1,4 @@
-function Analysis=A_FilterCNSMatch(Analysis)
+function Analysis=AB_FilterCNSMatch(Analysis)
 
     switch Analysis.Parameters.Behavior.Phase
         case {'RewardA','Training','RewardA_woOmi','RewardA_Large','PunishA'}
