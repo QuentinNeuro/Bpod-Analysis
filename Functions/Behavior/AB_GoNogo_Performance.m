@@ -67,14 +67,18 @@ for b=1:length(blocID)
     miss=logical(thisfGo.*thisfNoGo_State);
     FA=logical(thisfNoGo.*thisfGo_State);
     CR=logical(thisfNoGo.*thisfNoGo_State);
-    
     goTrial=unique(thisTrialType(thisfGo));
     nogoTrial=unique(thisTrialType(thisfNoGo));
-
+% Performance calculation
+    lickRate=[mean(licks(thisTrials(thisfGo))),mean(licks(thisTrials(thisfNoGo)))];
     hitRate(b)=sum(hit)/sum(thisfGo);
     FARate(b)=sum(FA)/sum(thisfNoGo);
-    dprime(b)=norminv(hitRate(b))-norminv(FARate(b));
-    lickRate=[mean(licks(thisTrials(thisfGo))),mean(licks(thisTrials(thisfNoGo)))];
+% dprime
+    epsilon = 1e-5;
+    hr4d= min(max(hitRate(b), epsilon), 1 - epsilon);
+    fa4d= min(max(FARate(b), epsilon), 1 - epsilon);
+    dprime(b)=norminv(hr4d)-norminv(fa4d);
+
 % Figure
     subplot(2,1,1);
     xp=thisTrials(hit);
