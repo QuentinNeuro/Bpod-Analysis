@@ -24,6 +24,6 @@ Analysis=AB_FilterPupilNaNCheck(Analysis,'PupilNaN',25);
 
 %% Performance
 if ~contains(Analysis.Parameters.Behavior.Phase,'Pavlvoian')
-    AB_GoNogo_Performance(Analysis)
+    Analysis=AB_GoNogo_Performance(Analysis);
     saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Plot.Legend '_Performance.png']);
 end
