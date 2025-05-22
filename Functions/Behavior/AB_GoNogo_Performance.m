@@ -8,6 +8,9 @@ bSequence=Analysis.Core.BpodSettings{1,1}.BlocSequence;
 blocID=[Analysis.Core.BpodSettings{1, 1}.GUI.Bloc1; ...
         Analysis.Core.BpodSettings{1, 1}.GUI.Bloc2;...
         Analysis.Core.BpodSettings{1, 1}.GUI.Bloc3];
+if length(bSequence)>length(tSequence)
+    bSequence=bSequence(tSequence);
+end
 else
     bSequence=ones(size(tSequence));
     blocID=15;
