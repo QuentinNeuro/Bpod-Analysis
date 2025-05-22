@@ -1,4 +1,4 @@
-function AB_GoNogo_Performance(Analysis)
+% function AB_GoNogo_Performance(Analysis)
 
 %% Data
 tSequence=Analysis.Core.TrialNumbers;
@@ -67,9 +67,9 @@ for b=1:length(blocID)
     goTrial=unique(thisTrialType(thisfGo));
     nogoTrial=unique(thisTrialType(thisfNoGo));
 
-    hitRate(b)=sum(hit)/sum(thisfGo);
-    FARate(b)=sum(FA)/sum(thisfNoGo);
-    dprime(b)=norminv(hitRate(b))-norminv(FARate(b));
+    hitRate=sum(hit)/sum(thisfGo);
+    FARate=sum(FA)/sum(thisfNoGo);
+    dprime=norminv(hitRate)-norminv(FARate)
     
 % Figure
     subplot(2,1,1);
@@ -91,14 +91,14 @@ for b=1:length(blocID)
     end
     plot(thisTrials,1.1*ones(size(thisTrials)),['-' bloc_color(b)])
     text(mean(thisTrials),1.4,sprintf('blocID %d', blocID(b)));
-    text(mean(thisTrials),1.2,sprintf('hit-FA : %.2f, d-prime : %.2f',hitRate(b)-FARate(b), dprime(b)));
+    text(mean(thisTrials),1.2,sprintf('hit-FA : %.2f, d-prime : %.2f',hitRate-FARate, dprime));
 % Lick rate
     subplot(2,1,2); hold on
     xg=thisTrials(thisfGo);
-    yg=licks(xg);
+    yg=licks(thisfGo);
     plot(xg,yg,[cueID_color(goTrial) stateID_shape(1)],'MarkerFaceColor',cueID_color(goTrial))
     xng=thisTrials(thisfNoGo);
-    yng=licks(xng);
+    yng=licks(thisfNoGo);
     plot(xng,yng,[cueID_color(nogoTrial) stateID_shape(2)],'MarkerFaceColor',cueID_color(nogoTrial))
 
     plot(thisTrials,9*ones(size(thisTrials)),['-' bloc_color(b)])
@@ -113,14 +113,9 @@ yticks([0 1])
 yticklabels({'NoLicks' 'Licks'})
 ylabel('Behavior')
 subplot(2,1,2);
-legend('GoCue','NoGoCue')
 xlim([0 length(tSequence)])
 ylim([-0.2 11])
 xlabel('Trial numbers')
 ylabel('Lickrate (Hz)')
 
-Analysis.Performance.HitRate=hitRate;
-Analysis.Performance.FARate=FARate;
-Analysis.Performance.prime=dprime;
-dprime
 end
