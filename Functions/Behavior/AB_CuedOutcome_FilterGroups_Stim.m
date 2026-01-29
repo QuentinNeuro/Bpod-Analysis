@@ -1,6 +1,6 @@
-function GroupPlot=AP_CuedOutcome_FilterGroups_Stim(GroupPlot,indexp,Analysis)
+function GroupPlot=AB_CuedOutcome_FilterGroups_Stim(GroupPlot,indexp,Analysis)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
-    switch Analysis.Parameters.Phase
+    switch Analysis.Parameters.Behavior.Phase
         case {'Habituation'}
                 indexp=indexp+1;
                 GroupPlot{indexp,1}='Uncued_Reward_Stim';

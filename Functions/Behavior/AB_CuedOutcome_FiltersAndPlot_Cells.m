@@ -37,10 +37,14 @@ theseTypeCells={};
     for tc=1:size(thisType,2)
         theseTypeCells{tc}=[thisType{tc} '_' thisCellFilter{tc}];
         AB_PlotData_Filter(Analysis,theseTypeCells{tc});
-        saveas(gcf,[thisDirFig Analysis.Parameters.Plot.Legend theseTypeCells{tc} '.png']);
+        F = getframe(gcf);
+        imwrite(F.cdata,[thisDirFig Analysis.Parameters.Plot.Legend theseTypeCells{tc} '.png']);
+        % saveas(gcf,[thisDirFig Analysis.Parameters.Plot.Legend theseTypeCells{tc} '.png']);
     end
     AB_PlotData(Analysis,'CellFilter',theseTypeCells);
-    saveas(gcf,[thisDirFig Analysis.Parameters.Plot.Legend 'CellFilter.png']);
+    F = getframe(gcf);
+    imwrite(F.cdata,[thisDirFig Analysis.Parameters.Plot.Legend 'CellFilter.png']);
+    % saveas(gcf,[thisDirFig Analysis.Parameters.Plot.Legend 'CellFilter.png']);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -65,7 +69,9 @@ if Analysis.Parameters.Spikes.Spikes && Analysis.Parameters.Plot.Cells_Spike
         AB_PlotData_Spikes_Behavior(Analysis,c,GroupPlot_Spikes);
         cellID=Analysis.AllData.AllCells.CellName{c};
         cellID_Label=[Analysis.AllData.(cellID).LabelClustering '_' Analysis.AllData.(cellID).LabelTag];
-        saveas(gcf,[thisDirFig Analysis.Parameters.Plot.Legend '_' cellID '_' cellID_Label '.png']);
+        F = getframe(gcf);
+        imwrite(F.cdata,[thisDirFig Analysis.Parameters.Plot.Legend '_' cellID '_' cellID_Label '.png']);
+        % saveas(gcf,[thisDirFig Analysis.Parameters.Plot.Legend '_' cellID '_' cellID_Label '.png']);
         % close
         end
     end

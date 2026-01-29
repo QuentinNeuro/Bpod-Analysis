@@ -19,6 +19,10 @@ end
 %% Figure
 if Analysis.Parameters.Plot.TrialTypes
     Analysis=AB_PlotData(Analysis,'TrialTypes',theseTypes);
-    saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Plot.Legend '_AllData.png']);
+
+    F = getframe(gcf);
+    imwrite(F.cdata,[Analysis.Parameters.DirFig Analysis.Parameters.Plot.Legend '_AllData.png']);
+
+    % saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Plot.Legend '_AllData.png']);
 end
 end

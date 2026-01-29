@@ -12,11 +12,11 @@ switch LP.Analysis_type
     case 'Single'
          for i=1:length(LP.FileList)
             LP.FileToOpen=LP.FileList(i);
-            try
+            % try
             Analysis=Analysis_Bpod(LP);
-            catch
-            disp([LP.FileToOpen ' NOT ANALYZED']);
-            end 
+            % catch
+            % disp([LP.FileToOpen ' NOT ANALYZED']);
+            % end 
             close all;
             % DataBase
             if DB.DataBase

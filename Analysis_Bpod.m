@@ -35,7 +35,7 @@ Analysis=AB_OddBall_FiltersAndPlot(Analysis);
     case 'Sensor'
 Analysis=AB_Sensor_FiltersAndPlot(Analysis); 
     case 'Continuous'
-AB_Continuous_FiltersAndPlot(Analysis)
+AB_Continuous_FiltersAndPlot2(Analysis)
     case 'CuedOutcome_AC'
 Analysis=AB_CuedOutcome_AC_FiltersAndPlot(Analysis); 
     case 'OptoTuning'

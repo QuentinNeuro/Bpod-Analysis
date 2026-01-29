@@ -162,7 +162,7 @@ end
 if contains(Name,'Continuous')
 Par.Behavior.Behavior='Continuous';
 Par.Data.BaselineBefAft=1;
-Par.Timing.PSTH=[0 max(diff(SessionData.TrialStartTimestamp))];
+Par.Timing.PSTH=[-10 max(diff(SessionData.TrialStartTimestamp))];
 Par.Timing.EpochZeroPSTH='Outcome';
 if isfield(SessionData.TrialSettings(1).Names,'Sound')
     Par.Behavior.TypeOfCue=SessionData.TrialSettings(1).Names.Sound{SessionData.TrialSettings(1).GUI.SoundType};

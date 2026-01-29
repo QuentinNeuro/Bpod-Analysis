@@ -1,4 +1,4 @@
-function demodData=AP_Demodulation(rawData,sampleRate,modFreq,lowCutoff,phaseShift)
+function demodData=AB_Demodulation(rawData,sampleRate,modFreq,lowCutoff,phaseShift)
 % Demodulate an AM-modulated input ('rawData') in quadrature given a
 % reference ('refData'). 'LowCutOff' is a corner frequency for 5-pole
 % butterworth lowpass filter.

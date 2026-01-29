@@ -1,7 +1,13 @@
 function AB_Archive(Analysis,SessionData,LP)
-NidaqWheel=Analysis.Parameters.Wheel.NidaqField;
-NidaqPhoto=Analysis.Parameters.Photometry.NidaqField;
+%% Function to create a demodulated / decimated version of the DAQ-acquired data
+% Work for photometry and wheel inputs
 
+try
+if isfield(SessionData,'DecimatedSampRate') || isfield(SessionData,'Archive')
+       disp('SessionData file already archived')
+else
+
+%% Directory
 DirArchive=[cd filesep];
 if ~LP.ArchiveOW
     DirArchive=[DirArchive 'Archive' filesep];
@@ -11,42 +17,46 @@ if ~LP.ArchiveOW
 end
 DirFile=[DirArchive Analysis.Parameters.Name '.mat'];
 
-if isfield(SessionData,'DecimatedSampRate')
-   disp('SessionData file already archived')
-else
-% try
-    if isfield(SessionData,NidaqPhoto{1})
-    for thisTrial=1:SessionData.nTrials
-        SessionData.(NidaqPhoto{1}){1,thisTrial}=Analysis.Core.Photometry{1,thisTrial}(1,:)';  
-    end
-    SessionData.DecimatedSampRate=Analysis.Parameters.Data.SamplingRateDecimated;
-    SessionData.Modulation=Analysis.Parameters.Photometry.Modulation;
-    end
-    if size(Analysis.Parameters.Photometry.Channels,2)>1
-        switch Analysis.Parameters.Photometry.Channels{2}
-            case '405'
-        for thisTrial=1:SessionData.nTrials
-            SessionData.(NidaqPhoto{1}){1,thisTrial}(:,2)=Analysis.Core.Photometry{1,thisTrial}(2,:)';  
-        end 
+%% Archiving
+% Photometry
+if Analysis.Parameters.Photometry.Photometry
+    dataField_Photo=Analysis.Parameters.Photometry.DataField;
+    multiplex=Analysis.Parameters.Photometry.Multiplex;
+    % New DAQ script
+    if Analysis.Parameters.Photometry.Version>=2
+        for c=1:size(dataField_Photo,2)
+            for t=1:SessionData.nTrials
+                SessionData.Photometry.Data.(dataField_Photo{c}){multiplex(c),t}=Analysis.Core.Photometry{1,t}(c,:)';  
+            end
+        end
+    else
+        for c=1:size(dataField_Photo,2)
+            for t=1:SessionData.nTrials
+                SessionData.(dataField_Photo{c}){1,t}(:,multiplex(c))=Analysis.Core.Photometry{1,t}(c,:)';
+            end
         end
     end
-        
-    if isfield(SessionData,NidaqPhoto{2})
-    for thisTrial=1:SessionData.nTrials
-        SessionData.(NidaqPhoto{2}){1,thisTrial}=Analysis.Core.Photometry{1,thisTrial}(2,:)';  
-    end
-    SessionData.DecimatedSampRate=Analysis.Parameters.Data.SamplingRateDecimated;
-    end
-    if isfield(SessionData,NidaqWheel)
-    for thisTrial=1:SessionData.nTrials
-        SessionData.(NidaqWheel){1,thisTrial}=Analysis.Core.Wheel{1,thisTrial}';
-    end
-    SessionData.DecimatedSampRate=Analysis.Parameters.Data.SamplingRateDecimated;
-    end
-    
-    save(DirFile,'SessionData');  
-% catch
-%     disp('Could not archive this SessionData')
-% end
 end
+% Wheel
+if Analysis.Parameters.Wheel.Wheel
+    if Analysis.Parameters.Wheel.Version>=2
+        for t=1:SessionData.nTrials
+            SessionData.Wheel.Data{1,t}=Analysis.Core.Wheel{1,t}';
+        end
+    else
+        dataField_Wheel=Analysis.Parameters.Wheel.DataField;
+        for t=1:SessionData.nTrials
+            SessionData.(dataField_Wheel){1,t}=Analysis.Core.Wheel{1,t}';
+        end
+    end
+end
+% Save
+SessionData.Archive=1;
+SessionData.DecimatedSampRate=Analysis.Parameters.Data.SamplingRateDecimated;
+
+save(DirFile,'SessionData'); 
+end
+
+catch
+disp('Could not archive this SessionData')
 end

@@ -164,7 +164,10 @@ xlabel('Time (s)');
 
 
 %% Save
-saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_Continuous.png']);
+F = getframe(gcf);
+imwrite(F.cdata,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_Continuous.png']);
+
+% saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_Continuous.png']);
 if Analysis.Parameters.Plot.Illustrator
 saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_Continuous','epsc']);
 end

@@ -1,0 +1,52 @@
+function Par=AB_Parameters_Photometry_V2(Par,SessionData)
+
+% Initialize
+Par.Photometry.Version=SessionData.TrialSettings(1).GUI.PhotometryVersion;
+Par.Photometry.Photometry(Par.Behavior.nSessions)=0;
+
+if isfield(SessionData.Photometry)
+    % this session has photometry
+    Par.Photometry.Photometry(Par.Behavior.nSessions)=1;
+    Par.Data.RecordingType='Photometry';
+    % recovers input/output mapping
+
+%% Get the input/output and GUI mapping from sessionData file 
+    Par.Photometry.DataField=SessionData.Photometry.input.list; % in Photometry.Data -> adjust in Core.
+    Par.Photometry.OutputField=SessionData.Photometry.output.list; % in Photometry.Data -> adjust in Core.
+    Par.Photometry.ModulData=Par.Photometry.OutputField;
+    Par.Photometry.recordedMod=1;
+
+    chCounter=1;
+    for ch=Par.Photometry.DataField
+        chName=cell2mat(ch);
+        Par.Photometry.AmpField{chCounter}=SessionData.Photometry.input.(chName).amplitude;
+        Par.Photometry.FreqField{chCounter}=SessionData.Photometry.input.(chName).frequency;
+        Par.Photometry.PhaseField{chCounter}=SessionData.Photometry.input.(chName).phase;
+        chCounter=chCounter+1;
+    end
+%% Names the channels for analysis script
+Par.Photometry.Channels{1}='470';
+if SessionData.TrialSettings(1).GUI.Isobestic405
+Par.Photometry.Channels{end+1}='405';
+end
+if and(SessionData.TrialSettings(1).GUI.RedChannel,SessionData.TrialSettings(1).GUI.DbleFibers)
+    Par.Photometry.Channels{end+1}='565';
+    Par.Photometry.Channels{end+1}='470b';
+    Par.Photometry.Channels{end+1}='565b';
+else
+if SessionData.TrialSettings(1).GUI.RedChannel
+    Par.Photometry.Channels{end+1}='565';
+end
+if SessionData.TrialSettings(1).GUI.DbleFibers
+    Par.Photometry.Channels{end+1}='470b';
+end
+end
+
+else
+    Par.Photometry.Photometry(Par.Behavior.nSessions)=0;
+%% Data already demodulated from archiving script
+if isfield(SessionData.Photometry,'DecimatedSampRate') % Already demodulated
+	Par.Photometry.Modulation=0;
+    Par.Photometry.SamplingRate=SessionData.DecimatedSampRate;
+end
+end

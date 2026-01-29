@@ -1,4 +1,4 @@
-function peakStats=AP_Events_Epochs(peakStats,epochTW,epochNames)
+function peakStats=AB_Events_Epochs(peakStats,epochTW,epochNames)
 
 %% test block
 % peakStats=Analysis.AllData.Photo_470_peak;

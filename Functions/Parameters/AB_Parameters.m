@@ -35,7 +35,16 @@ end
 Par.Licks.BinSize=0.25;
 
 %% Photometry
-Par=AB_Parameters_Photometry(Par,SessionData);
+if isfield(SessionData.TrialSettings(1).GUI,'PhotometryVersion')
+    if SessionData.TrialSettings(1).GUI.PhotometryVersion>=2
+        Par=AB_Parameters_Photometry_v2(Par,SessionData);
+    else
+        Par=AB_Parameters_Photometry_v1(Par,SessionData);
+    end
+else
+    Par=AB_Parameters_Photometry_v0(Par,SessionData);
+end
+
 
 %% Wheel 
 Par=AB_Parameters_Wheel(Par,SessionData,LP);

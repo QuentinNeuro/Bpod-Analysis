@@ -19,7 +19,7 @@ if isfield(Analysis.Core,'Wheel')
     dataTrial=Analysis.Core.Wheel;
 end
 % Data
-dataField=Analysis.Parameters.Wheel.NidaqField;
+dataField=Analysis.Parameters.Wheel.DataField;
 counterNBits=Analysis.Parameters.Wheel.CounterNbits;
 encoderCPR=Analysis.Parameters.Wheel.EncoderCPR;
 % Sampling Rate
@@ -33,16 +33,24 @@ Analysis.Parameters.Wheel.SamplingRateDecimated=sampRateDecimated;
 decimateFactor=ceil(sampRate/sampRateDecimated);   
 
 %% Data extraction
+if Analysis.Parameters.Wheel.Version>=2
+    dataSession=SessionData.Wheel.Data;
+else
+    dataSession=SessionData.(dataField);
+end
 for t=1:nTrials
-    if isfield(SessionData,'DecimatedSampRate')
-        thisData=SessionData.(dataField){1,t};
-    else
-        signedData = SessionData.(dataField){1,t};
-        signedThreshold = 2^(counterNBits-1);
-        signedData(signedData > signedThreshold) = signedData(signedData > signedThreshold) - 2^counterNBits;
-        thisData  = signedData * 360/encoderCPR;
-    end
+    if ~isempty(dataSession{t})
+        thisData=dataSession{t};
+        if ~Analysis.Parameters.Wheel.Archive
+            signedThreshold = 2^(counterNBits-1);
+            thisData(thisData > signedThreshold) = thisData(thisData > signedThreshold) - 2^counterNBits;
+            thisData  = thisData * 360/encoderCPR;
+        end
     dataTrial{t+nTrialsOffset}=decimate(thisData,decimateFactor);
+    else
+    Analysis.Filters.RecWheel(t)=0;
+    dataTrial{t+nTrialsOffset}=[];
+    end
 end
 %% Save in Analysis structure
 Analysis.Core.Wheel=dataTrial;

@@ -15,7 +15,9 @@ if Analysis.Parameters.Filters.Sort
         Analysis=AB_DataSort(Analysis,TrialTypeNames{i});
         if Analysis.Parameters.Plot.FiltersSingle && Analysis.(TrialTypeNames{i}).nTrials>0
                 AB_PlotData_Filter(Analysis,TrialTypeNames{i});
-                saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend TrialTypeNames{i} '.png']);
+                F = getframe(gcf);
+                imwrite(F.cdata,[Analysis.Parameters.DirFig Analysis.Parameters.Legend TrialTypeNames{i} '.png']);
+                % saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend TrialTypeNames{i} '.png']);
                 if Analysis.Parameters.Illustrator
                 saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Legend TrialTypeNames{i}],'epsc');
                 end

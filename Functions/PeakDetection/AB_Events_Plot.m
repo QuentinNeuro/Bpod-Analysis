@@ -8,7 +8,7 @@
 % 
 % clear data time peakStats trialName;
 
-function AB_Events_Ploti(peakStats,time,data,trialName)
+function AB_Events_Plot(peakStats,time,data,trialName)
 %% Parameters
 epochTW=peakStats.epochTW;
 epochNames=peakStats.epochNames;

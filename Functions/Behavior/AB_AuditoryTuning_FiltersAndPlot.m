@@ -37,6 +37,10 @@ FigureLegend=sprintf('%s_%s',Analysis.Parameters.Name,Analysis.Parameters.Rig);
 figData.figure=figure('Name',FigTitle,'Position', [200 100 1200 700], 'numbertitle','off');
 Legend=uicontrol('style','text');
 set(Legend,'String',FigureLegend,'Position',[10,5,500,20]); 
+
+TuningYAVG=NaN;
+TuningYMAX=NaN;
+TuningYSEM=NaN;
 % WhiteNoise
 subplot(2,3,1); hold on;
 title('White Noise');
@@ -131,6 +135,9 @@ if isnan(ToneTypes)==false
     end  
 end
 
+TuningYAVG=TuningYAVG(~isnan(TuningYAVG));
+TuningYMAX=TuningYMAX(~isnan(TuningYMAX));
+TuningYSEM=TuningYSEM(~isnan(TuningYSEM));
 
 % AudTuning curve
 subplot(2,3,[4 5]); hold on
@@ -146,7 +153,10 @@ title('Bleaching'); ylabel('Norm. DF/F'); xlabel('Trial Number');
 plot(Analysis.AllData.(thisChStruct).BaselineAVG./mean(Analysis.AllData.(thisChStruct).BaselineAVG(1:2)));
 
 %% Save
-saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_AudTun' thisChStruct '.png']);
+F = getframe(gcf);
+imwrite(F.cdata,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_AudTun' thisChStruct '.png']);
+
+% saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_AudTun' thisChStruct '.png']);
 if Analysis.Parameters.Plot.Illustrator
 saveas(gcf,[Analysis.Parameters.DirFig Analysis.Parameters.Name '_AudTun' thisChStruct],'epsc');
 end

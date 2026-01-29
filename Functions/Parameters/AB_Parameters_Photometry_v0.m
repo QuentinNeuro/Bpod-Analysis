@@ -1,16 +1,38 @@
-function Par=AB_Parameters_Photometry_VC(Par,SessionData)
+function Par=AB_Parameters_Photometry_v0(Par,SessionData)
+
+DataField={'NidaqData' ; 'Nidaq2Data'};
 %% Run inside AP_Parameters_Photometry for data acquired using old Bpod protocol version
+Par.Photometry.Version=0.1;
+Par.Photometry.Channels={}; 
+Par.Photometry.Photometry(Par.Behavior.nSessions)=0;
+if any(isfield(SessionData,DataField))
+    Par.Photometry.Photometry(Par.Behavior.nSessions)=1;
+    Par.Data.RecordingType='Photometry';
+%% SamplingRate
+if isfield(SessionData,'DecimatedSampRate')
+    Par.Photometry.SamplingRate=SessionData.DecimatedSampRate;
+    Par.Photometry.Archive=1;
+else
+    Par.Photometry.Archive=0;
+    if isfield(SessionData.TrialSettings(1).GUI,'NidaqSamplingRate')
+        Par.Photometry.SamplingRate=SessionData.TrialSettings(1).GUI.NidaqSamplingRate;
+    else
+        Par.Photometry.SamplingRate=LP.D.Data.SamplingRate; % Default
+    end
+end
+
+%% 
 try
-if isfield(SessionData,Par.Photometry.NidaqField{1})
+if isfield(SessionData,DataField{1})
     Par.Photometry.Phase=0;
     Par.Photometry.Modulation=1;
 	Par.Photometry.recordedMod=1;
-% First Channel
+% Fiber1 - 470
     Par.Photometry.Channels{1}='470';
-    Par.Photometry.PhotoField{1}=Par.Photometry.NidaqField{1};
+    Par.Photometry.DataField{1}=DataField{1};
     Par.Photometry.AmpField{1}='LED1_Amp';
     Par.Photometry.FreqField{1}='LED1_Freq';
-	Par.Photometry.ModulData=2;
+	Par.Photometry.Multiplex=1;
 % test if Laser/Lock-in Amplifier (old bpod/photometry)  
     if ~isfield(SessionData.TrialSettings(1).GUI,'Photometry')   %% kinda test version of bpod protocol, if not laser/lockin
         Par.Photometry.Modulation=0;
@@ -22,7 +44,7 @@ if isfield(SessionData,Par.Photometry.NidaqField{1})
                 case 1                                      %% LED commads not recorded
                     Par.Photometry.recordedMod=0;
                 case 2
-                    if max(SessionData.(Par.Photometry.PhotoField{1}){1,1}(:,2))<0.9*SessionData.TrialSettings(1).GUI.LED1_Amp
+                    if max(SessionData.(DataField{1}){1,1}(:,2))<0.9*SessionData.TrialSettings(1).GUI.LED1_Amp
                             Par.Photometry.Modulation=0;
                     end
             end
@@ -32,21 +54,21 @@ if isfield(SessionData,Par.Photometry.NidaqField{1})
     if isfield(SessionData.TrialSettings(1).GUI,'LED2_Amp') % can be absent in some early version of Bpod parameters
         if SessionData.TrialSettings(1).GUI.LED2_Amp~=0
             Par.Photometry.Channels{end+1}='405';
-            Par.Photometry.PhotoField{end+1}=Par.Photometry.NidaqField{1};
+            Par.Photometry.DataField{end+1}=DataField{1};
             Par.Photometry.AmpField{end+1}='LED2_Amp';
             Par.Photometry.FreqField{end+1}='LED2_Freq';
-            Par.Photometry.ModulData(end+1)=3;
+            Par.Photometry.Multiplex(end+1)=2;
             Par.Photometry.Modulation=1;
             Par.recordedMod=1;
         end
     end
 % Dual Fibers / PhotoDetet
-    if isfield(SessionData,Par.Photometry.NidaqField{2})
+    if isfield(SessionData,DataField{2})
         Par.Photometry.Channels{end+1}='470b';
-        Par.Photometry.PhotoField{end+1}=Par.Photometry.NidaqField{2};
+        Par.Photometry.DataField{end+1}=DataField{2};
         Par.Photometry.AmpField{end+1}='LED1b_Amp';
         Par.Photometry.FreqField{end+1}='LED1b_Freq';
-        Par.Photometry.ModulData(end+1)=2;
+        Par.Photometry.Multiplex(end+1)=1;
         Par.Modulation=1;
         Par.recordedMod=1;
     end

@@ -59,7 +59,7 @@ if ~isfield(Analysis.Parameters,'LauncherVer')
     newPar.Licks.Port=oldPar.LickPort;
     newPar.Licks.BinSize=oldPar.Bin;
 % Photometry
-    newPar.Photometry.NidaqField={oldPar.PhotometryField oldPar.Photometry2Field};
+    newPar.Photometry.DataField={oldPar.PhotometryField oldPar.Photometry2Field};
     if isfield(oldPar,'PhotoPhase')
         newPar.Photometry.Phase=oldPar.PhotoPhase;
     else
@@ -125,4 +125,8 @@ if isfield(Analysis.Core,'Pup')
         Analysis.Core = rmfield(Analysis.Core,pupField_old{pf});
     end
 end
+else
+    if ~isfield(Analysis.Parameters.Photometry,'DataField')
+        Analysis.Parameters.Photometry.DataField=Analysis.Parameters.Photometry.NidaqFields;
+    end
 end
