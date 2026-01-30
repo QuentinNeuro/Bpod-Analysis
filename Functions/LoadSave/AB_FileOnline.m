@@ -32,7 +32,11 @@ LP.ArchiveOnly=0;
 LP.ArchiveOW=0;
 LP.MEGABATCH=0;
 %% File path  from Bpod
+try
 [thisPath,thisName,thisExt]=fileparts(BpodSystem.DataPath);
+catch
+[thisPath,thisName,thisExt]=fileparts(BpodSystem.Path.CurrentDataFile);
+end
 LP.FileList=[thisName thisExt];
 LP.PathName=[thisPath filesep];
 LP.FileToOpen=cellstr(LP.FileList);
