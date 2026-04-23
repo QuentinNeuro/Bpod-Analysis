@@ -26,8 +26,10 @@ if isempty(Analysis.Parameters.Data.Label)
 end
 
 %% Fit Option
+fitCh=zeros(size(Analysis.Parameters.Photometry.Channels));
 if Analysis.Parameters.Photometry.Fit_470405
     Analysis=AB_Photometry_2ChFit(Analysis);
+    fitCh(end+1)=1;
     nChannels=size(Analysis.Parameters.Photometry.Channels,2);
 end
 
@@ -56,7 +58,13 @@ for c=1:nChannels
         end
     end
 % Baseline calculation and data normalization
-    [dataCells,baselineAVG,baselineSTD]=AB_DataProcess_Normalize(Analysis,timeCells,dataCells,dataBaseline);
+if fitCh(c)
+    dataCellsFit=dataCells;
+end
+[dataCells,baselineAVG,baselineSTD]=AB_DataProcess_Normalize(Analysis,timeCells,dataCells,dataBaseline);
+if fitCh(c)
+    dataCells=dataCellsFit;
+end
 
 %% Save in structure
     Analysis.Parameters.Photometry.CellID{c}=thisID;

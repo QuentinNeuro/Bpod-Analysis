@@ -6,7 +6,7 @@ clear SessionData Analysis LP; %close all;
 warning('off','all'); warning;
 
 %% Analysis type Single/Group/Batch/Online etc
-LP.Analysis_type='Single';
+LP.Analysis_type='Online';
 LP.Save=0;                          % 1: Core Data only     // 2: Full Analysis Structure
 LP.SaveTag=[];                      % string to be added to the saved analysis file name
 LP.BatchType='';                    % Spikes DataBase MegaBatch
@@ -30,7 +30,7 @@ LP.P.Plot.Illustrator=0;
 LP.P.Plot.Transparency=0;
 LP.P.Plot.Illustration=[1 0 0];          % #1 basic filtergroup #2 no ylim on rasters #3 arousal plots
 % Axis
-LP.P.Plot.xTime=[-4 4];
+LP.P.Plot.xTime=[-1 3];
 LP.P.Plot.yData(1,:)=[NaN NaN];     	 % Tight axis if [NaN NaN] / TBD [min max]
 LP.P.Plot.yData(2,:)=[NaN NaN];          % Tight axis if [NaN NaN] / TBD [min max]
 % % States and Timing
@@ -48,19 +48,20 @@ LP.P.Filters.WheelState='BaselineAVG';          % Optionss : 'BaselineAVG','CueA
 LP.P.Filters.LicksCue=1;                        % default : 1 or 2
 LP.P.Filters.LicksOutcome=2;                    % default : 2
 LP.P.Filters.TrialToFilterOut=[];
-LP.P.Filters.LoadIgnoredTrials=1;
+LP.P.Filters.LoadIgnoredTrials=0;
 LP.P.Filters.Cells_Stats='';
 LP.P.Filters.Cells_Threshold=[];
 % Data Normalization % default Zsc=1 mov=5 befAft=1 SR=20 
-LP.P.Data.Normalize='Zsc';                   % 'Zsc' 'DFF' 'No or empty or Hz'
+LP.P.Data.Normalize='DFF';                   % 'Zsc' 'DFF' 'No or empty or Hz'
 LP.P.Data.BaselineTW=[0.2 1.2];              % Baseline time (before PSTH)
 LP.P.Data.BaselineBefAft=1;                  % calculate Baseline before or after extracting desired PSTH
 LP.P.Data.BaselineMov=5;                     % 
 LP.P.Data.BaselineHisto=0;                   % percentage of data from the baseline to use
-LP.P.Data.ZeroTW=[-0.5 -0.1];                % in sec - within Timing.PSTH
-LP.P.Data.SamplingRateDecimated=100;         % in Hz 20 for figures 100 for archiving - DOES NOT WORK :(
+LP.P.Data.ZeroTW=[];                         % in sec - within Timing.PSTH
+LP.P.Data.SamplingRateDecimated=20;         % in Hz 20 for figures 100 for archiving - DOES NOT WORK :(
 LP.P.Data.BaselineFit=0;                     % To come
-LP.P.Photometry.Fit_470405=0;                % To TEST
+LP.P.Photometry.Fit_470405=1;                % To TEST
+LP.P.Plot.yData(3,:)=[NaN NaN];  
 LP.OW.Photometry.PhotoCh={};                 % Force one channel only '470' - useful to group sessions with different channels
 % Event detection %AP_DataProcess_Events
 LP.P.EventDetection.Detection=0;
@@ -68,8 +69,8 @@ LP.P.EventDetection.ThreshFactor=0.8;             % will be applied to the data 
 LP.P.EventDetection.MinFactor=0.5;                % will be applied to the threshold to restrict local minima
 LP.P.EventDetection.MinTW='auto';                 % TW left of the peak to find minimum. 'auto' : use the width of the peak, 0 to use time between two peaks.
 LP.P.EventDetection.waveform_TW=1;                % in sec. Time window for waveform event extraction. 0 to ignore.
-LP.P.EventDetection.EpochTW=[-4.8 -2.8; -2.3 -0.3; 0 2]; % Uncertainty [-4.8 -2.8; -2.3 -0.3; 0 2] Uncertainty2 [-4.5 -4; -2.5 -2; -0.5 0];
-LP.P.EventDetection.EpochNames={'Baseline','Cue','Reward'};
+LP.P.EventDetection.EpochTW=[-2.8 -0.8; 0 1; 2 4]; % Uncertainty [-4.8 -2.8; -2.3 -0.3; 0 2] Uncertainty2 [-4.5 -4; -2.5 -2; -0.5 0];
+LP.P.EventDetection.EpochNames={'Baseline','Cue', 'Post'};
 %% AOD
 LP.P.AOD.raw=1;                        % load raw vs dff data (new Analysis only)
 LP.P.AOD.timing='Bpod';                 % Bpod, TTL
@@ -107,7 +108,7 @@ LP.P.Prime.ProbeLength=2500; %TBD
 LP.P.Miniscope.SamplingRate=10;
 LP.P.Miniscope.raw=1;
 %% Archiving photometry data
-LP.Archive=1; %
+LP.Archive=0; %
 LP.ArchiveOnly=0;
 LP.ArchiveOW=0;
 %% Default Parameters

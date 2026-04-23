@@ -41,7 +41,7 @@ for t=1:nTrials
     duration=SessionData.TrialSettings(t).GUI.NidaqDuration;
     thisAmp=SessionData.TrialSettings(t).GUI.(ampField{c});
     thisFreq=SessionData.TrialSettings(t).GUI.(freqField{c});
-% Access date in sessionData file : deal with modulation, archived etc.
+% Access data in sessionData file : deal with modulation, archived etc.
     if thisAmp
         switch modTest
             case 1

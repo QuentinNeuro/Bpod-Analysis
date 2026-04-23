@@ -1,14 +1,14 @@
 %% test block
-Group_Plot=AB_CuedOutcome_FilterGroups(Analysis);
-thisGroup=Group_Plot{1, 2};
+% Group_Plot=AB_CuedOutcome_FilterGroups(Analysis);
+thisGroup='type_1'; %Group_Plot{1, 2};
 
 % for thisCh=1
     thisChData='Photo_470';
-    thisChStats='Photo_470_peak';
+    thisChStats='Photo_470_events';
 for g=1:size(thisGroup,1)
     thisType{g}=thisGroup{g};
     time{g}=Analysis.(thisType{g}).(thisChData).Time;
-    data{g}=Analysis.(thisType{g}).(thisChData).DFF;
+    data{g}=Analysis.(thisType{g}).(thisChData).Data;
     groupStats{g}=Analysis.(thisType{g}).(thisChStats)
 end
     AB_Events_GroupPloti(groupStats,time,data,thisType);

@@ -1,18 +1,18 @@
 % %% test block
-% trialType='HVS_Reward';
-% data=Analysis.(trialType).Photo_470.DFF;
-% time=Analysis.(trialType).Photo_470.Time;
-% peakStats=Analysis.(trialType).Photo_470_peak;
-% trialName='CuedReward';
-% AB_Events_Ploti(peakStats,time,data,trialName);
-% 
+trialType='type_1';
+data=Analysis.(trialType).Photo_470.Data;
+time=Analysis.(trialType).Photo_470.Time;
+peakStats=Analysis.(trialType).Photo_470_events;
+trialName='Visual';
+AB_Events_Ploti(peakStats,time,data,trialName);
+
 % clear data time peakStats trialName;
 
-function AB_Events_Plot(peakStats,time,data,trialName)
+function AB_Events_Ploti(peakStats,time,data,trialName)
 %% Parameters
 epochTW=peakStats.epochTW;
 epochNames=peakStats.epochNames;
-limTime=[-6 4];
+limTime=[-4 4];
 nTrials=size(data,1);
 trialNbs=unique(peakStats.trials);
 nEpochs=size(epochTW,1);

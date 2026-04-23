@@ -36,7 +36,7 @@ maxlag=maxlag*sampRate;
 tw=[-1 4];
 ySP=nTrials+1;
 xSP=3; %1+wheelTest+fiber2Test;
-color='kg';
+color='kgb';
 
 %% Reward PSTH
 licks=Analysis.(trialType).Licks.Events;
